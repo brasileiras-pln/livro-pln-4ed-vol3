@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Vitor H. B. D. Santi">
+<meta name="author" content="Lucas D. V. Figueiredo">
+<meta name="author" content="Diego R. Amancio">
+<meta name="author" content="Maria Cristina F. Oliveira">
+<meta name="author" content="Osvaldo N. Oliveira Jr.">
+
+<title>18&nbsp; Redes complexas no processamento de língua natural do português – Processamento de Linguagem Natural</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 1em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../shared/referencias/referencias.html" rel="next">
+<link href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8676d8d0f01772f2903466dda9733bcf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sem resultados",
+    "search-matching-documents-text": "Resultados encontrados",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-111J572WMR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-111J572WMR');
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../shared/bpln.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../shared/logos/bpln.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Processamento de Linguagem Natural</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../Livro_PLN_BPLN_4ed_vol3.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
+    <div class="dropdown">
+      <a href="" title="Compartilhar" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Compartilhar"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sobre o Volume 3</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Aplicações e Domínios</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Classificação de texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-mt/cap-mt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tradução Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sumarização Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Complexidade Textual e suas Tarefas Relacionadas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Classificação de Áudio aplicada à Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">PLN e Responsabilidade Social</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/referencias/referencias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referências</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Apêndices</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Considerações prévias à sumarização automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice-abstrativa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Exemplo de sumarização abstrativa</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../autores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Sobre as/os autoras/es</strong></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Conteúdo</h2>
+   
+  <ul>
+  <li><a href="#sec-cap-redes-complexas-intro" id="toc-sec-cap-redes-complexas-intro" class="nav-link active" data-scroll-target="#sec-cap-redes-complexas-intro"><span class="header-section-number">18.1</span> Introdução</a></li>
+  <li><a href="#sec-cap-redes-complexas-redes-complexas" id="toc-sec-cap-redes-complexas-redes-complexas" class="nav-link" data-scroll-target="#sec-cap-redes-complexas-redes-complexas"><span class="header-section-number">18.2</span> Redes complexas</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-redes-complexas-conceitos" id="toc-sec-cap-redes-complexas-conceitos" class="nav-link" data-scroll-target="#sec-cap-redes-complexas-conceitos"><span class="header-section-number">18.2.1</span> Conceitos fundamentais</a></li>
+  <li><a href="#sec-cap-redes-complexas-propriedades" id="toc-sec-cap-redes-complexas-propriedades" class="nav-link" data-scroll-target="#sec-cap-redes-complexas-propriedades"><span class="header-section-number">18.2.2</span> Propriedades</a></li>
+  <li><a href="#sec-cap-redes-complexas-tipos" id="toc-sec-cap-redes-complexas-tipos" class="nav-link" data-scroll-target="#sec-cap-redes-complexas-tipos"><span class="header-section-number">18.2.3</span> Tipos de redes</a></li>
+  <li><a href="#sec-cap-redes-complexas-dinamica" id="toc-sec-cap-redes-complexas-dinamica" class="nav-link" data-scroll-target="#sec-cap-redes-complexas-dinamica"><span class="header-section-number">18.2.4</span> Dinâmica</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-redes-complexas-comunidades" id="toc-sec-cap-redes-complexas-comunidades" class="nav-link" data-scroll-target="#sec-cap-redes-complexas-comunidades"><span class="header-section-number">18.3</span> Detecção de comunidades</a></li>
+  <li><a href="#sec-cap-redes-complexas-aplicacoes" id="toc-sec-cap-redes-complexas-aplicacoes" class="nav-link" data-scroll-target="#sec-cap-redes-complexas-aplicacoes"><span class="header-section-number">18.4</span> Aplicações de redes complexas em PLN para o português</a></li>
+  <li><a href="#sec-cap-redes-complexas-panorama" id="toc-sec-cap-redes-complexas-panorama" class="nav-link" data-scroll-target="#sec-cap-redes-complexas-panorama"><span class="header-section-number">18.5</span> Exemplo de aplicação: Panorama de PLN em língua portuguesa</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-redes-complexas-redes-citsim" id="toc-sec-cap-redes-complexas-redes-citsim" class="nav-link" data-scroll-target="#sec-cap-redes-complexas-redes-citsim"><span class="header-section-number">18.5.1</span> Redes de citações e similaridade</a></li>
+  <li><a href="#sec-cap-redes-complexas-bardosova" id="toc-sec-cap-redes-complexas-bardosova" class="nav-link" data-scroll-target="#sec-cap-redes-complexas-bardosova"><span class="header-section-number">18.5.2</span> Identificação de tópicos em redes de pesquisa</a></li>
+  <li><a href="#sec-cap-redes-complexas-PLNPortugues" id="toc-sec-cap-redes-complexas-PLNPortugues" class="nav-link" data-scroll-target="#sec-cap-redes-complexas-PLNPortugues"><span class="header-section-number">18.5.3</span> Pesquisa em PLN para o português</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-redes-complexas-conclusoes" id="toc-sec-cap-redes-complexas-conclusoes" class="nav-link" data-scroll-target="#sec-cap-redes-complexas-conclusoes"><span class="header-section-number">18.6</span> Considerações finais</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-cap-redes-complexas" class="quarto-section-identifier"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading"></div>
+    <div class="quarto-title-meta-contents">
+             <p>Vitor H. B. D. Santi </p>
+             <p>Lucas D. V. Figueiredo </p>
+             <p>Diego R. Amancio </p>
+             <p>Maria Cristina F. Oliveira </p>
+             <p>Osvaldo N. Oliveira Jr. </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Publicado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">13/04/2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+
+</div>
+<div>
+<div class="callout-body-container callout-body">
+<p>Este capítulo também está disponível em <a href="cap-redes-complexas.pdf">PDF</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-target=".callout-cite-contents" aria-expanded="false" aria-label="Toggle callout" aria-controls="callout-cite" data-bs-toggle="collapse">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Como citar
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
+<i class="callout-toggle"></i>
+</div>
+</div>
+<div id="callout-cite" class="callout-cite-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>@InCollection{BPLN_livro_cap-redes-complexas:2026,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    author    = {Santi, Vitor H. B. D. and Figueiredo, Lucas D. V. and Amancio, Diego R. and Oliveira, Maria Cristina F. and Jr., Osvaldo N. Oliveira},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    title     = {Redes complexas no processamento de língua natural do português},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    publisher = {BPLN},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    year      = {2026},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    editor    = {Caseli, H. M. and Nunes, M. G. V.},</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    type      = {Book Chapter},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    chapter   = {18},</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    edition   = {4},</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    volume    = {3},</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    isbn      = {XXXXXXXXXXXXXXXX},</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    url       = {https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html},</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Este capítulo explora a aplicação de redes complexas no Processamento de Linguagem Natural (PLN) para o português. Redes complexas, estruturas compostas por nós (entidades) e arestas (conexões), servem de arcabouço para analisar relações linguísticas em tarefas como sumarização extrativa, análise de sentimentos e avaliação de qualidade textual, classificação de textos, detecção de notícias falsas, avaliação de traduções e diagnósticos médicos a partir de transcrições. São introduzidos conceitos fundamentais (como centralidade e coeficiente de aglomeração) e modelos de rede (aleatórias, livres de escala e mundo-pequeno). Um tópico central é a detecção de comunidades por algoritmos que identificam agrupamentos temáticos em textos. O capítulo destaca contribuições pioneiras de pesquisadores brasileiros, que utilizaram redes para tarefas desde tradução automática até diagnóstico médico. Para mapear a pesquisa em PLN para português, são empregadas redes de similaridade, identificando comunidades temáticas como inteligência artificial aplicada à educação, construção e utilização de <em>corpus</em> em tarefas de PLN, análise de sentimentos e desinformação. Conclui-se que, embora modelos de linguagem de larga escala (LLMs) apresentem desempenho superior em tarefas de PLN, as redes complexas continuam essenciais para tarefas de análise estrutural, interpretabilidade e visualização da literatura científica.</p>
+</div>
+</div>
+</div>
+<section id="sec-cap-redes-complexas-intro" class="level2" data-number="18.1">
+<h2 data-number="18.1" class="anchored" data-anchor-id="sec-cap-redes-complexas-intro"><span class="header-section-number">18.1</span> Introdução</h2>
+<p>Redes complexas são estruturas formadas por nós — que representam alguma entidade de interesse — e arestas — que estabelecem conexões entre pares de nós. Essas redes tipicamente descrevem sistemas com padrões de interconexão não triviais e oferecem um arcabouço para a análise de sistemas dinâmicos em diversos domínios, incluindo biologia, telecomunicações e ciências sociais <span class="citation" data-cites="newman2010 10.1093/Estrada2011">(<a href="../../shared/referencias/referencias.html#ref-10.1093/Estrada2011" role="doc-biblioref">Estrada, 2011</a>; <a href="../../shared/referencias/referencias.html#ref-newman2010" role="doc-biblioref">Newman, 2010</a>)</span>. Sua relevância se estende à área do Processamento de Linguagem Natural (PLN), em que o entendimento das relações entre palavras e conceitos é essencial para uma gama de tarefas como sumarização, análise de sentimento, modelagem de tópicos e recuperação de informação. No PLN, os textos são frequentemente representados por métodos que focam no conteúdo, como o modelo <em>Bag-of-Words</em> (BoW), que desconsidera a ordem das palavras, ou por modelos de <em>embeddings</em> (como <em>Word2Vec</em> ou <em>BERT</em>), que capturam o significado semântico em um espaço vetorial. A abordagem de Redes Complexas (RC) é fundamentalmente diferente e complementar. Em vez de focar apenas na frequência ou na semântica de palavras isoladas, a RC modela explicitamente a estrutura relacional do texto. Ao representar palavras, sentenças ou conceitos como nós e suas conexões (sejam elas de coocorrência, adjacência ou relações sintáticas) como arestas, uma RC permite analisar a topologia do discurso. Essa perspectiva estrutural revela propriedades que outras representações não capturam diretamente. Com elas, é possível quantificar a coesão textual, identificar quais conceitos são mais centrais (ou “hubs”) em uma argumentação e detectar a organização temática através da detecção de comunidades, como veremos na Seção 3. Portanto, as redes complexas oferecem uma “lupa” sobre a organização e a dinâmica do texto, indo além do conjunto de palavras que ele contém.</p>
+<p>Medidas extraídas de redes complexas, como coeficientes de aglomeração e métricas de centralidade de nós, são fundamentais para entender a sua dinâmica e comportamento <span class="citation" data-cites="oaepublish2025">(<a href="../../shared/referencias/referencias.html#ref-oaepublish2025" role="doc-biblioref">OAEPublish, 2025</a>)</span>. As redes podem também apresentar propriedades – como serem livre-de-escala ou pequeno-mundo – que impactam como as informações relacionadas às entidades se propagam e se estruturam no sistema <span class="citation" data-cites="springeropen2017">(<a href="../../shared/referencias/referencias.html#ref-springeropen2017" role="doc-biblioref">SpringerOpen Applied Network Science, 2017</a>)</span>. Há grandes desafios para modelar redes, sobretudo porque muitos sistemas apresentam propriedades de autodissimilaridade em múltiplas escalas, para os quais a elaboração de modelos realistas requer esforço significativo. Ademais, a natureza evolutiva das redes complexas exige técnicas de análise para capturar as suas dinâmicas, especialmente em aplicações do mundo real, em que a disponibilidade de dados pode ser uma limitação <span class="citation" data-cites="sciencedirect2025">(<a href="../../shared/referencias/referencias.html#ref-sciencedirect2025" role="doc-biblioref">ScienceDirect, 2025a</a>)</span>. Essa combinação de um sólido arcabouço teórico com a possibilidade de aplicações práticas ressalta a relevância das redes complexas para a pesquisa em PLN e seu potencial para ampliar a nossa compreensão das interações linguísticas. Também são assunto de debates as implicações do uso de redes complexas em várias áreas, por exemplo, a necessidade de uso ético de dados e potenciais vieses em interpretações algorítmicas. À medida que pesquisadores se aprofundam no estudo dessas redes, ganha cada vez mais importância a discussão sobre sua relevância e as responsabilidades associadas ao seu uso.</p>
+<p>Neste capítulo, buscamos apresentar uma visão sobre usos de redes complexas no processamento da língua portuguesa. O conteúdo do capítulo está organizado da seguinte maneira: na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html#sec-cap-redes-complexas-redes-complexas" target="_blank" title="Volume 3">Redes complexas</a></span> introduzimos os conceitos e a terminologia básica em Redes Complexas. Na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html#sec-cap-redes-complexas-comunidades" target="_blank" title="Volume 3">Detecção de comunidades</a></span> introduzimos o problema de detecção de comunidades em redes e alguns algoritmos clássicos. Na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html#sec-cap-redes-complexas-aplicacoes" target="_blank" title="Volume 3">Aplicações de redes complexas em PLN para o português</a></span> discutimos algumas aplicações de redes complexas em PLN para o português, e na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html#sec-cap-redes-complexas-panorama" target="_blank" title="Volume 3">Exemplo de aplicação: Panorama de PLN em língua portuguesa</a></span> recorremos às redes complexas para apresentar um panorama sobre as pesquisas em PLN no âmbito da Língua Portuguesa, não só as que envolvem redes complexas. As considerações finais são apresentadas na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html#sec-cap-redes-complexas-conclusoes" target="_blank" title="Volume 3">Considerações finais</a></span>.</p>
+</section>
+<section id="sec-cap-redes-complexas-redes-complexas" class="level2" data-number="18.2">
+<h2 data-number="18.2" class="anchored" data-anchor-id="sec-cap-redes-complexas-redes-complexas"><span class="header-section-number">18.2</span> Redes complexas</h2>
+<p>Como o objetivo deste capítulo é ilustrar o uso de redes complexas em PLN, apresentaremos algumas informações essenciais para a compreensão das aplicações, sem preocupação de tratar o tema de forma abrangente ou exaustiva. Assim, além de introduzir conceitos fundamentais, discutiremos as métricas das redes usadas em PLN, os modelos de redes e a dinâmica ou evolução temporal de redes. Uma introdução ao tema de redes complexas, que aborda conceitos e algumas aplicações, pode ser encontrada na referência&nbsp;<span class="citation" data-cites="appel_redes_2011">(<a href="../../shared/referencias/referencias.html#ref-appel_redes_2011" role="doc-biblioref">Appel; Junior, 2011</a>)</span>.</p>
+<section id="sec-cap-redes-complexas-conceitos" class="level3" data-number="18.2.1">
+<h3 data-number="18.2.1" class="anchored" data-anchor-id="sec-cap-redes-complexas-conceitos"><span class="header-section-number">18.2.1</span> Conceitos fundamentais</h3>
+<p>Os elementos fundamentais de uma rede são os <strong>nós</strong>, também denominados vértices, que representam as entidades de interesse, e as conexões entre nós, denominadas <strong>arestas</strong>. Formalmente, uma rede (ou grafo) pode ser representada como um par <span class="math inline">\(G = (V, E)\)</span>, em que <span class="math inline">\(V\)</span> é o conjunto de nós (ou vértices) e <span class="math inline">\(E\)</span> é o conjunto de arestas.</p>
+<div id="fig-cap-redes-complexas-redecitacao" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-redes-complexas-redecitacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;18.1: Representação visual de uma rede não direcionada, em que os círculos representam os nós e as linhas representam as arestas.
+</figcaption>
+<div aria-describedby="fig-cap-redes-complexas-redecitacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/Grafo_Exemplo.png" class="img-fluid figure-img" style="width:50.0%">
+</div>
+</figure>
+</div>
+<p>A <a href="#fig-cap-redes-complexas-redecitacao" class="quarto-xref">Figura&nbsp;<span>18.1</span></a> ilustra uma representação visual de uma rede. Cada <strong>nó</strong> <span class="math inline">\(v \in V\)</span> pode ser associado a dados que registram atributos específicos da entidade correspondente, representados como pares chave-valor. Por exemplo, um nó que representa uma pessoa pode incluir chaves como “nome”, “idade”, “localização”, com seus valores correspondentes <span class="citation" data-cites="ebimsv2024">(<a href="../../shared/referencias/referencias.html#ref-ebimsv2024" role="doc-biblioref">Mousavi, 2024</a>)</span>.</p>
+<p>As <strong>arestas</strong> estabelecem as conexões entre as entidades. Cada aresta é um par ordenado ou não ordenado de nós, isto é, <span class="math inline">\(e = (u,v)\)</span> com <span class="math inline">\(u,v \in V\)</span>. Quando o par é não ordenado, isto é, <span class="math inline">\((u,v) = (v,u)\)</span>, a rede é dita <strong>não-direcionada</strong>; quando o par é ordenado, a rede é <strong>direcionada</strong> e <span class="math inline">\((u,v)\)</span> representa uma conexão do nó <span class="math inline">\(u\)</span> para o nó <span class="math inline">\(v\)</span>. Além disso, as arestas podem ter pesos associados, definindo uma <strong>rede ponderada</strong>, em que cada aresta <span class="math inline">\(e \in E\)</span> tem um peso <span class="math inline">\(w(e) \in \mathbb{R}\)</span>, representando a intensidade ou custo da relação.</p>
+<p>Em uma rede social, uma aresta indicativa de uma relação de amizade pode ser bidirecional, enquanto que uma aresta representando uma relação de compra seria unidirecional – em ambos os casos, evidenciando o fluxo direcional da relação. Em redes sociais, um exemplo de relação unidirecional ocorre quando um usuário segue outro, mas esse segundo usuário não o segue de volta. Isso é comum em plataformas como o <em>X</em> ou o <em>Instagram</em>. A título de ilustração de uma representação textual simples, considere, por exemplo, a sentença “Redes complexas modelam relações entre elementos”. Podemos representá-la como uma rede em que cada palavra é um nó (conjunto de nós <span class="math inline">\(V\)</span>) e as arestas conectam as palavras que aparecem consecutivamente (conjunto de arestas <span class="math inline">\(E\)</span>) (<a href="#fig-cap-redes-complexas-grafo_sentenca_box" class="quarto-xref">Figura&nbsp;<span>18.2</span></a>):</p>
+<p><span class="math display">\[\begin{aligned}
+V &amp;= \text{\{Redes, complexas, modelam, relações, entre, elementos\}} \\[2mm]
+E &amp;= \text{\{(Redes, complexas), (complexas, modelam), (modelam, relações),} \\
+  &amp;\quad \text{(relações, entre), (entre, elementos)\}}
+\end{aligned}\]</span></p>
+<div id="fig-cap-redes-complexas-grafo_sentenca_box" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-redes-complexas-grafo_sentenca_box-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;18.2: Representação de uma sentença como uma rede, em que cada palavra é um nó e as arestas conectam palavras consecutivas.
+</figcaption>
+<div aria-describedby="fig-cap-redes-complexas-grafo_sentenca_box-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/Rede_sentenca.png" class="img-fluid figure-img">
+</div>
+</figure>
+</div>
+<p>A importância de um nó na rede é tipicamente refletida pelo seu <strong>grau</strong>. O grau de um vértice <span class="math inline">\(v\)</span>, denotado por <span class="math inline">\(\deg(v)\)</span>, é definido como o número de arestas incidentes a <span class="math inline">\(v\)</span>. Em redes direcionadas, distinguimos o grau de entrada (<span class="math inline">\(\deg^{-}(v)\)</span>) e o grau de saída (<span class="math inline">\(\deg^{+}(v)\)</span>), correspondendo, respectivamente, ao número de arestas que chegam e ao número de arestas que saem de <span class="math inline">\(v\)</span>. Um grau alto tipicamente está associado a um nó mais central ou influente na rede.</p>
+<p>A representação de entidades e conexões em termos de nós e arestas define a essência das redes complexas, permitindo modelar sistemas complexos do mundo real, como redes sociais e padrões de comunicação na linguagem <span class="citation" data-cites="sciencedirect_complex_networks">(<a href="../../shared/referencias/referencias.html#ref-sciencedirect_complex_networks" role="doc-biblioref">ScienceDirect, 2025b</a>)</span>. Formalmente, o estudo de redes complexas utiliza a teoria dos grafos. Por exemplo, podemos definir um grafo <span class="math inline">\(G = (V,E)\)</span> em que <span class="math inline">\(V\)</span> representa palavras, sentenças ou documentos, e <span class="math inline">\(E\)</span> reflete relacionamentos entre eles, como coocorrência em um <em>corpus</em> ou relacionamentos sintáticos em uma sentença.</p>
+</section>
+<section id="sec-cap-redes-complexas-propriedades" class="level3" data-number="18.2.2">
+<h3 data-number="18.2.2" class="anchored" data-anchor-id="sec-cap-redes-complexas-propriedades"><span class="header-section-number">18.2.2</span> Propriedades</h3>
+<p>Várias propriedades exibidas pelas redes permitem entender a sua estrutura e comportamento, bem como analisar os mecanismos de propagação de informação na rede. <strong>Medidas de centralidade</strong> permitem quantificar e entender a importância de nós individuais. Além do <strong>grau</strong> (também conhecido como <strong>Centralidade de Grau</strong>), métricas como Centralidade de Intermediação e Centralidade de Proximidade fornecem indicações sobre como os nós estabelecem pontes ou estão estrategicamente posicionados dentro da rede. A <strong>Centralidade de Intermediação</strong> quantifica com que frequência um nó atua como uma ponte ao longo dos caminhos mais curtos entre outros nós – em PLN, por exemplo, isso poderia revelar palavras ou conceitos influentes em um texto. A <strong>Centralidade de Proximidade</strong> avalia quão rapidamente é possível alcançar todos os outros nós a partir de um dado nó, destacando os principais atores na distribuição de informações. A <a href="#fig-cap-redes-complexas-centralidade" class="quarto-xref">Figura&nbsp;<span>18.3</span></a> ilustra esses conceitos.</p>
+<div id="fig-cap-redes-complexas-centralidade" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-redes-complexas-centralidade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;18.3: Representação visual para as medidas de centralidade mencionadas. (a) centralidade de grau. O nó 0 é considerado central, pois tem grau 6 enquanto os demais têm grau 1. (b) centralidade de intermediação. Os nós 3 e 4 são centrais para a conexão entre os dois grupos de nós mostrados na figura. (c) centralidade de proximidade. O nó 0 tem alta centralidade de proximidade, pois através dele os demais nós podem ser acessados mais facilmente. Ele obviamente também tem centralidade de grau, por ser mais conectado que os demais.
+</figcaption>
+<div aria-describedby="fig-cap-redes-complexas-centralidade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/Centralidade.png" class="img-fluid figure-img">
+</div>
+</figure>
+</div>
+<p>Para um grafo com <span class="math inline">\(N\)</span> nós, as definições matemáticas de algumas dessas centralidades para um nó <span class="math inline">\(v\)</span> são:</p>
+<ul>
+<li><p><strong>Centralidade de Grau (<em>Degree Centrality</em>):</strong> em redes direcionadas, distingue-se entre o grau de entrada e o de saída. A forma normalizada é dada por:</p>
+<ul>
+<li><p>Grau de Entrada (<em>In-Degree</em>): <span class="math inline">\(C_{D}^{\text{in}}(v) = \frac{k_{\text{in}}(v)}{N-1}\)</span>, onde <span class="math inline">\(k_{\text{in}}(v)\)</span> é o número de arestas que chegam a <span class="math inline">\(v\)</span>.</p></li>
+<li><p>Grau de Saída (<em>Out-Degree</em>): <span class="math inline">\(C_{D}^{\text{out}}(v) = \frac{k_{\text{out}}(v)}{N-1}\)</span>, onde <span class="math inline">\(k_{\text{out}}(v)\)</span> é o número de arestas que saem de <span class="math inline">\(v\)</span>.</p></li>
+</ul></li>
+<li><p><strong>Centralidade de Intermediação (<em>Betweenness Centrality</em>):</strong> <span class="math display">\[C_B(v) = \sum_{s \neq v \neq t} \frac{\sigma_{st}(v)}{\sigma_{st}}\]</span> onde <span class="math inline">\(\sigma_{st}\)</span> é o número total de caminhos mais curtos do nó <span class="math inline">\(s\)</span> para o nó <span class="math inline">\(t\)</span>, e <span class="math inline">\(\sigma_{st}(v)\)</span> é o número desses caminhos que passam por <span class="math inline">\(v\)</span>.</p></li>
+<li><p><strong>Centralidade de Proximidade (<em>Closeness Centrality</em>):</strong> <span class="math display">\[C_C(v) = \frac{N-1}{\sum_{u \neq v} d(v, u)}\]</span> onde <span class="math inline">\(d(v, u)\)</span> é a distância do caminho mais curto entre os nós <span class="math inline">\(v\)</span> e <span class="math inline">\(u\)</span>.</p></li>
+</ul>
+<p>Além de medidas de centralidade, várias estratégias foram propostas para a identificação de nós influentes na estrutura da rede, adaptadas a diferentes tipos de rede e cenários de aplicação. O <strong>coeficiente de aglomeração</strong> é uma medida de como os nós se agrupam localmente. Um alto coeficiente de aglomeração indica interconexões fortemente localizadas entre subgrupos de nós. No contexto de PLN, por exemplo, pode indicar a presença de conceitos ou palavras fortemente relacionados em um contexto particular ou tópico específico <span class="citation" data-cites="Budel2023">(<a href="../../shared/referencias/referencias.html#ref-Budel2023" role="doc-biblioref">Budel et al., 2023</a>)</span>. Esta é uma propriedade particularmente relevante para análise semântica, em que é crucial entender os relacionamentos entre palavras ou frases ao implementar tarefas como desambiguação lexical ou reconhecimento de entidades nomeadas <span class="citation" data-cites="AlRfou2014">(<a href="../../shared/referencias/referencias.html#ref-AlRfou2014" role="doc-biblioref">Al-Rfou et al., 2014</a>)</span>.</p>
+<p>O <strong>Coeficiente de Aglomeração Local</strong> para um nó <span class="math inline">\(v\)</span> é definido como: <span class="math display">\[C(v) = \frac{2 E_v}{k_v(k_v-1)}\]</span> onde <span class="math inline">\(k_v\)</span> é o grau do nó <span class="math inline">\(v\)</span> (o número de seus vizinhos) e <span class="math inline">\(E_v\)</span> é o número de arestas existentes entre os vizinhos de <span class="math inline">\(v\)</span>. O denominador <span class="math inline">\(k_v(k_v-1)/2\)</span> representa o número máximo possível de arestas entre os vizinhos de <span class="math inline">\(v\)</span>.</p>
+<p>Uma revisão abrangente dessas estratégias as categoriza em abordagens tradicionais baseadas em topologia, para otimização, modelos de difusão de informação, métodos de aprendizado de máquina e técnicas mais recentes aplicáveis a redes dinâmicas&nbsp;<span class="citation" data-cites="chen2025critical">(<a href="../../shared/referencias/referencias.html#ref-chen2025critical" role="doc-biblioref">Chen et al., 2025</a>)</span>. Ao contrário das medidas clássicas de centralidade, esses métodos consideram interações na rede ao longo do tempo, além das propriedades estáticas. Outra métrica relevante, denominada <strong>Comprimento de Caminho Médio</strong>, indica o número médio de passos ao longo dos caminhos mínimos entre todos os possíveis pares de nós. Em redes complexas, essa métrica tende a ter valores baixos, o que facilita a disseminação eficiente de informação na rede. O <strong>Diâmetro</strong>, por outro lado, é definido como o maior valor entre os comprimentos dos menores caminhos entre qualquer par de nós da rede.</p>
+<p>As definições matemáticas para essas métricas são:</p>
+<ul>
+<li><p><strong>Comprimento de Caminho Médio (Average Path Length):</strong> <span class="math display">\[L = \frac{1}{N(N-1)} \sum_{i \neq j} d(v_i, v_j)\]</span> onde <span class="math inline">\(d(v_i, v_j)\)</span> é a distância do caminho mais curto entre os nós <span class="math inline">\(v_i\)</span> e <span class="math inline">\(v_j\)</span>.</p></li>
+<li><p><strong>Diâmetro (Diameter):</strong> <span class="math display">\[D = \max_{i,j} d(v_i, v_j)\]</span> que representa a maior distância de caminho mais curto entre qualquer par de nós <span class="math inline">\((v_i, v_j)\)</span> na rede.</p></li>
+</ul>
+</section>
+<section id="sec-cap-redes-complexas-tipos" class="level3" data-number="18.2.3">
+<h3 data-number="18.2.3" class="anchored" data-anchor-id="sec-cap-redes-complexas-tipos"><span class="header-section-number">18.2.3</span> Tipos de redes</h3>
+<p>As redes podem ser categorizadas com base em suas propriedades estruturais e comportamento, que de alguma forma refletem a natureza intrincada dos sistemas do mundo real. Muito conhecidas são as redes aleatórias, livres de escala e mundo-pequeno.</p>
+<section id="redes-aleatórias" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="redes-aleatórias">Redes aleatórias</h4>
+<p>Nesse tipo de rede, as conexões entre os nós são estabelecidas aleatoriamente. Pode-se citar, a título de exemplo, redes de sensores distribuídos aleatoriamente em ambientes físicos ou redes de coocorrência de palavras construídas a partir de textos embaralhados ou gerados aleatoriamente. A despeito de terem servido de base para estudos teóricos importantes na ciência de redes, elas não refletem o comportamento e os padrões de interconectividade observados em sistemas do mundo real. Ainda assim, a análise desse tipo de rede é importante para ilustrar os princípios fundamentais que governam redes de tipos mais complexos. O modelo canônico para redes aleatórias é o de <strong>Erdős-Rényi (ER)</strong>, <span class="math inline">\(G(N, p)\)</span>. Sua formação se dá a partir de <span class="math inline">\(N\)</span> nós, onde cada par de nós possível é conectado por uma aresta com uma probabilidade <span class="math inline">\(p\)</span> independente. A distribuição de grau <span class="math inline">\(P(k)\)</span> de uma rede aleatória segue uma distribuição binomial, que, para redes grandes e com baixa probabilidade de conexão, se aproxima de uma <strong>distribuição de Poisson</strong>: <span class="math display">\[P(k) \approx \frac{\lambda^k e^{-\lambda}}{k!}\]</span> onde <span class="math inline">\(\lambda\)</span> é o grau médio da rede. A maioria dos nós tem um grau próximo da média. Em redes aleatórias do tipo ER, a distância típica entre vértices é relativamente pequena.</p>
+</section>
+<section id="redes-livres-de-escala" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="redes-livres-de-escala">Redes livres de escala</h4>
+<p>Essas redes se caracterizam pelo fato de a distribuição de grau dos seus nós seguir uma lei de potência. Em outras palavras, um número reduzido de nós tem um altíssimo número de conexões (são os chamados “<em>hubs</em>”), enquanto a grande maioria dos demais é muito pouco conectada. Redes de citação entre artigos científicos e redes de coocorrência de palavras em grandes <em>corpora</em>, como a <em>Wikipedia</em> ou o <em>Google Books</em>, são exemplos de redes livres de escala <span class="citation" data-cites="SteyversTenenbaum2005">(<a href="../../shared/referencias/referencias.html#ref-SteyversTenenbaum2005" role="doc-biblioref">Steyvers; Tenenbaum, 2005</a>)</span>. Em PLN, esse fenômeno está relacionado à <strong>Lei de Zipf</strong> <span class="citation" data-cites="zipf1949human">(<a href="../../shared/referencias/referencias.html#ref-zipf1949human" role="doc-biblioref">Zipf, 1949</a>)</span>, um princípio fundamental da linguística. A Lei de Zipf postula que a frequência de uma palavra em um <em>corpus</em> é inversamente proporcional à sua posição em um <em>ranking</em> de frequência. Em uma rede de coocorrência de palavras, os termos mais frequentes (os <em>hubs</em>) naturalmente coocorrem com uma variedade muito maior do que outras palavras. Por outro lado, a maioria das palavras — aquelas de baixa frequência, que compõem a chamada “cauda longa” de Zipf — tende a apresentar poucas conexões.</p>
+<p>A distribuição de grau em lei de potência observada nessas redes textuais, ilustrada na <a href="#fig-cap-redes-complexas-power_law_distribution_v2" class="quarto-xref">Figura&nbsp;<span>18.4</span></a>, é, em grande parte, um reflexo da Lei de Zipf que governa a frequência das palavras. O surgimento desse tipo de rede pode ser explicado por mecanismos como crescimento e conexão preferencial, ilustrados no conhecido modelo Barabási-Albert (BA), proposto por Albert-László Barabási e Réka Albert em 1999&nbsp;<span class="citation" data-cites="barabasi1999emergence">(<a href="../../shared/referencias/referencias.html#ref-barabasi1999emergence" role="doc-biblioref">Barabási; Albert, 1999</a>)</span>. O padrão de distribuição de conexões segue uma <strong>lei de potência</strong>, em que a probabilidade <span class="math inline">\(P(k)\)</span> de um nó ter <span class="math inline">\(k\)</span> conexões é dada por: <span class="math display">\[P(k) \sim k^{-\gamma}\]</span> em que <span class="math inline">\(\gamma\)</span> é o expoente da distribuição, geralmente um valor entre 2 e 3. A formação pelo modelo <strong>Barabási-Albert (BA)</strong> se baseia no mecanismo de <strong>conexão preferencial</strong>: a probabilidade <span class="math inline">\(\Pi(v_i)\)</span> de um novo nó se conectar a um nó existente <span class="math inline">\(v_i\)</span> é proporcional ao seu grau <span class="math inline">\(k_i\)</span>: <span class="math display">\[\Pi(v_i) = \frac{k_i}{\sum_j k_j}\]</span></p>
+<p>A inserção de novos nós com probabilidade de conexão proporcional ao grau dos nós já existentes resulta no fenômeno conhecido como “rico-fica-mais-rico”, que induz à formação de <em>hubs</em>. Embora o modelo BA reproduza a característica de existência de <em>hubs</em>, algumas características de redes reais ainda não são representadas por este modelo. Uma delas é a possibilidade de surgimento de novas arestas entre vértices antigos ou o desaparecimento de arestas.</p>
+<div id="fig-cap-redes-complexas-power_law_distribution_v2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-redes-complexas-power_law_distribution_v2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;18.4: Distribuição de probabilidade para um grau <span class="math inline"><em>k</em></span> (eixo Y, logarítmico) versus o grau <span class="math inline"><em>k</em></span> (eixo X, logarítmico) em uma rede livre de escala. Os dados são relativos a uma rede sintética obtida usando um algoritmo que simula o modelo de Barabási-Albert. Foram gerados 20.000 nós, sendo que cada novo nó inserido na rede se conecta a dois nós pré-existentes. Os pontos seguem aproximadamente a linha tracejada vermelha indicativa da lei de potência, que é a “assinatura” visual dessa distribuição.
+</figcaption>
+<div aria-describedby="fig-cap-redes-complexas-power_law_distribution_v2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/power_law_distribution_v2.png" class="img-fluid figure-img">
+</div>
+</figure>
+</div>
+</section>
+<section id="redes-mundo-pequeno" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="redes-mundo-pequeno">Redes mundo-pequeno</h4>
+<p>Essas redes são caracterizadas por comprimentos de caminho curtos e coeficientes de aglomeração altos, o que permite que a maioria dos nós seja acessível a partir de qualquer nó com um número pequeno de passos. Essa propriedade é frequentemente exemplificada pelo conceito dos “seis graus de separação”. Segundo esse conceito, quaisquer duas pessoas no mundo estariam — em média — a seis conexões entre si. A rede de atores de Hollywood que atuaram juntos exibe propriedades de mundo pequeno, assim como a <em>WordNet</em> e redes sintáticas de línguas naturais&nbsp;<span class="citation" data-cites="SteyversTenenbaum2005">(<a href="../../shared/referencias/referencias.html#ref-SteyversTenenbaum2005" role="doc-biblioref">Steyvers; Tenenbaum, 2005</a>)</span>.</p>
+<p>O modelo mundo-pequeno, introduzido em 1998 por Duncan J. Watts e Steven Strogatz&nbsp;<span class="citation" data-cites="watts1998collective">(<a href="../../shared/referencias/referencias.html#ref-watts1998collective" role="doc-biblioref">Watts; Strogatz, 1998</a>)</span>, ilustra como uma rede pode transicionar de um formato de grade regular para uma estrutura mais aleatória enquanto mantém suas características de mundo-pequeno. Isso ocorre por meio de uma reatribuição aleatória de arestas, o que enfatiza as conexões sem alterar significativamente a estrutura global. O modelo de <strong>Watts-Strogatz (WS)</strong> descreve a formação dessas redes a partir de uma rede regular (anel) em que cada aresta é religada aleatoriamente com uma probabilidade <span class="math inline">\(p\)</span>. O padrão de distribuição não é definido por uma fórmula única de grau, mas pela coexistência de duas propriedades:</p>
+<ol type="1">
+<li><p><strong>Alto Coeficiente de Aglomeração (<span class="math inline">\(C\)</span>):</strong> Similar ao de uma rede regular e muito maior que o de uma rede aleatória (<span class="math inline">\(C \gg C_{\text{aleatória}}\)</span>).</p></li>
+<li><p><strong>Baixo Comprimento de Caminho Médio (<span class="math inline">\(L\)</span>):</strong> Similar ao de uma rede aleatória, crescendo logaritmicamente com o número de nós (<span class="math inline">\(L \sim \log(N)\)</span>).</p></li>
+</ol>
+<p>Redes complexas possuem várias características definidoras, incluindo heterogeneidade na distribuição do grau dos nós, alta aglomeração e modularidade. A diversidade nas conexões leva à formação de grupos coesos (comunidades) na rede, com conexões mais esparsas mantidas entre diferentes grupos. Essa modularidade é crucial para entender como as redes operam e evoluem.</p>
+</section>
+</section>
+<section id="sec-cap-redes-complexas-dinamica" class="level3" data-number="18.2.4">
+<h3 data-number="18.2.4" class="anchored" data-anchor-id="sec-cap-redes-complexas-dinamica"><span class="header-section-number">18.2.4</span> Dinâmica</h3>
+<p>O estudo da dinâmica de redes complexas permite determinar como elas evoluem ao longo do tempo e influenciam os vários processos que nelas ocorrem, o que é importante para entender fenômenos como a propagação de doenças e a difusão de informações. As redes não são estáticas; elas mudam e se adaptam à medida que novos nós e links são adicionados ou removidos. Essa dinâmica pode ser entendida utilizando diferentes modelos teóricos, permitindo aos pesquisadores prever estados futuros das redes e compreender os mecanismos subjacentes que impulsionam as mudanças. Esses modelos podem descrever como um estado ou informação se propaga de nó para nó. Dois exemplos clássicos são os modelos de epidemia, como o SIR (Suscetível-Infectado-Recuperado), e os modelos de difusão de informação, como o Modelo de Limiar Linear:</p>
+<ul>
+<li><strong>Modelo SIR (Suscetível-Infectado-Recuperado):</strong> usado para modelar a propagação de doenças; nesse modelo, cada nó pode estar em um de três estados. A dinâmica pode ser descrita por um sistema de equações diferenciais (em uma aproximação de campo médio):</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+        \frac{ds}{dt} &amp;= - \beta \langle k \rangle s(t) i(t) \\
+        \frac{di}{dt} &amp;= \beta \langle k \rangle s(t) i(t) - \delta i(t) \\
+        \frac{dr}{dt} &amp;= \delta i(t)
+  \end{align*}\]</span></p>
+<p>Aqui, <span class="math inline">\(s(t)\)</span>, <span class="math inline">\(i(t)\)</span> e <span class="math inline">\(r(t)\)</span> são as frações de nós <em>suscetíveis</em>, <em>infectados</em> e <em>recuperados</em>, respectivamente. <span class="math inline">\(\beta\)</span> é a taxa de transmissão, <span class="math inline">\(\delta\)</span> é a taxa de recuperação e <span class="math inline">\(\langle k \rangle\)</span> é o grau médio da rede. A condição para uma epidemia ocorrer é que o número básico de reprodução, <span class="math inline">\(R_0 = \frac{\beta \langle k \rangle}{\delta}\)</span>, seja maior do que 1.</p>
+<ul>
+<li><strong>Modelo de Limiar Linear (<em>Linear Threshold Model</em>):</strong> usado para modelar a difusão de inovações ou comportamentos. Cada nó <span class="math inline">\(v\)</span> possui um limiar de ativação <span class="math inline">\(\theta_v \in [0, 1]\)</span>. Um nó inativo <span class="math inline">\(v\)</span> torna-se ativo no instante <span class="math inline">\(t+1\)</span> se a soma das influências de seus vizinhos já ativos, ponderada por pesos <span class="math inline">\(b_{uv}\)</span>, atinge seu limiar: <span class="math display">\[\sum_{u \in \text{vizinhos\_ativos}(v)} b_{uv} \ge \theta_v\]</span> onde <span class="math inline">\(\sum_{u} b_{uv} \le 1\)</span>. O processo continua até que nenhum novo nó possa ser ativado.</li>
+</ul>
+</section>
+</section>
+<section id="sec-cap-redes-complexas-comunidades" class="level2" data-number="18.3">
+<h2 data-number="18.3" class="anchored" data-anchor-id="sec-cap-redes-complexas-comunidades"><span class="header-section-number">18.3</span> Detecção de comunidades</h2>
+<p>No contexto do PLN, o conceito de “comunidade” estabelece um elo essencial entre a estrutura da rede e o significado linguístico. Na prática, uma comunidade identifica um agrupamento temático coeso ou um campo semântico em um <em>corpus</em>. De fato, em redes de linguagem, principalmente em redes semânticas <span class="citation" data-cites="SteyversTenenbaum2005">(<a href="../../shared/referencias/referencias.html#ref-SteyversTenenbaum2005" role="doc-biblioref">Steyvers; Tenenbaum, 2005</a>)</span>, é comum observar grupos de nós fortemente conectados entre si e menos conectados com elementos externos ao grupo. No contexto de redes complexas, tais grupos são denominados comunidades. A <a href="#fig-cap-redes-complexas-comunidades" class="quarto-xref">Figura&nbsp;<span>18.5</span></a> ilustra uma rede hipotética e sua organização em comunidades, indicadas pelas diferentes cores. Em tarefas de processamento de linguagem e em diversas outras aplicações que envolvem a análise de redes, é comum a realização de uma etapa de identificação de comunidades.</p>
+<div id="fig-cap-redes-complexas-comunidades" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-redes-complexas-comunidades-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;18.5: Representação visual das comunidades detectadas em uma rede não direcionada.
+</figcaption>
+<div aria-describedby="fig-cap-redes-complexas-comunidades-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/Redes_clusters.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+</figure>
+</div>
+<p>Considere, por exemplo, uma rede construída a partir de um grande conjunto de notícias, em que os nós correspondem a palavras e as arestas conectam palavras que aparecem frequentemente juntas. Nessa rede, esperaríamos que palavras como “futebol”, “campeonato”, “jogador” e “partida” formassem um agrupamento muito denso, representando o tópico “Esportes” (ou especificamente “Futebol”). Da mesma forma, palavras como “governo”, “eleição”, “congresso” e “partido” formariam outra comunidade (“Política”). Identificar essas estruturas pode ser útil para revelar a organização temática latente do texto e constitui uma etapa crucial para tarefas como a modelagem de tópicos (em que comunidades podem indicar tópicos), a sumarização (ajudando a identificar os conceitos centrais de um texto) ou a desambiguação de palavras (entendendo os diferentes contextos em que uma palavra é usada).</p>
+<p>Muitos algoritmos são usados para identificar comunidades em redes complexas, em que se busca maximizar a coesão entre os vértices de um mesmo grupo. Esses algoritmos são aplicados em vários domínios além do PLN, incluindo análise de redes sociais, biologia, detecção de fraudes e telecomunicações. Métodos proeminentes incluem o <em>Algoritmo de Propagação de Rótulos</em> (LPA, <em>Label Propagation Algorithm</em>) <span class="citation" data-cites="Raghavan2007">(<a href="../../shared/referencias/referencias.html#ref-Raghavan2007" role="doc-biblioref">Raghavan et al., 2007</a>)</span>; o algoritmo <em>Infomap</em> <span class="citation" data-cites="Rosvall2008">(<a href="../../shared/referencias/referencias.html#ref-Rosvall2008" role="doc-biblioref">Rosvall; Bergstrom, 2008</a>)</span>; o algoritmo <em>Girvan-Newman</em> <span class="citation" data-cites="NewmanGirvan2004">(<a href="../../shared/referencias/referencias.html#ref-NewmanGirvan2004" role="doc-biblioref">Newman; Girvan, 2004</a>)</span>, e o algoritmo <em>Louvain</em> <span class="citation" data-cites="Blondel2008">(<a href="../../shared/referencias/referencias.html#ref-Blondel2008" role="doc-biblioref">Blondel et al., 2008</a>)</span>.</p>
+<p>Eles variam significativamente quanto à abordagem&nbsp;<span class="citation" data-cites="PalacioNino_Berzal_2024">(<a href="../../shared/referencias/referencias.html#ref-PalacioNino_Berzal_2024" role="doc-biblioref">Palacio-Niño; Berzal, 2024</a>)</span> <span class="citation" data-cites="Singh_Garg_2025">(<a href="../../shared/referencias/referencias.html#ref-Singh_Garg_2025" role="doc-biblioref">Singh; Garg, 2025</a>)</span>. O algoritmo de <em>Girvan-Newman</em> <span class="citation" data-cites="NewmanGirvan2004">(<a href="../../shared/referencias/referencias.html#ref-NewmanGirvan2004" role="doc-biblioref">Newman; Girvan, 2004</a>)</span>, um dos pioneiros, opera pela remoção iterativa de arestas: ele calcula a centralidade de intermediação das arestas e remove aquelas com maior centralidade até que a rede seja segmentada em comunidades distintas. Essa abordagem enfatiza a importância da conectividade das arestas. O LPA também adota uma estratégia simples, atribuindo rótulos a nós com base no voto da maioria de seus vizinhos. Inicialmente, cada nó recebe um rótulo único e, em cada iteração, os rótulos dos nós são atualizados para refletir o rótulo mais frequente entre seus vizinhos. Esse processo iterativo continua até que os rótulos se estabilizem, resultando em comunidades distintas. O LPA é eficiente e escalável, adequado para grandes redes. No entanto, seus resultados podem ser sensíveis à atribuição dos rótulos iniciais e à ordem de processamento dos nós, muitas vezes exigindo múltiplas execuções para alcançar resultados consistentes. Uma abordagem de consenso entre partições distintas pode também ser necessária para melhorar a qualidade das partições&nbsp;<span class="citation" data-cites="lancichinetti2012consensus">(<a href="../../shared/referencias/referencias.html#ref-lancichinetti2012consensus" role="doc-biblioref">Lancichinetti; Fortunato, 2012</a>)</span>.</p>
+<p>Já o algoritmo <em>Infomap</em> adota princípios da teoria da informação e passeios aleatórios. Um passeio aleatório (<em>random walk</em>) é um processo estocástico que descreve a movimentação de um “agente” que se desloca de nó em nó em uma rede seguindo regras probabilísticas. O algoritmo busca minimizar o comprimento do caminho de um passeador aleatório através da rede, capturando o fluxo de informação. Ao conceituar a rede como um mapa, o <em>Infomap</em> identifica agrupamentos de nós que são frequentemente visitados pelo passeador aleatório. Este algoritmo é reconhecido por sua robustez e estabilidade, sendo uma opção confiável quando for essencial entender o fluxo de informação na rede.</p>
+<p>O <em>Louvain</em> é um algoritmo heurístico introduzido por Blondel et al. <span class="citation" data-cites="Blondel2008">(<a href="../../shared/referencias/referencias.html#ref-Blondel2008" role="doc-biblioref">Blondel et al., 2008</a>)</span> para detecção de comunidades em grandes redes. O algoritmo otimiza uma métrica de modularidade, uma função de qualidade que mede quão bem uma partição de uma rede separa conexões densas intra-comunidade de conexões esparsas inter-comunidade. Ele opera em duas fases principais que são repetidas iterativamente: (i) Otimização local de modularidade, em que cada nó é inicialmente atribuído à sua própria comunidade, e nós são movidos para comunidades vizinhas se isso resultar em um ganho de modularidade; e (ii) Agregação de comunidades, a partir do momento que não há ganhos de modularidade adicional no nível local, cada comunidade detectada é colapsada em um único nó, produzindo uma “super-rede” menor. A primeira fase é então reaplicada. Esse processo hierárquico e multinível prossegue até que nenhuma melhoria na modularidade possa ser alcançada. O algoritmo é eficiente, mostrando-se adequado para redes muito grandes, com milhões de nós, e hierárquico, produzindo uma hierarquia de comunidades em diferentes níveis de resolução. Também é estocástico (i.e., não determinístico), uma vez que a ordem em que os nós são processados ao decidir mover um nó para uma comunidade vizinha afeta o resultado. Mais recentemente, uma extensão do <em>Louvain</em> foi criada de forma a garantir que as comunidades encontradas sejam comunidades conectadas, além de aumentar a velocidade do método&nbsp;<span class="citation" data-cites="Traag2019">(<a href="../../shared/referencias/referencias.html#ref-Traag2019" role="doc-biblioref">Traag et al., 2019</a>)</span>.</p>
+<p>A despeito dos avanços significativos, a detecção de comunidades segue com desafios em aberto. Uma das questões fundamentais é a ausência de métodos universalmente aplicáveis a diferentes estruturas de rede. Os algoritmos tradicionais geralmente pressupõem que as comunidades são grupos distintos e densos de nós, o que pode levar a imprecisões em cenários em que as comunidades se sobrepõem, i.e., existem nós que pertencem a múltiplas comunidades. Além disso, é difícil avaliar objetivamente a qualidade do resultado, em vista da ausência de uma única métrica aplicável aos diferentes métodos. Métricas como o <em>Índice Rand Ajustado</em> (ARI), o <em>Índice Omega</em> e a <em>Modularidade</em> não capturam adequadamente a complexidade de estruturas de comunidades sobrepostas. Assim, muitas vezes é necessário adaptar os métodos de avaliação às características específicas das redes e comunidades analisadas. Outro desafio é identificar corretamente a granularidade (ou o nível de resolução) das comunidades detectadas, i.e., se estamos buscando identificar numerosas comunidades menores ou identificar um número menor de comunidades, mas maiores. A escolha afeta a interpretabilidade e a usabilidade da estrutura de comunidades obtida. Além disso, a análise das propriedades estruturais locais, que poderia aprimorar o processo de detecção, é muitas vezes limitada pela escalabilidade dos algoritmos existentes e pela ausência de dados de referência (<em>ground truth</em>) para validação.</p>
+<p>A complexidade e a variabilidade inerentes às redes ressaltam a necessidade de abordagens customizadas, e pesquisas seguem na busca por ampliar a escalabilidade, o desempenho e a aplicabilidade dos algoritmos. Tendências incluem a integração de técnicas de aprendizado de máquina, o desenvolvimento de métodos de detecção de comunidades dinâmicas para análise em tempo real e algoritmos para lidar com comunidades sobrepostas.</p>
+</section>
+<section id="sec-cap-redes-complexas-aplicacoes" class="level2" data-number="18.4">
+<h2 data-number="18.4" class="anchored" data-anchor-id="sec-cap-redes-complexas-aplicacoes"><span class="header-section-number">18.4</span> Aplicações de redes complexas em PLN para o português</h2>
+<p>O desenvolvimento de aplicações de redes complexas em PLN tem tido participação significativa de pesquisadores brasileiros. A título de ilustração, dos cerca de 100 artigos indexados na <em>Web of Science</em> obtidos em uma busca expressa como (“natural language processing” and “complex network*”), realizada em setembro de 2025, aproximadamente um quarto são de autores brasileiros. Entretanto, essa busca não conseguiu capturar um conjunto representativo de artigos na área, como percebemos ao fazer um levantamento das contribuições de brasileiros da área. Possivelmente ocorreu o mesmo com autores de outros países. Aparentemente, a área está sub-representada na <em>Web of Science</em> e, portanto, o número real de artigos deve ser consideravelmente maior, provavelmente da ordem de algumas centenas. De todo modo, é notável a porcentagem de trabalhos brasileiros no tópico.</p>
+<p>Em vista da grande flexibilidade das redes complexas como modelo de representação, sua diversidade de aplicações é enorme. A vantagem dessa abordagem é explorar a topologia da rede textual, que é complementar às análises de conteúdo. Por exemplo, em tarefas de sumarização extrativa, nos moldes das discutidas no Capítulo 24, a centralidade de um nó (representando uma sentença) pode indicar sua importância para o resumo, independentemente do peso semântico de suas palavras isoladas. Em análise de sentimentos, por exemplo, em textos de postagens em redes sociais (ver Capítulo 34), a forma como os conceitos positivos e negativos se agrupam na rede pode revelar a polaridade de um texto de opinião com mais robustez. Na avaliação de traduções (ver Capítulo 23, sobre tradução automática), métricas de rede mostraram-se capazes de distinguir a qualidade e a fluidez de textos traduzidos por máquinas ou por humanos.</p>
+<p>Apresentamos, nesta seção, um breve resumo de algumas contribuições de autores brasileiros, que foram pioneiros em demonstrar como essas métricas estruturais capturam aspectos complexos da qualidade textual, da simplificação e até mesmo do diagnóstico médico baseado em transcrições de fala.</p>
+<p>Parcela significativa das contribuições descreve aplicações que abordam a classificação de textos modelados como redes complexas. A avaliação da qualidade de redações é uma das aplicações de interesse (ver Capítulo 26 deste livro). Um dos primeiros artigos a utilizar redes complexas em PLN&nbsp;<span class="citation" data-cites="Antiqueira2007811">(<a href="../../shared/referencias/referencias.html#ref-Antiqueira2007811" role="doc-biblioref">Antiqueira et al., 2007</a>)</span> identificou uma alta correlação de métricas de redes com a qualidade dos textos em redações de vestibular. As redações foram modeladas como redes de coocorrência em que os nós representam as palavras. As notas atribuídas por professores aos itens de coesão/coerência, correção gramatical e adequação ao tema diminuíram com o aumento dos valores de métricas como grau de saída, coeficiente de aglomeração e desvio da dependência linear no crescimento da rede. A maior correlação foi observada para o quesito coesão/coerência, indicando que as métricas da rede permitiam capturar esse aspecto qualitativo do texto.</p>
+<p>Como um exemplo, considere o seguinte trecho de texto que apresenta boa coesão: <em>O pesquisador instalou gravadores na floresta. Os sons captados revelaram a presença de aves raras.</em> Nesse caso, uma rede de coocorrência de palavras revelaria conexões claras entre termos como <em>pesquisador</em>, <em>gravadores</em>, <em>floresta</em>, <em>sons</em> e <em>aves</em>, formando uma estrutura interligada com caminhos curtos entre os nós. A palavra <em>sons</em>, por exemplo, funcionaria como um elo entre a ação de gravar e a descoberta das aves, contribuindo para a coesão semântica do texto. Agora, observe um texto menos coeso: <em>O pesquisador instalou gravadores na floresta. A cidade estava movimentada com o festival de música.</em> Embora ambas as frases sejam gramaticalmente corretas, elas pertencem a contextos distintos e não compartilham elementos semânticos relevantes. A rede de coocorrência resultante apresentaria dois componentes desconexos, refletindo a ausência de continuidade temática. Métricas como o coeficiente de aglomeração reduzido ou um maior diâmetro da rede poderiam ser utilizadas para indicar essa quebra de coesão.</p>
+<p>A topologia e a dinâmica de redes revelam características estruturais de um texto, o que permite avaliar questões linguísticas inerentes à tradução manual e automática (abordada no Capítulo 23). Amancio et al.&nbsp;<span class="citation" data-cites="Amancio_et_al_2011">(<a href="../../shared/referencias/referencias.html#ref-Amancio_et_al_2011" role="doc-biblioref">Amancio et al., 2011a</a>)</span> mostraram que é possível distinguir diferentes qualidades de traduções geradas por ferramentas de tradução automática de suas correspondentes manuais utilizando métricas como graus de entrada (ID) e de saída (OD), coeficiente de agrupamento (CC) e caminhos mínimos (SP). Os autores verificaram, por exemplo, que em redes de traduções automáticas o OD médio excede consistentemente os valores obtidos para traduções manuais, e que os valores de CC dos textos originais não são preservados em traduções manuais, mas o são em boas traduções automáticas. Isso provavelmente reflete os rearranjos textuais realizados por humanos durante a tradução manual.</p>
+<p>Considere a frase original em inglês: <em>The biologist recorded bird songs at sunrise in the rainforest</em>. Essa sentença formaria uma rede de coocorrência coesa, conectando termos como <em>biologist</em>, <em>recorded</em>, <em>bird songs</em>, <em>sunrise</em>, e <em>rainforest</em>, todos relacionados ao contexto de pesquisa ecológica. Agora, compare duas possíveis traduções para o português:</p>
+<ul>
+<li><p>Tradução automática: O biólogo registrou sons de pássaros na manhã na floresta.</p></li>
+<li><p>Tradução humana: O biólogo gravou cantos de aves ao amanhecer na floresta tropical.</p></li>
+</ul>
+<p>No exemplo, a tradução automática gerou estruturas mais genéricas e menos conectadas semanticamente. Termos como <em>registrou</em>, <em>sons</em>, <em>manhã</em> e <em>floresta</em> são corretos, mas formam uma rede com menor densidade e maior diâmetro, refletindo uma coesão temática mais fraca. Já a tradução humana preservou nuances do original, como <em>cantos de aves</em> e <em>amanhecer</em>, e introduziu termos mais específicos, como <em>floresta tropical</em>, resultando em uma rede mais compacta e interligada.</p>
+<p>Ao comparar diferentes redes, métricas como o coeficiente de aglomeração, a densidade de conexões e o número de componentes podem indicar maior fidelidade semântica e coesão na tradução humana. Esse tipo de análise é especialmente útil para avaliar sistemas de tradução automática anteriores à era dos modelos que empregam aprendizado de máquina, que frequentemente apresentavam limitações na preservação de contexto e fluidez textual. O estudo citado <span class="citation" data-cites="Amancio_et_al_2011">(<a href="../../shared/referencias/referencias.html#ref-Amancio_et_al_2011" role="doc-biblioref">Amancio et al., 2011a</a>)</span> mostrou que as redes de palavras desses dois tipos de texto, ou seja, gerados por traduções automáticas ou manuais, possuem “assinaturas” topológicas distintas. Por exemplo, métricas como o grau médio das palavras e o coeficiente de agrupamento diferem. Isso permitiu treinar classificadores para automaticamente distinguir traduções humanas de traduções automáticas de baixa qualidade.</p>
+<p>Ressalte-se que o artigo em questão foi publicado há mais de 15 anos, quando o desempenho dos tradutores automáticos era muito inferior ao atual. Abordagem similar foi aplicada para avaliar a qualidade da tradução automática, inclusive comparando traduções do português para o espanhol e para o inglês <span class="citation" data-cites="Amancio_et_al_2011">(<a href="../../shared/referencias/referencias.html#ref-Amancio_et_al_2011" role="doc-biblioref">Amancio et al., 2011a</a>)</span>. As métricas de redes foram usadas como entrada em algoritmos de aprendizado de máquina que conseguiram distinguir textos oriundos de tradução humana, tradução automática de alta qualidade e tradução automática de baixa qualidade. Um resultado importante foi que a acurácia na classificação aumentou quando foram consideradas métricas de diferentes níveis hierárquicos na rede. Concluiu-se que a possível captura de um contexto mais amplo com os níveis hierárquicos pode ser útil para aumentar a acurácia de classificação com aprendizado de máquina <span class="citation" data-cites="Amancio_et_al_2011">(<a href="../../shared/referencias/referencias.html#ref-Amancio_et_al_2011" role="doc-biblioref">Amancio et al., 2011a</a>)</span>. É interessante fazer uma analogia com o que se faz hoje com aprendizado de máquina nos modelos de língua de larga escala (LLMs, de <em>large language models</em> em inglês), em que os <em>embeddings</em> e o mecanismo de atenção fornecem contexto amplo, como discutido na Seção 2.6 do Capítulo 23.</p>
+<p>Três artigos abordam a adequação de redes complexas para tarefas de sumarização extrativa em português (discutidas no Capítulo 24 deste livro). No primeiro, foram empregadas métricas de redes complexas para selecionar sentenças em um resumo extrativo <span class="citation" data-cites="Antiqueira_2009">(<a href="../../shared/referencias/referencias.html#ref-Antiqueira_2009" role="doc-biblioref">Antiqueira et al., 2009</a>)</span>. A rede que representa um texto era constituída por nós correspondentes às sentenças, enquanto arestas conectavam sentenças que compartilhavam substantivos considerados significativos. Um conjunto de 14 sumarizadores foi produzido empregando diferentes métricas, como o grau dos nós e o comprimento de caminhos mínimos. Algumas versões apresentaram desempenho superior ao de sumarizadores que não empregavam conhecimento linguístico profundo. Em alguns casos, os resultados foram comparáveis aos dos sumarizadores de ponta baseados em recursos linguísticos de alto custo.</p>
+<p>Para ilustrar a abordagem de sumarização baseada em redes de coocorrência semântica, considere o seguinte minitexto composto por três sentenças:</p>
+<ul>
+<li><p><strong>S1</strong>: A inteligência artificial avança rapidamente no Brasil.</p></li>
+<li><p><strong>S2</strong>: O avanço da inteligência artificial impacta diversos setores da sociedade.</p></li>
+<li><p><strong>S3</strong>: O clima no Brasil é predominantemente tropical.</p></li>
+</ul>
+<p>O modelo constrói uma rede em que os nós representam sentenças e as arestas conectam sentenças que compartilham conceitos ou termos relevantes (por exemplo, <em>inteligência artificial</em>, <em>Brasil</em>, <em>avanço</em>). Nesse cenário:</p>
+<ul>
+<li><p><strong>S1</strong> compartilha os termos <em>inteligência artificial</em> e <em>Brasil</em> com <strong>S2</strong> e <strong>S3</strong>, respectivamente.</p></li>
+<li><p><strong>S2</strong> conecta-se a<strong>S1</strong> por meio dos termos <em>inteligência artificial</em> e <em>avanço</em>.</p></li>
+<li><p><strong>S3</strong> conecta-se a <strong>S1</strong> por meio do termo <em>Brasil</em>, mas não compartilha termos com <strong>S2</strong>.</p></li>
+</ul>
+<p>A estrutura resultante é uma rede em que <strong>S1</strong> atua como um nó central, com maior grau de conectividade. De acordo com métricas de centralidade (como <em>centralidade de grau</em> ou <em>PageRank</em>), <strong>S1</strong> seria considerada a sentença mais representativa do conteúdo global do texto e, portanto, uma forte candidata à composição de um resumo extrativo. Esse tipo de abordagem é particularmente útil para sumarização automática, pois permite identificar sentenças que funcionam como “pontes semânticas” entre diferentes partes do texto, mesmo em <em>corpora</em> maiores e mais complexos.</p>
+<p>Em outro trabalho <span class="citation" data-cites="Tohalino_Amancio_2018">(<a href="../../shared/referencias/referencias.html#ref-Tohalino_Amancio_2018" role="doc-biblioref">Tohalino; Amancio, 2018</a>)</span>, redes também com sentenças representadas por nós foram usadas para identificar as sentenças mais relevantes para sumarização em vários documentos simultaneamente, em português e em inglês. No terceiro artigo <span class="citation" data-cites="Amancio_Nunes_OliveiraCosta_2012">(<a href="../../shared/referencias/referencias.html#ref-Amancio_Nunes_OliveiraCosta_2012" role="doc-biblioref">Amancio et al., 2012a</a>)</span>, as redes eram formadas por coocorrência de palavras, ou seja, os nós eram constituídos por palavras em português. Mostrou-se que a incorporação de conhecimento linguístico foi capaz de melhorar, de maneira modesta, o desempenho do sumarizador automático. A conclusão principal foi quanto à utilidade de utilizar métricas de redes complexas para a tarefa de sumarização.</p>
+<p>A simplificação de textos é essencial para garantir acessibilidade a leitores com habilidade de leitura limitada, o que tem sido objeto de pesquisa para o português do Brasil, como discutido no Capítulo 25 deste livro. Um desafio é identificar o nível de simplificação adequado para uma audiência específica. Em um trabalho com textos representados por redes de coocorrência, verificou-se que a regularidade topológica se correlaciona negativamente com a complexidade textual <span class="citation" data-cites="Amancio_Aluisio_OliveiraCosta_2012">(<a href="../../shared/referencias/referencias.html#ref-Amancio_Aluisio_OliveiraCosta_2012" role="doc-biblioref">Amancio et al., 2012b</a>)</span>. Além disso, a distância entre conceitos, representados como nós, tende a diminuir em textos menos complexos. As métricas das redes complexas foram tratadas com técnicas multivariadas de reconhecimento de padrões, o que permitiu distinguir entre textos originais e suas versões simplificadas. Para cada texto original, duas versões simplificadas foram geradas manualmente com um número crescente de operações de simplificação. Como esperado, a distinção foi mais fácil para as versões fortemente simplificadas, em que as métricas mais relevantes foram força do nó, caminhos mínimos e diversidade. Além disso, a discriminação de textos complexos foi aprimorada com métricas hierárquicas mais altas da rede, apontando, assim, para a utilidade de considerar contextos mais amplos em torno dos conceitos.</p>
+<p>A distinção de textos com opiniões positivas ou negativas sobre um tema (problema abordado no Capítulo 34, PLN em Redes Sociais) também pode ser feita classificando-se redes complexas que representam textos. No artigo de Amancio et al.&nbsp;<span class="citation" data-cites="Amancio_Fabbri_Oliveira_Nunes_Costa_2011">(<a href="../../shared/referencias/referencias.html#ref-Amancio_Fabbri_Oliveira_Nunes_Costa_2011" role="doc-biblioref">Amancio et al., 2011b</a>)</span>, foram analisados pares de artigos de opinião publicados em um jornal de grande circulação, em que articulistas argumentavam contra ou a favor de um determinado tema. A distinção foi possível empregando várias métricas, incluindo graus, coeficiente de agrupamento, caminhos mínimos, eficiência global, centralidade de proximidade e acessibilidade.</p>
+<p>A título de exemplo, considere duas resenhas curtas de um filme, uma positiva e outra negativa:</p>
+<ul>
+<li><p>Resenha positiva: O filme é ótimo. As atuações são ótimas e o roteiro também é ótimo.</p></li>
+<li><p>Resenha negativa: O filme é lento. As atuações são previsíveis e o roteiro é muito fraco.</p></li>
+</ul>
+<p>A rede de coocorrência no primeiro caso, da resenha positiva, seria pequena e altamente conectada. O termo <em>ótimo</em> aparece em todas as sentenças e se conecta diretamente a <em>filme</em>, <em>atuação</em> e roteiro, formando um nó central (<em>hub</em>) com grau elevado. Essa estrutura indica forte polarização positiva e alta coesão semântica, o que facilita a detecção automática do sentimento positivo. No caso da resenha negativa, o resultado seria uma rede mais esparsa, com termos como <em>lento</em>, <em>previsível</em> e <em>fraco</em> distribuídos entre diferentes aspectos do filme. Não há um único termo dominante que conecte todos os elementos, resultando em uma rede com vários nós periféricos e menor densidade. Essa dispersão semântica reflete uma crítica fragmentada e facilita a identificação do sentimento negativo. Ao comparar essas redes, métricas como grau médio, coeficiente de aglomeração, diâmetro da rede e centralidade de termos afetivos podem ser utilizadas para inferir automaticamente o sentimento predominante. Redes densas com <em>hubs</em> positivos tendem a indicar avaliações favoráveis, enquanto redes dispersas com múltiplos termos negativos sugerem críticas desfavoráveis.</p>
+<p>O estudo &nbsp;<span class="citation" data-cites="Amancio_Fabbri_Oliveira_Nunes_Costa_2011">(<a href="../../shared/referencias/referencias.html#ref-Amancio_Fabbri_Oliveira_Nunes_Costa_2011" role="doc-biblioref">Amancio et al., 2011b</a>)</span> mostrou que essa diferença na estrutura da rede, capturada por métricas como o coeficiente de agrupamento e os caminhos mínimos, é suficiente para classificar automaticamente a polaridade do texto. O conjunto de dados multidimensional foi mapeado em um espaço bidimensional por meio da análise de componentes principais. A distinção foi quantificada utilizando algoritmos de aprendizado de máquina, com acerto de 84,4% na discriminação automática das opiniões negativas.</p>
+<p>Há muitas aplicações de PLN em saúde, como discutido nos capítulos 28 e 29 deste livro. O diagnóstico médico é essencialmente uma tarefa de classificação, razão pela qual atualmente se empregam diferentes algoritmos de aprendizado de máquina para a análise de imagens médicas e exames clínicos. Esse tipo de aplicação pode também ser feito com texto, como foi o caso da análise de textos transcritos a partir de falas de pacientes e voluntários para diagnosticar o comprometimento cognitivo leve (CCL), que normalmente antecede os sintomas de demências <span class="citation" data-cites="Santos_et_al_2017">(<a href="../../shared/referencias/referencias.html#ref-Santos_et_al_2017" role="doc-biblioref">Santos et al., 2017</a>)</span>. Como os textos eram curtos, as redes complexas foram enriquecidas utilizando-se de <em>embeddings</em> de palavras. Ao enriquecer os nós (palavras) com <em>embeddings</em>, o modelo consegue capturar nuances semânticas que, combinadas com as métricas da rede, ajudam o classificador a detectar o comprometimento cognitivo. A maior acurácia na classificação binária do CCL foi obtida com o algoritmo Máquina de Vetores de Suporte (<em>Support Vector Machine</em>)<span class="citation" data-cites="Santos_et_al_2017">(<a href="../../shared/referencias/referencias.html#ref-Santos_et_al_2017" role="doc-biblioref">Santos et al., 2017</a>)</span>.</p>
+</section>
+<section id="sec-cap-redes-complexas-panorama" class="level2" data-number="18.5">
+<h2 data-number="18.5" class="anchored" data-anchor-id="sec-cap-redes-complexas-panorama"><span class="header-section-number">18.5</span> Exemplo de aplicação: Panorama de PLN em língua portuguesa</h2>
+<p>Estabelecer um panorama para qualquer área de pesquisa exige hoje um grande esforço, em vista do enorme número de publicações. Uma estratégia introduzida há alguns anos <span class="citation" data-cites="Silva_Amancio_Bardosova_Costa_Oliveira_2016">(<a href="../../shared/referencias/referencias.html#ref-Silva_Amancio_Bardosova_Costa_Oliveira_2016" role="doc-biblioref">Silva et al., 2016</a>)</span> para obter tais panoramas consiste em combinar redes complexas com PLN, partindo-se de redes de citações ou de similaridade formadas com artigos extraídos de buscas em repositórios como a <em>Web of Science</em> ou o <em>OpenAlex</em>. Empregando algoritmos de identificação de comunidades, determinam-se as comunidades (agrupamentos) correspondentes a tópicos ou subtópicos da área sob estudo. A análise da rede, tanto em termos de seu formato e topologia quanto do conteúdo das comunidades, permite obter uma visão geral da área. Nesta seção, descrevemos os resultados de empregar essa estratégia para a área de PLN em português. A metodologia é detalhada nas subseções&nbsp;<span> <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html#sec-cap-redes-complexas-redes-citsim" target="_blank" title="Volume 3">Redes de citações e similaridade</a></span> e <span> <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html#sec-cap-redes-complexas-bardosova" target="_blank" title="Volume 3">Identificação de tópicos em redes de pesquisa</a></span>, e os resultados são apresentados na subseção&nbsp;<span> <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html#sec-cap-redes-complexas-PLNPortugues" target="_blank" title="Volume 3">Pesquisa em PLN para o português</a></span>.</p>
+<section id="sec-cap-redes-complexas-redes-citsim" class="level3" data-number="18.5.1">
+<h3 data-number="18.5.1" class="anchored" data-anchor-id="sec-cap-redes-complexas-redes-citsim"><span class="header-section-number">18.5.1</span> Redes de citações e similaridade</h3>
+<p>Uma rede de citações pode ser obtida a partir de um <em>corpus</em> de artigos, estabelecendo uma conexão entre dois artigos do <em>corpus</em> (representados como nós da rede) quando existe uma citação de um para o outro. Essa conexão é, em princípio, direcionada, i.e., sai do nó que representa o artigo que cita para o nó que representa o artigo citado. Entretanto, há situações em que se pode optar por ignorar o sentido das arestas, caso o objetivo seja simplesmente representar um relacionamento desse tipo entre os dois artigos.</p>
+<p>Se o <em>corpus</em> é representativo de uma área de conhecimento, ou de um tópico de pesquisa, a rede de citações permite capturar informações sobre a estrutura do conhecimento nessa área ou tópico. É possível identificar artigos altamente influentes (muito citados), grupos temáticos, artigos que atuam como pontes entre diferentes grupos temáticos, e como ideias se propagaram ao longo do tempo. Artigos centrais muitas vezes são precursores de novas subáreas ou pontos de referência para a comunidade de pesquisa representada na rede. Já artigos que ligam grupos temáticos podem indicar trabalhos com alto grau de interdisciplinaridade, pelo potencial de aproximar comunidades de pesquisa que antes não dialogavam entre si. Esse tipo de análise permite responder perguntas como: quais artigos deram origem a um novo tema de pesquisa? Que áreas e subáreas estão crescendo rapidamente em número de citações? Existe uma fragmentação em comunidades?</p>
+<p>As redes de citações evidenciam os relacionamentos entre os artigos, mas não capturam necessariamente o seu conteúdo semântico. Dois artigos podem abordar temas próximos ou relacionados sem que haja uma relação de citação entre eles. Para explorar relações de natureza semântica, pode-se recorrer às redes de similaridade textual. Nessa abordagem, uma conexão entre dois artigos representados como nós da rede é estabelecida quando seus conteúdos são considerados semanticamente próximos, ou seja, foi detectada alguma similaridade de conteúdo. Para quantificar essa proximidade semântica, utiliza-se uma representação vetorial conhecida como <em>embedding</em> <span class="citation" data-cites="pennington-etal-2014-glove">(<a href="../../shared/referencias/referencias.html#ref-pennington-etal-2014-glove" role="doc-biblioref">Pennington et al., 2014</a>)</span>. Para mais informações sobre similaridade textual e <em>embeddings</em> sugerimos ao leitor consultar o Capítulo 10 deste livro.</p>
+<p>Existem diversos modelos para gerar <em>embeddings</em>, que podem vetorizar desde palavras isoladas até textos completos. Na abordagem apresentada na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html#sec-cap-redes-complexas-PLNPortugues" target="_blank" title="Volume 3">Pesquisa em PLN para o português</a></span>, cada resumo é representado por um vetor numérico usando o modelo <em>SentenceTransformer</em>, que pode mapear textos inteiros em um espaço multidimensional. A proximidade semântica dos textos é determinada pelo cálculo de similaridade do cosseno entre todos os pares de vetores. A expressão matemática para essa similaridade é dada por:</p>
+<p><span class="math display">\[S_{cos} (A,B) = \frac{A \cdot B}{||A|| \:\: ||B||}\]</span></p>
+<p>onde <span class="math inline">\(A \cdot B\)</span> é o produto escalar entre os vetores <span class="math inline">\(A\)</span> e <span class="math inline">\(B\)</span>, e <span class="math inline">\(||A||\)</span> e <span class="math inline">\(||B||\)</span> indicam as respectivas normas dos vetores. Esse produto escalar varia entre <span class="math inline">\(-1\)</span> e <span class="math inline">\(1\)</span>; no entanto, no contexto de <em>embeddings</em> textuais, considera-se apenas o módulo. Assim, uma similaridade próxima de <span class="math inline">\(0\)</span> indica que os dois textos são totalmente distintos, enquanto uma similaridade próxima a <span class="math inline">\(1\)</span> revela que os textos são semanticamente próximos.</p>
+<p>Para a construção da rede de similaridade nessa abordagem, considera-se ainda um limiar de similaridade, que estabelece o valor mínimo necessário para que uma conexão seja adicionada à rede. Ou seja, utilizando um limiar de <span class="math inline">\(70\%\)</span> (<span class="math inline">\(S_{cos} (A,B) = 0.7\)</span>), apenas os pares de artigos cuja similaridade exceder este valor estarão conectados por uma aresta. Essa etapa evita que se crie uma rede excessivamente densa e garante que o modelo gerado ofereça uma visão estruturada da proximidade temática entre os artigos, servindo de base para a identificação de padrões na literatura. Artigos que compartilham temas centrais tendem a compor agrupamentos temáticos, revelando subáreas de estudo ou tópicos emergentes. Conexões entre agrupamentos podem indicar tópicos interdisciplinares ou tendências de convergência de temas de pesquisa. Essas redes permitem identificar artigos que abordam temas semelhantes, além de evidenciar padrões ocultos não evidenciados nas relações de citação. As redes de similaridade são então complementares às redes de citações. São particularmente úteis para pequenos grupos de artigos, como em uma área emergente na qual ainda não se identificam trabalhos centrais com alto número de citações.</p>
+</section>
+<section id="sec-cap-redes-complexas-bardosova" class="level3" data-number="18.5.2">
+<h3 data-number="18.5.2" class="anchored" data-anchor-id="sec-cap-redes-complexas-bardosova"><span class="header-section-number">18.5.2</span> Identificação de tópicos em redes de pesquisa</h3>
+<p>O método introduzido por Silva et al.&nbsp;<span class="citation" data-cites="Silva_Amancio_Bardosova_Costa_Oliveira_2016">(<a href="../../shared/referencias/referencias.html#ref-Silva_Amancio_Bardosova_Costa_Oliveira_2016" role="doc-biblioref">Silva et al., 2016</a>)</span> estabelece uma estratégia para identificar os principais temas (tópicos) associados a uma área de pesquisa, dada uma rede criada a partir de um <em>corpus</em> textual de artigos científicos representativo da área. A estratégia associa um algoritmo de detecção de comunidades na rede com a identificação dos tópicos abordados pelos artigos pertencentes às diferentes comunidades. Assim, comunidades são caracterizadas por conjuntos de termos (palavras-chave - unigramas e bigramas) extraídos do <em>corpus</em> a partir da quantificação da importância semântica dos termos, no contexto da sua ocorrência naquela comunidade. Em particular, os termos elencados são extraídos do título e resumo dos artigos que compõem a rede (seja ela de citação ou de similaridade), cujos conteúdos contêm informações suficientes para uma boa caracterização dos termos mais representativos.</p>
+<p>A importância dos termos na rede é quantificada por meio de dois índices de frequência relativa. Inicialmente, é determinada a frequência de um termo dentro de sua própria comunidade e, em seguida, sua frequência no restante da rede. Por exemplo, para determinar a frequência de um termo <span class="math inline">\((w)\)</span> em uma comunidade <span class="math inline">\((\alpha)\)</span>, conta-se o total de artigos <span class="math inline">\(n_{\alpha}(w)\)</span> dessa comunidade que contêm o termo <span class="math inline">\((w)\)</span>. Com isso, a frequência do termo relativa dentro da comunidade <span class="math inline">\(F_{\alpha}^{\: in}(w)\)</span> é:</p>
+<p><span class="math display">\[F_{\alpha}^{\: in}(w) = \frac{n_{\alpha}(w)}{|\alpha|}\]</span></p>
+<p>em que <span class="math inline">\(|\alpha|\)</span> é o número de artigos pertencentes à comunidade <span class="math inline">\((\alpha)\)</span>. Analogamente, definimos a frequência relativa fora da comunidade <span class="math inline">\((\alpha)\)</span> como:</p>
+<p><span class="math display">\[F_{\alpha}^{\: out}(w) = \sum_{\gamma \: \neq \: \alpha} \frac{n_{\gamma}(w)}{N - |\alpha|}\]</span></p>
+<p>Neste caso, <span class="math inline">\((\gamma)\)</span> representa uma comunidade qualquer, diferente de <span class="math inline">\((\alpha)\)</span>, e <span class="math inline">\(N\)</span> é o número total de artigos da rede. Ou seja, <span class="math inline">\(F_{\alpha}^{\: out}(w)\)</span> se refere à frequência relativa do termo <span class="math inline">\((w)\)</span> fora da comunidade <span class="math inline">\((\alpha)\)</span>.</p>
+<p>Com as relações de frequência interna e externa à comunidade <span class="math inline">\((\alpha)\)</span> estabelecidas, a importância de um termo <span class="math inline">\(I(w)\)</span> é definida como a maior diferença entre <span class="math inline">\(F_{\alpha}^{\: in}(w)\)</span> e <span class="math inline">\(F_{\alpha}^{\: out}(w)\)</span>, ou seja:</p>
+<p><span class="math display">\[I(w) = max_{\alpha}[F_{\alpha}^{\: in}(w) - F_{\alpha}^{\: out}(w)]\]</span></p>
+<p>Os termos-chave são agrupados com base na distância topológica média entre os artigos que os contêm, ou seja, é utilizado o comprimento médio do caminho mais curto <span class="math inline">\(\langle l \rangle_{uv}\)</span> entre um par de termos-chave <span class="math inline">\((u,v)\)</span>. O algoritmo inicialmente determina a menor distância <span class="math inline">\((l_{ij})\)</span> entre cada par de artigos <span class="math inline">\((i,j)\)</span> na rede e então, para cada par de termos-chave <span class="math inline">\((u,v)\)</span>, calcula a média dos menores caminhos entre todos os pares de resumos <span class="math inline">\((A_{i},A_{j})\)</span> dos artigos cujos termos-chave <span class="math inline">\(u\)</span> e <span class="math inline">\(v\)</span> estão presentes. A representação matemática desses conceitos é dada na equação abaixo:</p>
+<p><span class="math display">\[\langle l \rangle_{uv} = \sum_{(u,v) \: \in \: (A_{i} \: \times \: A_{j})} \frac{l_{ij}}{|(u,v) \: \in \: (A_{i} \: \times \: A_{j})|}\]</span></p>
+<p>Em termos gerais, significa que conjuntos de termos-chave são agrupados segundo a distância topológica média entre eles. Ressalte-se que os unigramas e bigramas são classificados de acordo com a mesma medida. Quando um bigrama possui alto <span class="math inline">\(I(w)\)</span>, há grande probabilidade de que seus unigramas compostos também tenham alto <span class="math inline">\(I(w)\)</span>, gerando redundância. Esse problema é resolvido com a remoção dos unigramas do conjunto de palavras-chave que fizerem parte de qualquer outro bigrama no conjunto. Essa prática proporciona uma maior prioridade a termos-chave (bigramas) mais específicos. Ao final, o método gera uma rede complexa composta por conjuntos densamente conectados (agrupamentos), que são caracterizados por seus termos-chave com maior índice de importância.</p>
+</section>
+<section id="sec-cap-redes-complexas-PLNPortugues" class="level3" data-number="18.5.3">
+<h3 data-number="18.5.3" class="anchored" data-anchor-id="sec-cap-redes-complexas-PLNPortugues"><span class="header-section-number">18.5.3</span> Pesquisa em PLN para o português</h3>
+<p>O desafio inicial consistiu em localizar as contribuições em PLN em português na literatura. Buscamos identificar artigos científicos publicados sobre o PLN para a língua portuguesa, escritos nas línguas portuguesa ou inglesa. Bases de dados como <em>Web of Science</em> e <em>OpenAlex</em> incluem textos em português, mas as estratégias de busca podem ser falhas, ou pelo menos mais difíceis de otimizar do que para textos em inglês. Há também o problema da menor visibilidade dos fóruns de publicação. Artigos em fóruns relevantes, como o PROPOR, podem não estar indexados. A baixa visibilidade representa, obviamente, uma limitação para o estudo proposto, assim como para a valorização das contribuições científicas de países lusófonos em PLN. Diante dessas limitações, não há como garantir que o panorama apresentado a seguir seja totalmente fiel ao panorama da literatura produzida para o PLN em português, ao contrário do que se pode afirmar para estudos anteriores em outros tópicos <span class="citation" data-cites="oliveira2025landscape">(<a href="../../shared/referencias/referencias.html#ref-oliveira2025landscape" role="doc-biblioref">Oliveira; Oliveira, 2025</a>)</span> <span class="citation" data-cites="oliveira2025using">(<a href="../../shared/referencias/referencias.html#ref-oliveira2025using" role="doc-biblioref">Oliveira et al., 2025</a>)</span>. Nestes últimos trabalhos não havia dúvidas de que os artigos mais relevantes para as respectivas áreas foram recuperados. Críticas sobre o panorama apresentado serão muito bem-vindas para garantir estudos mais precisos no futuro e para que a comunidade do PLN em português busque estratégias para ampliar a visibilidade dos trabalhos na área.</p>
+<p>O número de artigos que abordam PLN para a língua portuguesa encontrados em diferentes buscas, na <em>Web of Science</em> e <em>OpenAlex</em>, foi sempre inferior a 5.000. Esse número reduzido inviabiliza a construção de redes de citações, que seriam esparsamente conectadas. A alternativa foi construir redes de similaridade, como descrito na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html#sec-cap-redes-complexas-redes-citsim" target="_blank" title="Volume 3">Redes de citações e similaridade</a></span>, para o que também houve algumas dificuldades. Usado em estudos anteriores, o SciBERT <span class="citation" data-cites="beltagy2019scibert">(<a href="../../shared/referencias/referencias.html#ref-beltagy2019scibert" role="doc-biblioref">Beltagy et al., 2019</a>)</span> foi treinado com artigos e textos científicos em inglês e mostrou-se inadequado para textos em português. Isso motivou a adoção do <em>SentenceTransformer</em> multilíngue, um modelo BERT capaz de lidar com outras línguas. Apesar de não ser especializado em artigos científicos, foi a opção com melhores resultados. A busca no <em>OpenAlex</em> com os termos <strong>“PLN” OR “NLP” OR “processamento de linguagem natural” OR “natural language processing”</strong> retornou 3.303 artigos, dos quais 1.766 compõem a maior componente conectada da rede de similaridade, construída considerando um limiar de similaridade igual a <span class="math inline">\(70\%\)</span>. A maior componente da rede resultante é exibida na <a href="#fig-cap-redes-complexas-rede_PLN_PT" class="quarto-xref">Figura&nbsp;<span>18.6</span></a>.</p>
+<div id="fig-cap-redes-complexas-rede_PLN_PT" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-redes-complexas-rede_PLN_PT-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;18.6: Rede de similaridade para publicações sobre Processamento de Linguagem Natural em português, mostrando as principais comunidades temáticas e suas inter-relações.
+</figcaption>
+<div aria-describedby="fig-cap-redes-complexas-rede_PLN_PT-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="media/Rede_sim_PLN_PTBR.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="media/Legenda_rede_sim_PLN_PTBR.png" class="img-fluid figure-img"></p>
+</div>
+</div>
+</div>
+</figure>
+</div>
+<p><strong>Link para visualização interativa da rede:</strong> <a href="https://dir-rc.ifsc.usp.br/docs/example/?network=PLN_PT_BERT_similarity_infomap&amp;format=xnet" target="_blank">Rede de Similaridade</a></p>
+<p>O <a href="#def-cap-redes-complexas-comunidades" class="quarto-xref">Quadro&nbsp;<span>18.1</span></a> lista as 10 maiores comunidades identificadas na rede da <a href="#fig-cap-redes-complexas-rede_PLN_PT" class="quarto-xref">Figura&nbsp;<span>18.6</span></a>, incluindo o número de artigos por comunidade e uma descrição gerada pelo ChatGPT a partir dos termos-chave associados a cada comunidade. Estas descrições foram geradas com um comando “<em>Faça uma descrição dos tópicos abordados pelo cluster X, com base nas palavras-chave que o caracterizam</em>”. A maior comunidade (A, em azul, com 748 artigos) é dedicada à inteligência artificial, principalmente ao seu uso em diferentes domínios, como o jurídico e o educacional. Uma inspeção (sem valor estatístico) nos títulos dos artigos indica que muitos deles se referem a textos, alguns de fato envolvendo PLN, embora outros talvez não. Mencione-se aqui uma possível dificuldade de identificação de comunidades devido às ambiguidades de nomenclatura. O termo inteligência artificial (IA) é usado em contextos diversos, nem sempre com precisão na terminologia. É comum o uso do termo “aprendizado de máquina”  de forma intercambiável com IA, como se fossem sinônimos, ignorando que aprendizado de máquina é subárea de IA. PLN é outra subárea de IA, mas suas comunidades de pesquisadores nem sempre se identificam com grupos de IA que atuam em outras subáreas. Parece, portanto, inevitável que a busca por trabalhos em PLN encontre artigos de IA, mas que não necessariamente abordam PLN. De qualquer forma, é surpreendente que quase metade dos artigos da rede estejam na comunidade A, em que o foco está em usos de IA - e não em PLN.</p>
+<p>Já a segunda maior comunidade, B, em laranja, com 377 artigos, é de fato de artigos em PLN. Ela inclui artigos relacionados à construção e organização de <em>corpora</em>, classificação automatizada de textos e uso de linguística computacional para tarefas de análise e categorização. Artigos relacionados a aplicações em saúde aparecem na terceira comunidade, C, em verde, com 110 itens. Essa comunidade inclui trabalhos em temas variados, como análise sistemática da literatura em saúde e análise de sentimentos ou opinião relacionada à saúde. Parte desses artigos pode abordar tópicos de PLN, mas provavelmente há outros que envolvem algum tipo de processamento de texto, não necessariamente PLN. As demais comunidades são consideravelmente menores, com algumas dezenas de artigos. São, em geral, bastante específicas e abordam temas em PLN, com uma possível exceção. Trata-se da comunidade F (em marrom, com 46 artigos), composta por artigos sobre agricultura. Dos poucos artigos efetivamente de PLN que podem ser identificados, destacam-se os de análise de literatura no tópico. A comunidade D (em vermelho, 53 artigos) inclui artigos sobre assistentes de conversação (<em>chatbots</em>), principalmente o ChatGPT. São, portanto, artigos recentes. A comunidade E (em roxo, com 47 artigos) é dedicada à análise de sentimentos. Eleições e política são os temas principais na comunidade G (rosa, com 41 artigos), com trabalhos de PLN principalmente dedicados à análise de texto em redes sociais. Outra comunidade típica de PLN é a H, em cinza-escuro, com 38 artigos que versam sobre detecção de notícias falsas ou desinformação. A comunidade I, em verde-claro, com 37 artigos, é vizinha à comunidade E na rede da <a href="#fig-cap-redes-complexas-rede_PLN_PT" class="quarto-xref">Figura&nbsp;<span>18.6</span></a>, pois também trata de análise de sentimentos, com foco no Twitter. A última comunidade, J, em verde-musgo, com 18 artigos, inclui estudos linguísticos, como análise semântico-discursiva utilizando PLN. Alguns poucos artigos que não foram categorizados como pertencendo a alguma comunidade aparecem em cinza-claro na <a href="#fig-cap-redes-complexas-rede_PLN_PT" class="quarto-xref">Figura&nbsp;<span>18.6</span></a>.</p>
+<p>O formato da rede pode ser inspecionado cuidadosamente a partir do modelo tridimensional interativo acessado no link informado acima e também merece comentários. A rede é dominada por duas comunidades, A e B, que são bastante conectadas entre si. A comunidade J, de estudos linguísticos com e para PLN, é conectada apenas com a comunidade B, que engloba a maioria dos estudos em PLN. Pode-se afirmar, então, que essas duas são comunidades de pesquisadores de fato atuantes em PLN. O argumento se justifica porque o panorama que se depreende da rede da <a href="#fig-cap-redes-complexas-rede_PLN_PT" class="quarto-xref">Figura&nbsp;<span>18.6</span></a> talvez permita distinguir trabalhos de grupos de pesquisadores que efetivamente atuam em PLN de trabalhos de pesquisadores não necessariamente identificados com essa área, mas que passaram a atuar em processamento de texto como consequência dos avanços tecnológicos em aprendizado de máquina e, mais recentemente, a IA gerativa. O que se observa é que as demais comunidades são sempre conectadas à comunidade A; seus artigos têm maior similaridade com aqueles classificados mais genericamente como IA do que com PLN. Apenas a comunidade E (em roxo), relacionada à análise de sentimentos, está próxima da comunidade B, embora ainda se mostre mais conectada à comunidade A.</p>
+<div id="def-cap-redes-complexas-comunidades" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 18.1</strong></span> Comunidades na rede de PLN.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 9%">
+<col style="width: 36%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Comunidade</strong></th>
+<th style="text-align: center;"><strong>Nós</strong></th>
+<th style="text-align: left;"><strong>Palavras-chaves</strong></th>
+<th style="text-align: left;"><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: center;">748</td>
+<td style="text-align: left;">inteligência artificial, ensino, educação, desafios, aprendizado, tecnologias, científica, máquina, papel, ia</td>
+<td style="text-align: left;">Aplicações de inteligência artificial no contexto educacional; tecnologias e estratégias para ensino, aprendizagem e desenvolvimento científico.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: center;">377</td>
+<td style="text-align: left;"><em>corpus</em>, processamento linguagem natural, textos, automática, classificação, linguística, português brasileiro, textual, língua, modelos</td>
+<td style="text-align: left;">Processamento de linguagem natural e linguística computacional; análise automática de textos, classificação textual, <em>corpora</em> e modelos linguísticos em português brasileiro.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C</td>
+<td style="text-align: center;">110</td>
+<td style="text-align: left;">saúde, twitter, brasil, tempo, pacientes, idosos, in, pandemia covid-19, tratamento, revisão</td>
+<td style="text-align: left;">Uso de redes sociais para monitoramento de saúde pública; análise da pandemia de COVID-19, impacto em pacientes e idosos, e revisão de tratamentos no Brasil.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">D</td>
+<td style="text-align: center;">53</td>
+<td style="text-align: left;">chatgpt, chatbots, chatbot, ensino-aprendizagem, sobre, revisão, ferramenta, auxiliar, assistente, sistemática</td>
+<td style="text-align: left;">Desenvolvimento e aplicação de chatbots e assistentes virtuais; ferramentas para ensino e aprendizagem e revisões sistemáticas de tecnologias educacionais.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">E</td>
+<td style="text-align: center;">47</td>
+<td style="text-align: left;">sentimentos, sentimento, comentários, emoções, português, métricas, mídias sociais, mineração, rede, mapeamento</td>
+<td style="text-align: left;">Análise de sentimentos em mídias sociais; mineração de dados textuais, métricas emocionais e mapeamento de interações em português.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">F</td>
+<td style="text-align: center;">46</td>
+<td style="text-align: left;">feijão, produção, agrícola, agricultura, componentes, rendimento, produtividade, cultura soja, seleção, gesso</td>
+<td style="text-align: left;">Produção e produtividade agrícola; técnicas de cultivo, seleção de componentes e otimização de rendimento em culturas como feijão e soja.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">G</td>
+<td style="text-align: center;">41</td>
+<td style="text-align: left;">sobre, youtube, eleições, discurso, redes sociais, deputados, discursos, ódio, sentimento, twitter</td>
+<td style="text-align: left;">Análise de discursos e sentimentos em redes sociais durante eleições; estudo de conteúdo em YouTube e Twitter, incluindo discursos de deputados e manifestações de ódio.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">H</td>
+<td style="text-align: center;">38</td>
+<td style="text-align: left;">detecção fake news, desinformação, detecção automática, notícias falsas, jornalismo, utilizando, produção, covid-19 brasil, language, avaliação</td>
+<td style="text-align: left;">Detecção automática de fake news e desinformação; análise de notícias falsas e produção jornalística durante a pandemia de COVID-19 no Brasil.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">I</td>
+<td style="text-align: center;">37</td>
+<td style="text-align: left;">redes sociais, twitter, sentimentos, social, baseado, tweet sobre, eventos, classificação, identificação, caso</td>
+<td style="text-align: left;">Análise de sentimentos e classificação de eventos em redes sociais; identificação de padrões sociais e comportamentais no Twitter.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">J</td>
+<td style="text-align: center;">18</td>
+<td style="text-align: left;">verbo, descrição, verbos, construções, português, linguagem natural, processamento, base, verbal, semântico-discursiva</td>
+<td style="text-align: left;">Estudos linguísticos em português; análise de verbos, construções verbais e descrições semântico-discursivas utilizando processamento de linguagem natural.</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+<p>Uma análise manual permite identificar os tópicos mais relevantes nas diferentes comunidades, mas é inviável para um estudo pormenorizado, em vista do número de artigos da rede (mais de 1.700). É possível, entretanto, buscar auxílio das ferramentas com modelos de língua de larga escala (LLMs, do inglês <em>large-language models</em>), que podem processar texto a uma velocidade muito superior à de um ser humano. Em setembro de 2025, não há garantias de que tais ferramentas forneçam análises ou resumos fiéis aos artigos sob estudo, principalmente porque a janela de contexto disponibilizada para um usuário pode não ser suficiente para cobrir todo o <em>corpus</em>. Há, entretanto, evidências empíricas de que essas ferramentas conseguem fornecer uma análise superficial adequada. Com essa expectativa, solicitamos ao ChatGPT uma expansão na descrição das comunidades da <a href="#fig-cap-redes-complexas-rede_PLN_PT" class="quarto-xref">Figura&nbsp;<span>18.6</span></a>.</p>
+<p>Com os termos-chave de cada comunidade e suas respectivas descrições iniciais fornecidas pelo ChatGPT, foi solicitado um levantamento mais detalhado dos tópicos apontados por ele. Para isso, foi utilizado o seguinte comando “<em>Faça uma expansão para a descrição do cluster X, se aprofundando nos tópicos apresentados por ele de acordo com suas palavras-chave e a busca central utilizada para produzir a rede</em>”. Os textos produzidos, individualmente para cada comunidade, apresentaram um aprofundamento dos tópicos descritos na coluna “Descrição” do <a href="#def-cap-redes-complexas-comunidades" class="quarto-xref">Quadro&nbsp;<span>18.1</span></a>. Os textos foram editados, por concisão, e suas análises e conclusões estão descritas a seguir.</p>
+<p>Já comentamos a partir da análise manual que a maior comunidade, A, foca na aplicação de técnicas de IA e PLN na educação, revelando um movimento crescente de integração de tecnologias inteligentes em processos de ensino e aprendizagem, com destaque para sistemas de tutoria inteligente, plataformas adaptativas, ferramentas de correção automática de textos e <em>chatbots</em> educacionais. Os trabalhos também abordam de forma crítica os desafios pedagógicos e técnicos que acompanham essa transformação. Entre eles estão a dificuldade de adaptar modelos de PLN para diferentes contextos culturais, a necessidade de preparar professores para integrar essas ferramentas em suas práticas e os riscos de dependência tecnológica. Além disso, surgem preocupações sobre vieses algorítmicos, transparência na tomada de decisão das máquinas e privacidade dos dados estudantis, questões que exigem debates éticos e regulatórios. A literatura coberta nessa comunidade não se restringe às aplicações imediatas, mas também reflete sobre o impacto estrutural da adoção da IA na educação. Muitos artigos discutem como essas tecnologias estão redefinindo o papel do professor, não como substituto, mas como mediador em um ecossistema de aprendizagem híbrido, onde humanos e máquinas colaboram. Ao mesmo tempo, destacam-se análises empíricas sobre a eficácia dessas ferramentas na melhoria do desempenho acadêmico, no engajamento dos alunos e na inclusão de grupos tradicionalmente marginalizados no acesso ao ensino.</p>
+<p>Como já mencionado, a comunidade B contém literatura fundamental de PLN, concentrando-se nos fundamentos linguísticos e computacionais com ênfase em <em>corpus</em>, classificação automática e análise textual. Os estudos desse grupo envolvem a construção, curadoria e utilização de <em>corpora</em>. Fica evidenciado o papel central dos <em>corpora</em> para treinar, avaliar e comparar algoritmos de PLN em diferentes tarefas, como análise de sentimentos, categorização de documentos e reconhecimento de entidades nomeadas. São abordados também os desafios metodológicos relacionados à anotação, padronização e representatividade dos dados (questões abordadas no Capítulo 13 deste livro), uma vez que a qualidade e a diversidade dos <em>corpus</em> impactam o desempenho dos modelos. Nesse sentido, surgem discussões sobre métodos automáticos e semiautomáticos de anotação, bem como sobre a integração de abordagens linguísticas tradicionais com técnicas de aprendizado de máquina. Além disso, chama-se a atenção para as particularidades do português, idioma menos contemplado na pesquisa internacional de PLN do que o inglês. Esse foco evidencia um esforço da comunidade científica em reduzir desigualdades linguísticas e promover avanços na adaptação de modelos globais a contextos locais. Os trabalhos também revelam preocupações quanto à dimensão sociotécnica do PLN, discutindo o risco de vieses reproduzidos por <em>corpora</em> desbalanceados ou pouco representativos. A literatura aponta ainda para a necessidade de ferramentas linguísticas acessíveis, que possam servir tanto à pesquisa acadêmica quanto a aplicações práticas em educação, saúde e setores industriais.</p>
+<p>A comunidade C explora a aplicação do PLN em saúde, com ênfase em redes sociais como o Twitter e em contextos marcados pela pandemia da COVID-19. Os trabalhos desse grupo investigam como técnicas de PLN podem ser empregadas para monitorar, analisar e prever fenômenos relacionados à saúde pública, desde a identificação de sintomas relatados por pacientes até a avaliação de percepções sociais sobre políticas sanitárias. Essa vertente evidencia o papel estratégico do PLN na compreensão de grandes volumes de dados não estruturados, capazes de complementar fontes tradicionais de informação médica e epidemiológica. Os estudos também abordam a utilização do Twitter como fonte de dados em tempo real, permitindo a detecção de surtos, o acompanhamento de discussões sobre vacinas e tratamentos e a análise das emoções e preocupações expressas pela população. O caráter dinâmico e global das redes sociais potencializa o PLN como ferramenta de vigilância em saúde, mas também levanta desafios metodológicos, como a necessidade de filtrar ruídos, lidar com ambiguidade textual e diferenciar informações confiáveis de conteúdos desinformativos. Além disso, a pandemia de COVID-19 aparece em muitos artigos, em um período em que se empregou PLN para analisar notícias relacionadas e comentários em redes sociais. Outro ponto relevante é o impacto da análise automatizada na prática clínica e na formulação de políticas de saúde. Pesquisas avaliam o potencial de modelos de PLN para apoiar diagnósticos, identificar grupos de risco, prever demandas hospitalares e oferecer suporte a revisões sistemáticas de literatura biomédica. Paralelamente, surgem reflexões sobre os limites éticos e legais do uso de dados provenientes de redes sociais, sobretudo em relação à privacidade e ao consentimento dos usuários.</p>
+<p>Os <em>chatbots</em> são o assunto central da comunidade D, principalmente o ChatGPT. A literatura agrupa estudos sobre o desenvolvimento de agentes conversacionais voltados para suporte pedagógico — desde <em>chatbots</em> que oferecem retorno imediato em tarefas escritas até assistentes que guiam o estudante passo a passo em resoluções de problemas. Muitos trabalhos relatam experimentos com plataformas educacionais integradas a <em>chatbots</em>, avaliando como esses agentes podem personalizar explicações, fornecer exercícios adaptativos e atuar como tutores suplementares em disciplinas diversas. Alguns trabalhos nessa comunidade combinam revisões sistemáticas com estudos empíricos para testar protótipos em sala de aula ou em ambientes controlados. As avaliações frequentemente medem ganhos de aprendizagem, engajamento, aceitabilidade por parte de alunos e professores, além de métricas de usabilidade e qualidade da conversação (coerência, relevância das respostas, taxa de intervenção humana). Há também trabalhos técnicos que abordam arquiteturas (agentes baseados em regras vs.&nbsp;modelos gerativos), adaptação para domínios educacionais, técnicas de <em>prompting</em> e estratégias para integrar <em>chatbots</em> a sistemas de gestão de aprendizagem (para saber mais sobre o tema, sugerimos consultar o Capítulo 20 deste livro).</p>
+<p>A análise de sentimentos é o tópico dominante nas comunidades E e I, com destaque para dados provenientes de mídias sociais e comentários online em português. Os trabalhos desses grupos exploram como técnicas de PLN podem ser aplicadas para identificar, classificar e quantificar sentimentos positivos, negativos ou neutros, bem como emoções mais complexas, em grandes volumes de dados textuais. Essa linha de pesquisa é relevante para entender o comportamento dos usuários, monitorar percepções públicas sobre produtos, serviços ou eventos, fornecendo subsídios para áreas como publicidade, comunicação e políticas públicas. Os estudos evidenciam o desenvolvimento e a aplicação de métricas específicas para a análise de sentimentos, incluindo métodos baseados em léxicos, aprendizado de máquina e modelos de linguagem pré-treinados. Além disso, os trabalhos abordam questões metodológicas e práticas, incluindo desafios relacionados à ambiguidade textual, ironia, sarcasmo e diversidade linguística no português brasileiro.</p>
+<p>A comunidade F pareceu ser a menos aderente ao PLN na análise manual, pois os títulos dos artigos normalmente não indicavam uso de PLN. Entretanto, segundo a descrição do <em>ChatGPT</em>, o PLN está presente na análise textual em contextos agrícolas, com ênfase em culturas como feijão e soja. Ainda segundo o ChatGPT, a comunidade contém literatura na interface entre tecnologia e prática agrícola, demonstrando como a análise de textos e a extração de conhecimento podem contribuir para avanços concretos na produção de alimentos. A comunidade G é dedicada ao estudo de eleições e políticas, concentrando-se na análise de discursos políticos, eventos eleitorais e interações em redes sociais, principalmente no Twitter e no <em>YouTube</em>. Há artigos explorando técnicas de PLN para identificar padrões de comunicação, detectar discursos de ódio, analisar sentimentos e compreender o impacto das mensagens veiculadas por políticos, influenciadores e cidadãos em contextos eleitorais. Essa abordagem permite mapear tanto a propagação de opiniões quanto a dinâmica de engajamento do público em diferentes plataformas digitais. Além disso, investigam estratégias de comunicação política, incluindo a construção de narrativas, o uso de linguagem persuasiva e a disseminação de mensagens polarizadoras.</p>
+<p>Artigos sobre detecção de notícias falsas e desinformação predominam na comunidade H, em que há ênfase no uso de PLN para identificar padrões linguísticos, sinais de veracidade e estratégias de manipulação em notícias e conteúdos compartilhados em redes sociais. O objetivo central é desenvolver métodos que permitam avaliar a confiabilidade das informações, detectando conteúdos enganosos e prevenindo a disseminação de desinformação em larga escala. Os estudos nessa comunidade abordam múltiplas abordagens metodológicas, incluindo modelos baseados em aprendizado de máquina supervisionado e não supervisionado, análise de métricas linguísticas, redes semânticas e técnicas de classificação de textos. Além disso, a literatura enfatiza a importância de <em>corpus</em> específico para o português brasileiro, permitindo que os algoritmos lidem com variações linguísticas, regionalismos, gírias e construções sintáticas típicas do idioma. Muitas pesquisas também relacionam a detecção de notícias falsas sobre a pandemia de COVID-19, analisando a propagação de informações incorretas e seu impacto sobre comportamentos de saúde e percepção pública.</p>
+<p>A pequena comunidade J concentra-se no estudo de verbos, construções verbais e aspectos semântico-discursivos do português. Há ênfase na aplicação de técnicas de PLN para analisar padrões gramaticais, categorias verbais e relações semânticas, contribuindo para o desenvolvimento de modelos linguísticos mais precisos e adaptados às especificidades do idioma. Também aparecem pesquisas associadas à anotação e classificação de verbos, construção de bases de dados linguísticos e análise de estruturas sintáticas e semânticas em textos. Esses estudos permitem compreender como os verbos e suas construções funcionam em diferentes contextos comunicativos, servindo para tarefas de PLN como análise sintática, geração de linguagem natural e tradução automática.</p>
+<p>Para fins de estudo e transparência, foi disponibilizado um arquivo complementar contendo uma lista dos artigos que compõem as dez maiores comunidades da rede de similaridade. O arquivo está organizado em abas que correspondem às comunidades identificadas; cada aba apresenta uma tabela com os títulos e respectivos links de acesso aos artigos no repositório de origem.</p>
+<p><strong>Link de acesso:</strong> <a href="https://docs.google.com/spreadsheets/d/18XHpdd8-A5tmRi7NJ--ySVNZGpjNXipa/edit?usp=sharing&amp;ouid=111946380713255891971&amp;rtpof=true&amp;sd=true" target="_blank">Arquivo Complementar</a></p>
+</section>
+</section>
+<section id="sec-cap-redes-complexas-conclusoes" class="level2" data-number="18.6">
+<h2 data-number="18.6" class="anchored" data-anchor-id="sec-cap-redes-complexas-conclusoes"><span class="header-section-number">18.6</span> Considerações finais</h2>
+<p>O sucesso do uso de redes complexas para o PLN parece ser indiscutível, a julgar pela gama de aplicações comprovadas. A expectativa foi confirmada de que é possível capturar características semânticas, sintáticas e mesmo pragmáticas ao representar um texto como uma rede. A literatura da área, entretanto, não é vasta e o número de artigos deve ser da ordem de algumas poucas centenas. Essa produção tem contribuição relevante de autores brasileiros, que estiveram entre os primeiros a aplicar conceitos e métodos de redes complexas em PLN. Embora os trabalhos dos autores brasileiros sejam majoritariamente focados no processamento de textos em inglês, há pelo menos algumas dezenas de artigos que abordam PLN para o português. Neste capítulo, apresentamos um breve resumo de algumas dessas contribuições, em sumarização, desambiguação lexical, tradução automática, análise de sentimentos e diagnóstico médico baseado em texto.</p>
+<p>As perspectivas quanto aos usos de redes complexas para aplicações em PLN foram abordadas em um comentário <span class="citation" data-cites="Amancio_2014">(<a href="../../shared/referencias/referencias.html#ref-Amancio_2014" role="doc-biblioref">Amancio, 2014</a>)</span> que enfatizou a necessidade de maior rigor na interpretação dos fatores que contribuem para o sucesso dos modelos de rede. Por outro lado, é interessante fazer uma comparação ou analogia com modelos de língua de larga escala (LLMs), uma vez que muitas das tarefas de PLN realizadas com redes complexas podem atualmente ser feitas utilizando LLMs. Pode-se especular que as informações advindas das características estruturais e dinâmicas das redes representando textos sejam, de alguma maneira, inferidas por meio dos mecanismos de <em>embedding</em> e de atenção dos LLMs. A grande capacidade de processamento e a janela de contexto dos LLMs tendem a resultar em desempenho significativamente superior nas tarefas de PLN, em comparação ao uso de redes. De fato, em pelo menos um trabalho ainda não publicado de pesquisadores do <em>Núcleo Interinstitucional de Linguística Computacional</em> (NILC) mostrou-se que o uso de modelos de língua gera resultados consideravelmente melhores. Referimo-nos à capacidade de sistemas inteligentes de estimar a pontuação de redações de ENEM, em que modelos usando BERT (“transformer”) mostraram-se mais eficientes do que o uso de métricas de redes complexas. A comparação não é necessariamente justa, pois o desempenho das redes não foi otimizado variando-se as métricas exaustivamente.</p>
+<p>De todo modo, acreditamos que a maioria das tarefas de PLN será mais bem executada com LLMs, o que poderia indicar que não há muito futuro para o uso de redes complexas em PLN. Entretanto, deve-se considerar que as redes continuarão sendo adequadas para verificar modelos e estudar a importância de aspectos linguísticos nas diferentes tarefas. As informações estruturais capturadas pelos modelos podem contribuir para a melhor compreensão dos processos linguísticos envolvidos, ou seja, garantir mais interpretabilidade para os resultados do processamento de textos. Redes também serão importantes para arquiteturas baseadas em grafos e como fontes de informação em tarefas de visualização exploratória de itens da literatura científica, como no panorama apresentado neste capítulo para o PLN em português.</p>
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="1" role="list" style="display: none">
+<div id="ref-AlRfou2014" class="csl-entry" role="listitem">
+AL-RFOU, R. et al. <strong>Collective named entity disambiguation using graph-based ranking</strong>. Proceedings of the 23rd International Conference on World Wide Web (WWW ’14). <strong>Anais</strong>...ACM, 2014. Disponível em: &lt;<a href="https://doi.org/10.1145/2566486.2568010">https://doi.org/10.1145/2566486.2568010</a>&gt;
+</div>
+<div id="ref-Amancio_et_al_2011" class="csl-entry" role="listitem">
+AMANCIO, D. R. et al. <a href="https://doi.org/10.1016/j.physa.2010.08.052">Using metrics from complex networks to evaluate machine translation</a>. <strong>Physica A: Statistical Mechanics and its Applications</strong>, v. 390, n. 1, p. 131–142, a2011.
+</div>
+<div id="ref-Amancio_Fabbri_Oliveira_Nunes_Costa_2011" class="csl-entry" role="listitem">
+AMANCIO, D. R. et al. <strong>Opinion Discrimination Using Complex Network Features</strong>. Complex Networks: Second International Workshop on Complex Networks (CompleNet 2010). <strong>Anais</strong>...: Communications em Computer e Information Science.Springer, b2011. Disponível em: &lt;<a href="https://doi.org/10.1007/978-3-642-25501-4_16">https://doi.org/10.1007/978-3-642-25501-4_16</a>&gt;
+</div>
+<div id="ref-Amancio_Nunes_OliveiraCosta_2012" class="csl-entry" role="listitem">
+AMANCIO, D. R. et al. <a href="https://doi.org/10.1016/j.physa.2011.10.015">Extractive summarization using complex networks and syntactic dependency</a>. <strong>Physica A: Statistical Mechanics and its Applications</strong>, v. 391, n. 4, p. 1855–1864, a2012.
+</div>
+<div id="ref-Amancio_Aluisio_OliveiraCosta_2012" class="csl-entry" role="listitem">
+AMANCIO, D. R. et al. <a href="https://doi.org/10.1209/0295-5075/100/58002">Complex networks analysis of language complexity</a>. <strong>Europhysics Letters (EPL)</strong>, v. 100, n. 5, p. 58002, b2012.
+</div>
+<div id="ref-Amancio_2014" class="csl-entry" role="listitem">
+AMANCIO, D. R. <a href="https://doi.org/10.1016/j.plrev.2014.07.010">A perspective on the advancement of natural language processing tasks via topological analysis of complex networks</a>. <strong>Physics of Life Reviews</strong>, v. 11, n. 4, p. 641–643, 2014.
+</div>
+<div id="ref-Antiqueira2007811" class="csl-entry" role="listitem">
+ANTIQUEIRA, L. et al. <a href="https://doi.org/10.1016/j.physa.2006.06.002">Strong correlations between text quality and complex networks features</a>. <strong>Physica A: Statistical Mechanics and its Applications</strong>, v. 373, p. 811–820, 2007.
+</div>
+<div id="ref-Antiqueira_2009" class="csl-entry" role="listitem">
+ANTIQUEIRA, L. et al. <a href="https://doi.org/10.1016/j.ins.2008.09.027">A complex network approach to text summarization</a>. <strong>Information Sciences</strong>, v. 179, n. 5, p. 584–599, 2009.
+</div>
+<div id="ref-appel_redes_2011" class="csl-entry" role="listitem">
+APPEL, A. P.; JUNIOR, E. R. H. Por dentro das redes complexas – detectando grupos e prevendo ligações. Em: VILAIN, P.; ROESLER, V. (Eds.). <strong>Tópicos em Banco de Dados, Multimídia e Web: Minicursos do XXVI SBBD e do XVII WebMedia.</strong> Porto Alegre: Sociedade Brasileira de Computação, 2011. p. 123–147.
+</div>
+<div id="ref-barabasi1999emergence" class="csl-entry" role="listitem">
+BARABÁSI, A.-L.; ALBERT, R. Emergence of scaling in random networks. <strong>Science</strong>, v. 286, n. 5439, p. 509–512, 1999.
+</div>
+<div id="ref-beltagy2019scibert" class="csl-entry" role="listitem">
+BELTAGY, I.; LO, K.; COHAN, A. <strong><span>SciBERT</span>: A Pretrained Language Model for Scientific Text</strong>. Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP). <strong>Anais</strong>...Association for Computational Linguistics, 2019. Disponível em: &lt;<a href="https://aclanthology.org/D19-1371">https://aclanthology.org/D19-1371</a>&gt;
+</div>
+<div id="ref-Blondel2008" class="csl-entry" role="listitem">
+BLONDEL, V. D. et al. <a href="https://doi.org/10.1088/1742-5468/2008/10/P10008">Fast unfolding of communities in large networks</a>. <strong>Journal of Statistical Mechanics: Theory and Experiment</strong>, v. 2008, n. 10, p. P10008, 2008.
+</div>
+<div id="ref-Budel2023" class="csl-entry" role="listitem">
+BUDEL, G. et al. <a href="https://doi.org/10.48550/arXiv.2304.12940">Topological properties and organizing principles of semantic networks</a>. <strong>arXiv preprint arXiv:2304.12940</strong>, 2023.
+</div>
+<div id="ref-chen2025critical" class="csl-entry" role="listitem">
+CHEN, D. et al. <a href="https://doi.org/10.20517/ces.2025.34">Critical nodes identification in complex networks: a survey</a>. <strong>Complex Engineering Systems</strong>, v. 5, n. 11, p. –, 2025.
+</div>
+<div id="ref-10.1093/Estrada2011" class="csl-entry" role="listitem">
+ESTRADA, E. <strong><a href="https://doi.org/10.1093/acprof:oso/9780199591756.001.0001">The Structure of Complex Networks: Theory and Applications</a></strong>. [s.l.] Oxford University Press, 2011.
+</div>
+<div id="ref-lancichinetti2012consensus" class="csl-entry" role="listitem">
+LANCICHINETTI, A.; FORTUNATO, S. Consensus clustering in complex networks. <strong>Scientific reports</strong>, v. 2, n. 1, p. 336, 2012.
+</div>
+<div id="ref-ebimsv2024" class="csl-entry" role="listitem">
+MOUSAVI, E. <strong>Complex Network Series: Part 1 — An Overview</strong>., 2024. Disponível em: &lt;<a href="https://medium.com/@ebimsv/complex-network-series-part-1-an-overview-ddd9e0b6ec3a">https://medium.com/@ebimsv/complex-network-series-part-1-an-overview-ddd9e0b6ec3a</a>&gt;
+</div>
+<div id="ref-newman2010" class="csl-entry" role="listitem">
+NEWMAN, M. E. J. <strong><a href="https://doi.org/10.1080/0022250X.2012.744247">Networks: An Introduction</a></strong>. Oxford: Oxford University Press, 2010.
+</div>
+<div id="ref-NewmanGirvan2004" class="csl-entry" role="listitem">
+NEWMAN, M. E. J.; GIRVAN, M. <a href="https://doi.org/10.1103/PhysRevE.69.026113">Finding and evaluating community structure in networks</a>. <strong>Physical Review E</strong>, v. 69, n. 2, p. 026113, 2004.
+</div>
+<div id="ref-oaepublish2025" class="csl-entry" role="listitem">
+OAEPUBLISH. <strong>CES 2025 Article</strong>., 2025. Disponível em: &lt;<a href="https://www.oaepublish.com/articles/ces.2025.34">https://www.oaepublish.com/articles/ces.2025.34</a>&gt;
+</div>
+<div id="ref-oliveira2025landscape" class="csl-entry" role="listitem">
+OLIVEIRA, L. F. DE; OLIVEIRA, O. N., Jr. <a href="https://doi.org/10.1021/acsomega.5c04542">The Landscape of Wearable Sensors and Automated Literature Analysis with Large-Language Models</a>. <strong>ACS Omega</strong>, v. 10, n. 37, p. 42127–42134, 2025.
+</div>
+<div id="ref-oliveira2025using" class="csl-entry" role="listitem">
+OLIVEIRA, L. M. DE; MOURA, M. F. DE; OLIVEIRA, O. N., Jr. <a href="https://doi.org/10.1016/j.ijbiomac.2025.141565">Using network analysis and large-language models to obtain a landscape of the literature on dressing materials for wound healing: The predominance of chitosan and other biomacromolecules</a>. <strong>International Journal of Biological Macromolecules</strong>, v. 306.3, p. 141565, 2025.
+</div>
+<div id="ref-PalacioNino_Berzal_2024" class="csl-entry" role="listitem">
+PALACIO-NIÑO, J.-O.; BERZAL, F. <strong>Enhancing Community Detection in Networks: A Comparative Analysis of Local Metrics and Hierarchical Algorithms</strong>. arXiv preprint, 2024. Disponível em: &lt;<a href="https://arxiv.org/html/2408.09072v2">https://arxiv.org/html/2408.09072v2</a>&gt;
+</div>
+<div id="ref-pennington-etal-2014-glove" class="csl-entry" role="listitem">
+PENNINGTON, J.; SOCHER, R.; MANNING, C. <strong><span>G</span>lo<span>V</span>e: Global Vectors for Word Representation</strong>. Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (<span>EMNLP</span>). <strong>Anais</strong>...Doha, Qatar: Association for Computational Linguistics, out. 2014. Disponível em: &lt;<a href="https://aclanthology.org/D14-1162">https://aclanthology.org/D14-1162</a>&gt;
+</div>
+<div id="ref-Raghavan2007" class="csl-entry" role="listitem">
+RAGHAVAN, U. N.; ALBERT, R.; KUMARA, S. Near linear time algorithm to detect community structures in large-scale networks. <strong>Physical Review E</strong>, v. 76, n. 3, p. 036106, 2007.
+</div>
+<div id="ref-Rosvall2008" class="csl-entry" role="listitem">
+ROSVALL, M.; BERGSTROM, C. T. Maps of random walks on complex networks reveal community structure. <strong>Proceedings of the National Academy of Sciences</strong>, v. 105, n. 4, p. 1118–1123, 2008.
+</div>
+<div id="ref-Santos_et_al_2017" class="csl-entry" role="listitem">
+SANTOS, L. B. DOS et al. <strong>Enriching Complex Networks with Word Embeddings for Detecting Mild Cognitive Impairment from Speech Transcripts</strong>. Proceedings of the 55th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers). <strong>Anais</strong>...Vancouver, Canada: Association for Computational Linguistics, jul. 2017. Disponível em: &lt;<a href="https://aclanthology.org/P17-1118/">https://aclanthology.org/P17-1118/</a>&gt;
+</div>
+<div id="ref-sciencedirect_complex_networks" class="csl-entry" role="listitem">
+SCIENCEDIRECT. <strong>Complex Networks - an overview</strong>., b2025. Disponível em: &lt;<a href="https://www.sciencedirect.com/topics/computer-science/complex-networks">https://www.sciencedirect.com/topics/computer-science/complex-networks</a>&gt;
+</div>
+<div id="ref-sciencedirect2025" class="csl-entry" role="listitem">
+SCIENCEDIRECT. <strong>Complex Networks Article</strong>., a2025. Disponível em: &lt;<a href="https://www.sciencedirect.com/science/article/pii/S0966692325001619">https://www.sciencedirect.com/science/article/pii/S0966692325001619</a>&gt;
+</div>
+<div id="ref-Silva_Amancio_Bardosova_Costa_Oliveira_2016" class="csl-entry" role="listitem">
+SILVA, F. N. et al. <a href="https://doi.org/10.1016/j.joi.2016.03.008">Using network science and text analytics to produce surveys in a scientific topic</a>. <strong>Journal of Informetrics</strong>, v. 10, n. 2, p. 487–502, 2016.
+</div>
+<div id="ref-Singh_Garg_2025" class="csl-entry" role="listitem">
+SINGH, D.; GARG, R. <a href="https://doi.org/10.1016/j.cosrev.2025.100799">A survey of Community Detection algorithms and its comparative performance analysis</a>. <strong>Computer Science Review</strong>, v. 58, 2025.
+</div>
+<div id="ref-springeropen2017" class="csl-entry" role="listitem">
+SPRINGEROPEN APPLIED NETWORK SCIENCE. <strong>Small-world and scale-free properties in networks</strong>., 2017. Disponível em: &lt;<a href="https://appliednetsci.springeropen.com/articles/10.1007/s41109-017-0054-z">https://appliednetsci.springeropen.com/articles/10.1007/s41109-017-0054-z</a>&gt;
+</div>
+<div id="ref-SteyversTenenbaum2005" class="csl-entry" role="listitem">
+STEYVERS, M.; TENENBAUM, J. B. <a href="https://doi.org/10.1207/s15516709cog2901_3">The large-scale structure of semantic networks: statistical analyses and a model of semantic growth</a>. <strong>Cognitive science</strong>, v. 29, n. 1, p. 41–78, 2005.
+</div>
+<div id="ref-Tohalino_Amancio_2018" class="csl-entry" role="listitem">
+TOHALINO, J. V.; AMANCIO, D. R. <a href="https://doi.org/10.1016/j.physa.2018.03.013">Extractive multi‐document summarization using multilayer networks</a>. <strong>Physica A: Statistical Mechanics and its Applications</strong>, v. 503, p. 526–539, 2018.
+</div>
+<div id="ref-Traag2019" class="csl-entry" role="listitem">
+TRAAG, V. A.; WALTMAN, L.; ECK, N. J. VAN. <a href="https://doi.org/10.1038/s41598-019-41695-z">From Louvain to Leiden: guaranteeing well-connected communities</a>. <strong>Scientific Reports</strong>, v. 9, n. 1, p. 5233, 2019.
+</div>
+<div id="ref-watts1998collective" class="csl-entry" role="listitem">
+WATTS, D. J.; STROGATZ, S. H. Collective dynamics of <span>“small-world”</span> networks. <strong>Nature</strong>, v. 393, n. 6684, p. 440–442, 1998.
+</div>
+<div id="ref-zipf1949human" class="csl-entry" role="listitem">
+ZIPF, G. K. <strong>Human behavior and the principle of least effort: an introduction to human ecology</strong>. [s.l.] Addison-Wesley Press, 1949.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" class="pagination-link" aria-label="PLN e Responsabilidade Social">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">PLN e Responsabilidade Social</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../shared/referencias/referencias.html" class="pagination-link" aria-label="Referências">
+        <span class="nav-page-text">Referências</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://brasileiraspln.com/">
+<p>Brasileiras em PLN, 2026. Todos os direitos reservados</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

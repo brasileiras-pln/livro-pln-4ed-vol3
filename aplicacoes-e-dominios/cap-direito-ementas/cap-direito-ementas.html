@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kenzo Sakiyama">
+<meta name="author" content="Roseval Malaquias Junior">
+<meta name="author" content="Raphael Montanari">
+<meta name="author" content="Rodrigo Nogueira">
+<meta name="author" content="Roseli A. F. Romero">
+
+<title>14&nbsp; Geração Automática de Ementas Jurídicas – Processamento de Linguagem Natural</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 1em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" rel="next">
+<link href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8676d8d0f01772f2903466dda9733bcf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sem resultados",
+    "search-matching-documents-text": "Resultados encontrados",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-111J572WMR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-111J572WMR');
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../shared/bpln.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../shared/logos/bpln.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Processamento de Linguagem Natural</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../Livro_PLN_BPLN_4ed_vol3.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
+    <div class="dropdown">
+      <a href="" title="Compartilhar" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Compartilhar"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sobre o Volume 3</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Aplicações e Domínios</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Classificação de texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-mt/cap-mt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tradução Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sumarização Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Complexidade Textual e suas Tarefas Relacionadas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Classificação de Áudio aplicada à Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">PLN e Responsabilidade Social</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/referencias/referencias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referências</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Apêndices</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Considerações prévias à sumarização automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice-abstrativa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Exemplo de sumarização abstrativa</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../autores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Sobre as/os autoras/es</strong></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Conteúdo</h2>
+   
+  <ul>
+  <li><a href="#ch:intro" id="toc-ch:intro" class="nav-link active" data-scroll-target="#ch\:intro"><span class="header-section-number">14.1</span> Introdução</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-direito-ementas-intro" id="toc-sec-cap-direito-ementas-intro" class="nav-link" data-scroll-target="#sec-cap-direito-ementas-intro"><span class="header-section-number">14.1.1</span> Contextualização</a></li>
+  <li><a href="#organização-do-capítulo" id="toc-organização-do-capítulo" class="nav-link" data-scroll-target="#organização-do-capítulo"><span class="header-section-number">14.1.2</span> Organização do Capítulo</a></li>
+  </ul></li>
+  <li><a href="#conceitos-preliminares" id="toc-conceitos-preliminares" class="nav-link" data-scroll-target="#conceitos-preliminares"><span class="header-section-number">14.2</span> Conceitos Preliminares</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-direito-ementas-transferencia_aprendizado" id="toc-sec-cap-direito-ementas-transferencia_aprendizado" class="nav-link" data-scroll-target="#sec-cap-direito-ementas-transferencia_aprendizado"><span class="header-section-number">14.2.1</span> Transferência de Aprendizado e Ajuste Fino</a></li>
+  <li><a href="#sec-cap-direito-ementas-bleu" id="toc-sec-cap-direito-ementas-bleu" class="nav-link" data-scroll-target="#sec-cap-direito-ementas-bleu"><span class="header-section-number">14.2.2</span> <em>Bilingual Evaluation Under-study</em> (BLEU)</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-direito-ementas-geracao_de_verbetacoes" id="toc-sec-cap-direito-ementas-geracao_de_verbetacoes" class="nav-link" data-scroll-target="#sec-cap-direito-ementas-geracao_de_verbetacoes"><span class="header-section-number">14.3</span> Geração de verbetações</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-direito-ementas-dados" id="toc-sec-cap-direito-ementas-dados" class="nav-link" data-scroll-target="#sec-cap-direito-ementas-dados"><span class="header-section-number">14.3.1</span> Aquisição de dados</a></li>
+  <li><a href="#sec-cap-direito-ementas-geracao" id="toc-sec-cap-direito-ementas-geracao" class="nav-link" data-scroll-target="#sec-cap-direito-ementas-geracao"><span class="header-section-number">14.3.2</span> Geração textual</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-direito-ementas-avaliacao_ri" id="toc-sec-cap-direito-ementas-avaliacao_ri" class="nav-link" data-scroll-target="#sec-cap-direito-ementas-avaliacao_ri"><span class="header-section-number">14.4</span> Avaliação utilizando RI</a>
+  <ul class="collapse">
+  <li><a href="#formulação-da-tarefa" id="toc-formulação-da-tarefa" class="nav-link" data-scroll-target="#formulação-da-tarefa"><span class="header-section-number">14.4.1</span> Formulação da tarefa</a></li>
+  <li><a href="#experimentos-realizados" id="toc-experimentos-realizados" class="nav-link" data-scroll-target="#experimentos-realizados"><span class="header-section-number">14.4.2</span> Experimentos realizados</a></li>
+  <li><a href="#métodos-de-ri-avaliados" id="toc-métodos-de-ri-avaliados" class="nav-link" data-scroll-target="#métodos-de-ri-avaliados"><span class="header-section-number">14.4.3</span> Métodos de RI avaliados</a></li>
+  <li><a href="#ordenação-dos-documentos" id="toc-ordenação-dos-documentos" class="nav-link" data-scroll-target="#ordenação-dos-documentos"><span class="header-section-number">14.4.4</span> Ordenação dos documentos</a></li>
+  <li><a href="#métricas-avaliadas" id="toc-métricas-avaliadas" class="nav-link" data-scroll-target="#métricas-avaliadas"><span class="header-section-number">14.4.5</span> Métricas avaliadas</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-direito-ementas-resultados_e_discussoes" id="toc-sec-cap-direito-ementas-resultados_e_discussoes" class="nav-link" data-scroll-target="#sec-cap-direito-ementas-resultados_e_discussoes"><span class="header-section-number">14.5</span> Resultados e discussões</a>
+  <ul class="collapse">
+  <li><a href="#comparação-entre-verbetações-originais-e-geradas" id="toc-comparação-entre-verbetações-originais-e-geradas" class="nav-link" data-scroll-target="#comparação-entre-verbetações-originais-e-geradas"><span class="header-section-number">14.5.1</span> Comparação entre verbetações originais e geradas</a></li>
+  <li><a href="#sec-cap-direito-ementas-resultados_ri" id="toc-sec-cap-direito-ementas-resultados_ri" class="nav-link" data-scroll-target="#sec-cap-direito-ementas-resultados_ri"><span class="header-section-number">14.5.2</span> Experimentos com RI</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-direito-ementas-conclusao" id="toc-sec-cap-direito-ementas-conclusao" class="nav-link" data-scroll-target="#sec-cap-direito-ementas-conclusao"><span class="header-section-number">14.6</span> Conclusão</a></li>
+  <li><a href="#agradecimentos" id="toc-agradecimentos" class="nav-link" data-scroll-target="#agradecimentos">Agradecimentos</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-cap-direito-ementas" class="quarto-section-identifier"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading"></div>
+    <div class="quarto-title-meta-contents">
+             <p>Kenzo Sakiyama </p>
+             <p>Roseval Malaquias Junior </p>
+             <p>Raphael Montanari </p>
+             <p>Rodrigo Nogueira </p>
+             <p>Roseli A. F. Romero </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Publicado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">20/11/2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+
+</div>
+<div>
+<div class="callout-body-container callout-body">
+<p>Este capítulo também está disponível em <a href="cap-direito-ementas.pdf">PDF</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-cite-contents" aria-label="Toggle callout" aria-controls="callout-cite" aria-expanded="false">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Como citar
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
+<i class="callout-toggle"></i>
+</div>
+</div>
+<div id="callout-cite" class="callout-cite-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>@InCollection{BPLN_livro_cap-direito-ementas:2026,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    author    = {Sakiyama, Kenzo and Junior, Roseval Malaquias and Montanari, Raphael and Nogueira, Rodrigo and Romero, Roseli A. F.},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    title     = {Geração Automática de Ementas Jurídicas},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    publisher = {BPLN},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    year      = {2026},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    editor    = {Caseli, H. M. and Nunes, M. G. V.},</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    type      = {Book Chapter},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    chapter   = {14},</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    edition   = {4},</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    volume    = {3},</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    isbn      = {XXXXXXXXXXXXXXXX},</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    url       = {https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html},</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<section id="ch:intro" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="ch:intro"><span class="header-section-number">14.1</span> Introdução</h2>
+<section id="sec-cap-direito-ementas-intro" class="level3" data-number="14.1.1">
+<h3 data-number="14.1.1" class="anchored" data-anchor-id="sec-cap-direito-ementas-intro"><span class="header-section-number">14.1.1</span> Contextualização</h3>
+<p>Segundo dados do Conselho Nacional de Justiça (CNJ)&nbsp;<span class="citation" data-cites="cnj:online">(<a href="../../shared/referencias/referencias.html#ref-cnj:online" role="doc-biblioref">Justiça - CNJ, 24DC</a>)</span>, ao final de 2022, havia 81,4 milhões de processos em trânsito no judiciário brasileiro, um aumento de 7,5% em relação ao ano anterior. O relatório também destaca que, nos casos mais extremos, o tempo de análise pode levar vários anos. Além do esforço humano necessário para a análise e elaboração dos documentos, é preciso alocar recursos financeiros para sua manutenção ao longo de todo o processo. Neste cenário, o aprimoramento de sistemas computacionais jurídicos, com a automação do fluxo de documentos, torna-se essencial para agilizar a tramitação no judiciário brasileiro.</p>
+<div id="def-cap-direito-ementas-quadro-ex_ementa" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 14.1</strong></span> Exemplo de ementa. A verbetação está destacada em negrito.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<p><strong>DIREITO CONSTITUCIONAL, TRIBUTÁRIO, PREVIDENCIÁRIO E PROCESSUAL CIVIL. CONTRIBUIÇÃO SOCIAL. ART. 2º DA LEI Nº 7.856, DE 25 DE OUTUBRO DE 1989. MAJORAÇÃO DE 8% PARA 10%, DA ALÍQUOTA DA CONTRIBUIÇÃO SOCIAL. SUCUMBÊNCIA. HONORÁRIOS ADVOCATÍCIOS. CUSTAS PROCESSUAIS.</strong><br>
+1. Firmou-se em Plenário do Supremo Tribunal Federal o entendimento no sentido de que, em se tratando de “lei de conversão da Medida Provisória nº 86, de 25 de setembro de 1989, da data da edição desta é que flui o prazo de noventa dias previsto no art. 195, § 6º, da CF, o qual, no caso, teve por termo final o dia 24 de dezembro do mesmo ano, possibilitando o cálculo do tributo, pela nova alíquota, sobre o lucro da recorrente, apurado no balanço do próprio exercício de 1989” (RE 197.790-6-MG, Rel. Min. ILMAR GALVÃO).<br>
+2. Adotados os fundamentos desse precedente, o RE, no caso, é conhecido e provido.<br>
+3. As autoras ficaram vencedoras, quanto a outros pedidos, nas instâncias ordinárias, sem que o R.E. abordasse esses pontos. Sendo maior a sucumbência da ré, pagará honorários advocatícios às autoras.<br>
+4. Custas em proporção.</p>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+<p>Este Capítulo trata da geração automática de <strong>ementas</strong>, documentos amplamente utilizados em tribunais brasileiros, cuja função é fornecer um resumo de processos judiciais. As ementas oferecem uma representação sucinta e simplificada das decisões, permitindo que profissionais do Direito compreendam rapidamente o conteúdo sem a necessidade de ler o acórdão completo. Conforme demonstra o exemplo no <a href="#def-cap-direito-ementas-quadro-ex_ementa" class="quarto-xref">Quadro&nbsp;<span>14.1</span></a>, estes documentos usualmente contêm dois elementos principais: <strong>verbetações</strong> e <strong>parágrafos enumerados</strong>.</p>
+<p>As <strong>verbetações</strong> são cabeçalhos constituídos por frases curtas, em caixa-alta, que descrevem os assuntos mais relevantes da decisão. Além de resumir o conteúdo, elas auxiliam na tarefa de busca e recuperação de jurisprudências (precedentes)&nbsp;<span class="citation" data-cites="guimaraes2016ementa">(<a href="../../shared/referencias/referencias.html#ref-guimaraes2016ementa" role="doc-biblioref">Guimarães; Santos, 2016</a>)</span>. Por outro lado, os <strong>parágrafos enumerados</strong> expõem as teses da decisão, sendo que o último apresenta geralmente a conclusão do tribunal. Essa estrutura contribui para a agilidade no acesso à informação jurídica, facilitando a consulta à jurisprudência.</p>
+<p>Vale destacar que, devido à sua estrutura e estilo, as verbetações assemelham-se a palavras-chave e a textos sumarizados. No entanto, diferentemente das palavras-chave, elas podem consistir em frases curtas. Além disto, enquanto resumos são redigidos de maneira fluida, as verbetações seguem um estilo linguístico único e rígido em comparação aos resumos. Um desafio adicional na redação das verbetações é que muitos dos termos utilizados não aparecem no restante da ementa, tornando sua produção uma tarefa que vai além da simples extração de informação.</p>
+<p>Considerando as características do sistema judiciário brasileiro, os componentes das ementas e sua grande disponibilidade no Brasil, o objetivo deste Capítulo é apresentar métodos de PLN que propiciam a automatização da escrita de verbetações empregando os parágrafos enumerados como entradas para um modelo supervisionado generativo. Em específico, como Transformers&nbsp;<span class="citation" data-cites="gpt3 DBLP:journals/corr/abs-2008-09144 DBLP:journals/corr/abs-2211-05100 zhang2022opt">(<a href="../../shared/referencias/referencias.html#ref-gpt3" role="doc-biblioref">Brown et al., 2020</a>; <a href="../../shared/referencias/referencias.html#ref-DBLP:journals/corr/abs-2008-09144" role="doc-biblioref">Carmo et al., 2020</a>; <a href="../../shared/referencias/referencias.html#ref-DBLP:journals/corr/abs-2211-05100" role="doc-biblioref">Scao et al., 2022</a>; <a href="../../shared/referencias/referencias.html#ref-zhang2022opt" role="doc-biblioref">Zhang et al., 2022</a>)</span> se mostraram efetivos em tarefas de geração de texto, neste capítulo os mesmos são avaliados na tarefa de geração de verbetações. O <a href="#def-cap-direito-ementas-quadro-ex_verb" class="quarto-xref">Quadro&nbsp;<span>14.2</span></a> ilustra exemplos de verbetações geradas por Transformers, nos quais fica evidente a capacidade desse modelo generativo, obtendo resultados semelhantes à verbetações escritas por especialistas.</p>
+<div id="def-cap-direito-ementas-quadro-ex_verb" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 14.2</strong></span> Exemplos de verbetações geradas por Transformers.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<p><strong>Original:</strong> PROCESSUAL CIVIL. EMBARGOS DE DECLARAÇÃO NO RECURSO ESPECIAL. ALEGAÇÃO DE OMISSÃO. RESSALVAS DE FUNDAMENTAÇÃO CONTIDAS NO VOTO-VISTA. OMISSÃO NÃO CARACTERIZADA.<br>
+<strong>Gerada:</strong> PROCESSUAL CIVIL. EMBARGOS DE DECLARAÇÃO. OMISSÃO. VÍCIO INEXISTENTE. REJEIÇÃO.<br>
+</p>
+<p><strong>Original:</strong> AGRAVO REGIMENTAL NO HABEAS CORPUS. TRÁFICO DE DROGAS. PRISÃO PREVENTIVA. PERICULUM LIBERTATIS. CRISE MUNDIAL DE COVID-19. NÃO DEMONSTRADA A EXISTÊNCIA DE RISCO À INTEGRIDADE FÍSICA DO ENCARCERADO. AGRAVO REGIMENTAL NÃO PROVIDO.<br>
+<strong>Gerada:</strong> AGRAVO REGIMENTAL NO HABEAS CORPUS. TRÁFICO DE DROGAS. PRISÃO PREVENTIVA. PERICULUM LIBERTATIS. AGRAVO REGIMENTAL NÃO PROVIDO.<br>
+</p>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+<p>Este Capítulo apresenta mais uma aplicação de PLN na área do Direito, assim como as apresentadas no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito/cap-direito.html#sec-cap-direito" target="_blank" title="Volume 3">PLN no Direito</a></span>. São utilizados modelos de linguagem (descritos no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol2/modelos/cap-modelos-linguagem/cap-modelos-linguagem.html#sec-cap-modelos-linguagem" target="_blank" title="Volume 2">Modelos de linguagem</a></span>) em uma tarefa de geração de texto, similar à tarefa de sumarização (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-as/cap-as.html#sec-cap-as" target="_blank" title="Volume 3">Sumarização Automática</a></span>). A metodologia proposta descreve como a coleta de dados foi realizada, apresenta o modelo transformer utilizado e também a técnica de validação e métrica adotadas. Além disto, emprega-se conceitos de Recuperação de Informação (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir" target="_blank" title="Volume 3">Recuperação de Informação</a></span>) para avaliação final das verbetações geradas.</p>
+</section>
+<section id="organização-do-capítulo" class="level3" data-number="14.1.2">
+<h3 data-number="14.1.2" class="anchored" data-anchor-id="organização-do-capítulo"><span class="header-section-number">14.1.2</span> Organização do Capítulo</h3>
+<p>Este Capítulo está organizado da seguinte forma. A <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html#sec-cap-direito-ementas-transferencia_aprendizado" target="_blank" title="Volume 3">Transferência de Aprendizado e Ajuste Fino</a></span> introduz conceitos preliminares relacionados à aplicação. Em seguida, a <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html#sec-cap-direito-ementas-geracao_de_verbetacoes" target="_blank" title="Volume 3">Geração de verbetações</a></span> descreve a metodologia utilizada para a geração de verbetações. A <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html#sec-cap-direito-ementas-avaliacao_ri" target="_blank" title="Volume 3">Avaliação utilizando RI</a></span> detalha a metodologia adotada. Na sequência, os resultados obtidos são apresentados e discutidos na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html#sec-cap-direito-ementas-resultados_e_discussoes" target="_blank" title="Volume 3">Resultados e discussões</a></span>. Por fim, conclusão é apresentada na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html#sec-cap-direito-ementas-conclusao" target="_blank" title="Volume 3">Conclusão</a></span>.</p>
+</section>
+</section>
+<section id="conceitos-preliminares" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="conceitos-preliminares"><span class="header-section-number">14.2</span> Conceitos Preliminares</h2>
+<section id="sec-cap-direito-ementas-transferencia_aprendizado" class="level3" data-number="14.2.1">
+<h3 data-number="14.2.1" class="anchored" data-anchor-id="sec-cap-direito-ementas-transferencia_aprendizado"><span class="header-section-number">14.2.1</span> Transferência de Aprendizado e Ajuste Fino</h3>
+<p>Uma propriedade importante para a popularidade de Transformers em PLN é a <strong>Transferência de Aprendizado</strong> (TA). Como o próprio nome sugere, a técnica visa transferir conhecimento de um domínio para outro. Em outras palavras, busca-se generalizar o conhecimento adquirido em um domínio <span class="math inline">\(A\)</span> para um domínio <span class="math inline">\(B\)</span>. É importante notar que essa transferência é mais vantajosa se os domínios estiverem de alguma forma relacionados <span class="citation" data-cites="zhuang2020comprehensive">(<a href="../../shared/referencias/referencias.html#ref-zhuang2020comprehensive" role="doc-biblioref">Zhuang et al., 2020</a>)</span>.</p>
+<p>Esta propriedade é útil em casos em que há uma grande diferença na quantidade de dados disponíveis no domínio e na tarefa alvo. Por exemplo, pensando no contexto de PLN, há uma abundância de textos disponíveis publicamente na web, porém, apenas uma fração é relacionada ao Direito (uma fração ainda menor, se considerarmos textos em português). Neste caso, a TA permite que um modelo seja treinado em um domínio com dados abundantes e, depois, treinado novamente no conjunto de dados destinado à tarefa alvo. Este segundo treinamento, por sua vez, é chamado de <strong>Ajuste Fino</strong>.</p>
+<p>Um exemplo de TA no contexto de PLN utilizando Transformers é encontrado no modelo BERTimbau&nbsp;<span class="citation" data-cites="Souza2020">(<a href="../../shared/referencias/referencias.html#ref-Souza2020" role="doc-biblioref">Souza et al., 2020</a>)</span> (Transformer codificador). Inicialmente, ele foi treinado no <em>corpus</em> genérico brWaC <span class="citation" data-cites="wagner-filho-etal-2018-brwac">(<a href="../../shared/referencias/referencias.html#ref-wagner-filho-etal-2018-brwac" role="doc-biblioref">Wagner Filho et al., 2018</a>)</span>. Ambos, modelo e <em>corpus</em>, foram apresentados no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol2/modelos/cap-modelos-linguagem/cap-modelos-linguagem.html#sec-cap-modelos-linguagem" target="_blank" title="Volume 2">Modelos de linguagem</a></span>. O treinamento inicial foi feito em um grande volume de texto, visando aprender estruturas linguísticas comuns da língua portuguesa. Este treinamento é baseado em modelagem de linguagem (também discutido no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol2/modelos/cap-modelos-linguagem/cap-modelos-linguagem.html#sec-cap-modelos-linguagem" target="_blank" title="Volume 2">Modelos de linguagem</a></span>). Similar ao modelo BERT, o modelo BERTimbau, gera representações para os <em>tokens</em> que podem ser utilizadas em diferentes tarefas de PLN, como classificação, reconhecimento de entidades nomeadas, agrupamentos etc.</p>
+<p>Vale notar que o treinamento inicial não necessariamente corresponde à tarefa final na qual o modelo de aprendizado de máquina será empregado. Além disto, o pré-treinamento possibilita um bom desempenho na tarefa final, mesmo que esta não possua uma quantidade abundante de dados para o ajuste fino. Além disso, após essa etapa inicial de treinamento, os modelos pré-treinados podem ser disponibilizados publicamente <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Este fato é interessante, pois possibilita que outros pesquisadores tenham à sua disposição modelos pré-treinados, prontos para serem utilizados em suas tarefas alvo de interesse.</p>
+</section>
+<section id="sec-cap-direito-ementas-bleu" class="level3" data-number="14.2.2">
+<h3 data-number="14.2.2" class="anchored" data-anchor-id="sec-cap-direito-ementas-bleu"><span class="header-section-number">14.2.2</span> <em>Bilingual Evaluation Under-study</em> (BLEU)</h3>
+<p>Para avaliar quantitativamente sistemas de geração de texto, muitas métricas foram propostas ao longo dos anos, como por exemplo a medida BLEU.</p>
+<!--A métrica BLEU foi apresentada com mais detalhes no @sec-cap-mt. Para sumarizar sua interpretação, o cálculo da métrica envolve analisar a sobreposição entre as palavras (ou *tokens*) no texto gerado e aquelas nos textos de referência humanos. Na prática, as palavras são representadas por n-gramas (usualmente de uma a quatro palavras), após a tokenização dos textos. Os valores da métrica variam no intervalo de 0 a 1. Uma pontuação mais próxima de 1 indica uma melhor qualidade no texto gerado do que uma mais próxima de 0. Além disto, a métrica está correlacionada positivamente com as avaliações humanas [@Papineni2002].-->
+<p>A métrica BLEU <span class="citation" data-cites="Papineni2002">(<a href="../../shared/referencias/referencias.html#ref-Papineni2002" role="doc-biblioref">Papineni et al., 2002</a>)</span> foi proposta originalmente para avaliar sistemas de tradução. De maneira simplificada, seu funcionamento envolve analisar a sobreposição entre as palavras (ou <em>tokens</em>) no texto gerado e aquelas nos textos de referência humanos. Na prática, as palavras são representadas por n-gramas (usualmente de uma a quatro palavras), após a tokenização dos textos. Os valores da métrica estão em uma faixa de 0 a 1, na qual uma pontuação mais próxima de 1 indica uma melhor qualidade no texto gerado.</p>
+<p>Outra característica interessante é que a métrica considera todo o <em>corpus</em> de avaliação para seu cálculo. Assim, as estatísticas são obtidas a partir de todos os textos gerados e referências, sem realizar qualquer tipo de agregação, como uma média, para determinar a pontuação final.</p>
+<p>Formalmente, o BLEU está definido da seguinte forma:</p>
+<div style="transform-origin:left; scale:0.9;">
+<p> <span id="eq-cap-direito-ementas-bleu_geral"><span class="math display">\[
+BLEU = Penalidade \times \Big(\prod_{i=1}^{4}Precis\tilde{a}o_i\Big)^{1/4}
+\tag{14.1}\]</span></span> </p>
+</div>
+<div style="transform-origin:left; scale:0.9;">
+<p> <span id="eq-cap-direito-ementas-bleu_penalidade"><span class="math display">\[
+Penalidade = \min\Big(1,
+        \exp\big(1-\frac{\text{tamanho da refer\^encia}}{\text{tamanho do texto gerado}}\big)\Big)
+\tag{14.2}\]</span></span> </p>
+</div>
+<div style="transform-origin:left; scale:0.9;">
+<p> <span id="eq-cap-direito-ementas-bleu_precisao"><span class="math display">\[
+Precis\tilde{a}o_i = \dfrac{\sum_{\text{tg}\in\text{Gerados}}\sum_{i\in\text{tg}}\min(c^i_{gerado}, c^i_{ref)}}
+  {C_t^i = \sum_{\text{tg'}\in\text{Gerados}}\sum_{i'\in\text{tg'}} c^{i'}_{gerado}}
+\tag{14.3}\]</span></span> </p>
+</div>
+<p>na qual <span class="math inline">\(i\)</span> define o i-ésimo n-grama, <span class="math inline">\(tg\)</span> corresponde a um texto gerado, <span class="math inline">\(c^i_{gerado}\)</span> corresponde ao número de ocorrências simultâneas do i-grama na referência e no texto gerado, <span class="math inline">\(c^i_{ref}\)</span> corresponde ao número de ocorrências da i-grama no texto de referência, <span class="math inline">\(c^{i'}_{tg}\)</span> denota a quantidade de n-gramas no texto gerado e <span class="math inline">\(C_t^i\)</span> informa o número total de i-gramas dos textos gerados.</p>
+<!-- % % Brevity Penalty -->
+<p>Na fórmula apresentada, o componente de Penalidade (<a href="#eq-cap-direito-ementas-bleu_penalidade" class="quarto-xref">Equação&nbsp;<span>14.2</span></a>) penaliza a produção de textos curtos, já que seu valor diminui à medida que os textos gerados são menores. Já que o número de termos no texto gerado influencia o denominador da <a href="#eq-cap-direito-ementas-bleu_precisao" class="quarto-xref">Equação&nbsp;<span>14.3</span></a>, quando esse valor é pequeno, facilita-se maximizar a precisão. Logo, a penalidade atua para incentivar a geração de textos mais longos. Note que os tamanhos são calculados considerando todos os exemplos, tanto os gerados quanto os de referência.</p>
+<!--% % Precisão -->
+<p>Em sequência, a <a href="#eq-cap-direito-ementas-bleu_precisao" class="quarto-xref">Equação&nbsp;<span>14.3</span></a> ilustra um cálculo de precisão no qual verifica-se qual porcentagem dos n-gramas ocorre tanto no texto gerado quanto no texto de referência.</p>
+<!--% % BLEU -->
+<p>A <a href="#eq-cap-direito-ementas-bleu_geral" class="quarto-xref">Equação&nbsp;<span>14.1</span></a> define o BLEU, combinando componentes mencionados anteriormente. Como se pode observar, a métrica BLEU é a média harmônica das precisões dos n-gramas (tipicamente, entre 1 e 4), com uma penalização pelo tamanho do texto gerado.</p>
+<!--% % Benefícios e limitações-->
+<p>Em suma, o BLEU destaca-se por sua simplicidade e rapidez de cálculo, além de estar correlacionado positivamente com as avaliações humanas <span class="citation" data-cites="Papineni2002">(<a href="../../shared/referencias/referencias.html#ref-Papineni2002" role="doc-biblioref">Papineni et al., 2002</a>)</span>. No entanto, é importante reforçar que sua principal limitação está na falta de consideração dos aspectos semânticos dos textos comparados, já que sua metodologia se baseia no casamento de n-gramas. Além disso, a métrica é sensível ao método de tokenização utilizado.</p>
+<p><!-- FIM --></p>
+</section>
+</section>
+<section id="sec-cap-direito-ementas-geracao_de_verbetacoes" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="sec-cap-direito-ementas-geracao_de_verbetacoes"><span class="header-section-number">14.3</span> Geração de verbetações</h2>
+<p>Neste Capítulo, serão apresentados os componentes da metodologia proposta para o desenvolvimento desta aplicação. Iniciando pelos dados utilizados, a <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html#sec-cap-direito-ementas-dados" target="_blank" title="Volume 3">Aquisição de dados</a></span> discute a coleta dos documentos. Em seguida, a metodologia empregada para a geração automática de verbetações e sua avaliação é discutida na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html#sec-cap-direito-ementas-geracao" target="_blank" title="Volume 3">Geração textual</a></span>. Mais detalhes a respeito da metodologia podem ser encontrados em <span class="citation" data-cites="sakiyama2023geraccao">(<a href="../../shared/referencias/referencias.html#ref-sakiyama2023geraccao" role="doc-biblioref">Sakiyama, 2023</a>)</span>.</p>
+<section id="sec-cap-direito-ementas-dados" class="level3" data-number="14.3.1">
+<h3 data-number="14.3.1" class="anchored" data-anchor-id="sec-cap-direito-ementas-dados"><span class="header-section-number">14.3.1</span> Aquisição de dados</h3>
+<p>Em 2022, como parte de um movimento em direção à transparência administrativa, o Supremo Tribunal de Justiça (STJ) lançou a plataforma Dados Abertos<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. Este domínio público destina-se ao compartilhamento de decisões judiciais de diversos tribunais do Brasil, sendo estas julgadas por ministros do STJ. Além de promover a transparência, a plataforma foi criada visando reduzir o uso de <em>web scrappers</em> no portal oficial do STJ e estimular a pesquisa e o desenvolvimento de ferramentas baseadas em inteligência artificial que dependem da disponibilidade de dados.</p>
+<p>As ementas coletadas estão classificadas em seções. Estas representam as seções do STJ e se diferenciam pelos temas jurídicos julgados. Por exemplo: impostos (primeira seção), comércio (segunda seção) e crimes no geral (terceira seção) <span class="citation" data-cites="stj_composicao:online">(<a href="../../shared/referencias/referencias.html#ref-stj_composicao:online" role="doc-biblioref">STJ, 24DC</a>)</span>. Desta forma, os documentos obtidos abrangem uma ampla variedade de temas do contexto jurídico brasileiro. Para o desenvolvimento desta pesquisa foram coletados um total de 726.384 documentos da plataforma (a coleta ocorreu em agosto de 2022) e foram analisadas as ementas dos processos obtidos.</p>
+</section>
+<section id="sec-cap-direito-ementas-geracao" class="level3" data-number="14.3.2">
+<h3 data-number="14.3.2" class="anchored" data-anchor-id="sec-cap-direito-ementas-geracao"><span class="header-section-number">14.3.2</span> Geração textual</h3>
+<p>Nesta Seção, é apresentada a metodologia utilizada para geração das verbetações e sua avaliação.</p>
+<section id="sec-cap-direito-ementas-preprocessamento_geracao" class="level4" data-number="14.3.2.1">
+<h4 data-number="14.3.2.1" class="anchored" data-anchor-id="sec-cap-direito-ementas-preprocessamento_geracao"><span class="header-section-number">14.3.2.1</span> Preparação de exemplos para geração de texto</h4>
+<p>Para a preparação de entradas para o modelo generativo escolhido, verbetações e parágrafos enumerados foram separados, por meio da identificação de frases iniciadas por letras maiúsculas. Assim, as verbetações originais extraídas passam a compor o conjunto de referência (conjunto ouro ou <em>gold standard</em>) a ser usado para avaliar a qualidade das verbetações geradas pelas estratégias estudadas.</p>
+<p>Feito o processamento adicional, o <em>corpus</em> final foi dividido em três conjuntos: treino (70%), validação (10%) e teste (20%). Tal divisão foi feita de forma estratificada, para preservar as proporções das origens (seções de julgamento) dos documentos. Este procedimento foi feito visando uma avaliação utilizando a técnica de validação cruzada (mais detalhes no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/avaliacao/cap-avaliacao/cap-avaliacao.html#sec-cap-avaliacao" target="_blank" title="Volume 1">Avaliação de tecnologias de linguagem</a></span>).</p>
+<p>A fim de ilustrar aos leitores os tamanhos dos parágrafos enumerados e das verbetações, na <a href="#tbl-cap-direito-ementas-descriptive_stats" class="quarto-xref">Tabela&nbsp;<span>14.1</span></a> é sumarizada a análise estatística descritiva da variação dos tamanhos dos <em>tokens</em> presentes no conjunto de treinamento. Dentre as medidas foram calculadas a média, o desvio padrão e os 3 quartis: Q1, Q2 e Q3. O conjunto em questão possui cerca de 1,6 milhão de <em>tokens</em>. Os parágrafos enumerados têm, em média, 203,26 <em>tokens</em>, enquanto as verbetações têm, em média, 55,84 <em>tokens</em>. Os valores do desvio padrão revelam que os tamanhos dos parágrafos enumerados e das verbetações variam consideravelmente.</p>
+<div id="tbl-cap-direito-ementas-descriptive_stats" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cap-direito-ementas-descriptive_stats-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;14.1: Variação dos tamanhos dos parágrafos enumerados e das verbetações com base em medidas da estatística descritiva para <em>tokens</em> do conjunto de treino (78.375 exemplos).
+</figcaption>
+<div aria-describedby="tbl-cap-direito-ementas-descriptive_stats-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<caption>Variação dos tamanhos dos parágrafos enumerados e das verbetações com base em medidas da estatística descritiva para <em>tokens</em> do conjunto de treino (78.375 exemplos).</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: center;"><strong>Média</strong></th>
+<th style="text-align: center;"><strong>Desvio Padrão</strong></th>
+<th style="text-align: center;"><strong>Q1</strong></th>
+<th style="text-align: center;"><strong>Q2</strong></th>
+<th style="text-align: center;"><strong>Q3</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Parágrafos enumerados</td>
+<td style="text-align: center;">203,262</td>
+<td style="text-align: center;">183,332</td>
+<td style="text-align: center;">92</td>
+<td style="text-align: center;">155</td>
+<td style="text-align: center;">253</td>
+</tr>
+<tr class="even">
+<td>Verbetação</td>
+<td style="text-align: center;">55,842</td>
+<td style="text-align: center;">32,136</td>
+<td style="text-align: center;">34</td>
+<td style="text-align: center;">49</td>
+<td style="text-align: center;">69</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+<section id="sec-cap-direito-ementas-transf_verb" class="level4" data-number="14.3.2.2">
+<h4 data-number="14.3.2.2" class="anchored" data-anchor-id="sec-cap-direito-ementas-transf_verb"><span class="header-section-number">14.3.2.2</span> Transformers para geração de verbetações</h4>
+<p>Como mencionado anteriormente, as verbetações podem conter termos que não estão presentes no corpo da ementa (parágrafos enumerados). De fato, ao analisar os documentos do conjunto de validação, observou-se que apenas cerca de 10% dos termos das verbetações estão contidos no restante do texto. Sendo assim, optou-se por abordar a geração de verbetações como sendo uma geração de sequência-a-sequência (ou texto-para-texto). Utilizou-se o conteúdo dos parágrafos enumerados como entrada para os modelos Transformers, enquanto que as verbetações originais foram consideradas como as saídas desejadas.</p>
+<p>Estudos anteriores&nbsp;<span class="citation" data-cites="DBLP:journals/corr/abs-2008-09144 Souza2020 rosa2021cost">(<a href="../../shared/referencias/referencias.html#ref-DBLP:journals/corr/abs-2008-09144" role="doc-biblioref">Carmo et al., 2020</a>; <a href="../../shared/referencias/referencias.html#ref-rosa2021cost" role="doc-biblioref">Rosa et al., 2021a</a>; <a href="../../shared/referencias/referencias.html#ref-Souza2020" role="doc-biblioref">Souza et al., 2020</a>)</span> apontam que modelos pré-treinados para a linguagem da tarefa tendem a superar os modelos multilíngues nas mesmas tarefas. Em experimentos detalhados em <span class="citation" data-cites="sakiyama2023geraccao">(<a href="../../shared/referencias/referencias.html#ref-sakiyama2023geraccao" role="doc-biblioref">Sakiyama, 2023</a>)</span>, o modelo PTT5&nbsp;<span class="citation" data-cites="DBLP:journals/corr/abs-2008-09144">(<a href="../../shared/referencias/referencias.html#ref-DBLP:journals/corr/abs-2008-09144" role="doc-biblioref">Carmo et al., 2020</a>)</span><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, ajustado para português brasileiro, destacou-se como o mais eficaz, e seus resultados serão reportados aqui. Este modelo foi pré-treinado no <em>corpus</em> brWaC e foi utilizada sua versão base (com 220M de parâmetros). Tendo treinado o modelo PTT5, a geração de verbetações foi feita usando uma simples decodificação gulosa (que consiste sempre em escolher o <em>token</em> mais provável na geração).</p>
+</section>
+<section id="sec-cap-direito-ementas-avaliacao_texto" class="level4" data-number="14.3.2.3">
+<h4 data-number="14.3.2.3" class="anchored" data-anchor-id="sec-cap-direito-ementas-avaliacao_texto"><span class="header-section-number">14.3.2.3</span> Avaliação dos textos gerados</h4>
+<p>A avaliação dos textos gerados pelo modelo de língua PTT5 foi feita empregando-se a metodologia descrita no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/avaliacao/cap-avaliacao/cap-avaliacao.html#sec-cap-avaliacao" target="_blank" title="Volume 1">Avaliação de tecnologias de linguagem</a></span>. Utilizou-se a técnica de amostragem <em>holdout</em> para validação e a métrica BLEU (<em>Bilingual Evaluation Under-study</em>) para quantificar a qualidade dos textos gerados.</p>
+<p>A fim de aprofundar a avaliação, foram realizadas outras análises comparativas entre o texto gerado e as entradas originais. Por exemplo, os tamanhos das entradas geradas pelo melhor modelo foram comparados com os das entradas originais, bem como a quantidade de palavras (<em>tokens</em>) copiadas e geradas. Palavras ‘novas’ (ou geradas) são aquelas que não aparecem nos parágrafos enumerados, utilizados na geração de verbetações.</p>
+</section>
+</section>
+</section>
+<section id="sec-cap-direito-ementas-avaliacao_ri" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="sec-cap-direito-ementas-avaliacao_ri"><span class="header-section-number">14.4</span> Avaliação utilizando RI</h2>
+<p>Para a avaliação final das verbetações geradas, elas foram concatenadas aos seus documentos originais para simular um caso de uso real em uma tarefa de Recuperação de Informação (RI). Foram empregadas tanto a decodificação gulosa quanto a decodificação por amostragem na geração das verbetações nesta avaliação. Mais detalhes a respeito da avaliação experimental podem ser encontrados em <span class="citation" data-cites="sakiyama2023geraccao">(<a href="../../shared/referencias/referencias.html#ref-sakiyama2023geraccao" role="doc-biblioref">Sakiyama, 2023</a>)</span>.</p>
+<section id="formulação-da-tarefa" class="level3" data-number="14.4.1">
+<h3 data-number="14.4.1" class="anchored" data-anchor-id="formulação-da-tarefa"><span class="header-section-number">14.4.1</span> Formulação da tarefa</h3>
+<p>Os documentos apresentados na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html#sec-cap-direito-ementas-dados" target="_blank" title="Volume 3">Aquisição de dados</a></span>, juntamente com o texto da ementa, contêm metadados úteis, entre eles, o tema da decisão. Tais temas, ou temas de recursos repetitivos, consistem em identificadores únicos que correspondem a questões jurídicas comuns. Cada documento pode estar associado a mais de um tema, e há mais de mil temas distintos listados no STJ<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. Exemplos desses temas estão ilustrados no <a href="#def-cap-direito-ementas-quadro-ex_temas" class="quarto-xref">Quadro&nbsp;<span>14.3</span></a>.</p>
+<div id="def-cap-direito-ementas-quadro-ex_temas" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 14.3</strong></span> Exemplos de temas de recursos repetitivos, listados pelo STJ.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<p><strong>Tema 192:</strong> Incidência da pensão alimentícia sobre o décimo terceiro salário e o terço constitucional de férias .<br>
+<strong>Tema 312:</strong> Prazo para restituição ao consorciado desistente das parcelas pagas ao grupo de consórcio .<br>
+<strong>Tema 1166:</strong> Natureza material do crime de apropriação indébita previdenciária e sua consumação com a constituição definitiva do crédito tributário na via administrativa.<br>
+</p>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+<p>Com base nos temas, foi utilizada a definição binária de relevância para formular a seguinte tarefa de RI: dado um documento de consulta <span class="math inline">\(Q\)</span>, os documentos relevantes <span class="math inline">\(R\)</span> devem pertencer ao mesmo tema de <span class="math inline">\(Q\)</span>. Esta formulação simula o caso de uso em que um advogado busca processos semelhantes a um caso base, por exemplo. A formulação apresentada é semelhante à utilizada por <span class="citation" data-cites="ostendorff2021evaluating">Ostendorff et al. (<a href="../../shared/referencias/referencias.html#ref-ostendorff2021evaluating" role="doc-biblioref">2021</a>)</span>, na qual foram criados pares de relevância (documento de consulta e documento relevante) usando decisões da Suprema Corte dos Estados Unidos. As decisões foram categorizadas por livros de casos ou categorias pré-definidas.</p>
+<p>Em resumo, na avaliação proposta, ementas são usadas para buscar outras ementas. Para imitar o cenário real nos experimentos, foram empregadas ementas completas (incluindo verbetações e parágrafos enumerados). Foram utilizadas ementas completas em todos os experimentos, exceto o primeiro, que será discutido na próxima Seção.</p>
+<p>Entre as ementas coletadas, apenas 801 possuíam anotações de tema, com 99,3% apresentando valores ausentes. Estas ementas foram removidas do conjunto de treinamento dos geradores de texto e utilizadas para compor pares de consulta e documentos relevantes nos experimentos com RI. Foram filtrados temas que apareceram pelo menos duas vezes, resultando em 482 consultas.</p>
+<div id="fig-cap-direito-ementas-relevant_docs" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-direito-ementas-relevant_docs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;14.1: Visualização do número de documentos relevantes (de mesmo tema) por documento de consulta.
+</figcaption>
+<div aria-describedby="fig-cap-direito-ementas-relevant_docs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/relevant_docs.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+</figure>
+</div>
+<p>A <a href="#fig-cap-direito-ementas-relevant_docs" class="quarto-xref">Figura&nbsp;<span>14.1</span></a> mostra uma visualização do número de documentos relevantes (com o mesmo tema) por documento de consulta. Observa-se que a maioria das consultas possui entre 1 e 3 documentos relevantes. No caso mais extremo, uma consulta pode ter até 10 documentos relevantes.</p>
+<p>Para criar o <em>corpus</em> final de busca para a tarefa mencionada, foram combinados os 801 documentos com tema ao conjunto de teste discutido na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html#sec-cap-direito-ementas-preprocessamento_geracao" target="_blank" title="Volume 3">Preparação de exemplos para geração de texto</a></span>, totalizando 23.194 documentos. Esta combinação foi feita visando tornar a tarefa de RI mais desafiadora, pois a mesma pode incluir falsos negativos ao <em>corpus</em> de busca, que acabam prejudicando as métricas de RI. Falsos negativos são documentos que têm o mesmo tema da consulta, mas são considerados irrelevantes por não possuírem anotação de tema (dado ausente).</p>
+</section>
+<section id="experimentos-realizados" class="level3" data-number="14.4.2">
+<h3 data-number="14.4.2" class="anchored" data-anchor-id="experimentos-realizados"><span class="header-section-number">14.4.2</span> Experimentos realizados</h3>
+<p>A avaliação baseada em RI foi conduzida por meio de dois experimentos distintos. Todos os experimentos utilizaram métodos de decodificação simples (decodificação gulosa) e métodos não determinísticos (decodificação com amostragem). Seus detalhes serão descritos a seguir.</p>
+<ol type="1">
+<li><p><strong>Comparação de documentos com e sem verbetações</strong>: a influência das verbetações na tarefa de RI foi avaliada, analisando-se métricas de RI para buscas, usando documentos com e sem suas verbetações originais, tanto para documentos de consulta quanto para documentos do <em>corpus</em> de busca. Este experimento teve como objetivo validar o papel das verbetações no contexto de uma tarefa de RI.</p></li>
+<li><p><strong>Avaliação das verbetações geradas</strong>: neste experimento, foi investigado o efeito de usar verbetações geradas no lugar das originais. O texto gerado foi concatenado ao início de ambos os documentos de consulta e dos documentos do <em>corpus</em> de busca. O objetivo deste experimento é verificar se as verbetações artificiais melhoram as métricas de RI em comparação com a ausência de verbetações. Para este experimento, foram usadas verbetações geradas com decodificação gulosa.</p></li>
+</ol>
+</section>
+<section id="métodos-de-ri-avaliados" class="level3" data-number="14.4.3">
+<h3 data-number="14.4.3" class="anchored" data-anchor-id="métodos-de-ri-avaliados"><span class="header-section-number">14.4.3</span> Métodos de RI avaliados</h3>
+<p>Dois métodos tradicionais de RI para a tarefa descrita anteriormente: TF-IDF e BM25&nbsp; <span class="citation" data-cites="robertson1999okapi">(<a href="../../shared/referencias/referencias.html#ref-robertson1999okapi" role="doc-biblioref">Robertson; Walker, 1999</a>)</span> foram considerados para a avaliação. Tais métodos são amplamente utilizados em sistemas de busca populares (como Lucene<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>), e são frequentemente adotados como <em>base</em> em comparações de desempenho de algoritmos&nbsp;<span class="citation" data-cites="rosa2021yes pradeep2020h2oloo">(<a href="../../shared/referencias/referencias.html#ref-pradeep2020h2oloo" role="doc-biblioref">Pradeep et al., 2020</a>; <a href="../../shared/referencias/referencias.html#ref-rosa2021yes" role="doc-biblioref">Rosa et al., 2021b</a>)</span>. Além disto, conforme investigado por estudos anteriores&nbsp;<span class="citation" data-cites="lima2021comparison mandal2021unsupervised">(<a href="../../shared/referencias/referencias.html#ref-lima2021comparison" role="doc-biblioref">Lima et al., 2021</a>; <a href="../../shared/referencias/referencias.html#ref-mandal2021unsupervised" role="doc-biblioref">Mandal et al., 2021</a>)</span>, métodos de representação esparsa tendem a apresentar melhor desempenho em tarefas similares no domínio jurídico. Tendo apresentado os modelos investigados, a seguir serão apresentados mais detalhes sobre suas execuções.</p>
+</section>
+<section id="ordenação-dos-documentos" class="level3" data-number="14.4.4">
+<h3 data-number="14.4.4" class="anchored" data-anchor-id="ordenação-dos-documentos"><span class="header-section-number">14.4.4</span> Ordenação dos documentos</h3>
+<p>Ao utilizar o método TF-IDF para realizar as buscas, calculou-se a similaridade de cosseno entre consultas e documentos e os documentos do <em>corpus</em> foram ordenados a partir de suas semelhanças em ordem decrescente. Já o método BM25 utiliza o Princípio de Classificação por Probabilidade (<em>Probability Ranking Principle</em>) para estimar a relevância de um documento para uma consulta <span class="citation" data-cites="crestani1998document">(<a href="../../shared/referencias/referencias.html#ref-crestani1998document" role="doc-biblioref">Crestani et al., 1998</a>)</span>. Logo, os documentos foram ordenados com base em suas relevâncias estimadas.</p>
+</section>
+<section id="métricas-avaliadas" class="level3" data-number="14.4.5">
+<h3 data-number="14.4.5" class="anchored" data-anchor-id="métricas-avaliadas"><span class="header-section-number">14.4.5</span> Métricas avaliadas</h3>
+<p>Para avaliar de forma quantitativa o desempenho da busca e, em adição, a qualidade das verbetações geradas, foram computadas métricas tradicionais de RI. As métricas utilizadas foram: <em>Mean Reciprocal Rank</em> (MRR), <em>Normalized Discounted Cumulative Gain</em> (NDCG), Revocação, Precisão e <em>Mean Average Precision</em> (MAP).</p>
+<p>Utilizou-se os 10 primeiros documentos ordenados para o cálculo das métricas mencionadas. Este limite foi escolhido para simular um cenário restritivo, em que o usuário investiga somente até 10 documentos. Conforme&nbsp;<span class="citation" data-cites="russell2018information">(<a href="../../shared/referencias/referencias.html#ref-russell2018information" role="doc-biblioref">Russell-Rose et al., 2018</a>)</span>, profissionais do Direito geralmente aceitam analisar até 50 documentos em suas consultas. Portanto, este estudo avalia um cenário ainda mais desafiador do que o mencionado pelos autores.</p>
+</section>
+</section>
+<section id="sec-cap-direito-ementas-resultados_e_discussoes" class="level2" data-number="14.5">
+<h2 data-number="14.5" class="anchored" data-anchor-id="sec-cap-direito-ementas-resultados_e_discussoes"><span class="header-section-number">14.5</span> Resultados e discussões</h2>
+<p>Esta Seção apresenta e discute os resultados obtidos na geração de verbetações e sua avaliação usando RI.</p>
+<section id="comparação-entre-verbetações-originais-e-geradas" class="level3" data-number="14.5.1">
+<h3 data-number="14.5.1" class="anchored" data-anchor-id="comparação-entre-verbetações-originais-e-geradas"><span class="header-section-number">14.5.1</span> Comparação entre verbetações originais e geradas</h3>
+<p>Como apontado na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html#sec-cap-direito-ementas-transf_verb" target="_blank" title="Volume 3">Transformers para geração de verbetações</a></span>, as verbetações foram geradas usando o modelo PTT5, o qual obteve uma pontuação BLEU de 38,607 no conjunto de teste preparado. Nesta Seção, serão mostrados exemplos (Quadros <a href="#def-cap-direito-ementas-quadro-ex_greedy1" class="quarto-xref"><span>14.4</span></a>, <a href="#def-cap-direito-ementas-quadro-ex_parafrases" class="quarto-xref"><span>14.5</span></a> e <a href="#def-cap-direito-ementas-quadro-ex_variabilidade" class="quarto-xref"><span>14.6</span></a>) dos textos gerados e os mesmos também serão comparados com as verbetações originais.</p>
+<p>Ao avaliá-las qualitativamente (<a href="#def-cap-direito-ementas-quadro-ex_greedy1" class="quarto-xref">Quadro&nbsp;<span>14.4</span></a>), observa-se que, com pontuações BLEU próximas a 40%, as verbetações geradas não apresentam erros ortográficos ou léxicos. Elas simulam o estilo de escrita das verbetações originais e são bastante similares a elas. Além disto, fica evidente que as verbetações geradas não são cópias perfeitas das originais, uma vez que nem todos os termos das verbetações originais estão nas geradas. Assim, os resultados da geração textual com Transformers foram muito positivos, se consideramos o tamanho do conjunto de treinamento utilizado neste caso (menos de 100 mil exemplos).</p>
+<div id="def-cap-direito-ementas-quadro-ex_greedy1" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 14.4</strong></span> Exemplos de verbetações geradas, destacando-se termos em comum (idênticos) entre as verbetações.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<p><strong>Original:</strong> <span style="background-color: lightgreen">AGRAVO REGIMENTAL NO HABEAS CORPUS . TRÁFICO DE DROGAS. PRISÃO PREVENTIVA.</span> <span style="background-color: lightgreen">PERICULUM LIBERTATIS.</span> CRISE MUNDIAL DE COVID-19. NÃO DEMONSTRADA A EXISTÊNCIA DE RISCO À INTEGRIDADE FÍSICA DO ENCARCERADO. <span style="background-color: lightgreen">AGRAVO REGIMENTAL NÃO PROVIDO.</span><br>
+<strong>Gerada:</strong> <span style="background-color: lightgreen">AGRAVO REGIMENTAL NO HABEAS CORPUS. TRÁFICO DE DROGAS. PRISÃO PREVENTIVA.</span> <span style="background-color: lightgreen">PERICULUM LIBERTATIS. AGRAVO REGIMENTAL NÃO PROVIDO.</span><br>
+<strong>Original:</strong> <span style="background-color: lightgreen">ADMINISTRATIVO. RECURSO ESPECIAL REPETITIVO.</span> SERVIDOR PÚBLICO. ARTIGO 46, CAPUT, DA LEI N. 8.112/1990. TESE DEFINIDA NO <span style="background-color: lightgreen">TEMA 531/STJ</span>. AUSÊNCIA DE ALCANCE NOS CASOS DE <span style="background-color: lightgreen">PAGAMENTO INDEVIDO</span> DECORRENTE DE <span style="background-color: lightgreen">ERRO DE CÁLCULO OU OPERACIONAL</span> DA ADMINISTRAÇÃO PÚBLICA. POSSIBILIDADE DE <span style="background-color: lightgreen">DEVOLUÇÃO</span>. SALVO INEQUÍVOCA PRESENÇA DA <span style="background-color: lightgreen">BOA-FÉ OBJETIVA</span>.<br>
+<strong>Gerada:</strong> <span style="background-color: lightgreen">ADMINISTRATIVO. RECURSO ESPECIAL REPETITIVO. TEMA 531/STJ. ERRO DE CÁLCULO</span> <span style="background-color: lightgreen">OU OPERACIONAL. PAGAMENTO INDEVIDO. BOA-FÉ OBJETIVA. DEVOLUÇÃO</span>. DESCABIMENTO.</p>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+<div id="def-cap-direito-ementas-quadro-ex_parafrases" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 14.5</strong></span> Mais exemplos de verbetações geradas. Termos em comum foram destacados em verde. Parafrases ou sinônimos foram destacados em amarelo.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<p><strong>Original:</strong> <span style="background-color: lightgreen">CONFLITO NEGATIVO DE COMPETÊNCIA</span>. JUSTIÇA COMUM ESTADUAL E JUSTIÇA DO TRABALHO. AÇÃO DE OBRIGAÇÃO DE FAZER C/C COBRANÇA. <span style="background-color: lightgreen">CONTRIBUIÇÃO SINDICAL</span> DE <span style="background-color: yellow">SERVIDORES PÚBLICOS</span> MUNICIPAIS. ART. 114, III, DA <span style="background-color: yellow">CF/1988</span> COM REDAÇÃO DADA PELA <span style="background-color: yellow">EC 45/2004</span>. <span style="background-color: lightgreen">COMPETÊNCIA DA JUSTIÇA DO TRABALHO</span>. PRECEDENTES.<br>
+</p>
+<p><strong>Gerada:</strong> <span style="background-color: lightgreen">CONFLITO NEGATIVO DE COMPETÊNCIA CONTRIBUIÇÃO SINDICAL</span>. <span style="background-color: yellow">AGENTE PÚBLICO</span> ESTATUTÁRIO. ART. 114, III, DA <span style="background-color: yellow">CONSTITUIÇÃO FEDERAL DE 1988. EMENDA CONSTITUCIONAL</span> <span style="background-color: yellow">45/2004</span>. <span style="background-color: lightgreen">COMPETÊNCIA DA JUSTIÇA DO TRABALHO</span>.<br>
+</p>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+<div id="def-cap-direito-ementas-quadro-ex_variabilidade" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 14.6</strong></span> Exemplo de verbetação em que são introduzidos termos não presentes na verbetação original.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<p><strong>Original:</strong> TRIBUTÁRIO E PROCESSUAL CIVIL. RECURSO ESPECIAL. INTERPOSIÇÃO DE RECURSO, TEMPESTIVAMENTE, POR MEIO DE FAC-SIMILE. AUSÊNCIA DE APRESENTAÇÃO DA PETIÇÃO ORIGINAL, NO PRAZO PREVISTO NO ART. 2º DA LEI 9.800/99. RECURSO ESPECIAL INTERPOSTO VIA E-MAIL. INADMISSIBILIDADE. NÃO EQUIPARAÇÃO AO FAC-SIMILE. PRECEDENTES DO STJ. RECURSO ESPECIAL NÃO CONHECIDO.<br>
+</p>
+<p><strong>Gerada:</strong> : TRIBUTÁRIO E PROCESSUAL CIVIL. RECURSO ESPECIAL, POR FAC-SIMILE. INTERPOSIÇÃO, NA ORIGEM, DE AGRAVO DE INSTRUMENTO, POR INTERPOSIÇÃO DE RECURSO POR MEIO DE FAC-SIMILE, ORIGINAIS APRESENTADOS DENTRO DO PRAZO LEGAL. IMPOSSIBILIDADE. ART. 2o DA LEI 9.800/99. RECURSO <span style="background-color: red">INTEMPESTIVO</span>. PEÇA INCOMPLETA. NÃO APRESENTAÇÃO. PRESCRIÇÃO. PRAZO PARA INTERPOSIÇÃO DE RECURSO. PRECEDENTES DO STJ. <span style="background-color: red">ART. 543-C DO CPC/73</span>. TERMO INICIAL. <span style="background-color: red">SÚMULA 83/STJ. AGRAVO INTERNO IMPROVIDO</span>.<br>
+</p>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+<p>Dando prosseguimento às comparações, ao analisarmos o <a href="#def-cap-direito-ementas-quadro-ex_parafrases" class="quarto-xref">Quadro&nbsp;<span>14.5</span></a>, é possível observar uma característica interessante. Houve casos em que o PTT5 gerou paráfrases ou expandiu siglas presentes na verbetação original. Tal fato é facilmente perceptível no <a href="#def-cap-direito-ementas-quadro-ex_parafrases" class="quarto-xref">Quadro&nbsp;<span>14.5</span></a>, observando os termos “SERVIDOR PÚBLICO” e “AGENTE PÚBLICO”. Por outro lado, siglas como “CF/1998” foram expandidas para “CONSTITUIÇÃO FEDERAL DE 1998”, assim como “EC” foi expandida para “EMENDA CONSTITUCIONAL”. Os comportamentos observados são justificados pelo funcionamento de modelos de linguagem baseados em Transformers, uma vez que, durante a geração de texto, os mesmos tendem a gerar <em>tokens</em> que aparecem em contextos semelhantes.</p>
+<p>Como última discussão de exemplos, o <a href="#def-cap-direito-ementas-quadro-ex_variabilidade" class="quarto-xref">Quadro&nbsp;<span>14.6</span></a> ilustra potenciais alucinações do modelo avaliado. Como o modelo PTT5 está na família de Transformers generativos, o mesmo não está isento de alucinações, como é o caso dos mais conhecidos (GPT’s, por exemplo). Dentro do contexto desta aplicação e focando no <a href="#def-cap-direito-ementas-quadro-ex_variabilidade" class="quarto-xref">Quadro&nbsp;<span>14.6</span></a>, é possível notar a presença de termos e citações de artigos que não constam no texto original.</p>
+<p>Embora esses termos possam surgir em contextos parecidos, não se deve ignorar a possibilidade de que tenham sido gerados por alucinações do Transformer. Sem o conhecimento específico do domínio, não é possível assegurar que tais termos “novos” estejam realmente associados ao texto de entrada. Pode-se apenas supor que eles ocorrem em contextos semelhantes. Assim, existe sim o risco de adicionar textos factualmente incorretos às verbetações geradas, devido ao processo generativo.</p>
+<p>A investigação da métrica BLEU permite estimar a quantidade de termos em comum entre as verbetações de referências e as geradas, ao comparar a interseção de n-gramas em ambas. Como a métrica é computada considerando o <em>corpus</em> de teste inteiro, ela apresenta uma boa estimativa do casamento de n-gramas entre todas as verbetações originais e geradas. Para aprofundar a comparação entre as verbetações, na <a href="#fig-cap-direito-ementas-comparacao_tokens" class="quarto-xref">Figura&nbsp;<span>14.2</span></a> é apresentada uma comparação entre o número de <em>tokens</em> das verbetações originais e das verbetações geradas com decodificação gulosa.</p>
+<div id="fig-cap-direito-ementas-comparacao_tokens" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-direito-ementas-comparacao_tokens-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;14.2: Histogramas de comparação entre a quantidade de <em>tokens</em> das verbetações originais e das verbetações geradas.
+</figcaption>
+<div aria-describedby="fig-cap-direito-ementas-comparacao_tokens-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/comparacao_tokens.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+</figure>
+</div>
+<p>Embora as distribuições apresentadas pelos dois histogramas sejam semelhantes, fica evidente que as verbetações geradas tendem a ter uma concentração maior de exemplos abaixo de 60 <em>tokens</em>. Além disto, ao analisar todas a verbetações mostradas anteriormente (Quadros <a href="#def-cap-direito-ementas-quadro-ex_verb" class="quarto-xref"><span>14.2</span></a>, <a href="#def-cap-direito-ementas-quadro-ex_greedy1" class="quarto-xref"><span>14.4</span></a>, <a href="#def-cap-direito-ementas-quadro-ex_parafrases" class="quarto-xref"><span>14.5</span></a> e <a href="#def-cap-direito-ementas-quadro-ex_variabilidade" class="quarto-xref"><span>14.6</span></a>) fica evidente que as mesmas tendem a ter menos palavras do que as referências. Assim, podemos concluir que as verbetações geradas tendem a ser mais curtas que as originais.</p>
+</section>
+<section id="sec-cap-direito-ementas-resultados_ri" class="level3" data-number="14.5.2">
+<h3 data-number="14.5.2" class="anchored" data-anchor-id="sec-cap-direito-ementas-resultados_ri"><span class="header-section-number">14.5.2</span> Experimentos com RI</h3>
+<p>A Seção anterior apresentou comparações qualitativas entre as verbetações geradas pelo método PTT5 e as originais. Resta verificar como as verbetações originais e geradas se comportam na avaliação, usando um caso real de RI descrito na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html#sec-cap-direito-ementas-avaliacao_ri" target="_blank" title="Volume 3">Avaliação utilizando RI</a></span>. Vale observar que as métricas mostradas em todas as tabelas desta Seção consistem em médias obtidas para cada métrica considerando as 482 consultas.</p>
+<section id="sec-cap-direito-ementas-exp1" class="level4" data-number="14.5.2.1">
+<h4 data-number="14.5.2.1" class="anchored" data-anchor-id="sec-cap-direito-ementas-exp1"><span class="header-section-number">14.5.2.1</span> Comparação de documentos com e sem verbetações</h4>
+<p>A <a href="#tbl-cap-direito-ementas-experiment1" class="quarto-xref">Tabela&nbsp;<span>14.2</span></a> mostra as métricas obtidas ao realizar o primeiro experimento com documentos com e sem as verbetações originais. Observa-se que o uso de verbetações melhora todas as métricas avaliadas, com maiores ganhos para o método BM25. Tais resultados eram esperados, pois a adição de termos discriminatórios nos documentos beneficia os métodos esparsos. Assim, os resultados indicam que o uso de palavras-chave tem um impacto positivo na tarefa de busca. O maior ganho foi observado na métrica R@10 (4,2 pontos percentuais) para TF-IDF e na MAP@10 (6,1 pontos percentuais) para BM25.</p>
+<div id="tbl-cap-direito-ementas-experiment1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cap-direito-ementas-experiment1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;14.2: Métricas de RI obtidas para cada modelo avaliado, avaliando a influência das verbetações originais. ‘*’ indicam diferenças estatisticamente significativas, de acordo com um teste-T pareado (p-valor <span class="math inline">\(&lt; 0,05\)</span>).
+</figcaption>
+<div aria-describedby="tbl-cap-direito-ementas-experiment1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<caption>Métricas de RI obtidas para cada modelo avaliado, avaliando a influência das verbetações originais. ‘*’ indicam diferenças estatisticamente significativas, de acordo com um teste-T pareado (p-valor <span class="math inline">\(&lt; 0,05\)</span>).</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th style="text-align: center;"><strong>TF-IDF</strong></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td><strong>MRR@10</strong></td>
+<td style="text-align: center;"><strong>NDCG@10</strong></td>
+<td><strong>R@10</strong></td>
+<td><strong>P@10</strong></td>
+<td><strong>MAP@10</strong></td>
+</tr>
+<tr class="even">
+<td>Sem verbetações</td>
+<td>0,806</td>
+<td style="text-align: center;">0,745</td>
+<td>0,790</td>
+<td>0,191</td>
+<td>0,691</td>
+</tr>
+<tr class="odd">
+<td>Verbetações originais</td>
+<td>0,825<span class="math inline">\(^{*}\)</span></td>
+<td style="text-align: center;">0,780<span class="math inline">\(^{*}\)</span></td>
+<td>0,832<span class="math inline">\(^{*}\)</span></td>
+<td>0,201<span class="math inline">\(^{*}\)</span></td>
+<td>0,729<span class="math inline">\(^{*}\)</span></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td style="text-align: center;"><strong>BM25</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Sem verbetações</td>
+<td>0,819</td>
+<td style="text-align: center;">0,805</td>
+<td>0,878</td>
+<td>0,212</td>
+<td>0,754</td>
+</tr>
+<tr class="even">
+<td>Verbetações originais</td>
+<td>0,879<span class="math inline">\(^{*}\)</span></td>
+<td style="text-align: center;">0,858<span class="math inline">\(^{*}\)</span></td>
+<td>0,916<span class="math inline">\(^{*}\)</span></td>
+<td>0,222<span class="math inline">\(^{*}\)</span></td>
+<td>0,815<span class="math inline">\(^{*}\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+<section id="sec-cap-direito-ementas-exp2" class="level4" data-number="14.5.2.2">
+<h4 data-number="14.5.2.2" class="anchored" data-anchor-id="sec-cap-direito-ementas-exp2"><span class="header-section-number">14.5.2.2</span> Avaliação das verbetações geradas</h4>
+<p>Iniciando os experimentos com as verbetações geradas, a <a href="#tbl-cap-direito-ementas-experiment2" class="quarto-xref">Tabela&nbsp;<span>14.3</span></a> apresenta a avaliação das verbetações geradas com decodificação gulosa. Observa-se que, ao adicionar as verbetações artificiais aos documentos, houve melhorias em quase todas as métricas para ambos os modelos avaliados. Para o método TF-IDF, a diferença foi estatisticamente significativa em todas as métricas avaliadas.</p>
+<div id="tbl-cap-direito-ementas-experiment2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cap-direito-ementas-experiment2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;14.3: Métricas obtidas para cada modelo de recuperação, ao utilizar documentos sem verbetação e utilizando as verbetações geradas com decodificação gulosa. ‘*’ indicam diferenças estatisticamente significativas, de acordo com um teste-T pareado (p-valor <span class="math inline">\(&lt; 0,05\)</span>).
+</figcaption>
+<div aria-describedby="tbl-cap-direito-ementas-experiment2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<caption>Métricas obtidas para cada modelo de recuperação, ao utilizar documentos sem verbetação e utilizando as verbetações geradas com decodificação gulosa. ‘*’ indicam diferenças estatisticamente significativas, de acordo com um teste-T pareado (p-valor <span class="math inline">\(&lt; 0,05\)</span>).</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th style="text-align: center;"><strong>TF-IDF</strong></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td><strong>MRR@10</strong></td>
+<td style="text-align: center;"><strong>NDCG@10</strong></td>
+<td><strong>R@10</strong></td>
+<td><strong>P@10</strong></td>
+<td><strong>MAP@10</strong></td>
+</tr>
+<tr class="even">
+<td>Sem verbetações</td>
+<td>0,806</td>
+<td style="text-align: center;">0,745</td>
+<td>0,790</td>
+<td>0,191</td>
+<td>0,691</td>
+</tr>
+<tr class="odd">
+<td>Geradas</td>
+<td>0,822<span class="math inline">\(^{*}\)</span></td>
+<td style="text-align: center;">0,770<span class="math inline">\(^{*}\)</span></td>
+<td>0,815<span class="math inline">\(^{*}\)</span></td>
+<td>0,196<span class="math inline">\(^{*}\)</span></td>
+<td>0,718<span class="math inline">\(^{*}\)</span></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td style="text-align: center;"><strong>BM25</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Sem verbetações</td>
+<td>0,819</td>
+<td style="text-align: center;">0,805</td>
+<td>0,878</td>
+<td>0,212</td>
+<td>0,754</td>
+</tr>
+<tr class="even">
+<td>Geradas</td>
+<td>0,854<span class="math inline">\(^{*}\)</span></td>
+<td style="text-align: center;">0,819<span class="math inline">\(^{*}\)</span></td>
+<td>0,877</td>
+<td>0,211</td>
+<td>0,768</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Quanto ao BM25, houve ganhos em quase todas as métricas. No entanto, a diferença foi estatisticamente significativa apenas para duas métricas (MRR@10 e NDCG@10). Embora tenham ocorrido melhorias para o TF-IDF, os resultados sugerem que o modelo BM25 foi mais sensível a falsos positivos e falsos negativos, introduzidos no <em>corpus</em> de busca por verbetações ruidosas geradas pelo PTT5. Assim, houve quase nenhuma alteração nas métricas baseadas em revocação e precisão.</p>
+<p>As métricas analisadas mostram que ambos os modelos tiveram desempenho inferior em relação ao experimento anterior utilizando as verbetações originais (<a href="#tbl-cap-direito-ementas-experiment1" class="quarto-xref">Tabela&nbsp;<span>14.2</span></a>). Este resultado já era esperado, pois os resultados com verbetações originais atuam como um limite superior para este experimento. Mesmo com este cenário, o uso de verbetações artificiais melhorou ambos os métodos de RI em comparação à ausência de verbetação, evidenciando o potencial da geração automática de verbetações.</p>
+</section>
+</section>
+</section>
+<section id="sec-cap-direito-ementas-conclusao" class="level2" data-number="14.6">
+<h2 data-number="14.6" class="anchored" data-anchor-id="sec-cap-direito-ementas-conclusao"><span class="header-section-number">14.6</span> Conclusão</h2>
+<p>Nesta aplicação, utilizou-se modelos Transformers para a automação da escrita de verbetações presentes em ementas de processos judiciais brasileiros. O Transformer usado, PTT5, alcançou uma pontuação BLEU superior a 37% na geração textual. Em outras palavras, ao comparar as verbetações geradas com as originais, foi possível comprovar que as verbetações geradas foram capazes de reproduzir com fidelidade as características principais das verbetações escritas por especialistas.</p>
+<p>Além disso, notou-se que as verbetações geradas capturaram com sucesso o estilo linguístico das verbetações originais. As frases curtas e objetivas, presentes nas verbetações, também são características das geradas. O modelo também foi capaz de reconhecer e expandir siglas comuns (como “CF” e “EC”).</p>
+<p>Como a geração não é perfeita, também foi identificada a ocorrência de alucinações do modelo generativo usado e seus potenciais malefícios. Verificou-se também que as verbetações geradas tenderam a conter menos termos que as originais. Mesmo com estas ressalvas, os resultados qualitativos e quantitativos são evidências de que a geração automática de textos jurídicos é de fato possível.</p>
+<p>Note que, em virtude das ressalvas (principalmente das alucinações), a automação completa da escrita de verbetações não é recomendada. Contudo, a metodologia apresentada aqui pode ser útil para auxiliar na escrita de ementas. Como exemplo, os Transformers podem ser incorporados a sistemas existentes, gerando automaticamente sugestões de verbetações (ou <em>templates</em>), que podem, então, serem corrigidas por especialistas, conforme a necessidade.</p>
+<p>Considerando que o setor judiciário brasileiro convive com um crescente volume de processos para análise e que todo processo demanda tempo e recursos financeiros, qualquer esforço rumo à automatização é sem dúvida muito bem-vindo. Sendo assim, acredita-se que os resultados aqui apresentados possam estimular outros trabalhos no domínio jurídico, mostrando o potencial de modelos generativos em domínios com grandes demandas sobre recursos textuais.</p>
+</section>
+<section id="agradecimentos" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="agradecimentos">Agradecimentos</h2>
+<p>O presente trabalho foi realizado com apoio da Coordenação de Aperfeiçoamento de Pessoal de Nível Superior – Brasil (CAPES) – Código de Financiamento 001. Os autores agradecem também ao CEMEAI, pelo acesso ao <em>cluster</em> Euler, para a realização de experimentos.</p>
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="1" role="list" style="display: none">
+<div id="ref-gpt3" class="csl-entry" role="listitem">
+BROWN, T. B. et al. <strong>Language Models are Few-Shot Learners</strong>. (H. Larochelle et al., Eds.)Advances in Neural Information Processing Systems. <strong>Anais</strong>...Curran Associates, Inc., 2020. Disponível em: &lt;<a href="https://proceedings.neurips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html">https://proceedings.neurips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html</a>&gt;
+</div>
+<div id="ref-DBLP:journals/corr/abs-2008-09144" class="csl-entry" role="listitem">
+CARMO, D. et al. <a href="https://arxiv.org/abs/2008.09144"><span>PTT5:</span> Pretraining and validating the <span>T5</span> model on Brazilian Portuguese data</a>. <strong>CoRR</strong>, v. abs/2008.09144, 2020.
+</div>
+<div id="ref-crestani1998document" class="csl-entry" role="listitem">
+CRESTANI, F. et al. <a href="https://doi.org/10.1145/299917.299920"><span>“Is this document relevant?… probably”</span> a survey of probabilistic models in information retrieval</a>. <strong>ACM Computing Surveys (CSUR)</strong>, v. 30, n. 4, p. 528–552, 1998.
+</div>
+<div id="ref-guimaraes2016ementa" class="csl-entry" role="listitem">
+GUIMARÃES, J. A. C.; SANTOS, J. C. G. <a href="https://doi.org/10.36311/1981-1640.2016.v10n3.05.p32">A ementa jurisprudencial como resumo informativo em um dom<span>ı́</span>nio especializado: aspectos estruturais</a>. <strong>Brazilian Journal of Information Science: research trends</strong>, v. 10, n. 3, 2016.
+</div>
+<div id="ref-cnj:online" class="csl-entry" role="listitem">
+JUSTIÇA - CNJ, C. N. DE. <strong>Conselho Nacional de Justiça — Justiça em Números</strong>. <a href="https://www.cnj.jus.br/pesquisas-judiciarias/justica-em-numeros/" class="uri">https://www.cnj.jus.br/pesquisas-judiciarias/justica-em-numeros/</a>, maio 24DC.
+</div>
+<div id="ref-lima2021comparison" class="csl-entry" role="listitem">
+LIMA, J. P.; COSTA, J. A.; ARAÚJO, D. C. <strong>Comparison of Feature Extraction Methods for Brazilian Legal Documents Clustering</strong>. 2021 IEEE Latin American Conference on Computational Intelligence (LA-CCI). <strong>Anais</strong>...IEEE, 2021. Disponível em: &lt;<a href="https://doi.org/10.1109/LA-CCI48322.2021.9769839">https://doi.org/10.1109/LA-CCI48322.2021.9769839</a>&gt;
+</div>
+<div id="ref-mandal2021unsupervised" class="csl-entry" role="listitem">
+MANDAL, A. et al. <a href="https://doi.org/10.1007/s10506-020-09280-2">Unsupervised approaches for measuring textual similarity between legal court case reports</a>. <strong>Artificial Intelligence and Law</strong>, v. 29, n. 3, p. 417–451, 2021.
+</div>
+<div id="ref-ostendorff2021evaluating" class="csl-entry" role="listitem">
+OSTENDORFF, M. et al. <strong>Evaluating document representations for content-based legal literature recommendations</strong>. Proceedings of the Eighteenth International Conference on Artificial Intelligence and Law. <strong>Anais</strong>...2021. Disponível em: &lt;<a href="https://doi.org/10.1145/3462757.3466073">https://doi.org/10.1145/3462757.3466073</a>&gt;
+</div>
+<div id="ref-Papineni2002" class="csl-entry" role="listitem">
+PAPINENI, K. et al. <strong><span>BLEU: A Method for Automatic Evaluation of Machine Translation</span></strong>. Proceedings of the 40th Annual Meeting on Association for Computational Linguistics. <strong>Anais</strong>...: ACL ’02.USA: Association for Computational Linguistics, 2002. Disponível em: &lt;<a href="https://doi.org/10.3115/1073083.1073135">https://doi.org/10.3115/1073083.1073135</a>&gt;
+</div>
+<div id="ref-pradeep2020h2oloo" class="csl-entry" role="listitem">
+PRADEEP, R. et al. <a href="https://trec.nist.gov/pubs/trec29/papers/h2oloo.DL.HM.PM.pdf">H2oloo at trec 2020: When all you got is a hammer... deep learning, health misinformation, and precision medicine</a>. <strong>Corpus</strong>, v. 5, n. d3, p. d2, 2020.
+</div>
+<div id="ref-robertson1999okapi" class="csl-entry" role="listitem">
+ROBERTSON, S. E.; WALKER, S. <strong>Okapi/keenbow at trec-8</strong>. TREC. <strong>Anais</strong>...Citeseer, 1999. Disponível em: &lt;<a href="https://trec.nist.gov/pubs/trec8/papers/okapi.pdf">https://trec.nist.gov/pubs/trec8/papers/okapi.pdf</a>&gt;
+</div>
+<div id="ref-rosa2021yes" class="csl-entry" role="listitem">
+ROSA, G. M. et al. <a href="https://arxiv.org/abs/2105.05686">Yes, bm25 is a strong baseline for legal case retrieval</a>. <strong>arXiv preprint arXiv:2105.05686</strong>, b2021.
+</div>
+<div id="ref-rosa2021cost" class="csl-entry" role="listitem">
+ROSA, G. M. et al. <a href="https://arxiv.org/abs/2105.06813">A cost-benefit analysis of cross-lingual transfer methods</a>. <strong>arXiv preprint arXiv:2105.06813</strong>, a2021.
+</div>
+<div id="ref-russell2018information" class="csl-entry" role="listitem">
+RUSSELL-ROSE, T.; CHAMBERLAIN, J.; AZZOPARDI, L. <a href="https://doi.org/10.1016/j.ipm.2018.07.003">Information retrieval in the workplace: A comparison of professional search practices</a>. <strong>Information Processing &amp; Management</strong>, v. 54, n. 6, p. 1042–1057, 2018.
+</div>
+<div id="ref-sakiyama2023geraccao" class="csl-entry" role="listitem">
+SAKIYAMA, K. M. <strong>Gera<span>ç</span><span>ã</span>o Autom<span>á</span>tica de Verbeta<span>ç</span><span>õ</span>es para Recupera<span>ç</span><span>ã</span>o de Informa<span>ç</span><span>õ</span>es no Dom<span>ı́</span>nio Jur<span>ı́</span>dico Brasileiro</strong>. mathesis—[s.l.] Instituto de Ciências Matemáticas e de Computação - Universidade de S<span>ã</span>o Paulo, 2023.
+</div>
+<div id="ref-DBLP:journals/corr/abs-2211-05100" class="csl-entry" role="listitem">
+SCAO, T. L. et al. <a href="https://doi.org/10.48550/arXiv.2211.05100"><span>BLOOM:</span> <span>A</span> 176B-Parameter Open-Access Multilingual Language Model</a>. <strong>CoRR</strong>, v. abs/2211.05100, 2022.
+</div>
+<div id="ref-Souza2020" class="csl-entry" role="listitem">
+SOUZA, F.; NOGUEIRA, R.; LOTUFO, R. <strong>BERTimbau: pretrained BERT models for Brazilian Portuguese</strong>. (R. Cerri, R. C. Prati, Eds.)Proceedings of the 2020 Brazilian Conference on Intelligent Systems. <strong>Anais</strong>...Springer International Publishing, 2020.
+</div>
+<div id="ref-stj_composicao:online" class="csl-entry" role="listitem">
+STJ. <strong>Supremo Tribunal de Justiça — Composição</strong>. <a href="https://www.stj.jus.br/sites/portalp/Institucional/Composicao" class="uri">https://www.stj.jus.br/sites/portalp/Institucional/Composicao</a>, maio 24DC.
+</div>
+<div id="ref-wagner-filho-etal-2018-brwac" class="csl-entry" role="listitem">
+WAGNER FILHO, J. A. et al. <strong>The br<span>W</span>a<span>C</span> Corpus: A New Open Resource for <span>B</span>razilian <span>P</span>ortuguese</strong>. (N. Calzolari et al., Eds.)Proceedings of the Eleventh International Conference on Language Resources and Evaluation (<span>LREC</span> 2018). <strong>Anais</strong>...Miyazaki, Japan: European Language Resources Association (ELRA), 2018. Disponível em: &lt;<a href="https://aclanthology.org/L18-1686">https://aclanthology.org/L18-1686</a>&gt;
+</div>
+<div id="ref-zhang2022opt" class="csl-entry" role="listitem">
+ZHANG, S. et al. <a href="https://arxiv.org/abs/2205.01068">Opt: Open pre-trained transformer language models</a>. <strong>arXiv preprint arXiv:2205.01068</strong>, 2022.
+</div>
+<div id="ref-zhuang2020comprehensive" class="csl-entry" role="listitem">
+ZHUANG, F. et al. <a href="https://doi.org/10.1109/JPROC.2020.3004555">A comprehensive survey on transfer learning</a>. <strong>Proceedings of the IEEE</strong>, v. 109, n. 1, p. 43–76, 2020.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p><a href="https://pytorch.org/hub/" class="uri">https://pytorch.org/hub/</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://huggingface.co/models" class="uri">https://huggingface.co/models</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://dadosabertos.web.stj.jus.br/" class="uri">https://dadosabertos.web.stj.jus.br/</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="https://huggingface.co/unicamp-dl/ptt5-base-portuguese-vocab" class="uri">https://huggingface.co/unicamp-dl/ptt5-base-portuguese-vocab</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a href="https://scon.stj.jus.br/SCON/recrep/" class="uri">https://scon.stj.jus.br/SCON/recrep/</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p><a href="https://lucene.apache.org/" class="uri">https://lucene.apache.org/</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" class="pagination-link" aria-label="Reconhecimento de Entidades Nomeadas no Domínio Legal">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" class="pagination-link" aria-label="PLN e Humanidades Digitais">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://brasileiraspln.com/">
+<p>Brasileiras em PLN, 2026. Todos os direitos reservados</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

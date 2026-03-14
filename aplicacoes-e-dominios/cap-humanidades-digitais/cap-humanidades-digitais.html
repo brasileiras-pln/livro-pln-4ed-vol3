@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Renata Vieira">
+<meta name="author" content="Helena Freire Cameron">
+<meta name="author" content="Fernanda Olival">
+<meta name="author" content="Fatima Farrica">
+<meta name="author" content="Maria José Bocorny Finatto">
+<meta name="author" content="Ana Paula Banza">
+<meta name="author" content="Ana Sofia Ribeiro">
+<meta name="author" content="Cassia Trojahn">
+
+<title>15&nbsp; PLN e Humanidades Digitais – Processamento de Linguagem Natural</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 1em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html" rel="next">
+<link href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8676d8d0f01772f2903466dda9733bcf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sem resultados",
+    "search-matching-documents-text": "Resultados encontrados",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-111J572WMR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-111J572WMR');
+</script>
+
+
+<link rel="stylesheet" href="../../shared/bpln.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../shared/logos/bpln.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Processamento de Linguagem Natural</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../Livro_PLN_BPLN_4ed_vol3.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
+    <div class="dropdown">
+      <a href="" title="Compartilhar" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Compartilhar"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sobre o Volume 3</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Aplicações e Domínios</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Classificação de texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-mt/cap-mt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tradução Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sumarização Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Complexidade Textual e suas Tarefas Relacionadas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Classificação de Áudio aplicada à Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">PLN e Responsabilidade Social</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/referencias/referencias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referências</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Apêndices</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Considerações prévias à sumarização automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice-abstrativa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Exemplo de sumarização abstrativa</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../autores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Sobre as/os autoras/es</strong></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Conteúdo</h2>
+   
+  <ul>
+  <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução"><span class="header-section-number">15.1</span> Introdução</a></li>
+  <li><a href="#sec-cap-humanidades-digitais-prep" id="toc-sec-cap-humanidades-digitais-prep" class="nav-link" data-scroll-target="#sec-cap-humanidades-digitais-prep"><span class="header-section-number">15.2</span> Preparação das fontes</a>
+  <ul class="collapse">
+  <li><a href="#digitalização" id="toc-digitalização" class="nav-link" data-scroll-target="#digitalização"><span class="header-section-number">15.2.1</span> Digitalização</a></li>
+  <li><a href="#sec-humanidades-digitais-metadados" id="toc-sec-humanidades-digitais-metadados" class="nav-link" data-scroll-target="#sec-humanidades-digitais-metadados"><span class="header-section-number">15.2.2</span> Metadados</a></li>
+  <li><a href="#normalização" id="toc-normalização" class="nav-link" data-scroll-target="#normalização"><span class="header-section-number">15.2.3</span> Normalização</a></li>
+  <li><a href="#anotação-de-textos" id="toc-anotação-de-textos" class="nav-link" data-scroll-target="#anotação-de-textos"><span class="header-section-number">15.2.4</span> Anotação de textos</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-humanidades-digitais-transf" id="toc-sec-cap-humanidades-digitais-transf" class="nav-link" data-scroll-target="#sec-cap-humanidades-digitais-transf"><span class="header-section-number">15.3</span> Transformação de textos em dados</a>
+  <ul class="collapse">
+  <li><a href="#extração-de-informação" id="toc-extração-de-informação" class="nav-link" data-scroll-target="#extração-de-informação"><span class="header-section-number">15.3.1</span> Extração de informação</a></li>
+  <li><a href="#representação-de-conhecimento-e-ontologias" id="toc-representação-de-conhecimento-e-ontologias" class="nav-link" data-scroll-target="#representação-de-conhecimento-e-ontologias"><span class="header-section-number">15.3.2</span> Representação de conhecimento e ontologias</a></li>
+  <li><a href="#dados-ligados-e-dados-fair" id="toc-dados-ligados-e-dados-fair" class="nav-link" data-scroll-target="#dados-ligados-e-dados-fair"><span class="header-section-number">15.3.3</span> Dados ligados e dados <em>FAIR</em></a></li>
+  </ul></li>
+  <li><a href="#sec-cap-humanidades-digitais-exemp" id="toc-sec-cap-humanidades-digitais-exemp" class="nav-link" data-scroll-target="#sec-cap-humanidades-digitais-exemp"><span class="header-section-number">15.4</span> Exemplos de projetos de HD envolvendo o processamento da língua portuguesa</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-humanidades-digitais-tycho" id="toc-sec-cap-humanidades-digitais-tycho" class="nav-link" data-scroll-target="#sec-cap-humanidades-digitais-tycho"><span class="header-section-number">15.4.1</span> O <em>corpus</em> Tycho Brahe</a></li>
+  <li><a href="#sec-cap-humanidades-digitais-mempa" id="toc-sec-cap-humanidades-digitais-mempa" class="nav-link" data-scroll-target="#sec-cap-humanidades-digitais-mempa"><span class="header-section-number">15.4.2</span> As Memórias Paroquiais</a></li>
+  <li><a href="#sec-cap-humanidades-digitais-mons" id="toc-sec-cap-humanidades-digitais-mons" class="nav-link" data-scroll-target="#sec-cap-humanidades-digitais-mons"><span class="header-section-number">15.4.3</span> O projeto MONSOON</a></li>
+  <li><a href="#sec-cap-humanidades-digitais-hdf" id="toc-sec-cap-humanidades-digitais-hdf" class="nav-link" data-scroll-target="#sec-cap-humanidades-digitais-hdf"><span class="header-section-number">15.4.4</span> A História do Futuro</a></li>
+  <li><a href="#sec-cap-humanidades-digitais-manu" id="toc-sec-cap-humanidades-digitais-manu" class="nav-link" data-scroll-target="#sec-cap-humanidades-digitais-manu"><span class="header-section-number">15.4.5</span> Manuais médicos do século XVIII</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-humanidades-digitais-conc" id="toc-sec-cap-humanidades-digitais-conc" class="nav-link" data-scroll-target="#sec-cap-humanidades-digitais-conc"><span class="header-section-number">15.5</span> Considerações finais</a></li>
+  <li><a href="#agradecimentos" id="toc-agradecimentos" class="nav-link" data-scroll-target="#agradecimentos">Agradecimentos</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-cap-humanidades-digitais" class="quarto-section-identifier"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading"></div>
+    <div class="quarto-title-meta-contents">
+             <p>Renata Vieira </p>
+             <p>Helena Freire Cameron </p>
+             <p>Fernanda Olival </p>
+             <p>Fatima Farrica </p>
+             <p>Maria José Bocorny Finatto </p>
+             <p>Ana Paula Banza </p>
+             <p>Ana Sofia Ribeiro </p>
+             <p>Cassia Trojahn </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Publicado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">13/03/2024</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Atualizado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">20/11/2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+
+</div>
+<div>
+<div class="callout-body-container callout-body">
+<p>Este capítulo também está disponível em <a href="cap-humanidades-digitais.pdf">PDF</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" aria-label="Toggle callout" data-bs-target=".callout-cite-contents" aria-expanded="false" aria-controls="callout-cite" data-bs-toggle="collapse">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Como citar
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
+<i class="callout-toggle"></i>
+</div>
+</div>
+<div class="callout-cite-contents callout-collapse collapse" id="callout-cite">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>@InCollection{BPLN_livro_cap-humanidades-digitais:2026,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    author    = {Vieira, Renata and Cameron, Helena Freire and Olival, Fernanda and Farrica, Fatima and Finatto, Maria José Bocorny and Banza, Ana Paula and Ribeiro, Ana Sofia and Trojahn, Cassia},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    title     = {PLN e Humanidades Digitais},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    publisher = {BPLN},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    year      = {2026},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    editor    = {Caseli, H. M. and Nunes, M. G. V.},</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    type      = {Book Chapter},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    chapter   = {15},</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    edition   = {4},</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    volume    = {3},</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    isbn      = {XXXXXXXXXXXXXXXX},</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    url       = {https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html},</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mais recursos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="https://youtu.be/KwV-8kvEWbU?si=FLcIeQv2i961ivsD">Vídeo</a> e <a href="1o_Ciclo_PLN_BPLN-PLNeHD_28102024.pdf">Slides</a></p>
+</div>
+</div>
+<section id="introdução" class="level2" data-number="15.1">
+<h2 data-number="15.1" class="anchored" data-anchor-id="introdução"><span class="header-section-number">15.1</span> Introdução</h2>
+<p>A área de humanidades digitais (HD) tem ganhado força e adeptos nas últimas décadas, em paralelo com o desenvolvimento de ferramentas digitais que ampliam as possibilidades de armazenamento, acesso e processamento de dados. Essas capacidades estendem os horizontes de atuação de pesquisadores, permitindo a captura, organização e análise de um volume muito grande de dados. Com esta interação, que pode ser classificada de tecnológica, as humanidades ganham visibilidade, atravessam fronteiras disciplinares e enfrentam desafios sem precedentes.</p>
+<p>Este capítulo apresenta as bases comuns para projetos na área de HD, relacionados ao Processamento de Linguagem Natural (PLN), em particular sobre fontes textuais com grafia pré-contemporâneas, o que imprime uma maior complexidade no processamento. Além disso, nosso enfoque é a relação entre as HD e o PLN no contexto da língua portuguesa, entendendo que o alcance da área de HD vai muito além da língua, e do escopo das questões e projetos aqui mencionados.</p>
+<p>Na área de HD, relativamente aos trabalhos baseados em fontes textuais, encontramos uma grande variação, tanto nos períodos históricos das fontes, no seu suporte (manuscritos em papel, impressos, fotografados etc.), como no seu estágio de digitalização, que pode variar entre imagens digitais, textos em PDF e textos digitalizados em outros formatos. Todas essas variações adicionam esforços extras de processamento. Desta forma, apresentaremos um panorama geral e discutiremos os requisitos de preparação e organização das fontes, objetos de análise que depois de transcritas e digitalizadas, podem ser submetidas a processamentos mais avançados. O objetivo é mostrar não apenas como o PLN é útil e relevante nesse domínio, mas também como a área de HD é rica em despertar novas questões para o desenvolvimento do PLN.</p>
+<p>Este capítulo está organizado da seguinte maneira. Na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html#sec-cap-humanidades-digitais-prep" target="_blank" title="Volume 3">Preparação das fontes</a></span> apresentamos os tópicos e os desafios relacionados à preparação das fontes, desde a digitalização até a anotação. Na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html#sec-cap-humanidades-digitais-transf" target="_blank" title="Volume 3">Transformação de textos em dados</a></span>, discutimos os processos de transformação de fontes em dados, nos quais várias tarefas conhecidas de PLN (discutidas em outros capítulos deste livro) podem ser empregadas. Esses processos de transformação de textos em dados organizados possibilitam ao pesquisador realizar análises diferenciadas sobre textos, por exemplo, ao agrupar tipos específicos de informação, ou rapidamente quantificar fenômenos observáveis. Na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html#sec-cap-humanidades-digitais-exemp" target="_blank" title="Volume 3">Exemplos de projetos de HD envolvendo o processamento da língua portuguesa</a></span>, apresentamos alguns projetos relacionados às HD, em especial aqueles desenvolvidos pelas autoras. São projetos que apresentam diferentes fontes e objetivos de pesquisa, mas nos quais o PLN se faz presente em vários níveis, desde a preparação e a anotação até a extração, organização e partilha da informação. Por fim, apresentamos nossas considerações finais na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html#sec-cap-humanidades-digitais-conc" target="_blank" title="Volume 3">Considerações finais</a></span>.</p>
+</section>
+<section id="sec-cap-humanidades-digitais-prep" class="level2" data-number="15.2">
+<h2 data-number="15.2" class="anchored" data-anchor-id="sec-cap-humanidades-digitais-prep"><span class="header-section-number">15.2</span> Preparação das fontes</h2>
+<p>Trabalhos em HD que se baseiam em textos podem se beneficiar das atuais técnicas de Inteligência Artificial (IA) e PLN para um melhor acesso às fontes. Os textos em HD podem ter relevância por suas características históricas e literárias, mas também podem estar relacionados a estudos sociais ou de outra natureza. Na verdade, é difícil distinguir os limites das HD, mas se pode dizer que a área está ligada ao emprego e à compreensão de novas maneiras de se desenvolver pesquisa, com base em recursos digitais e computacionais. Em relação ao processamento da língua, essa influência tecnológica se observa em uma variedade de processos referentes ao tratamento das fontes e sua informação, tais como:</p>
+<ul>
+<li><p><strong>Digitalização de documentos</strong>: preparação no nível mais básico, para o tratamento computacional, e assim possibilitar a sua leitura por meio de programação.</p></li>
+<li><p><strong>Adição de metadados</strong>: inserção de níveis de informação extra-textuais, que podem ser importantes para a estruturação e o armazenamento, e também para o acréscimo de interpretações sobre o conteúdo de uma coleção de interesse. Os metadados podem trazer informações de contexto, como autores, datas, locais de produção, origem, ou ainda informações como volume, páginas, etc. Ou podem ser de análise linguística: morfológica, sintática ou semântica (por exemplo, identificando entidades ou eventos).</p></li>
+<li><p><strong>Normalização</strong>: a normalização para uma língua padrão e contemporânea pode ser necessária em situações como fontes históricas, textos de redes sociais que usam muitas abreviações, símbolos associados à emoções, ou comentários como <em>hashtags</em>, etc.</p></li>
+<li><p><strong>Anotação de <em>corpora</em></strong>: muitas vezes o estudo de uma fonte ou <em>corpus</em> necessita a adição de informações extras sobre o registro, que são representadas como metadados (mencionado acima). Os processos podem ser automáticos ou manuais. No entanto, geralmente o desenvolvimento de um processo automático requer um processo de anotação manual anterior, quer para o seu desenvolvimento (treino de algoritmos de aprendizado), quer para a avaliação da correção da anotação realizada por máquina.</p></li>
+</ul>
+<p>Os métodos usuais de tratamento textual, desenvolvidos em pesquisas de PLN e IA, podem requerer adaptação a diferentes necessidades de investigação, estilo textual, objetivos da pesquisa e também ao uso pretendido e seus usuários. Idealmente, são necessárias novas interfaces para que os métodos desenvolvidos sejam usados de forma facilitada e fora do contexto das estruturas de programação. Apresentaremos, a seguir, esses passos iniciais para projetos de HD que lidam com fontes textuais e, posteriormente, discutiremos sobre as técnicas de PLN.</p>
+<section id="digitalização" class="level3" data-number="15.2.1">
+<h3 data-number="15.2.1" class="anchored" data-anchor-id="digitalização"><span class="header-section-number">15.2.1</span> Digitalização</h3>
+<p>Muitos projetos na área de HD necessitam lidar com a digitalização de manuscritos originais. A área de paleografia, em particular, lida com a leitura e transcrição de versões manuscritas para um suporte atual. Mesmo registros em suportes muito antigos, como a escrita cuneiforme, podem ser transcodificados para o digital <span class="citation" data-cites="liu2016recognizing">(<a href="../../shared/referencias/referencias.html#ref-liu2016recognizing" role="doc-biblioref">Liu et al., 2016</a>)</span>, e a partir daí, podem passar por processos computacionais.</p>
+<p>A paleografia, deste modo, também se desenvolveu de habilidade tradicional do intelecto, e manual, para uma prática digital <span class="citation" data-cites="ackel7abordagens">(<a href="../../shared/referencias/referencias.html#ref-ackel7abordagens" role="doc-biblioref">Ackel, 2021</a>)</span>. Algumas ferramentas de transcrição, como por exemplo o Transkribus<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> ajudam na digitalização de manuscritos <span class="citation" data-cites="kahle2017transkribus">(<a href="../../shared/referencias/referencias.html#ref-kahle2017transkribus" role="doc-biblioref">Kahle et al., 2017</a>)</span>, através de um sistema de algoritmos HTR (<em>Handwritten Text Recognition</em>).</p>
+<p>Alguns documentos impressos podem necessitar a aplicação de tecnologia OCR (<em>Optical Character Recognition</em>). A qualidade da saída de sistemas OCR varia muito dependendo do formato e da qualidade da entrada. É um problema básico, mas não totalmente resolvido <span class="citation" data-cites="van2020assessing">(<a href="../../shared/referencias/referencias.html#ref-van2020assessing" role="doc-biblioref">Strien et al., 2020</a>)</span>. Por exemplo, nas primeiras levas de digitalização de acervos arquivísticos e bibliotecários, muitas digitalizações foram feitas em formatos de imagem, sem a preocupação de possibilitar a pesquisa dos seus conteúdos de texto. Por meio de diferentes ferramentas de transcrição automática com OCR, como o eScriptorum<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, podemos fazer essa transcrição de imagem para texto de forma automática.</p>
+<p>Muitas vezes, as saídas de OCR precisam passar por processamento extra de correção, por vezes manual, para tornar a fonte adequada para as próximas etapas. Esse processamento se faz necessário para que outras ferramentas, como as de anotação de texto, tenham maior eficácia na aprendizagem dos <em>tokens</em> anotados. É preciso preparar os textos, por exemplo, retirando números de páginas, textos de cabeçalhos ou rodapés, e evitar a translineação/hifenização de palavras. Se o texto a ser anotado for composto por um conjunto de textos, pode ser necessário que estejam devidamente separados. Outro problema que pode emergir são os textos organizados em mais de uma coluna nas páginas, pois será preciso ordená-los numa segmentação textual contínua. Essas etapas devem ser consideradas em projetos de HD envolvendo textos e PLN e é, portanto, necessário antever-se o tempo e recursos necessários para o seu desenvolvimento.</p>
+</section>
+<section id="sec-humanidades-digitais-metadados" class="level3" data-number="15.2.2">
+<h3 data-number="15.2.2" class="anchored" data-anchor-id="sec-humanidades-digitais-metadados"><span class="header-section-number">15.2.2</span> Metadados</h3>
+<p>Uma vez digitalizada a fonte ou <em>corpus</em> de estudo, é necessário pensar na organização dos seus metadados. O material digital deve ser bem descrito, ou seja, deve conter a informação sobre a qual acervo pertence, identificar unicamente cada arquivo e, quando pertinente, associar autoria, data e outros elementos pertinentes. Os metadados também podem descrever a estrutura do documento, quando necessário, identificar volumes, capítulos, páginas, por exemplo. É importante, ainda, separar os metadados dos dados originais. Para materiais transcritos, por exemplo, devem ser identificados os cabeçalhos, notas de rodapé, numeração de páginas ou comentários adicionados aos originais. Esta organização e distinção dos elementos extra-textuais são essenciais para garantir o bom processamento posteriormente. Os metadados são essenciais para conectar uma fonte a outras e as conectar aos dados abertos ligados <span class="citation" data-cites="nair2004brief">(<a href="../../shared/referencias/referencias.html#ref-nair2004brief" role="doc-biblioref">Nair; Jeeven, 2004</a>)</span>.</p>
+<p>Há vários padrões de metadados bastante difundidos. Por exemplo, a Text Encoding Initiative (TEI) é um consórcio que desenvolve e mantém coletivamente um padrão para a representação de textos em formato digital. O seu principal resultado é um conjunto de diretrizes que especifica métodos de codificação para textos legíveis por máquina, principalmente em ciências humanas, ciências sociais e linguística<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. Outro exemplo é o grupo de trabalho sobre “Publicação Sustentável de Metadados”, ativo na rede europeia da <em>Digital Research Infrastructure for the Arts and Humanities</em> (DARIAH) desde 2016. Esse grupo tem como objetivo apresentar informações sobre a reprodução e o compartilhamento de metadados entre institutos e pesquisadores no campo das ciências humanas e sociais.</p>
+<p>Vários trabalhos trataram da representação de metadados por meio de vocabulários semânticos, para descrever quer recursos digitais, como vídeos, imagens, páginas web, quer recursos físicos, como livros ou obras de arte. Esse vocabulários podem ser usados para fornecer interoperabilidade para o uso de metadados na nuvem de dados ligados. Exemplos são o Dublin Core<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, VoID (Vocabulary of Interlinked Datasets<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>), schema.org, DCAT (Data Catalog Vocabulary<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>) e PROV-O (Provenance Ontology<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>). Em particular, o DCAT é um vocabulário projetado para facilitar a interoperabilidade entre catálogos de dados publicados na Web. Permite a descrição de conjuntos de dados e serviços, usando um modelo e um vocabulário padrão que facilitam o consumo e a agregação de metadados de vários catálogos. Os metadados agregados do DCAT podem servir como um arquivo de manifesto<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> como parte do processo de preservação digital.</p>
+</section>
+<section id="normalização" class="level3" data-number="15.2.3">
+<h3 data-number="15.2.3" class="anchored" data-anchor-id="normalização"><span class="header-section-number">15.2.3</span> Normalização</h3>
+<p>Em HD, as fontes textuais, quer manuscritas, quer impressas, sendo de uma época anterior ao estágio atual da língua, apresentam variações ortográficas ou morfossintáticas, não só em relação ao padrão atual como também dentro da mesma época.</p>
+<p>A variação gráfica no século XVIII, por exemplo, é muito expressiva, quer em textos manuscritos, quer em impressos, especialmente ao nível da representação das vogais e de ditongos nasais, por exemplo “am-ão”, em “fizerão”, ou “oens-ões”, em “embarcaçoens”, etc. Também as consoantes duplas como “ll-l”, em “delles”, “tt-t”, em “Cratto”, entre outras, têm uma elevada frequência nesses textos. Note-se, também, a existência do fenômeno das chamadas grafias cultas ou pseudo-etimológicas, que já não integram o cânone atual da língua portuguesa. Estas podem trazer uma maior complexidade ao processamento lexical, como “th-t”, em “athé”, “ch-c” em “Christo” e “y-i”, por exemplo na palavra “Rey”. A palavra “coro”, que frequentemente é registada como “choro” em textos do século XVIII, é um exemplo da complexidade da variação gráfica deste período.</p>
+<p>Do ponto de vista do leitor, a abordagem destes documentos requer um forte conhecimento do contexto para a sua desambiguação e exige, frequentemente, conhecimentos linguísticos e históricos para que possa desvendar o conteúdo de forma adequada. A variação gráfica tem uma elevada incidência nos documentos desta época. Grande parte das palavras tem pelo menos uma variante gráfica e algumas palavras têm múltiplas num mesmo texto. A título ilustrativo, veja-se a palavra “circunstância”, com nove variantes gráficas recolhidas num mesmo <em>corpus</em> textual <span class="citation" data-cites="cameron2023planear">(<a href="../../shared/referencias/referencias.html#ref-cameron2023planear" role="doc-biblioref">Cameron et al., 2023</a>)</span>.</p>
+<p>Do ponto de vista do PLN, a variação, quer pela sua grande incidência, quer pela sua imprevisibilidade, vem trazer uma perturbação acrescida. Variantes de uma mesma palavra são tratadas como se fossem unidades lexicais diferentes, diminuindo a eficácia do processamento. Para que se possa processar o texto de forma mais célere e eficaz, frequentemente têm de ser desenvolvidas tarefas intermediárias de normalização, quase sempre de forma manual. Unificam-se as variantes gráficas em torno de um lema, normalmente a forma existente na ortografia padrão atual. Essa tarefa, morosa e minuciosa, muito ganharia com processos automáticos ou semi-automáticos de normalização sistemática de textos desses estágios da língua portuguesa. Essa tarefa não só os tornaria aptos para futuros processamentos, mas também permitiria que leitores não historiadores ou não linguistas pudessem ter acesso mais facilmente a textos valiosos culturalmente e de valor patrimonial, com interesse para várias áreas do saber. Compreender essas diferenças e conseguir traduzir ou associar escritos antigos aos padrões atuais é um passo importante para outros níveis de processamento <span class="citation" data-cites="cameron2020linguistic">(<a href="../../shared/referencias/referencias.html#ref-cameron2020linguistic" role="doc-biblioref">Cameron et al., 2020</a>)</span>.</p>
+<p>Outra forma de mitigar as variantes de escrita é criar modelos de linguagem que incluam <em>corpora</em> de outros períodos de tempo, com suas variantes de ocorrência natural, numa fase adicional de treinamento (ajuste por <em>fine tuning</em>), para adaptar o modelo às variantes <span class="citation" data-cites="arevalo">(<a href="../../shared/referencias/referencias.html#ref-arevalo" role="doc-biblioref">Arevalo; Fonteyn, 2021</a>)</span>. Em <em>corpora</em> históricos transcritos, a presença de vários critérios de transcrição pode dificultar a operação. Além disso, há a dificuldade em reunir um volume substancial de textos de uma mesma época que permita aprendizagens eficientes e com elevada acuidade.</p>
+</section>
+<section id="anotação-de-textos" class="level3" data-number="15.2.4">
+<h3 data-number="15.2.4" class="anchored" data-anchor-id="anotação-de-textos"><span class="header-section-number">15.2.4</span> Anotação de textos</h3>
+<p>A anotação de textos é um processo que por vezes pode ser complexo, necessitando de equipes interdisciplinares, de modo a prever todas as vertentes. A anotação requer a identificação de categorias de interesse para o estudo realizado, isso implica em impor alguma objetividade sobre a língua, sendo que a interpretação é fundamentalmente um processo subjetivo.</p>
+<p>A anotação textual ocorre em diferentes níveis, sintático, semântico lexical, e discursivo. Como para qualquer outra área, também nas HD, é útil identificar elementos de interesse para embasar diferentes estudos. Geralmente a anotação sintática permite um tipo de análise diferenciada da anotação semântica. Estudos linguísticos de filologia podem se beneficiar das anotações de nível morfológico (lexical estrutural) e sintático (sentencial), como poderemos conferir em exemplos de projetos apresentados nas Seções <span> <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html#sec-cap-humanidades-digitais-tycho" target="_blank" title="Volume 3">O <em>corpus</em> Tycho Brahe</a></span> e <span> <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html#sec-cap-humanidades-digitais-hdf" target="_blank" title="Volume 3">A História do Futuro</a></span>.</p>
+<p>A anotação de entidades é frequentemente adotada, uma vez que se trata de uma tarefa com desenvolvimento bastante avançado, com utilidade para estudos de literatura, história, geografia, entre muitos outros campos do conhecimento. Conforme a complexidade do fenômeno e a respectiva disponibilidade de recursos, a anotação pode ser manual ou automática.</p>
+<p>Identificar personagens, instituições ou os locais mencionados em documentos históricos ou obras literárias possibilita uma série de análises. Quase sempre permite uma resposta mais consistente a perguntas básicas, mas essenciais em qualquer estudo rigoroso, como são as associadas a questões como “quem?",”o quê?", “onde?". Isso poderá ser verificado nas Seções <span> <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html#sec-cap-humanidades-digitais-mempa" target="_blank" title="Volume 3">As Memórias Paroquiais</a></span>, <span> <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html#sec-cap-humanidades-digitais-mons" target="_blank" title="Volume 3">O projeto MONSOON</a></span> e <span> <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html#sec-cap-humanidades-digitais-manu" target="_blank" title="Volume 3">Manuais médicos do século XVIII</a></span>. No processo de anotação, é fundamental respeitar o contexto nas decisões que o anotador deve tomar, pois há muitos casos que se prestam a interpretação ambígua.</p>
+</section>
+</section>
+<section id="sec-cap-humanidades-digitais-transf" class="level2" data-number="15.3">
+<h2 data-number="15.3" class="anchored" data-anchor-id="sec-cap-humanidades-digitais-transf"><span class="header-section-number">15.3</span> Transformação de textos em dados</h2>
+<p>Naturalmente, com a evolução dos estudos em HD, são produzidos dados diferenciados, mais elaborados, mais numerosos, e úteis aos investigadores em humanidades. Amplia-se, assim, a capacidade de análise, pela possibilidade de trabalhar com um volume maior de informação e pela capacidade de organizar essa informação de forma mais ágil e rápida em estruturas bem definidas. O PLN atua como área responsável por possibilitar essa transformação de textos em dados. São comuns nesses processos a presença dos seguintes elementos:</p>
+<ul>
+<li><p>extração de informação para a criação de conjunto de dados;</p></li>
+<li><p>uso de técnicas de representação e organização de conhecimento, para organizar os dados;</p></li>
+<li><p>criação de bases de dados interligadas, de forma a estimular o re-uso e a colaboração.</p></li>
+</ul>
+<p>Contudo, tais processos, quando aplicados em pesquisas na área das humanidades, requerem não apenas ferramentas atuais de PLN, mas também uma interação mais próxima com os pesquisadores das respectivas áreas. Isso é necessário para o desenvolvimento das adaptações de ferramentas a diferentes objetivos e para a construção de interfaces adequadas ao seu uso. É, de fato, uma elaboração interdisciplinar. É importante aliar os interesses dos pesquisadores em humanidades às possibilidades mais atuais e eficientes de obtenção de informação por meio da aplicação de tecnologias da linguagem, especialidade dos pesquisadores em PLN. Discutiremos a seguir os elementos, mencionados acima, concernentes à transformação de textos em dados.</p>
+<section id="extração-de-informação" class="level3" data-number="15.3.1">
+<h3 data-number="15.3.1" class="anchored" data-anchor-id="extração-de-informação"><span class="header-section-number">15.3.1</span> Extração de informação</h3>
+<p>Entre as subáreas de PLN, a extração de informação é o processo mais fortemente relacionado ao objetivo de transformação de dados não estruturados (textuais) em dados estruturados (tabelas ou banco de dados). O capítulo 17 deste livro apresenta em detalhes essa área do PLN. Enquadram-se nela as tarefas de reconhecimento de entidades nomeadas e de identificação e classificação de eventos, aplicadas, por exemplo, nos projetos descritos nas Seções <span> <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html#sec-cap-humanidades-digitais-mempa" target="_blank" title="Volume 3">As Memórias Paroquiais</a></span>, <span> <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html#sec-cap-humanidades-digitais-mons" target="_blank" title="Volume 3">O projeto MONSOON</a></span> e <span> <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html#sec-cap-humanidades-digitais-manu" target="_blank" title="Volume 3">Manuais médicos do século XVIII</a></span> para o estudo de fontes históricas.</p>
+<p>O reconhecimento de entidades nomeadas possibilita a identificação de personagens importantes de um dado período; possibilita também mapear áreas de atuação, fazer relações com questões de cartografia e sistemas de informação geográfica. As instituições de diferentes perfis também podem ser identificadas. Se usarmos técnicas mais avançadas, os relacionamentos entre essas entidades também poderão trazer informações relevantes para os pesquisadores. A identificação de eventos e sua respectiva classificação podem ajudar a abordar zonas e contextos significativos, como, por exemplo, no projeto <em>Monsoon</em> (<span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html#sec-cap-humanidades-digitais-mons" target="_blank" title="Volume 3">O projeto MONSOON</a></span>) que realiza uma análise dos eventos inerentes a conflitos na coleção “Livro das Monções”.</p>
+<p>Em textos das áreas das humanidades que estejam já digitalizados e normalizados, podem ser aplicadas ferramentas de PLN já desenvolvidas para diferentes tarefas, como por exemplo, reconhecimento de entidades nomeadas, extração de eventos, resolução de correferências, e sistemas de respostas a perguntas.</p>
+<p>Uma outra maneira de fazer uso de ferramentas prontas, em textos não normalizados, com características diferenciadas do padrão contemporâneo, seria adaptar os modelos de linguagem já treinados. Essas adaptações podem ser feitas para datas históricas ou para a diversidade de mídias. Uma adaptação pode melhorar a performance dos sistemas, uma vez que os grandes modelos são treinados em versões contemporâneas da língua. Não conhecemos alguma adaptação de modelos para o português histórico, mas em breve deverão estar disponíveis, pois esta é uma área em rápida evolução.</p>
+</section>
+<section id="representação-de-conhecimento-e-ontologias" class="level3" data-number="15.3.2">
+<h3 data-number="15.3.2" class="anchored" data-anchor-id="representação-de-conhecimento-e-ontologias"><span class="header-section-number">15.3.2</span> Representação de conhecimento e ontologias</h3>
+<p>Ontologias são artefatos conceituais interpretados com diferentes nuances em filosofia, lógica e sistemas de informação. A ideia central é representar conceitualizações de forma estruturada. Em HD, a nuance mais comumente relacionada é aquela empregada em sistemas de informação, ontologias como estruturas conceituais que podem ajudar na organização dos dados e na comunicação entre sistemas. O nível de detalhe de uma ontologia pode variar entre estruturas taxonômicas, definição de instâncias, relações e axiomas lógicos. Elas auxiliam a esclarecer (e combinar) diversas conceitualizações que compõem diferentes disciplinas.</p>
+<p>Ontologias têm sido usadas em diversos domínios do conhecimento em diferentes tarefas:</p>
+<ul>
+<li><p>organizar e anotar grandes quantidades de dados (anotação semântica);</p></li>
+<li><p>integrar dados de diversas fontes (integração semântica);</p></li>
+<li><p>representar conhecimento de domínios complexos;</p></li>
+<li><p>dar ancoragem para o raciocínio automático:</p></li>
+<li><p>suportar buscas em grandes quantidades de dados (busca semântica).</p></li>
+</ul>
+<p>Em HD, além das tarefas citadas acima, ontologias têm sido utilizadas para representação de metadados, pois, geralmente, é necessário estender ontologias de domínio existentes ou desenvolver novas para atender às especificidades de cada <em>corpus</em> ou fonte. Essas descrições formais permitem a integração de dados de múltiplas fontes, de maneira independente de software e de esquema. Um passo essencial para melhorar a qualidade dos dados é usar vocabulários padronizados e ontologias para representação de dados e metadados <span class="citation" data-cites="Guizzardi2020IofFAIR">(<a href="../../shared/referencias/referencias.html#ref-Guizzardi2020IofFAIR" role="doc-biblioref">Guizzardi, 2020</a>)</span>.</p>
+<p>Uma ontologia bastante referenciada em HD, em especial na área do patrimônio cultural, é o CIDOC-CRM. É entendida como uma ferramenta teórica e prática para a integração de informação. O objetivo é ajudar os pesquisadores, os administradores e o público a explorar questões complexas, relacionadas ao passado, disponíveis em conjuntos de dados diversos e dispersos. O CIDOC-CRM faz isto fornecendo definições e uma estrutura formal para descrever os conceitos e relações implícitos e explícitos, utilizados em documentações do patrimônio cultural.</p>
+</section>
+<section id="dados-ligados-e-dados-fair" class="level3" data-number="15.3.3">
+<h3 data-number="15.3.3" class="anchored" data-anchor-id="dados-ligados-e-dados-fair"><span class="header-section-number">15.3.3</span> Dados ligados e dados <em>FAIR</em></h3>
+<p>Os esforços de partilha de dados produzidos nas pesquisas ainda têm um longo caminho a percorrer em termos de padronização. É muito importante tornar os dados compatíveis com os princípios <em>FAIR</em> (<em>Findability</em>/Encontrabilidade, <em>Accessibility</em>/Acessibilidade, <em>Interoperability</em>/Interoperabilidade e <em>Reuse</em>/Reutilização) <span class="citation" data-cites="wilkinson2016fair">(<a href="../../shared/referencias/referencias.html#ref-wilkinson2016fair" role="doc-biblioref">Wilkinson et al., 2016</a>)</span>. Esses princípios correspondem a um conjunto de 15 recomendações que visam facilitar a reutilização de dados por humanos e máquinas. Eles são independentes de domínio e podem ser implementados principalmente através de:</p>
+<ul>
+<li><p>(F) atribuição de identificadores exclusivos e persistentes a conjuntos de dados, descrevendo-os com metadados ricos que permitem sua indexação e descoberta;</p></li>
+<li><p>(A) uso de protocolos abertos e de padrões para acesso a conjuntos de dados;</p></li>
+<li><p>(I) uso de linguagens formais e de vocabulários padronizados <em>FAIR</em> para representar (meta)dados;</p></li>
+<li><p>(R) uso de metadados ricos sobre licença de uso, proveniência e qualidade de dados.</p></li>
+</ul>
+<p>Portanto, o primeiro passo para o cumprimento dos princípios <em>FAIR</em> é atribuir metadados aos conjuntos de dados e definir esquemas precisos de metadados. De fato, 12 dos 15 princípios <em>FAIR</em> <span class="citation" data-cites="wilkinson2016fair">(<a href="../../shared/referencias/referencias.html#ref-wilkinson2016fair" role="doc-biblioref">Wilkinson et al., 2016</a>)</span> se referem a metadados. Para dar um passo adiante no aprimoramento <em>FAIR</em> dos dados, os esquemas de metadados devem se basear em modelos semânticos (ou seja, ontologias) para uma representação de metadados mais rica <span class="citation" data-cites="Guizzardi2020IofFAIR">(<a href="../../shared/referencias/referencias.html#ref-Guizzardi2020IofFAIR" role="doc-biblioref">Guizzardi, 2020</a>)</span>. Graças à sua capacidade de tornar os tipos de dados explícitos, em um formato que pode ser processado por máquinas, as ontologias são essenciais para tornar os dados <em>FAIR</em>, mesmo para dados já publicados na Web <span class="citation" data-cites="jacobsen2020fair">(<a href="../../shared/referencias/referencias.html#ref-jacobsen2020fair" role="doc-biblioref">Jacobsen et al., 2020</a>)</span>.</p>
+<p>A ideia dos dados ligados é que os esforços possam ser reaproveitados e as bases enriquecidas com dados já identificados e organizados por outras iniciativas. A <em>open linked data cloud</em> (LOD)<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> fornece uma visão geral dos conjuntos de dados vinculados que estão disponíveis na Web. Representa um grafo de conhecimento, composto por diversos padrões abertos, como URI, URL, HTTP, HTML, RDF, a linguagem de consulta SPARQL, entre outros. Esse padrões são mantidos por curadores de dados amadores e profissionais na indústria e na academia<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>.</p>
+<p>Por exemplo, a <em>Europeana</em> é uma biblioteca virtual desenvolvida por países da União Europeia <span class="citation" data-cites="Coneglian_SantaremSegundo_2017 borin2023financial">(<a href="../../shared/referencias/referencias.html#ref-borin2023financial" role="doc-biblioref">Borin; Donato, 2023</a>; <a href="../../shared/referencias/referencias.html#ref-Coneglian_SantaremSegundo_2017" role="doc-biblioref">Coneglian; Santarem Segundo, 2017</a>)</span>. O protótipo agrega milhões de itens digitais, todos eles em domínio público, e está ligado ao LOD Cloud<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>. Em <span class="citation" data-cites="koho-et-al-warsampo-kg">(<a href="../../shared/referencias/referencias.html#ref-koho-et-al-warsampo-kg" role="doc-biblioref">Koho et al., 2021</a>)</span> é proposta uma infraestrutura semântica compartilhada, baseada na ideia de representar conceitos de guerra como uma sequência espaço-temporal de eventos, nos quais participam soldados, unidades militares e outros atores. O esquema de metadados usado é uma extensão do CIDOC-CRM, complementado por várias ontologias de domínio histórico militar, e é ligado ao LOD Cloud.</p>
+<p>Em termos de avaliação, várias estruturas foram propostas para avaliar o grau de <em>FAIRness</em> de um determinado objeto digital <span class="citation" data-cites="DBLP:conf/swat4ls/SunED22">(<a href="../../shared/referencias/referencias.html#ref-DBLP:conf/swat4ls/SunED22" role="doc-biblioref">Sun et al., 2022</a>)</span>. Em vários deles, a avaliação é realizada respondendo a um conjunto de perguntas, também chamadas de métricas ou indicadores, ou preenchendo uma lista de verificação<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>, como o <em>FAIRshake</em> <span class="citation" data-cites="CLARKE2019417">(<a href="../../shared/referencias/referencias.html#ref-CLARKE2019417" role="doc-biblioref">Clarke et al., 2019</a>)</span> ou o <em>FAIR Data Maturity Model</em> <span class="citation" data-cites="RDA2020fair_data_maturity_model">(<a href="../../shared/referencias/referencias.html#ref-RDA2020fair_data_maturity_model" role="doc-biblioref">FAIR Data Maturity Model Working Group RDA, 2020</a>)</span>.</p>
+<p>Outros autores <span class="citation" data-cites="Wilkinson2019 FAIRsFAIR2020">(<a href="../../shared/referencias/referencias.html#ref-FAIRsFAIR2020" role="doc-biblioref">Devaraju et al., 2020</a>; <a href="../../shared/referencias/referencias.html#ref-Wilkinson2019" role="doc-biblioref">Wilkinson et al., 2019</a>)</span> propuseram abordagens automatizadas. Recentemente, além de avaliar o grau de <em>FAIRness</em> dos dados, as propostas abordaram a avaliação de vocabulários e ontologias <span class="citation" data-cites="DBLP:journals/corr/abs-2003-13084 10.1371/journal.pcbi.1009041">(<a href="../../shared/referencias/referencias.html#ref-10.1371/journal.pcbi.1009041" role="doc-biblioref">Cox, 2021</a>; <a href="../../shared/referencias/referencias.html#ref-DBLP:journals/corr/abs-2003-13084" role="doc-biblioref">Garijo; Poveda-Villalón, 2020</a>)</span>.</p>
+<p>Nesta seção discutimos alguns elementos do caminho de construção de bases de pesquisa a partir de textos. Muitos projetos na área de HD são desenvolvidos com o objetivo de mapear informações textuais volumosas, dispersas, ou ainda não totalmente exploradas em novas descobertas. Uma vez mapeadas e organizadas, elas podem estar disponíveis para outros investigadores. As áreas de extração de informação, construção de ontologias e dados ligados caminham em paralelo, embora esforços interdisciplinares ainda sejam necessários para sua integração. Na próxima seção serão apresentados exemplos de projetos que caminham nesse sentido.</p>
+</section>
+</section>
+<section id="sec-cap-humanidades-digitais-exemp" class="level2" data-number="15.4">
+<h2 data-number="15.4" class="anchored" data-anchor-id="sec-cap-humanidades-digitais-exemp"><span class="header-section-number">15.4</span> Exemplos de projetos de HD envolvendo o processamento da língua portuguesa</h2>
+<p>Apresentamos aqui exemplos de trabalhos envolvendo HD e PLN com foco em língua portuguesa. Esta não é uma apresentação completa; há diversos outros projetos e trabalhos importantes e reconhecidos nesse domínio. Em especial, damos atenção aqui aos projetos relacionados com as autoras deste capítulo, e que colaboram no contexto do Laboratório Chronos<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a>, o Laboratório de Humanidades Digitais do Centro Interdisciplinar de História Culturas e Sociedades, CIDEHUS, da Universidade de Évora, Portugal. São, em geral, projetos atuais em desenvolvimento, com exceção do primeiro, que tem uma relevância histórica no desenvolvimento dessa área no Brasil.</p>
+<section id="sec-cap-humanidades-digitais-tycho" class="level3" data-number="15.4.1">
+<h3 data-number="15.4.1" class="anchored" data-anchor-id="sec-cap-humanidades-digitais-tycho"><span class="header-section-number">15.4.1</span> O <em>corpus</em> Tycho Brahe</h3>
+<p>O <em>corpus</em> histórico português Tycho Brahe <span class="citation" data-cites="de2014corpus">(<a href="../../shared/referencias/referencias.html#ref-de2014corpus" role="doc-biblioref">Sousa, 2014</a>)</span> é um <em>corpus</em> eletrônico de textos escritos em português por autores nascidos entre 1380 e 1978. O objetivo principal do projeto foi possibilitar, de forma ampla, a recuperação de informações filológicas e linguísticas dos textos. Esse pode ser considerado um dos trabalhos pioneiros na área de <em>corpus</em> histórico, com adição de anotação linguística e que tenha envolvido recursos computacionais na sua criação, sendo um importante contributo para essa área <span class="citation" data-cites="finger2000tecnicas britto2002computational">(<a href="../../shared/referencias/referencias.html#ref-britto2002computational" role="doc-biblioref">Britto et al., 2002</a>; <a href="../../shared/referencias/referencias.html#ref-finger2000tecnicas" role="doc-biblioref">Finger, 2000</a>)</span>.</p>
+<p>No site do projeto<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a>, 95 textos se encontram disponíveis para pesquisa. Os textos contam com anotação linguística em dois níveis: anotação morfológica <em>(part of speech)</em> (60 textos, total de 2.204.889 palavras); e anotação sintática (31 textos, total de 1.311.834 palavras). Estão disponíveis ainda versões sem anotação. A coleção engloba o português brasileiro e o europeu, contendo, por exemplo, a Gazeta de Lisboa e o Jornal da Bahia.</p>
+</section>
+<section id="sec-cap-humanidades-digitais-mempa" class="level3" data-number="15.4.2">
+<h3 data-number="15.4.2" class="anchored" data-anchor-id="sec-cap-humanidades-digitais-mempa"><span class="header-section-number">15.4.2</span> As Memórias Paroquiais</h3>
+<p>As Memórias Paroquiais constituem uma das principais fontes sobre o Portugal metropolitano dos meados do século XVIII. São, aliás, das mais citadas pelos historiadores. A coleção é composta pelas respostas dos párocos a um inquérito lançado em 1758, três anos depois do grande sismo de 1755. Incluía 60 perguntas sobre o território da freguesia, pelo que reúne uma plêiade diversificada de informações, desde elementos administrativos e demográficos aos recursos existentes: piscícolas, minerais, aquíferos com propriedades específicas, produções agro-pecuárias, etc. Interessam tanto ao historiador como ao botânico ou ao sismógrafo, para referir apenas alguns dos campos abrangidos pela observação dos párocos informantes.</p>
+<p>Estas respostas, encadernadas no século XIX, fez com que os volumes passassem a ser conhecidos como “Dicionário Geográfico de Portugal”. Aliás, a iniciativa de 1758 também tinha em vista dar continuidade a um projeto de dicionário com esse perfil, do Padre oratoriano Luís Cardoso (1697-1769), e que o terremoto de 1755 interrompera. A atual designação só se impôs no limiar do século XX <span class="citation" data-cites="mfo">(<a href="../../shared/referencias/referencias.html#ref-mfo" role="doc-biblioref">Olival et al., 2022</a>)</span>.</p>
+<p>Os originais manuscritos, num total de 43 volumes e um de índices, encontram-se na Torre do Tombo, desde o século XIX. Entre 1993 e 2003, os textos foram microfilmados e em 2005 esses rolos de 35 mm<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a>, em preto e branco, foram digitalizados e disponibilizados online.</p>
+<p>Por volta de 2007-2008, o CIDEHUS iniciou a tarefa de transcrever as Memórias das localidades a Sul do Tejo. O trabalho foi concluído em 2023 em um projeto colaborativo. Por vezes, até aproveitou transcrições já publicadas, sempre que foi possível entrar em contato com o Autor(a) da edição. Parte desse trabalho encontra-se disponível online, em acesso aberto, e com licenças <em>Creative Commons</em>, que facilitam a reutilização.</p>
+<p>Nos últimos dois anos começaram a ser aplicadas técnicas de PLN ao conjunto transcrito. Principiou-se por anotar categorias simples e básicas: pessoas, locais e organizações <span class="citation" data-cites="vieira2021enriching">(<a href="../../shared/referencias/referencias.html#ref-vieira2021enriching" role="doc-biblioref">Vieira et al., 2021</a>)</span>; já em 2023, usaram-se categorias de anotação mais complexas e com várias subdivisões. Teve-se em vista responder de modo mais adequado às necessidades do historiador e de outros cientistas ou pessoas interessadas. Também foi efetuado um ensaio de reconhecimento de entidades nomeadas, usando sistemas previamente desenvolvidos e que foram calibrados para esse efeito <span class="citation" data-cites="santos2024">(<a href="../../shared/referencias/referencias.html#ref-santos2024" role="doc-biblioref">Santos et al., 2024</a>)</span>. Baseavam-se em técnicas de aprendizagem de máquina e modelos de linguagem.</p>
+<p>Está ainda em curso a normalização da grafia do texto, quer em versão com léxico explicativo para o grande público, quer em versões para processamento, trabalhando-se na possibilidade de normalizar de forma automatizada <span class="citation" data-cites="cameron2023planear">(<a href="../../shared/referencias/referencias.html#ref-cameron2023planear" role="doc-biblioref">Cameron et al., 2023</a>)</span>.</p>
+<p>Nos próximos anos, será dada continuidade à tarefa de transformar estes textos em dados confiáveis e de ligá-los a outros repositórios de conhecimento.</p>
+</section>
+<section id="sec-cap-humanidades-digitais-mons" class="level3" data-number="15.4.3">
+<h3 data-number="15.4.3" class="anchored" data-anchor-id="sec-cap-humanidades-digitais-mons"><span class="header-section-number">15.4.3</span> O projeto MONSOON</h3>
+<p>Extração de eventos é uma tarefa bastante conhecida de PLN, com recursos desenvolvidos para o português <span class="citation" data-cites="sacramento2021joint">(<a href="../../shared/referencias/referencias.html#ref-sacramento2021joint" role="doc-biblioref">Sacramento; Souza, 2021</a>)</span>. O desafio, neste caso, é adaptar essas ferramentas à língua portuguesa do século XVII, esforço que está sendo explorado no projeto <em>Monsoon</em>: o Estado da Índia Habsburgo em perspectiva digital (1580-1640).</p>
+<p>Este projeto pretende estudar as dinâmicas internas desse espaço macro que constituía o Estado da Índia português, combinando o estudo da presença formal portuguesa com a presença de comunidades portuguesas que se instalaram na Ásia fora do território administrado pela Coroa portuguesa, buscando relacionar estas duas esferas com o Outro – seja o europeu ou o asiático ou africano. Por outro lado, o projeto tem o objetivo de criar uma metodologia de análise semi-automática que possa ser replicada em coleções documentais semelhantes de outras potências europeias <span class="citation" data-cites="asvr">(<a href="../../shared/referencias/referencias.html#ref-asvr" role="doc-biblioref">Ribeiro, 2022</a>)</span>.</p>
+<p>Este projeto tem como base documental a correspondência trocada entre o monarca português e as suas instituições com o vice-rei da Índia. Este conjunto ficou conhecido como Livros das Monções, dado que era na altura da monção no Oceano Índico que os navios portugueses podiam partir de Goa para Portugal ou podiam chegar ao Índico. Só no regime climático de monções existem ventos no Índico que permitem que navios sem motor aí circulem. Este conjunto documental, dividido entre o Arquivo Nacional Torre do Tombo, em Lisboa, Portugal, e o Arquivo Histórico do Estado de Goa, em Pangim, Índia, possui informações sobre os mais variados aspectos da presença portuguesa na Ásia e abarca uma geografia que vai desde Moçambique e toda a costa oriental africana até ao Japão.</p>
+<p>Este <em>corpus</em> documental é composto por um grande número de volumes, sendo que nenhum deles possui um índice sobre os assuntos tratados. Por meio da extração automática de eventos, os historiadores podem facilmente ter acesso a passagens relevantes a partir de uma palavra relacionada com uma determinada ação. É possível identificar e classificar semanticamente eventos, o que nos permite ter uma percepção clara dos temas abordados nesta correspondência, de forma eficiente e rápida. A partir da aplicação de extração de eventos numa amostra destas cartas, compreendemos que, em determinada cronologia, havia no Oceano Índico uma conjuntura generalizada de conflito, quer devido à concorrência de outras potências ultramarinas europeias, como a Holanda e a Inglaterra, quer entre os portugueses e outras entidades políticas asiáticas <span class="citation" data-cites="goncalo2024">(<a href="../../shared/referencias/referencias.html#ref-goncalo2024" role="doc-biblioref">Albuquerque et al., 2024</a>)</span>.</p>
+<p>Através do sistema de extração de eventos, temos acesso a estatísticas de classificação que nos permitem uma percepção mais evidente dos assuntos representados em cada carta e assim analisar conjunturas históricas. Isso, no que diz respeito à metodologia da análise histórica, é algo relativamente novo.</p>
+<p>Por outro lado, este projeto utiliza também a anotação de entidades nomeadas de quatro tipos: pessoas, locais, grupos de pessoas e instituições. Nos próximos passos deste projeto pretendemos conjugar as entidades extraídas por meio de anotação de texto e ligá-las aos eventos extraídos no texto, podendo assim articular agentes, instituições e locais às ações em que estão envolvidos.</p>
+</section>
+<section id="sec-cap-humanidades-digitais-hdf" class="level3" data-number="15.4.4">
+<h3 data-number="15.4.4" class="anchored" data-anchor-id="sec-cap-humanidades-digitais-hdf"><span class="header-section-number">15.4.4</span> A História do Futuro</h3>
+<p>Nos projetos em curso sobre a “História do Futuro” <span class="citation" data-cites="apb">(<a href="../../shared/referencias/referencias.html#ref-apb" role="doc-biblioref">Banza, 2022</a>)</span>, de Padre António Vieira, após alguns testes com a ferramenta de transcrição de manuscritos Transkribus <span class="citation" data-cites="kahle2017transkribus">(<a href="../../shared/referencias/referencias.html#ref-kahle2017transkribus" role="doc-biblioref">Kahle et al., 2017</a>)</span>, concluiu-se que, tratando-se de um texto relativamente curto e dadas as características do manuscrito, de leitura muito difícil, em parte devido às más condições do suporte, o treino necessário para uma utilização rentável da ferramenta não se justificaria neste caso, ao contrário de projetos envolvendo um grande volume de textos, uma vez que seria sempre necessária uma correção manual. Assim, o texto foi lido e transcrito manualmente para suporte digital, aplicando-se apenas posteriormente determinadas ferramentas de análise, de acordo com os objetivos pretendidos.</p>
+<p>A primeira transcrição, feita a partir da leitura paleográfica do manuscrito, sendo maximamente conservadora, mantém um número muito significativo de traços do português seiscentista, e do português do Padre António Vieira em particular, que dificultam muito ou impossibilitam mesmo a aplicação da maioria das ferramentas de PLN. Assim, optou-se por, a partir da primeira, realizar uma segunda transcrição, igualmente em formato , mas normalizadora. Dadas as características do texto, a normalização foi, mais uma vez, feita manualmente, depois de definidos critérios rigorosos que, sem desvirtuarem as principais características do texto e da sua época, o tornassem apto a processamento computacional e a aplicação de ferramentas automáticas.</p>
+<p>Sobre a versão normalizadora, tem sido possível aplicar com êxito algumas ferramentas e testar outras. Inicialmente, constituiu-se um <em>corpus</em> não lematizado, que foi anotado lexicalmente (permitindo, por exemplo a elaboração de um léxico da obra) e morfologicamente (o que permitirá rastrear automaticamente alguns aspetos inovadores na obra de Vieira neste domínio, como é o caso do uso dos pronomes clíticos), com recurso à ferramenta LX-Tagger<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a>, disponível no repositório PORTULAN-CLARIN<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a>.</p>
+<p>Nesses domínios, a anotação automática, verificada depois manualmente, revelou-se particularmente eficaz. Elaboraram-se, ainda, com auxílio da ferramenta AntConc<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a>, listas lexicais, alfabéticas, por frequência descendente, ou ordenadas pelo final de palavra, permitindo ver a disponibilidade do sistema sufixal. O <em>corpus</em> contém ainda um valioso intertexto latino, que foi processado manualmente de modo a constituir um sub-<em>corpus</em> autônomo.</p>
+<p>Ainda no domínio da análise linguística, prevê-se a utilização do esquema de Dependências Universais, por exemplo, para a análise morfossintática, cujos testes têm revelado um desempenho bastante razoável, apesar de, como nos demais casos, não se poder excluir a revisão manual. Encontram-se também ainda em fase de avaliação ferramentas que permitam identificar similaridades semânticas <span class="citation" data-cites="lopez2017interpretable">(<a href="../../shared/referencias/referencias.html#ref-lopez2017interpretable" role="doc-biblioref">Lopez-Gazpio et al., 2017</a>)</span> entre o texto consensualmente aceito como “História do Futuro" e outros, fisicamente distintos, mas conceitualmente idênticos. Neste aspecto, as ferramentas presentemente disponíveis têm-se revelado pouco adequadas, quer ao tipo de texto, quer ao tipo de similaridades que se procura detectar. O objetivo será, neste caso, adaptar os modelos atuais à”História do Futuro", conseguindo, essencialmente, mais eficiência, em termos de precisão e cobertura. Ainda assim, algumas ferramentas já disponíveis, como por exemplo, para o reconhecimento de entidades nomeadas ou para a análise de sentimentos, úteis para a análise histórico-cultural e literária da obra, poderão necessitar de uma menor adaptação.</p>
+</section>
+<section id="sec-cap-humanidades-digitais-manu" class="level3" data-number="15.4.5">
+<h3 data-number="15.4.5" class="anchored" data-anchor-id="sec-cap-humanidades-digitais-manu"><span class="header-section-number">15.4.5</span> Manuais médicos do século XVIII</h3>
+<p>Com a digitalização de acervos bibliográficos de bibliotecas físicas, impulsionada pelas HD <span class="citation" data-cites="Finatto_2023">(<a href="../../shared/referencias/referencias.html#ref-Finatto_2023" role="doc-biblioref">Finatto, 2023</a>)</span>, tornou-se mais fácil acessar obras médicas antigas impressas em português. Todavia, tais obras precisam ter seus conteúdos sistematizados para que possam ser compreendidas e situadas em relação ao conhecimento médico e científico atual.</p>
+<p>Mesmo com a digitalização e com as transcrições dos textos, conforme sua apresentação original, a interpretação e sistematização dessa informação requer consulta a toda uma série de materiais de apoio: compêndios de História da Ciência e da Medicina, edições filológicas, bases de dados com textos do português de diferentes épocas e vários tipos de dicionários. Assim, no âmbito do projeto “Humanidades digitais e conhecimento médico em língua portuguesa no século XVIII”, são analisados e disponibilizados<a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a> textos médicos desse período, reunidos em um <em>corpus</em> de arquivos de transcrições <span class="citation" data-cites="lazzari2023exame">(<a href="../../shared/referencias/referencias.html#ref-lazzari2023exame" role="doc-biblioref">Lazzari; Finatto, 2023</a>)</span>. Esse <em>corpus</em> é de acesso público e oferece manuais escritos por médicos, enfermeiros e cirurgiões. Nele, têm destaque as obras do médico Curvo Semedo (1635-1719) e o primeiro manual de Enfermagem publicado em português, de 1741.</p>
+<p>O objetivo desse projeto é descrever e sistematizar terminologias, conceitos e modos de dizer relacionados a doenças e seus tratamentos, criando-se bases para um futuro hiperdicionário <span class="citation" data-cites="wives1997tecnicas">(<a href="../../shared/referencias/referencias.html#ref-wives1997tecnicas" role="doc-biblioref">Wives, 1997</a>)</span> de epidemiologia histórica luso-brasileira. Nesse hiperdicionário, a ideia é associar nomes de doenças, partes do corpo, perfis de pessoas/doentes, dados geográficos e datas, com nomes de remédios, de processos e de tratamentos que chegam aos seus correspondentes terapêuticos atuais. Esses dados podem ser correspondidos à identificação das Entidades Nomeadas ao longo dos textos <span class="citation" data-cites="DBLP:conf/dhandnlp-ws/ZilioFV22">(<a href="../../shared/referencias/referencias.html#ref-DBLP:conf/dhandnlp-ws/ZilioFV22" role="doc-biblioref">Zilio et al., 2022</a>)</span>.</p>
+<p>Naturalmente, há todo um trabalho de geração e tratamento desse <em>corpus</em> histórico, que é feito também com auxílio de recursos e técnicas de PLN. Isso porque, no período dessas obras, verificava-se toda a sorte de variação de escrita e de tipografia, de modo que em uma mesma página, de um mesmo autor, encontra-se, por exemplo a palavra “água” escrita como “agua” ou “agoa”, além de haver itens de vocabulário hoje desconhecido, como o termo anatômico “madre” por “útero”. Por isso, o projeto já tenta aproximar, com apoio computacional, a escrita antiga da sua forma atualizada, investindo-se na normalização automática dos textos <span class="citation" data-cites="zilio2024">(<a href="../../shared/referencias/referencias.html#ref-zilio2024" role="doc-biblioref">Zilio et al., 2024</a>)</span>.</p>
+<p>Embora sejam enfrentados problemas com a qualidade das informações automaticamente extraídas em dados brutos, pois lida-se com textos apenas na ortografia antiga, plenos de variações nas formas das palavras conforme escritas na época, ferramentas genéricas de PLN já se mostram capazes de identificar informações relevantes <span class="citation" data-cites="quaresma2020information">(<a href="../../shared/referencias/referencias.html#ref-quaresma2020information" role="doc-biblioref">Quaresma; Finatto, 2020</a>)</span>. São ferramentas com bom potencial para ajudar especialistas que lidam com esses textos na criação de bases de conhecimento histórico. Enfim, o processamento desse <em>corpus</em> ajuda a identificar e refinar a informação nele contida. E isso pode ser muito relevante para várias aplicações, produzindo-se verdadeiros “mapas de navegação” da sua organização e conteúdos.</p>
+<p>A ligação de ontologias é, por fim, outro dos objetivos desse projeto de pesquisa. Assim, as antigas terminologias de Saúde poderão ser encontradas e mapeadas em seus equivalentes em ontologias da atualidade <span class="citation" data-cites="schriml2012disease">(<a href="../../shared/referencias/referencias.html#ref-schriml2012disease" role="doc-biblioref">Schriml et al., 2012</a>)</span>. Este mapeamento será mais uma forma de enriquecer os recursos derivados do <em>corpus</em> e estabelecer quais as áreas da Medicina, da Anatomia e que tipo de doenças e medicamentos eram conhecidos daquela época. Atualmente, as terminologias e expressões relacionadas, conforme usadas nos manuais de Curvo Semedo, já estão contrastadas com o vocabulário de Enfermagem empregado em 1741 <span class="citation" data-cites="finatto2023lexico">(<a href="../../shared/referencias/referencias.html#ref-finatto2023lexico" role="doc-biblioref">Finatto et al., 2023</a>)</span>. Esse contraste, entre outros, pode ajudar a identificar diferentes perspectivas, gêneros textuais, conceitos e saberes dos vários práticos e profissionais de Saúde em ação e formação no século XVIII.</p>
+</section>
+</section>
+<section id="sec-cap-humanidades-digitais-conc" class="level2" data-number="15.5">
+<h2 data-number="15.5" class="anchored" data-anchor-id="sec-cap-humanidades-digitais-conc"><span class="header-section-number">15.5</span> Considerações finais</h2>
+<p>Há um grande potencial de aplicações de PLN na área de humanidades digitais, muitas ainda a serem exploradas. Como visto neste capítulo, o PLN se faz presente no tratamento de problemas em diferentes fases, desde as etapas iniciais relacionadas à transcrição de manuscritos, ao tratamento de textos como imagem com técnicas como o OCR, a adição de metadados, e a normalização textual. Para as fases de processamento, a partir de um determinado texto preparado, as tecnologias de linguagem podem prestar auxílio a tarefas diversas como tradução, recuperação e extração de informações, criação de bases de conhecimento, e sua associação a ontologias ou outros dados. O ideal é que exista uma atenção especial aos padrões de disponibilização de dados, como os propostos pelos princípios <em>FAIR</em> de Dados Abertos.</p>
+<p>Nessa área de intersecção entre humanidades e tecnologias é essencial um trabalho interdisciplinar. São várias questões relevantes a serem combinadas: os objetivos de um pesquisador da área de humanidades, como linguística e literatura, ciências sociais, história, e, na perspectiva do processamento de língua, os objetivos de encontrar, aplicar ou mesmo desenvolver soluções apropriadas para cada tipo de problema, maximizando a correção e a performance das soluções encontradas de acordo com a disponibilidade de recursos.</p>
+<p>É crucial que uma perspectiva de IA, centrada no ser humano, seja levada em consideração para fornecer interfaces de usuário adequadas para preparar e acessar as fontes e os dados extraídos. Os projetos, muitas vezes considerando coleções distintas, ou mesmo possuindo objetivos diferentes, podem se beneficiar com a troca de experiências e com o uso das mesmas ferramentas para lidar com os textos e seus conhecimentos codificados.</p>
+<p>No contexto do evento principal da língua portuguesa, o PROPOR, tem sido organizado o <em>Workshop</em> de Humanidades Digitais e Processamento de Língua Natural, que em 2024 estará na sua terceira edição. Nos anais desse <em>workshop</em> disponíveis <em>on-line</em><a href="#fn20" class="footnote-ref" id="fnref20" role="doc-noteref"><sup>20</sup></a>, podem ser encontrados mais detalhes sobre os projetos mencionados neste capítulo, e muitos outros.</p>
+</section>
+<section id="agradecimentos" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="agradecimentos">Agradecimentos</h2>
+<p>Os trabalhos aqui mencionados contam com o suporte da Fundação de Ciência e Tecnologia (FCT) - projetos CEECIND/01997/2017, 2022.07730.PTDC, UIDB/ 00057/2020 (<a href="https://doi.org/10.54499/UIDB/00057/2020" class="uri">https://doi.org/10.54499/UIDB/00057/2020</a>), e e do Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq) - processos 308926/ 2019-6 (PQ) e 401770/2022-2 (PDE).</p>
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="1" role="list" style="display: none">
+<div id="ref-ackel7abordagens" class="csl-entry" role="listitem">
+ACKEL, A. Abordagens digitais para estudos de Paleografia: desafios, atualidade, desdobramentos. <strong>LaborHist<span>ó</span>rico</strong>, v. 7, n. 3, p. 100–120, 2021.
+</div>
+<div id="ref-goncalo2024" class="csl-entry" role="listitem">
+ALBUQUERQUE, G. et al. Applying event classification to reveal the Estado da Índia. <strong>Proceedings of the International Conference on the Computational treatment of Portuguese, PROPOR</strong>, 2024.
+</div>
+<div id="ref-arevalo" class="csl-entry" role="listitem">
+AREVALO, E. M.; FONTEYN, L. <strong>MacBERTh: Development and Evaluation of a Historically Pre-trained Language Model for English (1450-1950)</strong>. ICON Workshop on Natural Language Processing for Digital Humanities. <strong>Anais</strong>...2021.
+</div>
+<div id="ref-apb" class="csl-entry" role="listitem">
+BANZA, A. P. <strong>A edição digital da História do Futuro, de António Vieira: arquivo e ferramentas</strong>. Actas da Jornada de Humanidades Digitais do CIDEHUS (to appear). <strong>Anais</strong>...2022.
+</div>
+<div id="ref-borin2023financial" class="csl-entry" role="listitem">
+BORIN, E.; DONATO, F. Financial Sustainability of Digitizing Cultural Heritage: The International Platform Europeana. <strong>Journal of Risk and Financial Management</strong>, v. 16, n. 10, p. 421, 2023.
+</div>
+<div id="ref-britto2002computational" class="csl-entry" role="listitem">
+BRITTO, H.; FINGER, M.; GALVES, C. Computational and linguistic aspects of the construction of The Tycho Brahe Parsed Corpus of Historical Portuguese. <strong>Romanistische Korpuslinguistik, Korpora und gesprochene Sprache, Romance Corpus Linguistics, Corpora and Spoken Language, ScriptOralia, v. 126.</strong>, 2002.
+</div>
+<div id="ref-cameron2020linguistic" class="csl-entry" role="listitem">
+CAMERON, H. F.; GONÇALVES, M. F.; QUARESMA, P. <strong>Linguistic and orthographical classic Portuguese variants Challenges for <span>NLP</span></strong>. Proceedings of the 14th International Conference on the Computational Processing of Portuguese. <strong>Anais</strong>...2020.
+</div>
+<div id="ref-cameron2023planear" class="csl-entry" role="listitem">
+CAMERON, H.; OLIVAL, F.; VIEIRA, R. <a href="https://doi.org/10.24206/lh.v9i1.52234">Planear a normalização automática: tipologia de variação gráfica do corpus das Memórias Paroquiais (1758)</a>. <strong>LaborHistórico</strong>, v. 9, n. 1, p. 52234, 2023.
+</div>
+<div id="ref-CLARKE2019417" class="csl-entry" role="listitem">
+CLARKE, D. J. B. et al. <a href="https://doi.org/10.1016/j.cels.2019.09.011">FAIRshake: Toolkit to Evaluate the FAIRness of Research Digital Resources</a>. <strong>Cell Systems</strong>, v. 9, n. 5, p. 417–421, 2019.
+</div>
+<div id="ref-Coneglian_SantaremSegundo_2017" class="csl-entry" role="listitem">
+CONEGLIAN, C. S.; SANTAREM SEGUNDO, J. E. <a href="https://doi.org/10.5007/1518-2924.2017v22n48p88">Europeana no Linked Open Data: conceitos de Web Semântica na dimensão aplicada das Humanidades Digitais</a>. <strong>Encontros Bibli: revista eletrônica de biblioteconomia e ciência da informação</strong>, v. 22, n. 48, p. 88–99, 2017.
+</div>
+<div id="ref-10.1371/journal.pcbi.1009041" class="csl-entry" role="listitem">
+COX, A. N. A. M., Simon J. D. AND Gonzalez-Beltran. <a href="https://doi.org/10.1371/journal.pcbi.1009041">Ten simple rules for making a vocabulary FAIR</a>. <strong>PLOS Computational Biology</strong>, v. 17, n. 6, p. 1–15, jun. 2021.
+</div>
+<div id="ref-FAIRsFAIR2020" class="csl-entry" role="listitem">
+DEVARAJU, A. et al. <strong><span>FAIRsFAIR Data Object Assessment Metrics 0.5</span></strong>. [s.l.] Research Data Alliance (RDA), out. 2020. Disponível em: &lt;<a href="https://zenodo.org/record/6461229">https://zenodo.org/record/6461229</a>&gt;.
+</div>
+<div id="ref-RDA2020fair_data_maturity_model" class="csl-entry" role="listitem">
+FAIR DATA MATURITY MODEL WORKING GROUP RDA. <strong><span>FAIR Data Maturity Model. Specification and Guidelines</span></strong>. Research Data Alliance; Zenodo, 2020. Disponível em: &lt;<a href="https://doi.org/10.15497/rda00050">https://doi.org/10.15497/rda00050</a>&gt;
+</div>
+<div id="ref-Finatto_2023" class="csl-entry" role="listitem">
+FINATTO, M. J. B. <a href="https://doi.org/10.14393/DLv17a2023-69">Humanidades digitais e estudos históricos do léxico</a>. <strong>Domínios de Lingu@gem</strong>, v. 17, p. e1769, 2023.
+</div>
+<div id="ref-finatto2023lexico" class="csl-entry" role="listitem">
+FINATTO, M. J.; GONÇALVES, M. F.; LAZZARI, R. L<span>é</span>xico e terminologia em um novo g<span>ê</span>nero textual do s<span>é</span>culo XVIII: o manual para enfermeiros. <strong>In: Natalia Terrón Vinagre &amp; Jenny Brumme (orgs.) Emergencia de nuevos géneros textuales y terminología en la historia de los lenguajes de especialidad.</strong>, 2023.
+</div>
+<div id="ref-finger2000tecnicas" class="csl-entry" role="listitem">
+FINGER, M. T<span>é</span>cnicas de otimiza<span>ç</span><span>ã</span>o da precis<span>ã</span>o empregadas no etiquetador Tycho Brahe. <strong>Proceedings of the International Conference on the Computational treatment of Portuguese, PROPOR</strong>, 2000.
+</div>
+<div id="ref-DBLP:journals/corr/abs-2003-13084" class="csl-entry" role="listitem">
+GARIJO, D.; POVEDA-VILLALÓN, M. <a href="https://arxiv.org/abs/2003.13084">Best Practices for Implementing <span>FAIR</span> Vocabularies and Ontologies on the Web</a>. <strong>CoRR</strong>, v. <span>abs/2003.13084</span>, 2020.
+</div>
+<div id="ref-Guizzardi2020IofFAIR" class="csl-entry" role="listitem">
+GUIZZARDI, G. <span>Ontology, Ontologies and the <span>“I”</span> of FAIR</span>. <strong>Data Int.</strong>, v. 2, n. 1-2, p. 181–191, 2020.
+</div>
+<div id="ref-jacobsen2020fair" class="csl-entry" role="listitem">
+JACOBSEN, A. et al. <strong>FAIR principles: interpretations and implementation considerations</strong>. <strong>Data intelligence</strong>MIT Press One Rogers Street, Cambridge, MA 02142-1209, USA journals-info&nbsp;…, 2020.
+</div>
+<div id="ref-kahle2017transkribus" class="csl-entry" role="listitem">
+KAHLE, P. et al. <strong>Transkribus-a service platform for transcription, recognition and retrieval of historical documents</strong>. 2017 14th IAPR International Conference on Document Analysis and Recognition (ICDAR). <strong>Anais</strong>...IEEE, 2017.
+</div>
+<div id="ref-koho-et-al-warsampo-kg" class="csl-entry" role="listitem">
+KOHO, M. et al. <a href="https://doi.org/10.3233/SW-200392">WarSampo Knowledge Graph: Finland in the Second World War as Linked Open Data</a>. <strong>Semantic Web – Interoperability, Usability, Applicability</strong>, v. 12, n. 2, p. 265–278, 2021.
+</div>
+<div id="ref-lazzari2023exame" class="csl-entry" role="listitem">
+LAZZARI, R. R.; FINATTO, M. J. B. Exame do vocabul<span>á</span>rio m<span>é</span>dico no Portugu<span>ê</span>s no s<span>é</span>culo XVIII: contribui<span>ç</span><span>õ</span>es da lexicometria para o desenho de um dicion<span>á</span>rio hist<span>ó</span>rico. <strong>Mandinga-Revista de Estudos Lingu<span>ı́</span>sticos (ISSN: 2526-3455)</strong>, v. 7, n. 1, p. 102–123, 2023.
+</div>
+<div id="ref-liu2016recognizing" class="csl-entry" role="listitem">
+LIU, Y.; HEARNE, J.; CONRAD, B. <strong>Recognizing proper names in ur iii texts through supervised learning</strong>. The Twenty-Ninth International Flairs Conference. <strong>Anais</strong>...2016.
+</div>
+<div id="ref-lopez2017interpretable" class="csl-entry" role="listitem">
+LOPEZ-GAZPIO, I. et al. Interpretable semantic textual similarity: Finding and explaining differences between sentences. <strong>Knowledge-Based Systems</strong>, v. 119, p. 186–199, 2017.
+</div>
+<div id="ref-nair2004brief" class="csl-entry" role="listitem">
+NAIR, S. S.; JEEVEN, V. A brief overview of metadata formats. <strong>DESIDOC Journal of Library &amp; Information Technology</strong>, v. 24, n. 4, 2004.
+</div>
+<div id="ref-mfo" class="csl-entry" role="listitem">
+OLIVAL, F.; CAMERON, H.; VIEIRA, R. <strong>As Memórias Paroquiais: do manuscrito ao digital</strong>. Actas da Jornada de Humanidades Digitais do CIDEHUS (to appear). <strong>Anais</strong>...2022.
+</div>
+<div id="ref-quaresma2020information" class="csl-entry" role="listitem">
+QUARESMA, P.; FINATTO, M. J. B. <strong>Information Extraction from Historical Texts: a Case Study.</strong> DHandNLP@ PROPOR. <strong>Anais</strong>...2020.
+</div>
+<div id="ref-asvr" class="csl-entry" role="listitem">
+RIBEIRO, A. S. <strong>O projecto MONSOON: perspectivas digitais da Índia portuguesa</strong>. Actas da Jornada de Humanidades Digitais do CIDEHUS (to appear). <strong>Anais</strong>...2022.
+</div>
+<div id="ref-sacramento2021joint" class="csl-entry" role="listitem">
+SACRAMENTO, A. DA S. B.; SOUZA, M. <strong>Joint Event Extraction with Contextualized Word Embeddings for the Portuguese Language</strong>. Brazilian Conference on Intelligent Systems. <strong>Anais</strong>...Springer, 2021.
+</div>
+<div id="ref-santos2024" class="csl-entry" role="listitem">
+SANTOS, J. et al. Named entity recognition specialised for Portuguese 18th-century History research. <strong>Proceedings of the International Conference on the Computational treatment of Portuguese, PROPOR</strong>, 2024.
+</div>
+<div id="ref-schriml2012disease" class="csl-entry" role="listitem">
+SCHRIML, L. M. et al. Disease Ontology: a backbone for disease semantic integration. <strong>Nucleic acids research</strong>, v. 40, n. D1, p. D940–D946, 2012.
+</div>
+<div id="ref-de2014corpus" class="csl-entry" role="listitem">
+SOUSA, M. C. P. DE. O Corpus Tycho Brahe: contribui<span>ç</span><span>õ</span>es para as humanidades digitais no Brasil. <strong>Filologia e lingu<span>ı́</span>stica portuguesa</strong>, v. 16, n. esp., p. 53–93, 2014.
+</div>
+<div id="ref-van2020assessing" class="csl-entry" role="listitem">
+STRIEN, D. VAN et al. <strong>Assessing the impact of OCR quality on downstream NLP tasks</strong>. ICAART 2020 - Proceedings of the 12th International Conference on Agents and Artificial Intelligence. <strong>Anais</strong>...2020.
+</div>
+<div id="ref-DBLP:conf/swat4ls/SunED22" class="csl-entry" role="listitem">
+SUN, C.; EMONET, V.; DUMONTIER, M. <strong>A Comprehensive Comparison of Automated FAIRness Evaluation Tools</strong>. (K. Wolstencroft et al., Eds.)13th International Conference on Semantic Web Applications and Tools for Health Care and Life Sciences, <span>SWAT4HCLS</span> 2022, Virtual Event, Leiden, The Netherlands, January 10th to 14th, 2022. <strong>Anais</strong>...: <span>CEUR</span> Workshop Proceedings.CEUR-WS.org, 2022. Disponível em: &lt;<a href="http://ceur-ws.org/Vol-3127/paper-6.pdf">http://ceur-ws.org/Vol-3127/paper-6.pdf</a>&gt;
+</div>
+<div id="ref-vieira2021enriching" class="csl-entry" role="listitem">
+VIEIRA, R. et al. Enriching the 1758 Portuguese Parish Memories (Alentejo) with Named Entities. <strong>Journal of Open Humanities Data</strong>, v. 7, p. 20, 2021.
+</div>
+<div id="ref-wilkinson2016fair" class="csl-entry" role="listitem">
+WILKINSON, M.; DUMONTIER, M.; AALBERSBERG, ET AL. <span>The FAIR Guiding Principles for scientific data management and stewardship</span>. <strong>Scientific data</strong>, v. 3, n. 1, p. 1–9, 2016.
+</div>
+<div id="ref-Wilkinson2019" class="csl-entry" role="listitem">
+WILKINSON, M.; DUMONTIER, M.; SANSONE, ET AL. <a href="https://www.ncbi.nlm.nih.gov/pubmed/31541130"><span>Evaluating FAIR maturity through a scalable, automated, community-governed framework</span></a>. <strong>Sc. Data</strong>, v. 6, n. 1, p. 1–12, 2019.
+</div>
+<div id="ref-wives1997tecnicas" class="csl-entry" role="listitem">
+WIVES, L. K. <strong><a href="https://www.academia.edu/2957818.">T<span>é</span>cnicas de Recupera<span>ç</span><span>ã</span>o de Informa<span>ç</span><span>õ</span>es Com <span>Ê</span>nfase em Informa<span>ç</span><span>õ</span>es Textuais</a></strong>. tese de doutorado—[s.l.] Universidade Federal do Rio Grande do Sul, 1997.
+</div>
+<div id="ref-DBLP:conf/dhandnlp-ws/ZilioFV22" class="csl-entry" role="listitem">
+ZILIO, L.; FINATTO, M. J.; VIEIRA, R. <strong>Named Entity Recognition Applied to Portuguese Texts from the <span>XVIII</span> Century</strong>. (C. Trojahn et al., Eds.)Proceedings of the Second Workshop on Digital Humanities and Natural Language Processing (2nd DHandNLP 2022) co-located with International Conference on the Computational Processing of Portuguese <span>(PROPOR</span> 2022), Virtual Event, Fortaleza, Brazil, 21st March, 2022. <strong>Anais</strong>...: <span>CEUR</span> Workshop Proceedings.CEUR-WS.org, 2022. Disponível em: &lt;<a href="http://ceur-ws.org/Vol-3128/paper10.pdf">http://ceur-ws.org/Vol-3128/paper10.pdf</a>&gt;
+</div>
+<div id="ref-zilio2024" class="csl-entry" role="listitem">
+ZILIO, L.; LAZZARI, R. R.; FINATTO, M. J. B. NLP for historical Portuguese: Analysing 18th-century medical texts. <strong>Proceedings of the International Conference on the Computational treatment of Portuguese, PROPOR</strong>, 2024.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p><a href="https://www.transkribus.org" class="uri">https://www.transkribus.org</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://www.resilience-ri.eu/blog/resilience-tool-escriptorium/" class="uri">https://www.resilience-ri.eu/blog/resilience-tool-escriptorium/</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://tei-c.org" class="uri">https://tei-c.org</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="https://www.iso.org/standard/71339.html" class="uri">https://www.iso.org/standard/71339.html</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a href="http://vocab.deri.ie/" class="uri">http://vocab.deri.ie/</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p><a href="https://www.w3.org/TR/vocab-dcat-3/" class="uri">https://www.w3.org/TR/vocab-dcat-3/</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p><a href="https://www.w3.org/TR/prov-o/" class="uri">https://www.w3.org/TR/prov-o/</a><a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p><em>Manifest file</em>, arquivo que contém metadados para um grupo de arquivos que são parte de um conjunto ou de uma unidade coerente.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p><a href="https://lod-cloud.net" class="uri">https://lod-cloud.net</a><a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p><a href="https://www.w3.org/wiki/LinkedData" class="uri">https://www.w3.org/wiki/LinkedData</a><a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p><a href="https://www.europeana.eu/en" class="uri">https://www.europeana.eu/en</a><a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p><a href="https://fairassist.org/" class="uri">https://fairassist.org/</a><a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p><a href="https://sites.google.com/view/hdlabcidehus" class="uri">https://sites.google.com/view/hdlabcidehus</a><a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p><a href="https://www.tycho.iel.unicamp.br/corpus/" class="uri">https://www.tycho.iel.unicamp.br/corpus/</a><a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p>Agradece-se à Dra. Anabela Ribeiro, do Arquivo Nacional da Torre do Tombo, estas informações.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p><a href="http://lxcenter.di.fc.ul.pt/tools/en/conteudo/LXTagger.html" class="uri">http://lxcenter.di.fc.ul.pt/tools/en/conteudo/LXTagger.html</a><a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p><a href="https://portulanclarin.net" class="uri">https://portulanclarin.net</a><a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p><a href="https://www.laurenceanthony.net/software/antconc/" class="uri">https://www.laurenceanthony.net/software/antconc/</a><a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p><a href="https://sites.google.com/view/projeto38597" class="uri">https://sites.google.com/view/projeto38597</a><a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20"><p><a href="https://sites.google.com/view/dhandnlp-propor" class="uri">https://sites.google.com/view/dhandnlp-propor</a><a href="#fnref20" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" class="pagination-link" aria-label="Geração Automática de Ementas Jurídicas">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html" class="pagination-link" aria-label="PLN em Redes Sociais">
+        <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://brasileiraspln.com/">
+<p>Brasileiras em PLN, 2026. Todos os direitos reservados</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

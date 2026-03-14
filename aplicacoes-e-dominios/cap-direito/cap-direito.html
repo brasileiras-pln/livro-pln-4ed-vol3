@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Maria José Bocorny Finatto">
+<meta name="author" content="Aline Macohin">
+
+<title>12&nbsp; PLN no Direito – Processamento de Linguagem Natural</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 1em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" rel="next">
+<link href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8676d8d0f01772f2903466dda9733bcf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sem resultados",
+    "search-matching-documents-text": "Resultados encontrados",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-111J572WMR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-111J572WMR');
+</script>
+
+
+<link rel="stylesheet" href="../../shared/bpln.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../shared/logos/bpln.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Processamento de Linguagem Natural</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../Livro_PLN_BPLN_4ed_vol3.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
+    <div class="dropdown">
+      <a href="" title="Compartilhar" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Compartilhar"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sobre o Volume 3</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Aplicações e Domínios</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Classificação de texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-mt/cap-mt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tradução Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sumarização Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Complexidade Textual e suas Tarefas Relacionadas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Classificação de Áudio aplicada à Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">PLN e Responsabilidade Social</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/referencias/referencias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referências</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Apêndices</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Considerações prévias à sumarização automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice-abstrativa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Exemplo de sumarização abstrativa</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../autores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Sobre as/os autoras/es</strong></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Conteúdo</h2>
+   
+  <ul>
+  <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução"><span class="header-section-number">12.1</span> Introdução</a></li>
+  <li><a href="#o-direito-uma-moldura-para-a-significação" id="toc-o-direito-uma-moldura-para-a-significação" class="nav-link" data-scroll-target="#o-direito-uma-moldura-para-a-significação"><span class="header-section-number">12.2</span> O Direito – uma moldura para a significação</a></li>
+  <li><a href="#entre-as-terminologias-e-as-palavras-no-direito-do-brasil" id="toc-entre-as-terminologias-e-as-palavras-no-direito-do-brasil" class="nav-link" data-scroll-target="#entre-as-terminologias-e-as-palavras-no-direito-do-brasil"><span class="header-section-number">12.3</span> Entre as terminologias e as palavras no Direito do Brasil</a></li>
+  <li><a href="#um-caso-concreto-em-pequeníssima-escala" id="toc-um-caso-concreto-em-pequeníssima-escala" class="nav-link" data-scroll-target="#um-caso-concreto-em-pequeníssima-escala"><span class="header-section-number">12.4</span> Um caso concreto: em pequeníssima escala</a></li>
+  <li><a href="#outros-casosexemplos-direito-ambiental" id="toc-outros-casosexemplos-direito-ambiental" class="nav-link" data-scroll-target="#outros-casosexemplos-direito-ambiental"><span class="header-section-number">12.5</span> Outros casos/exemplos: Direito Ambiental</a></li>
+  <li><a href="#aplicação-análise-de-sentimentos-em-direito-desafios-e-exemplos" id="toc-aplicação-análise-de-sentimentos-em-direito-desafios-e-exemplos" class="nav-link" data-scroll-target="#aplicação-análise-de-sentimentos-em-direito-desafios-e-exemplos"><span class="header-section-number">12.6</span> Aplicação: Análise de Sentimentos em Direito: desafios e exemplos</a></li>
+  <li><a href="#considerações-finais" id="toc-considerações-finais" class="nav-link" data-scroll-target="#considerações-finais"><span class="header-section-number">12.7</span> Considerações finais</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-cap-direito" class="quarto-section-identifier"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></span></h1>
+<p class="subtitle lead">Perspectivas e Desafios com Textos Jurídicos e Legais</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading"></div>
+    <div class="quarto-title-meta-contents">
+             <p>Maria José Bocorny Finatto </p>
+             <p>Aline Macohin </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Publicado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">26/09/2023</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Atualizado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">13/04/2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+
+</div>
+<div>
+<div class="callout-body-container callout-body">
+<p>Este capítulo também está disponível em <a href="cap-direito.pdf">PDF</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" aria-controls="callout-cite" aria-expanded="false" aria-label="Toggle callout" data-bs-target=".callout-cite-contents">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Como citar
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
+<i class="callout-toggle"></i>
+</div>
+</div>
+<div id="callout-cite" class="callout-cite-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>@InCollection{BPLN_livro_cap-direito:2026,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    author    = {Finatto, Maria José Bocorny and Macohin, Aline},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    title     = {PLN no Direito: Perspectivas e Desafios com Textos Jurídicos e Legais},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    publisher = {BPLN},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    year      = {2026},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    editor    = {Caseli, H. M. and Nunes, M. G. V.},</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    type      = {Book Chapter},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    chapter   = {12},</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    edition   = {4},</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    volume    = {3},</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    isbn      = {XXXXXXXXXXXXXXXX},</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    url       = {https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito/cap-direito.html},</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<section id="introdução" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="introdução"><span class="header-section-number">12.1</span> Introdução</h2>
+<p>Neste capítulo, tratamos de diferentes aspectos associados ao trabalho computacional com textos produzidos na esfera do Direito. As tarefas de PLN envolvidas, em geral, são a análise textual e a representação de conteúdos por meio de diferentes técnicas, mas há várias abordagens e estudos, voltados para diferentes finalidades. O nosso objetivo é apresentar apenas algumas perspectivas e desafios no âmbito de trabalhos que exploram materiais produzidos em português, considerando somente o cenário do Direito Brasileiro. Afinal, o Direito, de país para país, tem especificidades linguísticas e culturais que repercutem muito sobre seus textos, discursos e tipo de vocabulário.</p>
+<p>Enquanto este capítulo introduz o gênero jurídico e discute alguns desafios para o PLN, o Capítulo 31 trata da tarefa de Reconhecimento de Entidades Nomeadas nos textos legais. Por sua vez, o Capítulo 32 propõe métodos de geração automática de ementas (resumos de processos judiciais).</p>
+<p>Iniciamos este capítulo apresentando alguns aspectos sócio-históricos do Direito Brasileiro, que acabam influenciando suas práticas de escrita e os seus conteúdos textuais. Em seguida, situamos exemplos de reconhecimento e exploração do vocabulário jurídico, dos seus modos de dizer e, especialmente, das suas terminologias. Vamos partir de dois diferentes cenários textuais: as leis e sentenças judiciais. A primeira parte de exemplos tem a ver com um trabalho que denominamos reconhecimento terminológico (<strong>RT</strong>). O <strong>RT</strong> envolve a identificação dos usos e dos significados de um vocabulário especializado ao longo de acervos textuais, os quais formam um corpus de estudo. Esse trabalho, atualmente, é baseado em fontes escritas disponíveis em formato digital e se beneficia muito das técnicas da Linguística de <em>Corpus</em> <span class="citation" data-cites="berbersardinha_2000">(<a href="../../shared/referencias/referencias.html#ref-berbersardinha_2000" role="doc-biblioref">Sardinha, 2000</a>)</span> e do PLN. Depois dessa parte, mais dedicada ao vocabulário e terminologias, segue um exemplo de estudo em PLN, na área conhecida como <strong>Análise de Sentimentos</strong> (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html#sec-cap-redes-sociais" target="_blank" title="Volume 3">PLN em Redes Sociais</a></span>).</p>
+<p>O território de materiais para estudo e de enfoques, em Direito, é extremamente amplo, isso se ficarmos restritos aos trabalhos que lidam com os textos jurídicos da atualidade. Ainda assim, vale mencionar que uma série de estudos históricos sobre a linguagem jurídica brasileira, tratando de seus conceitos e até preconceitos, têm sido muito úteis para uma crítica social e política sobre o Direito. Para esses estudos históricos, os processos sobre crimes no período colonial e do império, reunidos em <em>corpora</em> que se exploram com apoio computacional, têm mostrado a importância de se fazer uma linha de tempo de ações e de entendimentos até os dias de hoje. No Brasil, temos já, por exemplo, diferentes pesquisas filológicas e linguísticas dedicadas a estudos de processos criminais dos séculos 17, 18 e 19.</p>
+<p>Entretanto, para se trabalhar com textos antigos em português, há todo o processo de <em>normalizar</em> e padronizar a apresentação escrita das “palavras antigas”, para então podermos fazer o seu processamento. A normalização de textos é, assim, um desafio multidisciplinar de uma nova área de estudos denominada <em>Humanidades Digitais</em> e que inclui o PLN no tratamento de acervos antigos.</p>
+<p>Conforme nos coloca o artigo de <span class="citation" data-cites="cameron2023planear">Cameron et al. (<a href="../../shared/referencias/referencias.html#ref-cameron2023planear" role="doc-biblioref">2023</a>)</span>, os desafios são muitos. Afinal, geralmente trabalha-se com textos em forma de arquivo provenientes de manuscritos que foram “decifrados” e transcritos. Isso significa enfrentar muitas questões associadas à variabilidade da escrita. Afinal, uma mesma palavra podia apresentar-se de vários modos, em um mesmo documento, escrito por uma mesma pessoa, como nos casos de ÁGUA/AGUA/AGOA ou UMA/HUA/HUMA. Há exemplos interessantes desses tipo de estudo histórico, no âmbito do Direito Penal e da Medicina Legal, com processos judiciais que envolveram crimes contra mulheres no Brasil do século 19. O artigo de <span class="citation" data-cites="Carvalho_etal_2022">Teixeira et al. (<a href="../../shared/referencias/referencias.html#ref-Carvalho_etal_2022" role="doc-biblioref">2022</a>)</span> mostra um exemplo de estudo bem interessante nesse tema do histórico dos tratamentos jurídicos para as práticas de violência contra as mulheres.</p>
+<p>Mas, voltando à atualidade dos textos e da linguagem do Direito, veremos, mais adiante, como exemplos, alguns textos jurídicos brasileiros, buscando ilustrar suas peculiaridades. Vamos destacar: <strong>a)</strong> o texto do Estatuto da Criança e do Adolescente (ECA), conforme apresentado na Lei 8.069-90, promulgada em 13 de julho de 1990 e atualizada em 2021; <strong>b)</strong> o texto da nossa Constituição do Brasil, de 1988 (CF88); e, <strong>c)</strong> um conjunto de Sentenças Judiciais dos chamados “tribunais de pequenas causas”, os Juizados Especiais Cíveis. Conforme pretendemos deixar claro, esses três tipos de fontes, em suas características linguísticas e textuais, podem estar associados a diferentes tarefas de PLN, desde a descrição do português até a pontos específicos de <em>Recuperação da Informação</em>, área conhecida como <em>Information Retrieval</em> (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir" target="_blank" title="Volume 3">Recuperação de Informação</a></span>).</p>
+<p>Por isso, um outro exemplo que trazemos neste capítulo é o da análise de conteúdos em sentenças judiciais via <em>Análise de Sentimentos</em>. Este tipo de técnica pode ser muito útil para identificar, por exemplo, padrões de sentenças judiciais favoráveis ou desfavoráveis a um determinado assunto. A utilidade dessa técnica para os profissionais do Direito é grande, pois um profissional geralmente faz buscas para entender como um determinado tribunal já vem decidindo sobre um assunto específico. Nesse trabalho de pesquisa, são buscadas retornadas inúmeras sentenças e documentos. Vale destacar que existem tribunais no Brasil inteiro, que lidam diversos assuntos (trabalhistas, penais, civis, eleitorais, entre outros). Nesses órgãos são protocolados milhares de novos processos diariamente e neles existe uma base de milhões de processos já julgados, muitos já em formato digital. A criação de um método que possa filtrar, por exemplo, as causas que foram consideradas favoráveis, em um dado tema, tende a reduzir o trabalho de leitura individual de cada sentença, ajudando o profissional a buscar e encontrar a informação que precisa.</p>
+</section>
+<section id="o-direito-uma-moldura-para-a-significação" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="o-direito-uma-moldura-para-a-significação"><span class="header-section-number">12.2</span> O Direito – uma moldura para a significação</h2>
+<!--e a linguagem tratada computacionalmente-->
+<p>Conforme já mostraram os estudos <span class="citation" data-cites="Motta_2021 motta_2022">(<a href="../../shared/referencias/referencias.html#ref-Motta_2021" role="doc-biblioref">Motta, 2021</a>, <a href="../../shared/referencias/referencias.html#ref-motta_2022" role="doc-biblioref">2022</a>)</span>, o Direito se manifesta através da língua, pois são as palavras que emprega e os enunciados que produz que conferem e confirmam a sua existência peculiar <span class="citation" data-cites="maciel_2001">(<a href="../../shared/referencias/referencias.html#ref-maciel_2001" role="doc-biblioref">Maciel, 2001</a>)</span> como uma prática social e área de conhecimento. Assim, temos uma relação intensa entre o Direito e a língua em uso pelas pessoas que nele atuam. Isto é, pelo emprego de certas palavras<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, com um sentido particular e pela forma como suas proposições e teses são enunciadas vemos todo um cenário de valores. Isso é tão importante que temos, há bastante tempo, uma área de estudos específica conhecida como <em>jurilinguística</em> (veja mais em <span class="citation" data-cites="cornu-1990">Cornu (<a href="../../shared/referencias/referencias.html#ref-cornu-1990" role="doc-biblioref">1990</a>)</span>).</p>
+<p>Estudiosos dessa área da linguística <span class="citation" data-cites="BookMontoro">(<a href="../../shared/referencias/referencias.html#ref-BookMontoro" role="doc-biblioref">Montoro, 1998, p. 1998</a>)</span> explicam que a linguagem jurídica, sempre com destaque para escrita, compreende diversas “espécies” de práticas que se subdividem, conforme uma dada finalidade e foco. Vejamos um detalhamento dessas espécies ou modos de se apresentar conforme seus propósitos <span class="citation" data-cites="petri_2017">(<a href="../../shared/referencias/referencias.html#ref-petri_2017" role="doc-biblioref">Petri, 2017, p. 47</a>)</span>:</p>
+<ol type="1">
+<li>linguagem legislativa – a linguagem dos códigos - como o Código Penal ou Civil, das normas; sua finalidade: criar o Direito;</li>
+<li>linguagem judiciária, forense ou processual - é a linguagem dos processos e sentenças; sua finalidade: aplicar o Direito;</li>
+<li>linguagem convencional ou contratual – é a linguagem dos contratos, por meio dos quais se criam direitos e obrigações entre as partes;</li>
+<li>linguagem doutrinária – é a linguagem dos mestres, dos doutrinadores, cuja finalidade é explicar os institutos jurídicos, é ensinar o Direito;</li>
+<li>linguagem cartorária ou notarial – a linguagem jurídica que tem por finalidade registrar os atos de Direito.</li>
+</ol>
+<p>Assim, embora se possa pensar em uma linguagem jurídica em geral, quando lidamos com sentenças produzidas em processos judiciais, temos linguagem judiciária, forense ou processual. Quando trabalhamos com os textos de leis, decretos e portarias, temos a linguagem legislativa. Cada tipo de suporte e/ou instrumento jurídico tende a adotar usos diferenciados e um vocabulário diferenciado. E esses elementos podem ser importantes quando se trabalha com o processamento em larga ou pequena escala desses textos. Como há uma especificidade de discursos envolvida, considerar os seus elementos linguísticos e modos de dizer próprios poderá nos ajudar a desempenhar tarefas de um modo mais produtivo. Afinal, o “Direito é, por excelência, entre as que mais o sejam, a ciência da palavra. Mais precisamente: do uso dinâmico da palavra” <span class="citation" data-cites="xavier_2002">(<a href="../../shared/referencias/referencias.html#ref-xavier_2002" role="doc-biblioref">Xavier, 2002, p. 1</a>)</span>.</p>
+<p>Conforme já mencionamos no início deste capítulo, em cada país, a linguagem jurídica tende a realizar um uso particular da língua nacional. Por isso, a linguagem do Direito de um país se diferencia da de um outro – como acontece com a linguagem jurídica dos diferentes países de Língua Portuguesa. Embora haja elos comuns, o Direito brasileiro é bastante distinto do de países como Angola ou Portugal. E, mesmo os textos jurídicos, em suas diversas formas (no Brasil conhecidos como petições, recursos, decisões judiciais etc.) podem adotar nomes e modelos de apresentação diversos. Conforme a cultura jurídica e as tradições de cada país, os produtores dos textos jurídicos serão também “autorias” diferentes, conforme o que é estabelecido no ordenamento legal de cada país.</p>
+<p>O Direito no Brasil é regido pelo sistema da <em>civil law</em>, isso significa que uma a lei escrita tem preponderância sobre a jurisprudência – que são as decisões dos juízes – lembrando que os juízes são encarregados de verificar e direcionar a aplicação das leis. No Brasil, quem produz as leis são os membros do poder legislativo, eleitos, democraticamente, pelo povo. Os textos das leis são discutidos e votados, e então aprovados para entrarem em vigor. Os membros do poder executivo, também eleitos pelo povo, devem executar as leis aprovadas. Vejamos um resumo sobre como se organiza o Direito brasileiro, atualmente, em suas hierarquias:</p>
+<ul>
+<li><strong>Constituição Federal</strong>: é a lei maior do país e define os direitos e deveres dos cidadãos, além de estabelecer a organização e o funcionamento dos poderes Executivo, Legislativo e Judiciário.</li>
+<li><strong>Legislação infraconstitucional</strong>: são as leis, decretos e normas que regulamentam assuntos específicos, como por exemplo, o Código Civil, Código Penal, Código de Defesa do Consumidor, entre outros.</li>
+<li><strong>Poder Executivo</strong>: é composto pelo Presidente da República, Vice-Presidente e ministros. É responsável pela administração do país e pela implementação das leis.</li>
+<li><strong>Poder Legislativo</strong>: é formado pelo Congresso Nacional (Senado Federal e Câmara dos Deputados). É responsável por criar, modificar e aprovar as leis.</li>
+<li><strong>Poder Judiciário</strong>: é composto pelos tribunais e juízes. É responsável por aplicar a lei em casos concretos, solucionar conflitos e garantir os direitos fundamentais dos cidadãos.</li>
+</ul>
+<p>Apesar de o sistema jurídico brasileiro ser o <em>civil law</em>, há grande influência da jurisprudência nas decisões judiciais, principalmente quando agrupadas pelos tribunais e transformadas em <em>súmulas</em>. A súmula é um tipo de documento que consiste em um verbete que registra a interpretação pacífica ou majoritária adotada por um Tribunal a respeito de um tema específico. Portanto, quando textos legislativos e documentos processuais tornam-se objetos do PLN, com vistas a obter conhecimento para os profissionais do Direito, será preciso compreender esses elementos e valores diferenciados. Sem isso, há o risco de “misturar alhos com bugalhos”.</p>
+</section>
+<section id="entre-as-terminologias-e-as-palavras-no-direito-do-brasil" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="entre-as-terminologias-e-as-palavras-no-direito-do-brasil"><span class="header-section-number">12.3</span> Entre as terminologias e as palavras no Direito do Brasil</h2>
+<p><em>Grosso modo</em>, um RT equivale à identificação e à sistematização de denominações associadas a conceitos conforme utilizadas em um dado campo ou área do conhecimento. Geralmente, o RT envolve a produção de uma “lista” de nomes (termos) vinculados aos seus significados (conceitos). Além disso, junto de cada item dessa “lista”, tem-se um conjunto de informações que ajudam a contextualizar e a entender o seu uso ao longo de um conjunto de documentos escritos.</p>
+<p>Desse modo, vamos pensar nesse processo ao longo de um conjunto de documentos jurídicos - em um dado tipo - tendo em mente a situação particular do uso de suas palavras. A Terminologia descritiva, para nós um ramo da Linguística Aplicada brasileira, e os terminólogos dedicam-se a estudar – descrever e compreender - os diferentes fenômenos linguísticos da comunicação técnico-científica, o que se estende ao Direito, em seus variados cenários.</p>
+<p>O que diferencia uma terminologia ou um “termo técnico” de uma palavra “comum” é, em primeiro plano, o seu ambiente comunicativo. E, repetindo a ideia de uma das maiores autoridades da nossa área da Terminologia descritiva internacional <span class="citation" data-cites="cabre_2005">(<a href="../../shared/referencias/referencias.html#ref-cabre_2005" role="doc-biblioref">Cabré, 2005</a>)</span>, podemos dizer: uma palavra não é um termo técnico-científico, ela está nessa condição em determinados contextos, que conferem a ela um significado “especial”. Esse significado ou modo de compreensão especial, chamaremos, grosso modo, de conceito.</p>
+<p>Vejamos um exemplo, com a palavra/item CRIANÇA, muito corriqueira no nosso dia a dia. Como seu significado básico, geralmente, entendemos algo como “pessoa não adulta”. Mas, quando empregada e “significada” em um dado ambiente comunicativo de especialidade, como é o caso do Direito brasileiro, essa palavra “comum” assume contornos semânticos diferenciados.</p>
+<p>No contexto do nosso Estatuto da Criança e do Adolescente, documento brasileiro conhecido como ECA, que corresponde à Lei 8.069-90, atualizada em 2021, que podemos enquadrar no domínio do Direito Civil do Brasil, temos o seguinte:</p>
+<blockquote class="blockquote">
+<p>“Art. 2º Considera-se <strong>criança</strong>, para os efeitos desta Lei, a pessoa até doze anos de idade incompletos, e adolescente aquela entre doze e dezoito anos de idade” (BRASIL, 1990, grifo nosso).</p>
+</blockquote>
+<p>Como se percebe, há um significado “especializado”, jurídico, uma delimitação em termos de anos de idade, que se soma ao nosso entendimento mais comum de <strong>criança</strong>. E você deve estar se perguntando: no que isso importará ou como poderia repercutir em um trabalho computacional sobre o tema das crianças em leis e documentos em português? A resposta é: isso importa muito! Se você comparar esse conceito com os que estabelece a OMS, Organização Mundial da Saúde, a faixa etária de uma pessoa considerada como <strong>criança</strong> é outra, pois compreende pessoas até 19 anos de idade. Isto é, os traços/valores de uso da palavra, que adquire estatuto terminológico, são variáveis. Além disso, temos uma conceituação jurídica específica e bem particular associada a um dado termo que, à primeira vista, não pareceria ser um termo, e sim uma palavra comum.</p>
+<p>No caso do segmento de lei acima, o ECA, podemos considerar que há uma definição específica para CRIANÇA, que se opõe à de ADOLESCENTE. Além disso, essa definição é circunscrita, isto é, ela vale apenas em um dado contexto ou “<em>frame</em> de significação”. Assim, teríamos um problema, para aquelas pessoas que se interessassem pelo Direito das Crianças, seja em sistemas jurídicos específicos, como o do Brasil, ou que busquem um mapeamento sobre esse tema no âmbito do Direito Internacional. Afinal, há variação no modo como se delimita o conceito em foco e isso pode ser um problema também para o tratamento automático dessas informações, não é mesmo?</p>
+<p>Vamos supor uma aplicação de PLN que pudesse nos ajudar a dar conta de uma busca de informações sistematizadas sobre esse tema, o Direito das Crianças, mas restrita ao cenário brasileiro. Como vimos, em Direito, temos uma definição que tende a ser circunscrita, isto é, ela vale apenas em um dado contexto, correspondendo a um valor que estabelece frente a todo um CONJUNTO DE OUTROS TERMOS E CONCEITOS com ela relacionados. Isso é o que chamamos de sistema conceitual, que tem a ver como uma rede de conceitos e de terminologias que se entrelaçam. Como vimos, o ECA está subordinado à Constituição do Brasil, e ainda podemos ter, por exemplo, leis estaduais ou municipais – ou mesmo códigos e portarias – que “valem como leis locais” sobre, por exemplo, o tratamento de crianças em estabelecimentos de Saúde em diferentes estados do Brasil. Além das normas, também pode haver interpretações jurídicas unânimes ou diversas sobre assuntos relacionados à criança e disponibilizadas em sentenças judiciais.</p>
+</section>
+<section id="um-caso-concreto-em-pequeníssima-escala" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="um-caso-concreto-em-pequeníssima-escala"><span class="header-section-number">12.4</span> Um caso concreto: em pequeníssima escala</h2>
+<p>Para realizar um ensaio de um reconhecimento terminológico (RT), podemos explorar um conjunto de textos que servem de referência ou espelhamento em uma dada área de conhecimento (veja um passo a passo detalhado de um RT com a <em>Constituição do Brasil</em> em <span class="citation" data-cites="finatto-esteves-villar_2022">Finatto et al. (<a href="../../shared/referencias/referencias.html#ref-finatto-esteves-villar_2022" role="doc-biblioref">2022</a>)</span>). Lidando com textos jurídicos, como vimos, será importante levar em conta suas naturezas e tipologias. Assim, vamos supor um RT associado, por hipótese, ao tema “Direitos das Crianças no Brasil”. Esse RT poderia envolver identificar, em diferentes documentos relevantes previamente selecionados, os seguintes elementos:</p>
+<p>a) TERMOS e seus respectivos CONCEITOS</p>
+<p>b) TERMOS e seus respectivos FORMATOS LINGUÍSTICOS</p>
+<p>c) TERMOS, CONCEITOS e respectivos TERMOS E CONCEITOS RELACIONADOS.</p>
+<p>Nos itens a) e b), acima, entra em jogo uma questão muito importante: a variação terminológica. Essa variação que um TERMO pode ter tem a ver com as diferentes formas das denominações e das conceituações, dentro de uma dada especialidade ou subárea. Você poderá perguntar sobre o escopo do RT: vamos explorar esse tema nos âmbito do Direito Civil até o Direito Criminal? Ou vamos ficar apenas em um dado recorte legislativo? Essa decisão é muito importante e deve ser bem ponderada antes do trabalho começar.</p>
+<p>Para administrar a variabilidade de termos e conceitos, sem a ideia de condená-la, pois o enfoque linguístico e conceitual em um reconhecimento terminológico (RT) é sempre descritivo, teremos, para nos socorrer, os vocabulários controlados e/ou padronizados. Esses vocabulários mostram padrões de denominações que geralmente são colocados pela autoridade de órgãos profissionais associados a uma dada especialidade. Nesses vocabulários, encontramos as “terminologias padronizadas” e também as “normas técnicas” de uma área. Assim, uma forma de denominar um respectivo conceito/significado pode ser formalmente estabelecida em um dado contexto, de modo a se garantir precisão e boa correlação com outros termos e conceitos relacionados. Essa padronização será importante especialmente em situações de trocas de conhecimento e de trocas em geral, como no caso da comunicação jurídica internacional. Ainda assim, todos os terminólogos sabem que as variabilidades dos usos da língua, apesar dos esforços normativos, sempre se apresentam e que elas devem ser descritas e administradas.</p>
+<p>Guardadas as devidas diferenças, é semelhante o caso, por exemplo, do conceito de CRIANÇA frente ao conceito de ADOLESCENTE no nosso Estatuto da Criança e do Adolescente, o ECA. Ainda que pareça um “detalhe”, as crianças não poderão ser confundidas, em um cenário legal e jurídico, com adolescentes, muito menos com pessoas adultas, salvo condições especiais definidas naquele texto, que funciona como uma moldura de significação para suas terminologias e conceituações.</p>
+<p>O mesmo vemos nos casos dos nomes “oficiais” para algumas doenças, que inclusive correspondem a um código numérico, conhecido como CID ou Classificação Internacional de Doenças. A ideia, nesse contexto de padronização das terminologias da área da Saúde, é evitar confusões de nomes e tentar garantir que todos possam ter um mesmo entendimento – ou conceito uniforme – de um dado TERMO + CONCEITO/DESCRIÇÃO DE SEU SIGNIFICADO. Abaixo, alguns exemplos dessa padronização da CID para o termo SARAMPO e seus tipos – uma doença, no Brasil, geralmente associada a <strong>crianças</strong>.</p>
+<ul>
+<li>CID 10 – B05 – Sarampo</li>
+<li>CID 10 – B05.0 – Sarampo complicado por encefalite</li>
+<li>CID 10 – B05.1 – Sarampo complicado por meningite</li>
+</ul>
+<p>Dada a relevância e necessidade de tratar esse assunto, alguns tribunais como o Supremo Tribunal Federal e Superior Tribunal de Justiça criaram um site denominado “Tesauro” como forma de ferramenta para controle terminológico que tem por objetivo a padronização da informação. Nesta ferramenta, o tesauro, são apresentados os termos, conceitos, termos relacionados, mas também categorias, termos genéricos e termos específicos. A partir deste mapeamento do tesauro, é possível orientar que os servidores públicos redijam os documentos judiciais com uma terminologia uniforme, para auxiliar na pesquisa e recuperação da informação posteriormente. Para saber mais sobre o tema dos <em>tesauros e sua interface com as terminologias</em>, recomendamos consultar o trabalho de <span class="citation" data-cites="vargas2011contribuiccao">Vargas; Van der Lann (<a href="../../shared/referencias/referencias.html#ref-vargas2011contribuiccao" role="doc-biblioref">2011</a>)</span>.</p>
+<p>Em função dos diversos contextos a que os tribunais se vinculam, há uma variedade maior de termos relacionados em comparação à legislação e cada tribunal pode apresentar informações diversas nos <em>tesauros</em> para o mesmo termo. <em>Tesauros</em> são listas de assuntos, palavras-chave e de terminologias de uma dada área de conhecimento. Essas listagens,que também se estudam há bastante tempo na Terminologia descritiva do Brasil <span class="citation" data-cites="vanderlaan_2002_doutorado">(<a href="../../shared/referencias/referencias.html#ref-vanderlaan_2002_doutorado" role="doc-biblioref">Van der Laan, 2002</a>)</span>, dão suporte à indexação e catalogação de documentos em bibliotecas e em diferentes acervos físicos, como também nas bases de dados. Geralmente, quem produz esses tesauros são os bibliotecários, documentalistas e cientistas da informação que lidam com a catalogação de informações técnicas e científicas. Veja este exemplo de como funciona um tesauro, quando se busca pelo item CRIANÇA no <em>tesauro</em> do Supremo Tribunal Federal. Nessa busca, temos o seguinte resultado:</p>
+<ul>
+<li><strong>Termo Genérico:</strong> Menor</li>
+<li><strong>Termos relacionados:</strong> Adulto, Castigo Físico, Direito da Criança e do Adolescente, Educação, Educação Infantil, Estatuto da Criança e do Adolescente (ECA), Guarda de Menor, Investigação de Paternidade, Poder Familiar.</li>
+<li><strong>Categoria:</strong> DCT Direito Constitucional, ECA Estatuto da Criança e do Adolescente.</li>
+</ul>
+<p>O que se informa aqui não é um conceito para CRIANÇA, mas se aponta que ele tem um correspondente ou equivalente genérico nesse âmbito. Isto é, CRIANÇA = MENOR (genérico). Em seguida, nos termos relacionados, vemos assuntos em que se inclui esse item.</p>
+<p>Feitas essas explicações sobre peculiaridades das terminologias jurídicas, em suas diferentes circunstâncias e variabilidades de uso e de significações, um reconhecimento terminológico (RT) pode ser visto como um tipo de trabalho de mediação de comunicação, realizado por profissionais de uma área, terminólogos, linguistas, informatas, entre outros. Salienta-se, assim, a ideia de uma mediação terminológica <span class="citation" data-cites="conceicao_2020">(<a href="../../shared/referencias/referencias.html#ref-conceicao_2020" role="doc-biblioref">Conceição; Zanola, 2020</a>)</span>.</p>
+<p>Além disso, um RT pode ser um trabalho multidocumento, por exemplo, com diferentes tipos de leis e normas, e multitemático, quando se tenta cobrir diferentes temas ou assuntos que se entrelaçam. Pode, ainda, apontar ligações entre documentos de diferentes naturezas, extrapolando-se o reconhecimento de um dado tópico para diferentes fronteiras. Um exemplo seriam os materiais sobre temas e políticas de Saúde Pública voltadas para crianças e os documentos jurídicos que estabelecem seus direitos. Outro exemplo de trabalho seria verificar como um determinado tribunal interpreta e aplica a legislação sobre crianças, diante de alguns problemas específicos, em âmbitos regionais ou locais.</p>
+</section>
+<section id="outros-casosexemplos-direito-ambiental" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="outros-casosexemplos-direito-ambiental"><span class="header-section-number">12.5</span> Outros casos/exemplos: Direito Ambiental</h2>
+<p>Um reconhecimento terminológico (RT) legislativo também poderia servir de apoio para um recurso didático voltado para o cidadão comum, sem formação em Direito, ou mesmo para diferentes estudantes universitários interessados na legislação ambiental do Brasil. Nesse caso, vamos imaginar um conjunto composto, por exemplo, por 800 leis, as quais versam sobre diferentes aspectos ambientais. Vamos supor que estamos trabalhando em um RT para uso de jornalistas novatos que lidam com temas ambientais. Como explorar essas 800 leis para chegar, por exemplo, a um conjunto de seus termos e conceitos conforme sejam mais comumente empregados nessas leis? Como apresentar a informação de forma a melhor atender o nosso suposto usuário jornalista, que, sem ter formação em Direito ou Biologia, precisaria ler e entender a legislação? Bastaria perguntar ao ChatGPT?</p>
+<p>Naturalmente, hoje, dada a larga prática de digitalização desse tipo de documento e a garantia de seu acesso a todo o cidadão, parece ser fácil encontrar e percorrer uma base de dados com leis ambientais. O Senado Federal do Brasil, por exemplo, oferece todo um banco de leis, decretos e outros documentos afins para acesso público. Basta a pessoa acessar um site determinado e salvar os documentos no seu computador. Feito isso, “bastaria” a pessoa – o jornalista novato que imaginamos – ler, calmamente e com cuidado, todas as 800 leis do nosso caso imaginário e ir fazendo um registro, em um arquivo de texto, de suas terminologias e conceituações à medida que avance com a leitura.</p>
+<p>Outra opção seria o “nosso” jornalista consultar um dicionário especializado sobre esse tema. A constituição de um dicionário especializado também serve como um exemplo de um ponto final possível, entre outros, quando se produz um reconhecimento terminológico (RT). Dicionários terminológicos são um ponto final ou um produto possível, entre outros, quando se elabora um RT Assim, ao empreender um RT específico, podemos nos beneficiar de RTs anteriores ao nosso.</p>
+<p>Como a legislação, em alguns aspectos, pode ser principiológica ou apenas fornecer diretrizes, ou ainda possuir conflitos de termos entre normas diversas, pode ser necessário associar um outro reconhecimento terminológico (RT) para identificar o entendimento prevalente. Uma legislação principiológica é um tipo de norma jurídica que se baseia mais em princípios do que em regras detalhadas. Em vez de definir condutas específicas de forma minuciosa, ela apresenta valores, diretrizes gerais e objetivos fundamentais que devem orientar a interpretação e aplicação do Direito. Neste caso, podemos associar a um RT Judicial, alguns <em>tesauros</em> de tribunais, como o mencionado anteriormente.</p>
+<p>Naturalmente, além dessas fontes padronizadas, há dicionários especializados em terminologias e glossários descritivos sobre o tema do Direito Ambiental do Brasil. Um exemplo é o <em>Dicionário de Direito Ambiental</em> do Grupo Termisul da UFRGS, publicado em segunda edição em 2008. A produção desse dicionário demandou construir, desde 1994, toda uma base legislativa sobre temas do meio ambiente associada à obra, a Base Legis<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Essa base, que começa com o texto do Código de Águas do Brasil, de 1930<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<p>Mas, voltando aos tesauros, segundo o <em>tesauro</em> do Supremo Tribunal Federal, temos as seguintes informações:</p>
+<ul>
+<li><strong>Termo Genérico:</strong> Direito (Ciência Jurídica)</li>
+<li><strong>Termo Relacionado:</strong> Lei da Biossegurança</li>
+<li><strong>Categoria:</strong> DAM Direito Ambiental</li>
+</ul>
+<p>Como termo, há poucas informações sobre Direito Ambiental, mas ao acessar a categoria “DAM Direito Ambiental”, temos cerca de 200 termos relacionados. Vale destacar que os termos apresentados fazem parte do contexto ao qual o tribunal pertence e os processos judiciais que julga. Um RT legislativo pode ter mais termos que os apresentados no tesauro do Supremo Tribunal Federal, mas em contrapartida, o <em>tesauro</em> do tribunal, pode ter um nível de detalhamento maior.</p>
+<p>Já para o Superior Tribunal de Justiça do Brasil, ao se consultar o termo/assunto <strong>Direito Ambiental</strong>, temos os seguintes resultados:</p>
+<ul>
+<li><strong>Termos relacionados:</strong> Bioética, Meio Ambiente, Órgão público ambiental, Princípio da Precaução, Princípio da Prevenção, Princípio do In Dubio Pro Natura, Teoria do Risco Integral.</li>
+</ul>
+<p>A vantagem do tesauro elaborado por alguns tribunais é que esse instrumento reduz esforços na aplicação do PLN ao Direito, uma vez que já associa os termos mais frequentes nas decisões judiciais e associa esses termos às decisões judiciais existentes. Dado que muitos dos tesauros não associam conceitos aos termos, ao trabalhar com RT de outras fontes, como o legislativo, podem ser obtidas estas informações.</p>
+</section>
+<section id="aplicação-análise-de-sentimentos-em-direito-desafios-e-exemplos" class="level2" data-number="12.6">
+<h2 data-number="12.6" class="anchored" data-anchor-id="aplicação-análise-de-sentimentos-em-direito-desafios-e-exemplos"><span class="header-section-number">12.6</span> Aplicação: Análise de Sentimentos em Direito: desafios e exemplos</h2>
+<p>A análise de sentimento em textos jurídicos envolve a aplicação de técnicas de PLN para determinar o tom emocional, qualificativo ou opinativo presente nos documentos legais.</p>
+<p>Dentre diferentes possibilidades de aplicação da técnica de análise de sentimento em textos jurídicos, podemos trabalhar com sentenças judiciais. Assim, analisa-se o contexto das sentenças judiciais e identifica-se se o juiz foi favorável ou desfavorável ao pedido de cada parte. Para esse tipo de trabalho, alguns passos devem ser seguidos como: 1) Coleta de Dados; 2) Pré-Processamento do Texto; 3) Rotulação de Dados; 4) Escolha da técnica de análise de sentimento; 5) Execução da técnica e 6) Avaliação e Validação.</p>
+<p>Na coleta de dados, é necessário escolher um repositório que possua os textos das decisões judiciais, sejam elas de forma resumida ou na íntegra. Dentre as opções públicas e gratuitas, estão os diários de justiça dos tribunais, uso de APIs (<em>Application Programming Interface</em>) públicas como o DataJud do Conselho Nacional de Justiça e decisões disponibilizadas nos sistemas de busca dos tribunais. Para automatização desta coleta, é preciso o conhecimento de técnicas de <em>web crawling</em> e <em>web scraping</em> <span class="citation" data-cites="macohin_carneiro_2020">(<a href="../../shared/referencias/referencias.html#ref-macohin_carneiro_2020" role="doc-biblioref">Macohin; Carneiro, 2020</a>)</span>. Essas técnicas consistem na automatização do download das páginas e arquivos que possuem decisões judiciais e posterior filtragem da informação que se deseja usar), respectivamente.</p>
+<p>Um exemplo de informação que pode ser obtida de um tribunal pode ser verificado abaixo. Neste exemplo foram suprimidas algumas informações que pudessem identificar os envolvidos. Veja que lidamos com um tipo de texto que contém <em>uma parte</em> denominada <em>ementa</em> e outra parte que é o <em>acórdão</em>, com o resultado do processo.</p>
+<div id="fig-cap-direito-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-direito-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;12.1: Exemplo de resumo de acórdão judicial de um tribunal superior brasileiro.
+</figcaption>
+<div aria-describedby="fig-cap-direito-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/image1.png" class="img-fluid figure-img">
+</div>
+</figure>
+</div>
+<p>A partir do download desta página, o objetivo é extrair a informação do <em>acórdão</em>, último parágrafo da imagem, onde consta se foi dado ou negado provimento ao pedido do autor. Neste caso, foi negado provimento ao autor do recurso, como se verifica através do uso das palavras “negou provimento”.</p>
+<p>Em posse dos trechos das decisões judiciais que se deseja analisar, de forma automatizada, se o desfecho foi favorável ou desfavorável, pode-se iniciar a fase de pré-processamento do texto. A fase de pré-processamento pode contemplar diversas subtécnicas. Mas, para fins de exemplificação, vamos citar apenas a tokenização, a remoção de pontuações, conversão de todas as letras para minúsculas e remoção de <em>stop words.</em></p>
+<p>A tokenização consiste em dividir o texto em palavras ou unidades menores, chamadas de <em>tokens</em> (veja mais detalhes no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/palavras/cap-caracteres-palavras/cap-caracteres-palavras.html#sec-cap-caracteres-palavras" target="_blank" title="Volume 1">Sequência de caracteres e palavras</a></span>), que são conjuntos de caracteres separados por um espaço em branco. Um critério para separação dos <em>tokens</em> pode ser o espaço entre as palavras. Já a remoção de pontuações visa eliminar pontuação e caracteres especiais que não são relevantes para a análise de sentimento.</p>
+<p>Em seguida, a conversão para minúsculas consiste em transformar todas as palavras em minúsculas para garantir consistência nas comparações. Por fim, a remoção de <em>stop words</em> consiste na remoção de palavras que são comuns - as palavras gramaticais ou instrumentais - e não contribuem significativamente para uma análise de sentimento, como “a”, “o”, “em”, “por” etc. Vale destacar que a lista de <em>stop words</em> deve ser na mesma língua do texto analisado. Veja o <a href="#def-cap-direito-1" class="quarto-xref">Quadro&nbsp;<span>12.1</span></a> abaixo.</p>
+<div id="def-cap-direito-1" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 12.1</strong></span> Exemplo de pré-processamento de um trecho de decisão judicial.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<blockquote class="blockquote">
+<p><strong>Texto Original:</strong> “Vistos, relatados e discutidos esses autos em que são partes as acima indicadas, acordam os Ministros da SEGUNDA TURMA do Superior Tribunal de Justiça, na conformidade dos votos e das notas taquigráficas, o seguinte resultado de julgamento: 'Prosseguindo-se no julgamento, após o voto-vista do Sr.&nbsp;Ministro Francisco Falcão, acompanhando o Sr.&nbsp;Ministro-Relator, dando provimento ao recurso especial, a Turma, por maioria, negou provimento ao recurso especial, nos termos do voto do Sr.&nbsp;Ministro Og Fernandes, vencidos os Srs. Ministros Herman Benjamin e Francisco Falcão. Lavrará o acórdão o Sr.&nbsp;Ministro Mauro Campbell Marques.' Os Srs. Ministros Mauro Campbell Marques e Assusete Magalhães votaram com o Sr.&nbsp;Ministro Og Fernandes.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>Após Pré-processamento:</strong> “vistos relatados discutidos autos partes acima indicadas acordam ministros segunda turma superior tribunal justiça conformidade votos notas taquigráficas seguinte resultado julgamento prosseguindo julgamento após voto-vista sr ministro francisco falcão acompanhando sr ministro-relator dando provimento recurso especial turma maioria negou provimento recurso especial termos voto sr ministro og fernandes vencidos srs ministros herman benjamin francisco falcão lavrará acórdão sr ministro mauro campbell marques srs ministros mauro campbell marques assusete magalhães votaram sr ministro og fernandes”</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+<p>Ainda na fase de pré-processamento, é possível aperfeiçoar a tarefa e incluir novas <em>stop words</em>, com o objetivo de limpar mais ainda o texto e facilitar futuramente a identificação das palavras positivas ou negativas na sentença. No <a href="#def-cap-direito-1" class="quarto-xref">Quadro&nbsp;<span>12.1</span></a>, verifica-se que as palavras “srs”, “sr”, “vistos”, não influenciam na interpretação da decisão judicial e podem ser removidas.</p>
+<p>A próxima fase, rotulamento de dados, consiste em classificar manualmente algumas decisões como positivas ou negativas, para fins de validação futura se a classificação automatizada está desempenhando um bom resultado. A partir do <a href="#def-cap-direito-1" class="quarto-xref">Quadro&nbsp;<span>12.1</span></a>, facilmente esta decisão seria classificada como “NEGATIVA”. Outras opções de rótulo seriam “POSITIVA” e “NEUTRA”. Os casos de neutro poderiam ser utilizados, por exemplo, quando o juiz decidiu parcialmente pelo provimento (aceitação do pedido).</p>
+<p>Já a fase da escolha da técnica de análise de sentimento, consiste em selecionar qual abordagem será utilizada, se baseada em regras ou baseada em aprendizado de máquina. Na abordagem baseada em regras, é criado um conjunto de regras e heurísticas que determinam o sentimento ou polaridade com base em palavras-chave, padrões gramaticais e outras características linguísticas. Por exemplo, certas palavras negativas podem indicar um sentimento negativo. Já, na abordagem baseada em aprendizado de máquina, é treinado um modelo de aprendizado de máquina usando-se os dados linguísticos rotulados. Algoritmos como <em>Naïve Bayes, Support Vector Machines</em> (SVM) ou redes neurais podem ser usados para construir um modelo.</p>
+<p>Para dar continuidade ao exemplo mencionado, utilizaremos a abordagem baseada em regras. Nesse caso, utilizamos um dicionário prévio com palavras positivas e negativas. Quando são usados dicionários, deve ser considerada a língua do texto. Como exemplo de dicionário de palavras positivas, negativas e neutras em português, temos o SentiLex-PT<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> <span class="citation" data-cites="sentilex">(<a href="../../shared/referencias/referencias.html#ref-sentilex" role="doc-biblioref">Carvalho; Silva, 2017</a>)</span>.</p>
+<p>Na fase de execução da técnica e a partir do texto pré-processado anteriormente, será preciso verificar se cada palavra do texto consta no dicionário como palavra positiva, negativa ou neutra. Segundo o SentiLex-PT, foi encontrado o seguinte resultado apresentado no <a href="#def-cap-direito-quadro1" class="quarto-xref">Quadro&nbsp;<span>12.2</span></a>.</p>
+<!--`\newpage`{=latex}-->
+<div id="def-cap-direito-quadro1" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 12.2</strong></span> Palavras positivas e negativas segundo o SentiLex-PT.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<p>Dicionário:</p>
+<p>Positivas: [“acordam”, “conformidade”, “aprovar” ]</p>
+<p>Negativas: [“negou”, “vencidos” ]</p>
+<p>Sentimento:</p>
+<p>Positivas: 3 (acordam, conformidade, aprovar)</p>
+<p>Negativas: 2 (negou, vencidos)</p>
+<p>Sentimento Geral: 1 (POSITIVO) (Positivas - Negativas = 3 - 2)</p>
+</div>
+</div>
+</div>
+</div>
+<p>O sentimento geral é calculado realizando-se uma subtração do número de palavras positivas com o número de palavras negativas. Um resultado com valor positivo indica um sentimento positivo, já um resultado com valor negativo indica um sentimento negativo e um valor próximo de zero indica um sentimento neutro. Este cálculo pode ser aperfeiçoado ao dividir o número encontrado pelo total de palavras (<em>tokens</em>) existentes no texto ((palavras positivas - palavras negativas) / total de palavras). Ou seja, se há 10 palavras no texto, 3 são positivas e 0 negativas, indica uma maior “probabilidade” que o texto realmente seja positivo. Por outro lado, se há 50 palavras no texto, apenas 1 negativa e nenhuma positiva, há probabilidade de ser um falso negativo. Essa divisão pode indicar que novos aperfeiçoamentos no dicionário podem ser necessários.</p>
+<p>Neste exemplo acima, verifica-se que o resultado não reflete a resposta correta (NEGATIVO) e ajustes devem ser feitos. O dicionário SentiLex-PT pode ser adaptado para a linguagem jurídica, uma vez que “acordam” “conformidade” e “aprovar”, não indicam necessariamente que o juiz está dando provimento (julgando como positivo) a decisão judicial, logo, devem ser desassociados do sentimento “POSITIVO”. Outro ajuste que pode ser feito também é não associar a palavra “vencidos” ao sentimento “NEGATIVO”, uma vez que é comum, quando há divergência entre o grupo de juízes votantes, aparecer a palavra “vencidos”. Outro ajuste que também pode ser feito no dicionário é associar palavras frequentemente encontradas juntas e que reflitam a intenção da decisão judicial, por exemplo “negou provimento”, “negado provimento”, “não provido o recurso”, ” não dado provimento”, entre outros.</p>
+<p>Feitos estes ajustes, teremos o seguinte resultado apresentado no <a href="#def-cap-direito-quadro2" class="quarto-xref">Quadro&nbsp;<span>12.3</span></a>.</p>
+<div id="def-cap-direito-quadro2" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 12.3</strong></span> Resultado após os ajustes.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<p>Dicionário:</p>
+<p>Positivas: [“” ]</p>
+<p>Negativas: [“negou provimento” ]</p>
+<p>Sentimento:</p>
+<p>Positivas: 0 ()</p>
+<p>Negativas: 1 (negou provimento)</p>
+<p>Sentimento Geral: -1 (NEGATIVO) (Positivas - Negativas = 0 - 1)</p>
+</div>
+</div>
+</div>
+</div>
+<p>Lembrando de que essa abordagem é uma simplificação e pode não capturar todas as nuances de sentimento e/ou as polaridades em textos jurídicos complexos. Principalmente quando há uma variedade de pedidos sendo julgados com decisões diferentes para cada pedido. O contexto legal específico também pode influenciar a interpretação das palavras. Portanto, ajustes e validações são sempre necessários.</p>
+<p>Por fim, com relação à fase de avaliação e validação, se foi utilizada a abordagem baseada em regras, como a acima exemplificada, é mais simples validar com a amostra rotulada previamente e comparar a taxa de acertos e erros. Já no caso da abordagem baseada em aprendizado de máquina, é possível utilizar parâmetros estatísticos para demonstrar a precisão e desempenho do modelo.</p>
+<p>Como mencionado anteriormente, é necessário fazer ajustes em cada fase da execução da análise de sentimentos devido às peculiaridades discursivas dos textos jurídicos que nem sempre constam nos dicionários de referência existentes. A partir das informações obtidas na última fase, de avaliação e validação, pode-se sugerir que novos aperfeiçoamentos sejam feitos nas fases anteriores, para que o algoritmo tenha um desempenho similar e até superior ao de uma atividade humana.</p>
+<p>Dentre os desafios para aplicar este tipo de técnica em decisões judiciais, está principalmente na coleta dos dados. Os tribunais, no geral, não possuem repositórios com estas informações prontas, estruturadas, segmentadas e públicas. Isso, por si só, já dificulta iniciar qualquer trabalho de Processamento de Linguagem Natural. Apesar do problema poder ser contornado com a criação de algoritmos de <em>web crawling</em> e <em>web scraping</em>, alguns tribunais fazem uso de <em>captchas</em> que impedem o acesso automatizado e massivo às informações. Embora haja iniciativas do Conselho Nacional de Justiça, como o DataJud, para centralizar e fornecer informações estruturadas por meio de uma API, ainda não há a íntegra das decisões disponibilizadas. Entretanto, como o DataJud continua em constante evolução, é possível que, futuramente, esse recurso seja disponibilizado. A limpeza e seleção das informações contidas em uma página HTML ou em um arquivo PDF também é bastante custosa e trabalhosa. Por isso, somente a partir destes esforços se torna possível dar seguimento à aplicação, em melhores condições, da técnica de análise de sentimentos em Direito.</p>
+</section>
+<section id="considerações-finais" class="level2" data-number="12.7">
+<h2 data-number="12.7" class="anchored" data-anchor-id="considerações-finais"><span class="header-section-number">12.7</span> Considerações finais</h2>
+<p>Este capítulo tentou situar o “mundo textual” oferecido e formatado pelo Direito do Brasil. Com isso, o objetivo foi trazer alguns exemplos de trabalhos e estudos com a sua linguagem e as suas práticas de escrita. Comentamos um pouco dos estudos históricos com a linguagem empregada em processos brasileiros antigos sobre crimes contra mulheres, mencionamos que a tarefa de reconhecimento terminológico (RT) pode ser uma demanda importante da sistematização de termos e de conceitos dos Direitos da Criança e do Direito Ambiental. Por fim, trouxemos um breve exemplo de estudo de sentimentos ou de polaridades, em PLN, que serve para ajudar a detectar os tipos de decisões que os juízes brasileiros tomam em determinados tipos de processos federais.</p>
+<p>Buscamos salientar que é importante considerar as características e elementos de diferentes tipos de documentos, sejam leis, códigos, processos ou sentenças, produzidos por diferentes instâncias jurídicas. E, visto esse panorama, caso você possa se interessar especificamente por sentenças de tribunais administrativamente menores, como os Juizados Especiais Cíveis (JECs) - conhecidos como “tribunais de pequenas causas”, vale conhecer o trabalho de doutorado de <span class="citation" data-cites="motta_2022">Motta (<a href="../../shared/referencias/referencias.html#ref-motta_2022" role="doc-biblioref">2022</a>)</span>. A autora estudou elementos da complexidade das sentenças dos JECs, quanto ao vocabulário, terminologias e sintaxe, frente aos preceitos da legislação que estabelece que tais sentenças devem ser escritas em linguagem simples, que possibilitem fácil compreensão sobre o que se decide em uma causa. Afinal, o cidadão comum recorre aos JECs geralmente sem advogados, em meio a causas de valor limitado. Além de ampla análise, <span class="citation" data-cites="motta_2022">Motta (<a href="../../shared/referencias/referencias.html#ref-motta_2022" role="doc-biblioref">2022</a>)</span> oferece, no seu trabalho, acesso a todo um <em>corpus</em> de sentenças por ela reunido e analisado com a ferramenta NILC-METRIX <a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> <span class="citation" data-cites="Leal_NILC_METRIX_2023">(<a href="../../shared/referencias/referencias.html#ref-Leal_NILC_METRIX_2023" role="doc-biblioref">Leal et al., 2023</a>)</span>. Também os <em>corpora</em> que ela usou como contraponto para ponderar a complexidade/facilidade de linguagem dessas sentenças estão disponíveis nos anexos da sua tese.</p>
+<p>O Direito é um mundo feito de palavras e modos de dizer, o que oferece um terreno fértil para os nossos trabalhos de análise linguístico-textual, em geral, e, em especial, para diferentes tarefas do PLN. Os resultados desses trabalhos tendem a auxiliar tanto os profissionais quanto o cidadão e a sociedade, que são os principais focos e beneficiários das ações do Direito.</p>
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="1" role="list" style="display: none">
+<div id="ref-cabre_2005" class="csl-entry" role="listitem">
+CABRÉ, M. T. A Terminologia, uma disciplina em evolu<span>ç</span><span>ã</span>o: passado, presente e alguns elementos de futuro. <strong>Debate Terminol<span>ó</span>gico. ISSN: 1813-1867</strong>, n. 01, 2005.
+</div>
+<div id="ref-cameron2023planear" class="csl-entry" role="listitem">
+CAMERON, H.; OLIVAL, F.; VIEIRA, R. <a href="https://doi.org/10.24206/lh.v9i1.52234">Planear a normalização automática: tipologia de variação gráfica do corpus das Memórias Paroquiais (1758)</a>. <strong>LaborHistórico</strong>, v. 9, n. 1, p. 52234, 2023.
+</div>
+<div id="ref-sentilex" class="csl-entry" role="listitem">
+CARVALHO, P.; SILVA, M. J. <strong>SentiLex-PT 02</strong>. https://b2share.eudat.eu, 2017. Disponível em: &lt;<a href="https://b2share.eudat.eu/records/93ab120efdaa4662baec6adee8e7585f">https://b2share.eudat.eu/records/93ab120efdaa4662baec6adee8e7585f</a>&gt;
+</div>
+<div id="ref-conceicao_2020" class="csl-entry" role="listitem">
+CONCEIÇÃO, M. C.; ZANOLA, M. T. <strong>Terminologia e media<span>ç</span><span>ã</span>o lingu<span>ı́</span>stica: m<span>é</span>todos, pr<span>á</span>ticas e atividades</strong>. Universidade do Algarve Editora, 2020.
+</div>
+<div id="ref-cornu-1990" class="csl-entry" role="listitem">
+CORNU, G. <strong>Linguistique juridique</strong>. [s.l: s.n.].
+</div>
+<div id="ref-finatto-esteves-villar_2022" class="csl-entry" role="listitem">
+FINATTO, M. J. B.; ESTEVES, F. F.; VILLAR, G. S. <a href="https://www.yumpu.com/pt/document/read/67427397/plato-vol-5-n-9-2022-nivel-lexical-as-palavras-e-os-termos-desafios-politico-linguisticos-para-o-portugues-lingua-pluricentrica">Construindo uma terminologia de raiz: textos legislativos sob exploração terminológica</a>. <strong>Revista Platô</strong>, v. 5, n. 9, 2022.
+</div>
+<div id="ref-Leal_NILC_METRIX_2023" class="csl-entry" role="listitem">
+LEAL, S. E. et al. <a href="https://doi.org/10.1007/s10579-023-09693-w">NILC-Metrix: assessing the complexity of written and spoken language in Brazilian Portuguese</a>. <strong>Language Resources and Evaluation</strong>, 2023.
+</div>
+<div id="ref-maciel_2001" class="csl-entry" role="listitem">
+MACIEL, A. M. B. <strong><a href="http://hdl.handle.net/10183/1649">Para o reconhecimento da especificidade do termo jurídico</a></strong>. mathesis—[s.l.] Universidade Federal do Rio Grande do Sul, RS, 2001.
+</div>
+<div id="ref-macohin_carneiro_2020" class="csl-entry" role="listitem">
+MACOHIN, A.; CARNEIRO, J. V. V. Web Crawling e Web Scraping em sites de tribunais: publicidade processual e proteção de dados pessoais nas experiências europeia e brasileira. Em: WACHOWICZ, M. (Ed.). <strong>Proteção de Dados Pessoais em Perspectiva: LGPD e RGPD na Ótica do Direito Comparado</strong>. Curitiba: Gedai, UFPR, 2020.
+</div>
+<div id="ref-BookMontoro" class="csl-entry" role="listitem">
+MONTORO, A. F. <strong>Curso de Teoria Geral do Direito - Aula 2: A linguagem do direito: semântica, sintática e pragmática</strong>. Disponível em: &lt;<a href="http://www.dialdata.com.br/ilam/aula2">http://www.dialdata.com.br/ilam/aula2</a>&gt;.
+</div>
+<div id="ref-Motta_2021" class="csl-entry" role="listitem">
+MOTTA, E. <a href="https://doi.org/10.14393/DL47-v15n3a2021-6">Sentenças Judiciais e Acessibilidade Textual e Terminológica</a>. <strong>Domínios de Lingu@gem</strong>, v. 15, n. 3, p. 761–813, 2021.
+</div>
+<div id="ref-motta_2022" class="csl-entry" role="listitem">
+MOTTA, E. <strong><a href="https://www.lume.ufrgs.br/handle/10183/246496">SENTENÇAS JUDICIAIS E LINGUAGEM SIMPLES: um encontro possível e necessário</a></strong>. mathesis—[s.l.] Universidade Federal do Rio Grande do Sul, RS, 2022.
+</div>
+<div id="ref-petri_2017" class="csl-entry" role="listitem">
+PETRI, M. J. C. <strong>Manual de Linguagem Jurídica</strong>. 3rd. ed. São Paulo: Saraiva, 2017.
+</div>
+<div id="ref-berbersardinha_2000" class="csl-entry" role="listitem">
+SARDINHA, T. B. <a href="https://doi.org/10.1590/S0102-44502000000200005">Lingüística de Corpus: histórico e problemática</a>. <strong>DELTA: Documentação de Estudos em Lingüística Teórica e Aplicada</strong>, v. 16, n. 2, p. 323–367, 2000.
+</div>
+<div id="ref-Carvalho_etal_2022" class="csl-entry" role="listitem">
+TEIXEIRA, S. C. S. B.; MARENGO, S. M. D. A.; FINATTO, M. J. B. <a href="https://periodicoscientificos.ufmt.br/ojs/index.php/revdia/article/view/14784">Construindo fichas terminológicas para estudos sócio-históricos</a>. <strong>Revista Diálogos</strong>, v. 10, n. 3, p. 261–279, 2022.
+</div>
+<div id="ref-vanderlaan_2002_doutorado" class="csl-entry" role="listitem">
+VAN DER LAAN, R. H. <strong><a href="https://lume.ufrgs.br/handle/10183/3487">Tesauro e terminologia: uma inter-relação lógica</a></strong>. Tese (Doutorado em Letras)—Porto Alegre: Universidade Federal do Rio Grande do Sul; Instituto de Letras, Programa de Pós-Graduação em Letras, 2002.
+</div>
+<div id="ref-vargas2011contribuiccao" class="csl-entry" role="listitem">
+VARGAS, D. F.; VAN DER LANN, R. H. A contribui<span>ç</span><span>ã</span>o da terminologia na constru<span>ç</span><span>ã</span>o de linguagens document<span>á</span>rias como os tesauros. <strong>Biblos</strong>, v. 25, n. 1, p. 21–34, 2011.
+</div>
+<div id="ref-xavier_2002" class="csl-entry" role="listitem">
+XAVIER, R. C. <strong>Português no Direito: Linguagem Forense</strong>. Rio de Janeiro: Forense, 2002. p. 1
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Veja mais sobre a delimitação de “palavras” e de unidades de processamento no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/palavras/cap-caracteres-palavras/cap-caracteres-palavras.html#sec-cap-caracteres-palavras" target="_blank" title="Volume 1">Sequência de caracteres e palavras</a></span>. Neste capítulo sobre Direito e PLN, vamos acentuar a noção de palavra como uma unidade da língua escrita, situada entre dois espaços em branco, ou entre espaço em branco e sinal de pontuação.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>A Base Legis Termisul-UFRGS é composta de textos da Legislação Ambiental do Brasil, Alemanha, Argentina, Estados Unidos, França, Paraguai e Uruguai. Também inclui códigos brasileiros, constituições dos países anteriormente mencionados e dos demais países que empregam a língua portuguesa (Angola, Cabo Verde, Guiné Bissau, Moçambique, Portugal, São Tomé e Príncipe e Timor Leste), Atos Internacionais relativos ao meio ambiente (Agenda 21, Convenção de Estocolmo, Declaração do Rio e Protocolo de Kyoto). Todos os textos possuem uma descrição de conteúdos e pontos principais, podendo ser baixados em formato TXT.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Você pode acessar todos os textos legislativos ambientais reunidos pelo grupo Termisul- UFRGS em <a href="http://www.ufrgs.br/termisul" class="uri">http://www.ufrgs.br/termisul</a>, na aba “Recursos” , “Bases textuais” e “Base legis”.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>O SentiLex-PT está disponível em: <a href="https://b2share.eudat.eu/records/93ab120efdaa4662baec6adee8e7585f" class="uri">https://b2share.eudat.eu/records/93ab120efdaa4662baec6adee8e7585f</a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a href="http://fw.nilc.icmc.usp.br:23380/nilcmetrix" class="uri">http://fw.nilc.icmc.usp.br:23380/nilcmetrix</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" class="pagination-link" aria-label="Classificação de Áudio aplicada à Saúde">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Classificação de Áudio aplicada à Saúde</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" class="pagination-link" aria-label="Reconhecimento de Entidades Nomeadas no Domínio Legal">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://brasileiraspln.com/">
+<p>Brasileiras em PLN, 2026. Todos os direitos reservados</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

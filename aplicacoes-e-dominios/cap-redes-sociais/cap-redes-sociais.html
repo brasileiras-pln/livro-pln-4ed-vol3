@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Brenda S. Santana">
+<meta name="author" content="Larissa A. de Freitas">
+
+<title>16&nbsp; PLN em Redes Sociais – Processamento de Linguagem Natural</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 1em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" rel="next">
+<link href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8676d8d0f01772f2903466dda9733bcf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sem resultados",
+    "search-matching-documents-text": "Resultados encontrados",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-111J572WMR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-111J572WMR');
+</script>
+
+
+<link rel="stylesheet" href="../../shared/bpln.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../shared/logos/bpln.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Processamento de Linguagem Natural</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../Livro_PLN_BPLN_4ed_vol3.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
+    <div class="dropdown">
+      <a href="" title="Compartilhar" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Compartilhar"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sobre o Volume 3</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Aplicações e Domínios</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Classificação de texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-mt/cap-mt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tradução Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sumarização Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Complexidade Textual e suas Tarefas Relacionadas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Classificação de Áudio aplicada à Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">PLN e Responsabilidade Social</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/referencias/referencias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referências</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Apêndices</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Considerações prévias à sumarização automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice-abstrativa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Exemplo de sumarização abstrativa</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../autores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Sobre as/os autoras/es</strong></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Conteúdo</h2>
+   
+  <ul>
+  <li><a href="#sec-cap-redes-sociais-intro" id="toc-sec-cap-redes-sociais-intro" class="nav-link active" data-scroll-target="#sec-cap-redes-sociais-intro"><span class="header-section-number">16.1</span> Introdução</a></li>
+  <li><a href="#sec-cap-redes-sociais-redes-sociais" id="toc-sec-cap-redes-sociais-redes-sociais" class="nav-link" data-scroll-target="#sec-cap-redes-sociais-redes-sociais"><span class="header-section-number">16.2</span> Redes Sociais</a>
+  <ul class="collapse">
+  <li><a href="#facebook" id="toc-facebook" class="nav-link" data-scroll-target="#facebook"><span class="header-section-number">16.2.1</span> Facebook</a></li>
+  <li><a href="#reddit" id="toc-reddit" class="nav-link" data-scroll-target="#reddit"><span class="header-section-number">16.2.2</span> Reddit</a></li>
+  <li><a href="#youtube" id="toc-youtube" class="nav-link" data-scroll-target="#youtube"><span class="header-section-number">16.2.3</span> Youtube</a></li>
+  <li><a href="#twitterx" id="toc-twitterx" class="nav-link" data-scroll-target="#twitterx"><span class="header-section-number">16.2.4</span> Twitter/X</a></li>
+  <li><a href="#whatsapp" id="toc-whatsapp" class="nav-link" data-scroll-target="#whatsapp"><span class="header-section-number">16.2.5</span> Whatsapp</a></li>
+  <li><a href="#instagram" id="toc-instagram" class="nav-link" data-scroll-target="#instagram"><span class="header-section-number">16.2.6</span> Instagram</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-redes-sociais-areas-aplicacao" id="toc-sec-cap-redes-sociais-areas-aplicacao" class="nav-link" data-scroll-target="#sec-cap-redes-sociais-areas-aplicacao"><span class="header-section-number">16.3</span> Áreas de Aplicação</a>
+  <ul class="collapse">
+  <li><a href="#detecção-de-discurso-de-ódio-e-linguagem-ofensiva" id="toc-detecção-de-discurso-de-ódio-e-linguagem-ofensiva" class="nav-link" data-scroll-target="#detecção-de-discurso-de-ódio-e-linguagem-ofensiva"><span class="header-section-number">16.3.1</span> Detecção de Discurso de Ódio e Linguagem Ofensiva</a></li>
+  <li><a href="#sec-cap-redes-sociais-as" id="toc-sec-cap-redes-sociais-as" class="nav-link" data-scroll-target="#sec-cap-redes-sociais-as"><span class="header-section-number">16.3.2</span> Análise de Sentimento</a></li>
+  <li><a href="#sec-cap-redes-sociais-dnf" id="toc-sec-cap-redes-sociais-dnf" class="nav-link" data-scroll-target="#sec-cap-redes-sociais-dnf"><span class="header-section-number">16.3.3</span> Detecção de Notícias Falsas</a></li>
+  <li><a href="#sec-cap-redes-sociais-ironia" id="toc-sec-cap-redes-sociais-ironia" class="nav-link" data-scroll-target="#sec-cap-redes-sociais-ironia"><span class="header-section-number">16.3.4</span> Detecção de Ironia/Sarcasmo/Humor</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-redes-sociais-consideracoes-finais" id="toc-sec-cap-redes-sociais-consideracoes-finais" class="nav-link" data-scroll-target="#sec-cap-redes-sociais-consideracoes-finais"><span class="header-section-number">16.4</span> Considerações finais</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-cap-redes-sociais" class="quarto-section-identifier"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading"></div>
+    <div class="quarto-title-meta-contents">
+             <p>Brenda S. Santana </p>
+             <p>Larissa A. de Freitas </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Publicado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">26/09/2023</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Atualizado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">13/03/2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+
+</div>
+<div>
+<div class="callout-body-container callout-body">
+<p>Este capítulo também está disponível em <a href="cap-redes-sociais.pdf">PDF</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-target=".callout-cite-contents" aria-controls="callout-cite" aria-label="Toggle callout" data-bs-toggle="collapse" aria-expanded="false">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Como citar
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
+<i class="callout-toggle"></i>
+</div>
+</div>
+<div id="callout-cite" class="callout-cite-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>@InCollection{BPLN_livro_cap-redes-sociais:2026,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    author    = {Santana, Brenda S. and Freitas, Larissa A. de},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    title     = {PLN em Redes Sociais},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    publisher = {BPLN},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    year      = {2026},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    editor    = {Caseli, H. M. and Nunes, M. G. V.},</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    type      = {Book Chapter},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    chapter   = {16},</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    edition   = {4},</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    volume    = {3},</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    isbn      = {XXXXXXXXXXXXXXXX},</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    url       = {https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html},</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<section id="sec-cap-redes-sociais-intro" class="level2" data-number="16.1">
+<h2 data-number="16.1" class="anchored" data-anchor-id="sec-cap-redes-sociais-intro"><span class="header-section-number">16.1</span> Introdução</h2>
+<p>O Processamento de Linguagem Natural (PLN) desempenha um papel cada vez mais significativo no cenário das redes sociais. O volume de dados advindos de redes sociais a todo instante é imenso. Dentre os dados gerados, podemos citar os dados textuais, os quais variam desde conversas informais até discussões complexas. Nas redes sociais, as pessoas expressam ideias e opiniões de maneiras diversas. Isso inclui o uso de gírias, abreviações, emojis e outros elementos da linguagem cotidiana. Tratar esse tipo de dado não é uma tarefa trivial e é desafiador para os sistemas de PLN.</p>
+<p>Os sistemas de PLN são ferramentas indispensáveis para compreender, analisar e extrair informações. O estudo dos estilos de linguagem utilizados nas redes sociais ajuda a melhorar a compreensão de textos informais. As redes sociais são fontes valiosas de informação e seus conteúdos podem ser utilizados como <em>corpora</em> para treinar e testar algoritmos de PLN, permitindo que pesquisadores e desenvolvedores trabalhem com exemplos reais e relevantes. Visto que o Brasil é um dos países com maior presença nas redes sociais, e o português é o idioma predominante nessas interações, tem-se aqui uma área muito fértil para o desenvolvimento de estudos de aplicações de abordagens e PLN.</p>
+<p>Neste capítulo buscamos abordar algumas das principais áreas de aplicação de PLN em redes sociais, discutindo os desafios encontrados. Ainda, buscamos apresentar alguns dos recursos disponíveis para suporte no desenvolvimento de estudos voltados para as tarefas apresentadas, focando em dados em língua portuguesa. Para tanto, este capítulo se organiza da seguinte maneira: na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html#sec-cap-redes-sociais-redes-sociais" target="_blank" title="Volume 3">Redes Sociais</a></span>, apresentamos a definição de redes sociais e descrevemos sobre os conteúdos nela postados; na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html#sec-cap-redes-sociais-areas-aplicacao" target="_blank" title="Volume 3">Áreas de Aplicação</a></span>, apresentamos as principais áreas de aplicação de PLN que utilizam essas redes sociais. E, na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html#sec-cap-redes-sociais-consideracoes-finais" target="_blank" title="Volume 3">Considerações finais</a></span>, apresentamos as considerações finais.</p>
+</section>
+<section id="sec-cap-redes-sociais-redes-sociais" class="level2" data-number="16.2">
+<h2 data-number="16.2" class="anchored" data-anchor-id="sec-cap-redes-sociais-redes-sociais"><span class="header-section-number">16.2</span> Redes Sociais</h2>
+<p>Uma rede social é definida como um conjunto de dois elementos: atores e suas conexões <span class="citation" data-cites="Wasserman1994">(<a href="../../shared/referencias/referencias.html#ref-Wasserman1994" role="doc-biblioref">Wasserman; Faust, 1994</a>)</span>. Nos últimos anos, as redes sociais (como: Facebook, Reddit, Youtube, Twitter/X, Whatsapp e Instagram) têm revolucionado a forma como indivíduos, grupos e comunidades interagem. Nelas, são compartilhados textos, fotos, vídeos e outros tipos de conteúdo. Assim, as redes sociais estabelecem um ambiente rico e dinâmico que oferece inúmeras oportunidades para o estudo e o aprimoramento de abordagens em PLN. Segundo <span class="citation" data-cites="Recuero2009">Recuero (<a href="../../shared/referencias/referencias.html#ref-Recuero2009" role="doc-biblioref">2009</a>)</span>, o estudo das redes sociais na Internet objetiva analisar como as estruturas sociais surgem, de que tipo elas são e como são compostas.</p>
+<p>De acordo com <span class="citation" data-cites="Farzindar2018">Farzindar; Inkpen (<a href="../../shared/referencias/referencias.html#ref-Farzindar2018" role="doc-biblioref">2018</a>)</span>, usar PLN em textos provindos de mídias tradicionais (como jornal, rádio e televisão) tem sido um tópico de pesquisa popular nos últimos 25 anos. Hoje, usar PLN em textos provindos de redes sociais é uma área de pesquisa que requer adaptações dos métodos tradicionais, já que os textos provindos de redes sociais têm várias peculiaridades, principalmente devido a sua natureza. Ainda, eles podem estar escritos em diferentes idiomas e pertencerem a diferentes fontes.</p>
+<p>As redes sociais se popularizaram no Brasil em 2004, com a criação do Orkut<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Desde lá, novas redes surgiram e com elas a percepção da necessidade e viabilidade de aplicação de abordagens em PLN para o estudo de conteúdos e comportamentos gerados nesse meio. Dentre as áreas de aplicação dessas abordagens, destacam-se a detecção de discurso de ódio e linguagem ofensiva, a detecção de ironia/sarcasmo/humor, a detecção de notícias falsas, a análise de sentimento, entre outras <span class="citation" data-cites="Ferreira2017">(<a href="../../shared/referencias/referencias.html#ref-Ferreira2017" role="doc-biblioref">Ferreira et al., 2017</a>)</span>.</p>
+<p>Na literatura, existe uma predominância do Twitter/X como fonte de dados, isso se deve, provavelmente, ao fato de ele oferecer uma API<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> que, de forma muito simples, consegue acessar mensagens publicadas e os dados associados a seus usuários (por exemplo, o número de seguidores deste). No caso do Facebook, é necessário criar um aplicativo e obter a autorização dos usuários para que seus dados possam ser acessados/capturados <span class="citation" data-cites="Coelho2019">(<a href="../../shared/referencias/referencias.html#ref-Coelho2019" role="doc-biblioref">Coello; Junqueira, 2019</a>)</span>, o que pode ser visto como um limitante na extração de informações desta rede.</p>
+<p>No ano de 2023, algumas mudanças ocorreram nas APIs do Twitter/X e do Reddit. No Twitter/X, os pesquisadores terão que se adaptar às restrições da versão gratuita ou assinar alguns dos planos pagos para manter suas atividades. Já, no Reddit, o uso da API<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> passou a ser cobrado. Portanto, é de se esperar que mudanças aconteçam nas pesquisas que utilizam <em>corpora</em> advindos dessas redes sociais.</p>
+<p>Como mencionado anteriormente, o conteúdo postado nas redes sociais pode variar muito de acordo com a plataforma, o público-alvo e a intenção por trás da postagem. Abaixo descrevemos brevemente as redes sociais mais utilizadas em trabalhos de PLN sobre redes sociais em língua portuguesa.</p>
+<section id="facebook" class="level3" data-number="16.2.1">
+<h3 data-number="16.2.1" class="anchored" data-anchor-id="facebook"><span class="header-section-number">16.2.1</span> Facebook</h3>
+<p>O Facebook<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> é atualmente a maior rede social do mundo, com 2.9 bilhões de usuários ativos em 2023. Ela permite que os usuários criem perfis pessoais, adicionem amigos, compartilhem textos, fotos, vídeos e atualizações de status. Os usuários podem interagir com as postagens de outros usuários através de curtidas, comentários e compartilhamentos. Além disso, essa rede social também permite a criação de páginas para empresas, tornando-se uma ferramenta importante para marketing e divulgação.</p>
+</section>
+<section id="reddit" class="level3" data-number="16.2.2">
+<h3 data-number="16.2.2" class="anchored" data-anchor-id="reddit"><span class="header-section-number">16.2.2</span> Reddit</h3>
+<p>O Reddit<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> é uma plataforma online de compartilhamento de conteúdo e discussões, organizada em comunidades chamadas <em>subreddits</em>. Os usuários podem enviar postagens, comentar, votar em conteúdos e interagir uns com os outros. Essa plataforma abrange uma ampla variedade de tópicos e interesses, permitindo que os usuários encontrem comunidades específicas que correspondam aos seus interesses. É um espaço onde os usuários podem trocar informações, debater, compartilhar histórias, memes e muito mais.</p>
+</section>
+<section id="youtube" class="level3" data-number="16.2.3">
+<h3 data-number="16.2.3" class="anchored" data-anchor-id="youtube"><span class="header-section-number">16.2.3</span> Youtube</h3>
+<p>O Youtube<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> é uma plataforma de compartilhamento de vídeos que permite que os usuários compartilhem e assistam vídeos de uma variedade gêneros, incluindo filmes, programas de TV, vídeos musicais, documentários, entre outros. Também é uma ferramenta de marketing importante para muitas empresas e indivíduos, os quais usam a plataforma para compartilhar conteúdo promocional e aumentar a conscientização sobre seus produtos ou serviços.</p>
+</section>
+<section id="twitterx" class="level3" data-number="16.2.4">
+<h3 data-number="16.2.4" class="anchored" data-anchor-id="twitterx"><span class="header-section-number">16.2.4</span> Twitter/X</h3>
+<p>O Twitter/X<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> é um serviço de microblogging que pode ser utilizado para transmitir pequenas atualizações de status <span class="citation" data-cites="Russell2011">(<a href="../../shared/referencias/referencias.html#ref-Russell2011" role="doc-biblioref">Russell, 2011</a>)</span>. Nele podem ser analisados os vínculos entre amigos e seguidores, grafos sociais e descobertas de mais informações sobre os usuários, inspecionando as entidades presentes em seus tweets. Os tweets são mensagens curtas (contendo até 280 caracteres, incluindo texto, imagens, GIFs, vídeos e links para outros sites) e públicas postadas no Twitter/X. Eles têm um alcance imediato e podem se tornar viral rapidamente, dependendo do conteúdo e da quantidade de interação que recebem de outros usuários. Isso faz do Twitter/X uma plataforma poderosa para disseminar informações, ideias e tendências em tempo real.</p>
+</section>
+<section id="whatsapp" class="level3" data-number="16.2.5">
+<h3 data-number="16.2.5" class="anchored" data-anchor-id="whatsapp"><span class="header-section-number">16.2.5</span> Whatsapp</h3>
+<p>O Whatsapp<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> permite que os usuários troquem mensagens privadas. Apesar de ser usado principalmente para conversas individuais, o WhatsApp possui recursos de grupos de conversação, onde podem participar até 256 usuários, e encaminhamento de mensagens <span class="citation" data-cites="2021_cabral_fakewhastappDataset">(<a href="../../shared/referencias/referencias.html#ref-2021_cabral_fakewhastappDataset" role="doc-biblioref">Cabral et al., 2021</a>)</span>. Concebido como um aplicativo de mensagens instantâneas, o WhatsApp evoluiu para uma plataforma multifacetada, permitindo não apenas conversas privadas, mas também a formação de grupos e comunidades, compartilhamento de mídia, chamadas de voz e vídeo e até mesmo recursos empresariais.</p>
+</section>
+<section id="instagram" class="level3" data-number="16.2.6">
+<h3 data-number="16.2.6" class="anchored" data-anchor-id="instagram"><span class="header-section-number">16.2.6</span> Instagram</h3>
+<p>Instagram<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> é uma rede social para compartilhamento de fotos e vídeos. Nela também é possível acompanhar (seguir) outras contas, curtir, comentar e compartilhar publicações. Todas as publicações realizadas no aplicativo são mostradas por meio do <em>feed</em> e o usuário pode visualizar as postagens das contas que ele segue. Ainda, esta rede social oferece diversas outras funcionalidades, como: <em>boomerang</em>, <em>live</em> e <em>stories</em>.</p>
+</section>
+</section>
+<section id="sec-cap-redes-sociais-areas-aplicacao" class="level2" data-number="16.3">
+<h2 data-number="16.3" class="anchored" data-anchor-id="sec-cap-redes-sociais-areas-aplicacao"><span class="header-section-number">16.3</span> Áreas de Aplicação</h2>
+<p>Abaixo são descritas quatro áreas de aplicações que surgiram com a finalidade de compreender, analisar e extrair informações de textos que são publicados diariamente nas redes sociais, são elas: detecção de discurso de ódio e linguagem ofensiva, análise de sentimento, detecção de notícias falsas e detecção de ironia/sarcasmo/humor.</p>
+<section id="detecção-de-discurso-de-ódio-e-linguagem-ofensiva" class="level3" data-number="16.3.1">
+<h3 data-number="16.3.1" class="anchored" data-anchor-id="detecção-de-discurso-de-ódio-e-linguagem-ofensiva"><span class="header-section-number">16.3.1</span> Detecção de Discurso de Ódio e Linguagem Ofensiva</h3>
+<p>A partir de definições encontradas na literatura, termos diferentes, porém semelhantes, podem ser enquadrados como discursos simbolicamente prejudiciais (por exemplo, discurso perigoso, discurso tóxico, discurso de ódio, discurso intolerante e outros). Certos discursos possuem o potencial de causar danos significativos, inclusive críticos, e podem ser considerados tóxicos <span class="citation" data-cites="Tirrell2018">(<a href="../../shared/referencias/referencias.html#ref-Tirrell2018" role="doc-biblioref">Tirrell, 2018</a>)</span>. Discursos tóxicos podem assumir diversas formas, podendo ser um discurso persistente ou momentâneo, afetar indivíduos ou a sociedade como um todo, causando danos temporários ou permanentes. O impacto de toxinas discursivas é de natureza social, afetando comunidades e prejudicando indivíduos pertencentes aos grupos-alvos. Essas toxinas podem incluir palavras ofensivas, insultos, discriminação, discurso de ódio, difamação, ameaças ou qualquer forma de linguagem que busque macular, menosprezar ou ferir a dignidade e a integridade de indivíduos pertencentes ao grupo-alvo. De acordo com <span class="citation" data-cites="10.1145/3543507.3583522">Kumar et al. (<a href="../../shared/referencias/referencias.html#ref-10.1145/3543507.3583522" role="doc-biblioref">2023</a>)</span>, comentários tóxicos são a principal forma de ódio e assédio online.</p>
+<p>Os grupos-alvos de discursos tóxicos podem variar dependendo do contexto e da natureza do discurso. Grupos frequentemente alvos de discursos tóxicos incluem minorias étnicas e raciais, comunidade LGBTQIA, mulheres, religiões minoritárias, portadores de deficiência, refugiados e imigrantes, e grupos políticos ou ideológicos. Contudo, qualquer grupo ou indivíduo pode ser alvo de discursos tóxicos, e a disseminação desse tipo de linguagem é prejudicial para a sociedade como um todo. Indivíduos pertencentes a diferentes grupos discriminados podem ainda ser alvos de discursos interseccionais que os atacam por múltiplas frentes. A <a href="#fig-interseccao" class="quarto-xref">Figura&nbsp;<span>16.1</span></a>, adaptada de <span class="citation" data-cites="Brenda2023Tese">Santana (<a href="../../shared/referencias/referencias.html#ref-Brenda2023Tese" role="doc-biblioref">2023</a>)</span>, ilustra um caso em que ataques interseccionais dirigidos a uma entidade foram disseminados na Internet. A imagem busca ilustrar o que aconteceu após o assassinato em 2018 da socióloga e política brasileira Marielle Franco, quando uma rede de ódio e desinformação gerou diversos comentários online atacando sua imagem por diversas características que ela possuía, e até outros traços que foram indevidamente atribuídos a ela. <span class="citation" data-cites="teixeira2019pensando">Teixeira; Zamora (<a href="../../shared/referencias/referencias.html#ref-teixeira2019pensando" role="doc-biblioref">2019</a>)</span> destacam que Marielle - mulher negra, assumidamente bissexual, favelada, defensora política dos direitos humanos - foi, sem dúvida, atravessada por todo tipo de opressão desencadeada pelo sistema machista, racista e classista. Os ataques registrados neste caso foram motivados pelo ódio.</p>
+<!--![Exemplo de interseccionalidade entre diferentes formas de discurso de ódio observado no caso de Marielle Franco.](media/intersections.png){#fig-interseccao widht=90%}
+
+::: {.content-visible when-format="pdf"}
+Fonte: Adaptada de @Brenda2023Tese\
+:::-->
+<div id="fig-interseccao" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-interseccao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;16.1: Exemplo de interseccionalidade entre diferentes formas de discurso de ódio observado no caso de Marielle Franco.
+</figcaption>
+<div aria-describedby="fig-interseccao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img src="media/intersections.png" class="img-fluid figure-img"></p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
+<p>Fonte: Adaptada de <span class="citation" data-cites="Brenda2023Tese">(<a href="../../shared/referencias/referencias.html#ref-Brenda2023Tese" role="doc-biblioref">Santana, 2023</a>)</span></p>
+</div>
+</div>
+</div>
+</figure>
+</div>
+<p>A análise e a detecção de diferentes tipos de discursos tóxicos são um tópico de crescente interesse tanto para a área de PLN quanto demais áreas de interesse social como um todo. De acordo com <span class="citation" data-cites="Guimaraes2020">Guimarães et al. (<a href="../../shared/referencias/referencias.html#ref-Guimaraes2020" role="doc-biblioref">2020</a>)</span>, quando focamos em comentários tóxicos, especialmente em notícias, o Facebook é a rede social que mais se destaca. O Reddit também introduz uma inclinação em relação à linguagem tóxica e ofensiva <span class="citation" data-cites="Mohan2017">(<a href="../../shared/referencias/referencias.html#ref-Mohan2017" role="doc-biblioref">Mohan et al., 2017</a>)</span>. Por esse motivo, o conteúdo do Reddit tem sido usado para estudar microagressões <span class="citation" data-cites="Breitfeller2019 Mollas_2022">(<a href="../../shared/referencias/referencias.html#ref-Breitfeller2019" role="doc-biblioref">Breitfeller et al., 2019</a>; <a href="../../shared/referencias/referencias.html#ref-Mollas_2022" role="doc-biblioref">Mollas et al., 2022</a>)</span> e depressão <span class="citation" data-cites="Pirina2018">(<a href="../../shared/referencias/referencias.html#ref-Pirina2018" role="doc-biblioref">Pirina; Çöltekin, 2018</a>)</span>. De acordo com estudos realizados por <span class="citation" data-cites="10.1145/3543507.3583522">Kumar et al. (<a href="../../shared/referencias/referencias.html#ref-10.1145/3543507.3583522" role="doc-biblioref">2023</a>)</span>, perfis que postam comentários tóxicos representam 3,1% de todas as contas que postam comentários no Reddit. Entretanto, ainda de acordo com os autores, apesar de seu percentual relativamente pequeno, tais contas desempenham um papel ativo e de alto impacto na plataforma.</p>
+<p>Apesar dos diversos avanços pelos quais a área de PLN vem passando, a detecção de discursos tóxicos ainda é um desafio latente. O desenvolvimento de algoritmos de PLN e Aprendizado de Máquina (AM) para detectar esses tipos de conteúdo depende da disponibilidade de <em>corpora</em> anotados para treinamento. Conforme identificado por <span class="citation" data-cites="Trajano2023">Trajano et al. (<a href="../../shared/referencias/referencias.html#ref-Trajano2023" role="doc-biblioref">2023</a>)</span> quase todos os sistemas de detecção de toxicidade usam modelos de aprendizado supervisionado que requerem uma grande quantidade de dados rotulados<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>. Entre estes <em>corpora</em>, podemos ressaltar recursos para a língua a portuguesa como o ToLD-Br<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> desenvolvido por <span class="citation" data-cites="Leite2020">Leite et al. (<a href="../../shared/referencias/referencias.html#ref-Leite2020" role="doc-biblioref">2020</a>)</span>.</p>
+<p>O ToLD-Br <span class="citation" data-cites="Leite2020">(<a href="../../shared/referencias/referencias.html#ref-Leite2020" role="doc-biblioref">Leite et al., 2020</a>)</span> é um conjunto de dados capturado do Twitter/X entre julho e agosto de 2019 com a ferramenta GATE Cloud’s Twitter Collector<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>. Elaborado para estudos sobre classificação automática de comentários tóxicos, este conjunto de dados tem como objetivo equilibrar o viés de anotação. Para tanto, 42 anotadores foram selecionados, com base em suas informações demográficas. Este <em>corpus</em> apresenta um conjunto de 21000 tweets em português manualmente anotados por três diferentes anotadores em sete categorias: LGBTQ+fobia, obsceno, insulto, racismo, misoginia e/ou xenofobia. <a href="#exm-cap23-1" class="quarto-xref">Exemplo&nbsp;<span>16.1</span></a> apresenta uma instância de tweet obsceno e <a href="#exm-cap23-2" class="quarto-xref">Exemplo&nbsp;<span>16.2</span></a> uma instância de tweet insulto contidos no <em>corpus</em> ToLD-Br.</p>
+<p></p>
+<div id="exm-cap23-1" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.1</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>“Aonde tem um monte que fala mal, mas ninguem vai embora do morro.” acha que alguem mora aqui por que quer, c*****o!? Que idéia. […]</p>
+</blockquote>
+</div>
+<div id="exm-cap23-2" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.2</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>[…] VAI SE F***R IRMÃO VC NÃO É FELIZ PQ NAO QUER</p>
+</blockquote>
+</div>
+<p>O estudo de discursos tóxicos é de suma importância por várias razões, abordando questões sociais, éticas e técnicas. O volume de informações gerado a partir das redes sociais e plataformas online aumenta a exposição a discursos tóxicos, o que pode causar impactos negativos na saúde mental e emocional dos usuários. Compreender e identificar esses discursos é fundamental para criar um ambiente digital mais saudável e seguro para todos. Discursos tóxicos frequentemente incluem discursos de ódio e manifestação de linguagem imprópria, ou seja, atos que podem promover a violência, intolerância e discriminação contra grupos específicos. A análise desses discursos permite identificar padrões prejudiciais e trabalhar para mitigar seus efeitos negativos.</p>
+<p>Adicionalmente, muitos discursos tóxicos envolvem a disseminação intencional de informações incorretas, desinformação e notícias falsas (<span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html#sec-cap-redes-sociais-dnf" target="_blank" title="Volume 3">Detecção de Notícias Falsas</a></span>). Ao estudar esses discursos, podemos desenvolver técnicas para detecção precoce de conteúdo enganoso, ajudando a manter a qualidade da informação nas redes. Além disso, técnicas de PLN auxiliam na detecção de linguagem irônica, sarcástica e outros formatos frequentemente usados nas redes sociais para mascarar discursos de ódio (<span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html#sec-cap-redes-sociais-ironia" target="_blank" title="Volume 3">Detecção de Ironia/Sarcasmo/Humor</a></span>). Essas abordagens avançadas permitem que plataformas de redes sociais aprimorem suas ferramentas de moderação, identificando automaticamente discursos de ódio e adotando medidas para removê-los ou sinalizá-los.</p>
+<p>Muitas iniciativas têm sido empreendidas com o intuito de possibilitar a detecção automatizada de discursos de ódio nas diferentes plataformas. Conforme mencionado por <span class="citation" data-cites="fortuna2018survey">Fortuna; Nunes (<a href="../../shared/referencias/referencias.html#ref-fortuna2018survey" role="doc-biblioref">2018</a>)</span>, esse crescente interesse não se restringe apenas à ampla cobertura midiática, mas também à crescente relevância política do tema. No entanto, os autores também destacam desafios latentes, como a falta de técnicas automáticas adequadas e a escassez de dados confiáveis sobre o discurso de ódio, que continuam motivando pesquisas nessa área. Analisando estatísticas brasileiras, <span class="citation" data-cites="dadico-phdthesis">Dadico (<a href="../../shared/referencias/referencias.html#ref-dadico-phdthesis" role="doc-biblioref">2020</a>)</span> explana que os dados indicam que o ódio sobrevitimiza pessoas de grupos identificados por critérios de raça, cor, etnia, sexo, orientação sexual, identidade de gênero, origem nacional e regional, sem-teto ou deficiência, entre outros atributos que os expõem a maior vulnerabilidade social. Apesar da normalização do ódio, esse discurso é parte de uma narrativa socio-histórica que traz em si os modos de pensar de uma cultura. É pela língua que nos mostramos como somos, e enquanto ela pode ser um instrumento de empoderamento, também pode gerar exclusão, opressão. O avanço de estudos de aplicação de abordagens de PLN para a detecção de tais conteúdos é essencial. Entretanto, avanços nesta área de estudos dependem fundamentalmente de conjuntos de dados anotados, ferramentas de análise de texto e modelos específicos disponibilizados para tal.</p>
+<p>Para o português, <span class="citation" data-cites="Fortuna2019">Fortuna et al. (<a href="../../shared/referencias/referencias.html#ref-Fortuna2019" role="doc-biblioref">2019</a>)</span> criou um conjunto de dados para a classificação do discurso de ódio, o HLPHSD<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a>. As instâncias deste conjunto foram coletadas através do uso da API do Twitter/X. Para isso, foram usadas palavras-chave e hashtags como #dyke ou #womensPlaceIsInTheKitchen coletadas entre janeiro e março de 2017 (majoritariamente). Este conjunto de dados contém conteúdo de 1156 usuários diferentes e abrange diferentes tipos de discriminação, com base sobre religião, gênero, orientação sexual, etnia, e migração. Nele foram feitas duas anotações: binária (“é discurso de ódio” ou “não é discurso de ódio”) e hierárquica (“racismo”, “sexismo”, ou “homofobia”). <a href="#exm-cap23-3" class="quarto-xref">Exemplo&nbsp;<span>16.3</span></a> apresenta uma instância de tweet que é discurso de ódio e <a href="#exm-cap23-4" class="quarto-xref">Exemplo&nbsp;<span>16.4</span></a> uma instância de tweet que não é discurso de ódio contidos no <em>corpus</em> HLPHSD.</p>
+<div id="exm-cap23-3" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.3</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>Os negros deveriam voltar para suas terras!!</p>
+</blockquote>
+</div>
+<div id="exm-cap23-4" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.4</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>Carne e feijão preto são deliciosos!</p>
+</blockquote>
+</div>
+<p>Na anotação binária, cada tweet foi anotado por três diferentes anotadores. Por fim, uma votação majoritária para determinar classificação final foi realizada nos 3059 tweets. Os autores realizaram experimentos utilizando uma LSTM combinada com <em>embeddings</em> pré-treinados para realizar uma classificação base a partir deste conjunto de dados e assim demonstrar seu potencial de uso. O resultado obtido foi a medida-F de 78%.</p>
+<p>Outro conjunto de dados disponível na literatura que foi elaborado para estudos sobre a classificação do discurso de ódio é o HateBR<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a>, elaborado por <span class="citation" data-cites="Vargas2022">Vargas et al. (<a href="../../shared/referencias/referencias.html#ref-Vargas2022" role="doc-biblioref">2022</a>)</span>. O HateBR é composto por 7000 textos sobre o domínio político coletados através da API do Instagram. Neste conjunto de dados, constam postagens de seis contas pré-definidas (gênero - 4 mulheres e 2 homens, posição política - 3 liberais e 3 conservadores). Sua anotação foi feita de três maneiras: binária (“é ofensivo” ou “não é ofensivo”), granularidade (“levemente ofensivo”, “moderadamente ofensivo” e “altamente ofensivo”) e grupos de discursos de ódio (“partidarismo”, “sexismo”, “intolerância religiosa”, “apologia pela ditadura”, “gordofobia”, “homofobia”, “racismo”, “anti-semitismo” e “xenofobia”). <a href="#exm-cap23-5" class="quarto-xref">Exemplo&nbsp;<span>16.5</span></a> apresenta uma instância de texto que é discurso de ódio e <a href="#exm-cap23-6" class="quarto-xref">Exemplo&nbsp;<span>16.6</span></a> uma instância de texto que não é discurso de ódio contidos no <em>corpus</em> HateBR.</p>
+<div id="exm-cap23-5" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.5</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>Vagabunda. Comunista. Mentirosa. O povo chileno nao merece uma desgraça desta</p>
+</blockquote>
+</div>
+<div id="exm-cap23-6" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.6</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>Pois é, deveria devolver o dinheiro aos cofres públicos do Brasil. Canalha.</p>
+</blockquote>
+</div>
+<p>Tal como diversas outras tarefas de aplicação de abordagens de PLN, apesar dos esforços recentes, a detecção de discurso de ódio em português fica muito atrás do inglês <span class="citation" data-cites="JAHAN2023126232">(<a href="../../shared/referencias/referencias.html#ref-JAHAN2023126232" role="doc-biblioref">Jahan; Oussalah, 2023</a>)</span>. A detecção de discursos de ódio em língua portuguesa é, sem dúvida, uma área promissora de pesquisa no campo do PLN. Redes sociais são um terreno fértil para a disseminação de discursos de ódio em qualquer idioma. Dada a popularidade da língua portuguesa nas redes sociais, tem-se aqui uma área muito fértil para o desenvolvimento de estudos de aplicações de abordagens e PLN. A detecção de discursos de ódio em português envolve desafios únicos, como a diversidade linguística, o uso de gírias e expressões regionais, além das particularidades culturais. Isso torna a pesquisa nessa área empolgante e relevante, não apenas do ponto de vista técnico, mas também do ponto de vista social e ético.</p>
+<p>Embora muito do que é visto em discursos tóxicos seja também discurso de ódio, cabe ressaltar que outras formas de toxicidade também são manifestas através de discursos. Há também o que chamamos de linguagem ofensiva. Diferentemente de discursos de ódio, os quais são voltados para indivíduos ou grupos específicos de pessoas com base em características identitárias, a linguagem ofensiva tem a intenção de magoar, insultar ou provocar os sentimentos das pessoas, sem necessariamente ter um objetivo discriminatório. É importante notar que a linha entre discurso de ódio e linguagem ofensiva nem sempre é clara, e o contexto em que o conteúdo é apresentado pode influenciar a percepção do quão prejudicial ele é. Isto é, todo discurso de ódio é uma linguagem ofensiva, mas nem toda linguagem que é ofensiva é também um discurso de ódio. Ambos podem ser prejudiciais e problemáticos em diferentes aspectos, e muitas vezes é necessário avaliar cuidadosamente o conteúdo para entender suas implicações e tomar medidas apropriadas para mitigar seus efeitos negativos. Tal qual os demais discursos considerados tóxicos, é importante também o desenvolvimento de meios de detecção de linguagem ofensiva.</p>
+<p>Conjuntos de dados voltados para a detecção deste tipo de linguagem podem ser usados em um contexto que não é necessariamente de ódio. Para o português brasileiro, <span class="citation" data-cites="Trajano2023">Trajano et al. (<a href="../../shared/referencias/referencias.html#ref-Trajano2023" role="doc-biblioref">2023</a>)</span> construíram um conjunto de dados voltados a detecção de linguagem ofensiva, nomeado OLID-Br<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a>. <a href="#exm-cap23-7" class="quarto-xref">Exemplo&nbsp;<span>16.7</span></a> apresenta uma instância de texto que é insulto e sexismo e <a href="#exm-cap23-8" class="quarto-xref">Exemplo&nbsp;<span>16.8</span></a> uma instância de texto que é insulto e ideologia contidos no <em>corpus</em> OLID-Br.</p>
+<div id="exm-cap23-7" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.7</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>Pior do que adolescentezinhas de merda…são pessoas que levam filmes tão a sério! O livro/filme é dela, ela faz o que quiser! E por mais ruim que seja, ta rendendo milhões (:</p>
+</blockquote>
+</div>
+<div id="exm-cap23-8" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.8</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>“Heterofobismo?” Pelo que eu saiba héteros nunca foram perseguidos, mortos e torturados por centenas de anos pela sua orientação sexual. Em alguns países do Oriente, gays são presos e , as vezes, mortos só por causa de orientação sexual. Isso NUNCA aconteceu e nem vai acontecer com héteros. A implantação nas escolas da ideia de que existem casais diferentes é ótima! O conhecimento é a arma contra a ignorância e tenho certeza que vai ajudar muitas crianças confusas por aí! “Heterofobismo?” Estude mais um pouco antes de abrir a boca e passar vergonha, por favor.</p>
+</blockquote>
+</div>
+<p>Inspirado em outros <em>corpora</em> similares (do inglês, <strong><em>O</em></strong><em>ffensive</em> <strong><em>L</em></strong><em>anguage</em> <strong><em>I</em></strong><em>dentification</em> <strong><em>D</em></strong><em>atasets</em> ou OLID), construídos para outros idiomas, o OLID-Br reúne dados de diferentes fontes: Twitter/X, YouTube, e ainda de outros conjuntos de dados em português anotados com um esquema de anotação distinto do proposto. Os conjuntos de dados utilizados foram o OffComBR de <span class="citation" data-cites="Pelle2017">Pelle; Moreira (<a href="../../shared/referencias/referencias.html#ref-Pelle2017" role="doc-biblioref">2017</a>)</span>, NCCVG<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a> de <span class="citation" data-cites="nascimento2019hate">Nascimento et al. (<a href="../../shared/referencias/referencias.html#ref-nascimento2019hate" role="doc-biblioref">2019</a>)</span>, HLPHSD de <span class="citation" data-cites="Fortuna2019">Fortuna et al. (<a href="../../shared/referencias/referencias.html#ref-Fortuna2019" role="doc-biblioref">2019</a>)</span>, e ToLD-Br de <span class="citation" data-cites="Leite2020">Leite et al. (<a href="../../shared/referencias/referencias.html#ref-Leite2020" role="doc-biblioref">2020</a>)</span>. O conjunto de dados OLID-BR contém anotações para cinco tarefas, são elas: (1) classificação de comentário tóxico: classificação binária utilizada para identificar se um comentário é ou não tóxico; (2) detecção do tipo de toxicidade: classificação multi-rótulo que identifica os rótulos de toxicidade presentes em um comentário tóxico; (3) classificação de alvo de toxicidade: classificação binária que prevê se um comentário tóxico é direcionado ou não; (4) identificação do tipo de alvo de toxicidade: classificação multiclasse que identifica o tipo de alvo de um comentário direcionado; e (5) categorização de <em>spans</em>: tarefa voltada a detecção de <em>spans</em> (parte de um texto) em um comentário tóxico. O conjunto de dados contém 6.354 (extensível para 13.538) comentários rotulados usando um esquema de anotação de três camadas com granulação fina compatível com conjuntos de dados em outros idiomas, o que permite o treinamento de modelos multilíngues.</p>
+</section>
+<section id="sec-cap-redes-sociais-as" class="level3" data-number="16.3.2">
+<h3 data-number="16.3.2" class="anchored" data-anchor-id="sec-cap-redes-sociais-as"><span class="header-section-number">16.3.2</span> Análise de Sentimento</h3>
+<p>Com a proliferação das redes sociais e das plataformas de avaliação online (tais como: TripAdvisor<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a>, Booking<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> e Airbnb<a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a>), assim como em diversos sites de e-commerce, uma infinidade de textos opinativos são publicados diariamente. Estes textos têm grande potencial para apoiar os processos de tomada de decisão <span class="citation" data-cites="Zhang2023">(<a href="../../shared/referencias/referencias.html#ref-Zhang2023" role="doc-biblioref">Zhang et al., 2023</a>)</span>. A Análise de Sentimento (AS) estuda as opiniões, sentimentos, avaliações, apreciações, atitudes e emoções em relação a entidades como produtos, serviços, organizações, indivíduos, problemas, eventos, tópicos e seus diferentes aspectos expressos em textos <span class="citation" data-cites="Liu2012">(<a href="../../shared/referencias/referencias.html#ref-Liu2012" role="doc-biblioref">Liu, 2012</a>)</span>. Nesta área desenvolvem-se aplicações em diversos campos do conhecimento como: política, finanças e marketing<a href="#fn20" class="footnote-ref" id="fnref20" role="doc-noteref"><sup>20</sup></a>.</p>
+<p>Existem muitos nomes e tarefas ligeiramente diferentes, por exemplo, análise de sentimento no nível de aspecto, reconhecimento/classificação de emoções etc. A AS visa encontrar soluções computacionais para extrair e analisar as opiniões das pessoas sobre uma entidade e seus diferentes aspectos <span class="citation" data-cites="Pereira2021">(<a href="../../shared/referencias/referencias.html#ref-Pereira2021" role="doc-biblioref">Pereira, 2021</a>)</span>. Como as opiniões podem ser categorizadas com polaridades (por exemplo, positivo e negativo), a AS pode ser considerada uma tarefa de classificação de texto <span class="citation" data-cites="Zhang2023">(<a href="../../shared/referencias/referencias.html#ref-Zhang2023" role="doc-biblioref">Zhang et al., 2023</a>)</span>. E como se trata de uma tarefa de classificação de texto, de acordo com <span class="citation" data-cites="Tan2023">Tan et al. (<a href="../../shared/referencias/referencias.html#ref-Tan2023" role="doc-biblioref">2023</a>)</span>, três tipos de abordagens podem ser utilizadas, são elas: AM, Aprendizado Profundo (AP) e Aprendizado Conjunto (AC), usualmente referido como <em>ensemble learning</em>. Abordagens baseadas em AM, como classificador Ingênuo de Bayes (em inglês, <em>Naïve Bayes</em> ou NB) de <span class="citation" data-cites="Zhang2004">Zhang (<a href="../../shared/referencias/referencias.html#ref-Zhang2004" role="doc-biblioref">2004</a>)</span> e Máquina de Vetor de Suporte (em inglês, <em>Support Vector Machine</em> ou SVM) de <span class="citation" data-cites="10.1023/A:1022627411411">Cortes; Vapnik (<a href="../../shared/referencias/referencias.html#ref-10.1023/A:1022627411411" role="doc-biblioref">1995</a>)</span>, usam modelos matemáticos para prever sentimentos. Já, as abordagens baseadas em AP, como Redes de Memória Longa de Curto Prazo (em inglês, <em>Long Short-Term Memory</em> ou LSTM) de <span class="citation" data-cites="10.1162/neco.1997.9.8.1735">Hochreiter; Schmidhuber (<a href="../../shared/referencias/referencias.html#ref-10.1162/neco.1997.9.8.1735" role="doc-biblioref">1997</a>)</span>, utilizam Redes Neurais Artificiais para prever sentimentos. O AC combina vários classificadores para obter um melhor desempenho de AS.</p>
+<p>No trabalho de <span class="citation" data-cites="Pereira2021">Pereira (<a href="../../shared/referencias/referencias.html#ref-Pereira2021" role="doc-biblioref">2021</a>)</span> é apresentada uma pesquisa de AS em língua portuguesa. Nele são apresentados os principais tipos de abordagens de AS, as quais podem ser baseadas em AM (classificação também proposta por <span class="citation" data-cites="Tan2023">Tan et al. (<a href="../../shared/referencias/referencias.html#ref-Tan2023" role="doc-biblioref">2023</a>)</span>), em léxico de sentimento, em conceitos, e híbrida. Abordagens baseadas em AM utilizam algoritmos de AM tradicionais. Já, abordagens baseadas em léxico de sentimento obtêm o grau de polaridade de opinião ou emoção de um léxico de sentimento. As abordagens baseadas em conceito usam redes de conceito (por exemplo: ontologias) para realizar a análise semântica do texto. Por fim, as abordagens híbridas, combinam as abordagens mencionadas anteriormente.</p>
+<p>Em geral, a AS tem sido investigada principalmente em três níveis de granularidade: documento, sentença ou aspecto <span class="citation" data-cites="Liu2012">(<a href="../../shared/referencias/referencias.html#ref-Liu2012" role="doc-biblioref">Liu, 2012</a>)</span>. No nível de documento, um sentimento é atribuído ao documento como um todo (<a href="#exm-cap23-9" class="quarto-xref">Exemplo&nbsp;<span>16.9</span></a> com polaridade positiva). No nível de sentença, um sentimento é atribuído a cada sentença do documento (<a href="#exm-cap23-10" class="quarto-xref">Exemplo&nbsp;<span>16.10</span></a> com polaridade positiva). No nível de aspecto, um sentimento é atribuído a cada aspecto de determinada entidade. É uma análise mais refinada, onde os aspectos podem ser atributos ou componentes de uma entidade (<a href="#exm-cap23-11" class="quarto-xref">Exemplo&nbsp;<span>16.11</span></a> com polaridade positiva para o aspecto <strong>café da manhã</strong>).</p>
+<div id="exm-cap23-9" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.9</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>O café da manhã é <strong>incrível</strong>. O hotel é um <strong>ótimo</strong> lugar para relaxar e curtir cada momento.</p>
+</blockquote>
+</div>
+<div id="exm-cap23-10" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.10</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>O café da manhã é <strong>incrível</strong>.</p>
+</blockquote>
+</div>
+<div id="exm-cap23-11" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.11</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>O <strong>café da manhã</strong> é <strong>incrível</strong>.</p>
+</blockquote>
+</div>
+<p>Abordagens de AS são altamente dependentes do uso de ferramentas de PLN, pois precisam interpretar textos em linguagem natural. Logo, desenvolver soluções específicas para a língua portuguesa está diretamente condicionado ao desenvolvimento de recursos linguísticos para a língua. Segundo <span class="citation" data-cites="Lo2017">Lo et al. (<a href="../../shared/referencias/referencias.html#ref-Lo2017" role="doc-biblioref">2017</a>)</span>, o português é uma das línguas com poucos recursos linguísticos disponíveis, apesar de estar entre as línguas mais utilizadas na Web.</p>
+<p>Dentre os recursos para o português brasileiro, podemos citar os léxicos de sentimentos: OpLexicon<a href="#fn21" class="footnote-ref" id="fnref21" role="doc-noteref"><sup>21</sup></a> <span class="citation" data-cites="Souza2011">(<a href="../../shared/referencias/referencias.html#ref-Souza2011" role="doc-biblioref">Souza et al., 2011</a>)</span>, OpenWordNet-PT<a href="#fn22" class="footnote-ref" id="fnref22" role="doc-noteref"><sup>22</sup></a> <span class="citation" data-cites="Paiva2012">(<a href="../../shared/referencias/referencias.html#ref-Paiva2012" role="doc-biblioref">De Paiva et al., 2012</a>)</span>, SentiLex<a href="#fn23" class="footnote-ref" id="fnref23" role="doc-noteref"><sup>23</sup></a> <span class="citation" data-cites="Silva2012">(<a href="../../shared/referencias/referencias.html#ref-Silva2012" role="doc-biblioref">Silva et al., 2012</a>)</span>, Reli-Lex<a href="#fn24" class="footnote-ref" id="fnref24" role="doc-noteref"><sup>24</sup></a> <span class="citation" data-cites="Freitas2013">(<a href="../../shared/referencias/referencias.html#ref-Freitas2013" role="doc-biblioref">Freitas, 2013</a>)</span>, Brazilian Portuguese LIWC Dictionary<a href="#fn25" class="footnote-ref" id="fnref25" role="doc-noteref"><sup>25</sup></a> <span class="citation" data-cites="Filho2013">(<a href="../../shared/referencias/referencias.html#ref-Filho2013" role="doc-biblioref">Balage Filho et al., 2013</a>)</span>, Word NetAffect-BR<a href="#fn26" class="footnote-ref" id="fnref26" role="doc-noteref"><sup>26</sup></a> <span class="citation" data-cites="Pasqualotti2015">(<a href="../../shared/referencias/referencias.html#ref-Pasqualotti2015" role="doc-biblioref">Pasqualotti, 2015</a>)</span>, Personalitatem Lexicon <span class="citation" data-cites="Machado2015">(<a href="../../shared/referencias/referencias.html#ref-Machado2015" role="doc-biblioref">Machado et al., 2015</a>)</span>, AffectPT-BR<a href="#fn27" class="footnote-ref" id="fnref27" role="doc-noteref"><sup>27</sup></a> <span class="citation" data-cites="Carvalho2018">(<a href="../../shared/referencias/referencias.html#ref-Carvalho2018" role="doc-biblioref">Carvalho et al., 2018</a>)</span> e LexReli <span class="citation" data-cites="Machado2018">(<a href="../../shared/referencias/referencias.html#ref-Machado2018" role="doc-biblioref">Machado et al., 2018</a>)</span>.</p>
+<ul>
+<li>O OpLexicon <span class="citation" data-cites="Souza2011">(<a href="../../shared/referencias/referencias.html#ref-Souza2011" role="doc-biblioref">Souza et al., 2011</a>)</span> possui 30.322 palavras (23.433 adjetivos e 6.889 verbos) e foi construído com base em um <em>corpus</em> do português brasileiro (composto por 346 resenhas de filmes e 970 textos jornalísticos), no <em>thesaurus</em> denominado TEP<a href="#fn28" class="footnote-ref" id="fnref28" role="doc-noteref"><sup>28</sup></a> (do português, Thesaurus Eletrônico Básico para o Português do Brasil) de <span class="citation" data-cites="Dias2003">Dias-da-Silva; Morales (<a href="../../shared/referencias/referencias.html#ref-Dias2003" role="doc-biblioref">2003</a>)</span> e no léxico de sentimento de <span class="citation" data-cites="Hu2004">Hu; Liu (<a href="../../shared/referencias/referencias.html#ref-Hu2004" role="doc-biblioref">2004</a>)</span> traduzido para o português.</li>
+<li>A base de dados da OpenWordNet-PT <span class="citation" data-cites="Paiva2012">(<a href="../../shared/referencias/referencias.html#ref-Paiva2012" role="doc-biblioref">De Paiva et al., 2012</a>)</span> é o resultado da tradução da base de dados da WordNet de Princeton<a href="#fn29" class="footnote-ref" id="fnref29" role="doc-noteref"><sup>29</sup></a>, portanto, contém uma base de dados com grande abrangência, possui 62034 sentidos de pares de palavras e 45421 palavras únicas.</li>
+<li>A versão 2 do SentiLex <span class="citation" data-cites="Silva2012">(<a href="../../shared/referencias/referencias.html#ref-Silva2012" role="doc-biblioref">Silva et al., 2012</a>)</span> é composta por 82347 formas flexionadas, organizadas em adjetivos (16863), substantivos (1280), verbos (29504) e expressões idiomáticas (34700).</li>
+<li>O ReLi-Lex <span class="citation" data-cites="Freitas2013">(<a href="../../shared/referencias/referencias.html#ref-Freitas2013" role="doc-biblioref">Freitas, 2013</a>)</span> é derivado do <em>corpus</em> ReLi de <span class="citation" data-cites="Freitas2012">Freitas et al. (<a href="../../shared/referencias/referencias.html#ref-Freitas2012" role="doc-biblioref">2012</a>)</span>, que é composto por resenhas de livros publicadas na internet e possui 1600 resenhas de treze livros (sete autores), este léxico contém 609 entradas.</li>
+<li>O Brazilian Portuguese LIWC Dictionary <span class="citation" data-cites="Filho2013">(<a href="../../shared/referencias/referencias.html#ref-Filho2013" role="doc-biblioref">Balage Filho et al., 2013</a>)</span> é um léxico disponível para a língua portuguesa, construído a partir do LIWC de <span class="citation" data-cites="Pennebaker2001">Pennebaker et al. (<a href="../../shared/referencias/referencias.html#ref-Pennebaker2001" role="doc-biblioref">2001</a>)</span>, ou seja, foi resultado de tradução automática, utilizando diversos dicionários bilíngues português-inglês e possui 127.149 instâncias.</li>
+<li>O WordNetAffect-BR <span class="citation" data-cites="Pasqualotti2015">(<a href="../../shared/referencias/referencias.html#ref-Pasqualotti2015" role="doc-biblioref">Pasqualotti, 2015</a>)</span> é um vocabulário de emoções que possui 289 palavras (adjetivos e substantivos).</li>
+<li>O Personalitatem Lexicon <span class="citation" data-cites="Machado2015">(<a href="../../shared/referencias/referencias.html#ref-Machado2015" role="doc-biblioref">Machado et al., 2015</a>)</span> contém lexemas de conotação afetiva baseada nos traços de personalidade e foi construído com base no <em>Linguistic Inquiry e Word Count</em> (LIWC) 2.015.</li>
+<li>O AffectPT-BR <span class="citation" data-cites="Carvalho2018">(<a href="../../shared/referencias/referencias.html#ref-Carvalho2018" role="doc-biblioref">Carvalho et al., 2018</a>)</span> tem um total de 1.139 palavras atribuídas na categoria “afeto”, 479 em “posemo” e 661 em “negemo”.</li>
+<li>O LexReli <span class="citation" data-cites="Machado2018">(<a href="../../shared/referencias/referencias.html#ref-Machado2018" role="doc-biblioref">Machado et al., 2018</a>)</span> é uma combinação de três léxicos, OpLexicon <span class="citation" data-cites="Souza2011">(<a href="../../shared/referencias/referencias.html#ref-Souza2011" role="doc-biblioref">Souza et al., 2011</a>)</span>, SentiLex <span class="citation" data-cites="Silva2012">(<a href="../../shared/referencias/referencias.html#ref-Silva2012" role="doc-biblioref">Silva et al., 2012</a>)</span> e Brazilian Portuguese LIWC Dictionary <span class="citation" data-cites="Filho2013">(<a href="../../shared/referencias/referencias.html#ref-Filho2013" role="doc-biblioref">Balage Filho et al., 2013</a>)</span>, especializado em identificar a polaridade de aspectos em textos opinativos sobre livros e contém 1.543 entradas.</li>
+</ul>
+<p>Além dos léxicos há também os <em>corpora</em> anotados para a tarefa de AS: ReLi <span class="citation" data-cites="Freitas2012">(<a href="../../shared/referencias/referencias.html#ref-Freitas2012" role="doc-biblioref">Freitas et al., 2012</a>)</span>, comentários sobre hotéis publicados no TripAdvisor <span class="citation" data-cites="Freitas2015">(<a href="../../shared/referencias/referencias.html#ref-Freitas2015" role="doc-biblioref">Freitas, 2015</a>)</span>, comentários sobre produtos publicados no Buscapé<a href="#fn30" class="footnote-ref" id="fnref30" role="doc-noteref"><sup>30</sup></a> <span class="citation" data-cites="Avanco2014">(<a href="../../shared/referencias/referencias.html#ref-Avanco2014" role="doc-biblioref">Avanço; Nunes, 2014</a>)</span>, comentários sobre restaurantes <span class="citation" data-cites="Farias2016">(<a href="../../shared/referencias/referencias.html#ref-Farias2016" role="doc-biblioref">Farias et al., 2016</a>)</span>, TweetSentBR<a href="#fn31" class="footnote-ref" id="fnref31" role="doc-noteref"><sup>31</sup></a> <span class="citation" data-cites="BRUM18.389">(<a href="../../shared/referencias/referencias.html#ref-BRUM18.389" role="doc-biblioref">Brum; Nunes, 2018</a>)</span>, UTLCorpus<a href="#fn32" class="footnote-ref" id="fnref32" role="doc-noteref"><sup>32</sup></a> <span class="citation" data-cites="Sousa2019">(<a href="../../shared/referencias/referencias.html#ref-Sousa2019" role="doc-biblioref">Sousa et al., 2019</a>)</span> e tweets sobre a pandemia de COVID-19 <span class="citation" data-cites="Vargas2020">(<a href="../../shared/referencias/referencias.html#ref-Vargas2020" role="doc-biblioref">Vargas et al., 2020</a>)</span>. <a href="#exm-cap23-12" class="quarto-xref">Exemplo&nbsp;<span>16.12</span></a> apresenta uma instância de texto que é positivo e <a href="#exm-cap23-13" class="quarto-xref">Exemplo&nbsp;<span>16.13</span></a> uma instância de texto que é negativo contidos no <em>corpus</em> ReLi. <a href="#exm-cap23-14" class="quarto-xref">Exemplo&nbsp;<span>16.14</span></a> apresenta uma instância de texto que é positivo, <a href="#exm-cap23-15" class="quarto-xref">Exemplo&nbsp;<span>16.15</span></a> uma instância de texto que é negativo e <a href="#exm-cap23-16" class="quarto-xref">Exemplo&nbsp;<span>16.16</span></a> uma instância de texto que é neutro contidos no <em>corpus</em> TweetSentBR. <a href="#exm-cap23-17" class="quarto-xref">Exemplo&nbsp;<span>16.17</span></a> é um comentário sobre restaurante onde o aspecto <strong>sobremesa</strong> é positivo e o <strong>atendimento</strong> é negativo.</p>
+<div id="exm-cap23-12" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.12</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>impossível abandonar o livro pela metade</p>
+</blockquote>
+</div>
+<div id="exm-cap23-13" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.13</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>a tradução deveria ser CRAPúsluco</p>
+</blockquote>
+</div>
+<div id="exm-cap23-14" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.14</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>Essa mulher que faz voz de siri e do google tradutor é mó linda #TheNoite</p>
+</blockquote>
+</div>
+<div id="exm-cap23-15" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.15</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>Nunca fiquei tão bravo numa eliminação quanto hoje, Mas fazer o que, né? #HellsKitchenBR</p>
+</blockquote>
+</div>
+<div id="exm-cap23-16" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.16</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>Vamos acorda esse prédio!!!!!! #AltasHoras @luansantana</p>
+</blockquote>
+</div>
+<div id="exm-cap23-17" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.17</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>As <strong>sobremesas</strong> deste restaurante são <strong>deliciosas</strong>, mas o <strong>atendimento</strong> é muito <strong>ruim</strong>.</p>
+</blockquote>
+</div>
+<p>No ano de 2022, foi proposto um desafio sobre AS no nível de aspecto (em inglês, <em>Aspect-based Sentiment Analysis</em> ou ABSA) para língua portuguesa no IberLEF<a href="#fn33" class="footnote-ref" id="fnref33" role="doc-noteref"><sup>33</sup></a> denominado ABSAPT<a href="#fn34" class="footnote-ref" id="fnref34" role="doc-noteref"><sup>34</sup></a>. A proposta do ABSAPT foi inspirada em competições propostas em outros idiomas, como SemEval <span class="citation" data-cites="semeval2014 semeval2015 semeval2016">(<a href="../../shared/referencias/referencias.html#ref-semeval2014" role="doc-biblioref">Pontiki et al., 2014</a>, <a href="../../shared/referencias/referencias.html#ref-semeval2015" role="doc-biblioref">2015</a>, <a href="../../shared/referencias/referencias.html#ref-semeval2016" role="doc-biblioref">2016</a>)</span> para o inglês e EVALITA <span class="citation" data-cites="evalita2020">(<a href="../../shared/referencias/referencias.html#ref-evalita2020" role="doc-biblioref">Mattei et al., 2020</a>)</span> para o italiano. Além disso, tinha como público-alvo acadêmicos, pesquisadores e profissionais de empresas privadas. Na competição participaram cinco equipes de diferentes universidades e institutos do Brasil. O <em>corpus</em> disponibilizado na competição foi desenvolvido por <span class="citation" data-cites="Freitas2015">Freitas (<a href="../../shared/referencias/referencias.html#ref-Freitas2015" role="doc-biblioref">2015</a>)</span> e <span class="citation" data-cites="Correa2021b">Corrêa (<a href="../../shared/referencias/referencias.html#ref-Correa2021b" role="doc-biblioref">2021</a>)</span>. Os participantes usaram diferentes tipos de abordagens para resolver a tarefa de ABSA, a qual foi dividida em duas, identificação de aspectos e extração de polaridade destes aspectos. O time da UFSCAR <span class="citation" data-cites="Assi2022">(<a href="../../shared/referencias/referencias.html#ref-Assi2022" role="doc-biblioref">Assi et al., 2022</a>)</span> propôs uma solução baseada em regras e léxico de sentimento, os times do NILC <span class="citation" data-cites="Machado2022">(<a href="../../shared/referencias/referencias.html#ref-Machado2022" role="doc-biblioref">Machado; Pardo, 2022</a>)</span> e da UFPR <span class="citation" data-cites="Heinrich2022">(<a href="../../shared/referencias/referencias.html#ref-Heinrich2022" role="doc-biblioref">Heinrich; Marchi, 2022</a>)</span> propuseram soluções baseadas em AM, utilizando algoritmos de AM tradicionais como <em>Conditional Random Field</em> (CRF) e os times Deep Learning Brasil <span class="citation" data-cites="Gomes2022">(<a href="../../shared/referencias/referencias.html#ref-Gomes2022" role="doc-biblioref">Gomes et al., 2022</a>)</span>, PiLN <span class="citation" data-cites="Neto2022">(<a href="../../shared/referencias/referencias.html#ref-Neto2022" role="doc-biblioref">Ricarte Neto et al., 2022</a>)</span> e UFPR <span class="citation" data-cites="Heinrich2022">(<a href="../../shared/referencias/referencias.html#ref-Heinrich2022" role="doc-biblioref">Heinrich; Marchi, 2022</a>)</span> propuseram soluções baseada em AP, utilizando Transformers <span class="citation" data-cites="Silva2022">(<a href="../../shared/referencias/referencias.html#ref-Silva2022" role="doc-biblioref">Silva et al., 2022</a>)</span>. Enfim, estratégias como estas, especialmente para línguas com poucos recursos como o português, são extremamente importantes.</p>
+</section>
+<section id="sec-cap-redes-sociais-dnf" class="level3" data-number="16.3.3">
+<h3 data-number="16.3.3" class="anchored" data-anchor-id="sec-cap-redes-sociais-dnf"><span class="header-section-number">16.3.3</span> Detecção de Notícias Falsas</h3>
+<p>Uma notícia falsa é uma mensagem transmitida conscientemente por um remetente para promover uma falsa crença ou conclusão por parte do destinatário <span class="citation" data-cites="Fuller2006">(<a href="../../shared/referencias/referencias.html#ref-Fuller2006" role="doc-biblioref">Fuller et al., 2006</a>)</span>. Segundo <span class="citation" data-cites="Oliveira2020">Oliveira et al. (<a href="../../shared/referencias/referencias.html#ref-Oliveira2020" role="doc-biblioref">2020</a>)</span>, a classificação de notícias falsas pode ser vista como uma execução de uma classificação binária entre falso ou verdadeiro. A principal diferença entre a definição dos problemas de classificação de notícias falsas é em função dos diferentes esquemas de anotação ou contextos de aplicação em diferentes conjuntos de dados. Em geral, os dados são coletados de declarações anotadas em sites de verificação de fatos, com os rótulos “verdadeiro” ou “falso”. No Brasil, algumas agências de checagem são: Agência Lupa<a href="#fn35" class="footnote-ref" id="fnref35" role="doc-noteref"><sup>35</sup></a>, Aos Fatos<a href="#fn36" class="footnote-ref" id="fnref36" role="doc-noteref"><sup>36</sup></a>, Fato ou Fake<a href="#fn37" class="footnote-ref" id="fnref37" role="doc-noteref"><sup>37</sup></a> e Comprova<a href="#fn38" class="footnote-ref" id="fnref38" role="doc-noteref"><sup>38</sup></a>.</p>
+<p>A detecção de notícias falsas, também conhecidas como <em>fake news</em>, em redes sociais é uma área de pesquisa crítica e desafiadora. A aplicação eficaz de técnicas de PLN nesse contexto é crucial para preservar a integridade da informação online e combater a desinformação que pode trazer consequências sérias tanto na política, quanto na economia, e ainda na sociedade como um todo. O PLN desempenha um papel fundamental no desenvolvimento de abordagens eficazes para lidar com esse problema (veja <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html#sec-cap-fake-news" target="_blank" title="Volume 3">Detecção Automática de Notícias Falsas</a></span>). Apesar do problema de disseminação de notícias falsas estar presente em todas as redes sociais, algumas tendem a ter o compartilhamento deste tipo de conteúdo mais dissipado. De acordo com <span class="citation" data-cites="2021_cabral_fakewhastappDataset">Cabral et al. (<a href="../../shared/referencias/referencias.html#ref-2021_cabral_fakewhastappDataset" role="doc-biblioref">2021</a>)</span>, o Whatsapp facilita a disseminação rápida de desinformação. No Brasil, cerca de 35% das notícias falsas são compartilhadas através do WhatsApp <span class="citation" data-cites="Newman2020">(<a href="../../shared/referencias/referencias.html#ref-Newman2020" role="doc-biblioref">Newman et al., 2020</a>)</span>, e 40,7% destes mensagens são compartilhadas após serem desmentidas <span class="citation" data-cites="Resende2019">(<a href="../../shared/referencias/referencias.html#ref-Resende2019" role="doc-biblioref">Resende et al., 2019</a>)</span>.</p>
+<p>Na literatura, encontramos alguns <em>corpora</em>, descritos na língua portuguesa, anotados para a tarefa de detecção de notícias falsas em língua portuguesa, são eles: COVID-19<a href="#fn39" class="footnote-ref" id="fnref39" role="doc-noteref"><sup>39</sup></a>, FakeTweetBr<a href="#fn40" class="footnote-ref" id="fnref40" role="doc-noteref"><sup>40</sup></a> de <span class="citation" data-cites="Cordeiro2019">Cordeiro; Pinheiro (<a href="../../shared/referencias/referencias.html#ref-Cordeiro2019" role="doc-biblioref">2019</a>)</span>, Fake.br-Corpus<a href="#fn41" class="footnote-ref" id="fnref41" role="doc-noteref"><sup>41</sup></a> de <span class="citation" data-cites="Monteiro2018">(<a href="../../shared/referencias/referencias.html#ref-Monteiro2018" role="doc-biblioref">Monteiro et al., 2018</a>)</span> e FakeWhatsApp<a href="#fn42" class="footnote-ref" id="fnref42" role="doc-noteref"><sup>42</sup></a> de <span class="citation" data-cites="Cunha2021">Cunha (<a href="../../shared/referencias/referencias.html#ref-Cunha2021" role="doc-biblioref">2021</a>)</span>. O COVID-19 contém notícias sobre a cura da COVID-19 postadas no Twitter/X. O FakeTweetBr é um <em>corpus</em> de notícias falsas também advindo do Twitter/X. O Fake.br-Corpus contém notícias classificadas em seis grandes categorias (política, TV e celebridades, sociedade e notícias diárias, ciência e tecnologia, economia, religião) extraídas do G1<a href="#fn43" class="footnote-ref" id="fnref43" role="doc-noteref"><sup>43</sup></a>, Folha de São Paulo<a href="#fn44" class="footnote-ref" id="fnref44" role="doc-noteref"><sup>44</sup></a> e Estadão<a href="#fn45" class="footnote-ref" id="fnref45" role="doc-noteref"><sup>45</sup></a>. O FakeWhatsApp possui mensagens anônimas do WhatsApp de grupos públicos do português brasileiro para detecção automática de desinformação textual e de usuários maliciosos. <a href="#exm-cap23-18" class="quarto-xref">Exemplo&nbsp;<span>16.18</span></a> apresenta uma mensagem falsa e <a href="#exm-cap23-19" class="quarto-xref">Exemplo&nbsp;<span>16.19</span></a> apresenta uma mensagem verdadeira contidas no <em>corpus</em> FakeWhatsApp.</p>
+<div id="exm-cap23-18" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.18</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>Olhem reportagem da TV italiana RAÍ Essa matéria é de 2015 e apresenta a preocupação da comunidade científica a respeito das pesquisas feitas pelo Instituto de virulogia de Wuhan com o coronavirus de morcegos, combinando - o geneticamente com o SARS para fazê-lo mais contagioso, a fim de estudar seus efeitos.</p>
+</blockquote>
+</div>
+<div id="exm-cap23-19" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.19</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>Em novembro de 2015 a televisão italiana apresentou uma matéria que denunciava que cientistas chineses haviam desenvolvido um super virus capaz de desencadear pneumonia aguda em seres humanos.</p>
+</blockquote>
+</div>
+<p>Um dos trabalhos recentes que utiliza Aprendizado Profundo (AP) na detecção de notícias falsas é o trabalho de <span class="citation" data-cites="Narde2021">Narde (<a href="../../shared/referencias/referencias.html#ref-Narde2021" role="doc-biblioref">2021</a>)</span>. Nele foram utilizados diferentes modelos (ELECTRA de <span class="citation" data-cites="Clark2020">Clark et al. (<a href="../../shared/referencias/referencias.html#ref-Clark2020" role="doc-biblioref">2020</a>)</span>, RoBERTa de <span class="citation" data-cites="10.1007/978-3-030-84186-7_31">Liu et al. (<a href="../../shared/referencias/referencias.html#ref-10.1007/978-3-030-84186-7_31" role="doc-biblioref">2021</a>)</span>, XLM-R de <span class="citation" data-cites="Conneau2020">Conneau et al. (<a href="../../shared/referencias/referencias.html#ref-Conneau2020" role="doc-biblioref">2020</a>)</span>, Multilingual BERT de <span class="citation" data-cites="Devlin19">Devlin et al. (<a href="../../shared/referencias/referencias.html#ref-Devlin19" role="doc-biblioref">2019</a>)</span> e BERTimbau de <span class="citation" data-cites="Souza2020">Souza et al. (<a href="../../shared/referencias/referencias.html#ref-Souza2020" role="doc-biblioref">2020</a>)</span>) para detectar notícias falsas em redes sociais. O modelo BERTimbau <span class="citation" data-cites="Souza2020">(<a href="../../shared/referencias/referencias.html#ref-Souza2020" role="doc-biblioref">Souza et al., 2020</a>)</span> com 6 épocas foi o que obteve acurácia e medida-F superior a todos outros os modelos utilizados nos experimentos, medida-F de 95%.</p>
+</section>
+<section id="sec-cap-redes-sociais-ironia" class="level3" data-number="16.3.4">
+<h3 data-number="16.3.4" class="anchored" data-anchor-id="sec-cap-redes-sociais-ironia"><span class="header-section-number">16.3.4</span> Detecção de Ironia/Sarcasmo/Humor</h3>
+<p>Apesar dos avanços na área de Análise de Sentimentos (<span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html#sec-cap-redes-sociais-as" target="_blank" title="Volume 3">Análise de Sentimento</a></span>), ela ainda se depara com vários desafios. Entre eles, destaca-se o entendimento de figuras de linguagem (ironia/sarcasmo/humor). As figuras de linguagem são difundidas em quase qualquer gênero de texto e são especialmente comuns nos textos da Web e das redes sociais, em plataformas como o Twitter/X <span class="citation" data-cites="Ghosh2015">(<a href="../../shared/referencias/referencias.html#ref-Ghosh2015" role="doc-biblioref">Ghosh et al., 2015</a>)</span>.</p>
+<p>Existe uma linha tênue entre os conceitos de ironia, sarcasmo e humor. <span class="citation" data-cites="Reyes2012">Reyes et al. (<a href="../../shared/referencias/referencias.html#ref-Reyes2012" role="doc-biblioref">2012</a>)</span> define a ironia como uma “ligeira fronteira no significado do sarcasmo e da sátira”. <span class="citation" data-cites="Gibbs2001">Gibbs; Colston (<a href="../../shared/referencias/referencias.html#ref-Gibbs2001" role="doc-biblioref">2001</a>)</span> afirmam que o sarcasmo, combinado com jocosidade, hipérbole, perguntas retóricas e eufemismo, são tipos de ironia. Tradicionalmente, a ironia é conhecida como o oposto do significado literal <span class="citation" data-cites="Grice1975">(<a href="../../shared/referencias/referencias.html#ref-Grice1975" role="doc-biblioref">Grice, 1975</a>)</span>.</p>
+<p>Dentre os trabalhos aplicados à tarefa de detecção de ironia para a língua portuguesa, podemos citar: <span class="citation" data-cites="Carvalho2009">Carvalho et al. (<a href="../../shared/referencias/referencias.html#ref-Carvalho2009" role="doc-biblioref">2009</a>)</span>, <span class="citation" data-cites="Freitas2014">Freitas et al. (<a href="../../shared/referencias/referencias.html#ref-Freitas2014" role="doc-biblioref">2014</a>)</span> e <span class="citation" data-cites="Silva2018">Silva (<a href="../../shared/referencias/referencias.html#ref-Silva2018" role="doc-biblioref">2018</a>)</span>. Nos trabalhos de <span class="citation" data-cites="Carvalho2009">Carvalho et al. (<a href="../../shared/referencias/referencias.html#ref-Carvalho2009" role="doc-biblioref">2009</a>)</span> e <span class="citation" data-cites="Freitas2014">Freitas et al. (<a href="../../shared/referencias/referencias.html#ref-Freitas2014" role="doc-biblioref">2014</a>)</span> são propostas pistas linguísticas para detectar ironia. Em <span class="citation" data-cites="Carvalho2009">Carvalho et al. (<a href="../../shared/referencias/referencias.html#ref-Carvalho2009" role="doc-biblioref">2009</a>)</span>, os autores mostraram que é possível identificar opiniões irônicas em comentários, com precisão relativamente alta (de 45% a 85%), usando padrões linguísticos relativamente simples, tais como: emoticons, expressões onomatopeicas para risos, sinais de pontuação, aspas e interjeições positivas (“viva”, “parabéns”, “força” etc.). Ainda, em <span class="citation" data-cites="Freitas2014">Freitas et al. (<a href="../../shared/referencias/referencias.html#ref-Freitas2014" role="doc-biblioref">2014</a>)</span> padrões linguísticos foram aplicados no <em>corpus</em> sobre o assunto “fim do mundo” extraído do Twitter/X (<a href="#exm-cap23-20" class="quarto-xref">Exemplo&nbsp;<span>16.20</span></a> de tweet irônico com emoticons e <a href="#exm-cap23-21" class="quarto-xref">Exemplo&nbsp;<span>16.21</span></a> de tweet irônico com sinais de pontuação e expressões onomatopeicas para risos presentes no <em>corpus</em> sobre o assunto “fim do mundo”).</p>
+<div id="exm-cap23-20" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.20</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>O fim domundo não chegou ainda porque esta engarrafado naBR116. #GauchanoFimdoMundo :)</p>
+</blockquote>
+</div>
+<div id="exm-cap23-21" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.21</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>Todo mundo tirando sarro do fim do mundo…oquei!!!…mas quero ver amanhã, qualquer temporalzinhovai todo mundo se mijar de medo…hahaha</p>
+</blockquote>
+</div>
+<p>Esses padrões estão relacionados ao português brasileiro, mas a metodologia pode ser facilmente transferida para análises em outras línguas. Isso foi feito no trabalho de <span class="citation" data-cites="Deon2020">Freitas et al. (<a href="../../shared/referencias/referencias.html#ref-Deon2020" role="doc-biblioref">2020</a>)</span>, no qual um subconjunto de padrões foi testado em <em>corpora</em> de diferentes idiomas (inglês, italiano e espanhol). Em <span class="citation" data-cites="Silva2018">Silva (<a href="../../shared/referencias/referencias.html#ref-Silva2018" role="doc-biblioref">2018</a>)</span>, o autor descreve sobre o processo de geração de um <em>corpus</em> de ironia para a língua portuguesa, bem como, a criação de um modelo pré-treinado de uma Rede Neural Convolucional (em inglês, <em>Convolutional Neural Network</em> ou CNN) para detectar ironia. A CNN foi capaz de adaptar-se e detectar automaticamente as figuras de linguagem em questão. Tal abordagem mostrou-se satisfatória para detecção de ironia, obtendo medida-F de 89,78%.</p>
+<p>No ano de 2021, foi proposto um desafio sobre detecção de ironia para língua portuguesa no IberLEF<a href="#fn46" class="footnote-ref" id="fnref46" role="doc-noteref"><sup>46</sup></a> denominado IDPT<a href="#fn47" class="footnote-ref" id="fnref47" role="doc-noteref"><sup>47</sup></a>. A proposta do IDPT foi inspirada em competições proposta em outros idiomas, como SemEval <span class="citation" data-cites="VanHee2018">(<a href="../../shared/referencias/referencias.html#ref-VanHee2018" role="doc-biblioref">Hee et al., 2018</a>)</span> para o inglês, IronITA <span class="citation" data-cites="Cignarella2018">(<a href="../../shared/referencias/referencias.html#ref-Cignarella2018" role="doc-biblioref">Cignarella et al., 2018</a>)</span> para o italiano, IroSvA <span class="citation" data-cites="Bueno2019">(<a href="../../shared/referencias/referencias.html#ref-Bueno2019" role="doc-biblioref">Bueno et al., 2019</a>)</span> para o espanhol e IDAT <span class="citation" data-cites="Ghanem2019">(<a href="../../shared/referencias/referencias.html#ref-Ghanem2019" role="doc-biblioref">Ghanem et al., 2019</a>)</span> para o árabe. Participaram da tarefa seis equipes de universidades e de empresas de quatro diferentes países: Brasil, China, Portugal e Espanha. Os <em>corpora</em> disponibilizados na competição contêm textos (tweets e notícias) sobre diferentes temas. <a href="#exm-cap23-22" class="quarto-xref">Exemplo&nbsp;<span>16.22</span></a> de notícia irônica, <a href="#exm-cap23-23" class="quarto-xref">Exemplo&nbsp;<span>16.23</span></a> de notícia não irônica, <a href="#exm-cap23-24" class="quarto-xref">Exemplo&nbsp;<span>16.24</span></a> de tweet irônico e <a href="#exm-cap23-25" class="quarto-xref">Exemplo&nbsp;<span>16.25</span></a> de tweet não irônico contidos no <em>corpus</em> do desafio IDPT.</p>
+<div id="exm-cap23-22" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.22</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>A criatura chegou ao Rio de Janeiro e deve conceder entrevista na tarde de hoje.</p>
+</blockquote>
+</div>
+<div id="exm-cap23-23" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.23</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>A superlotação de hospitais da região metropolitana de Belo Horizonte preocupa a capital, já que a cidade é referência hospitalar da macrorregião Central e, caso não haja vagas na cidade de origem, os pacientes são transferidos para BH. No momento, cerca de 30% dos leitos de terapia intensiva e enfermaria da capital estão ocupados com pacientes de outras cidades.</p>
+</blockquote>
+</div>
+<div id="exm-cap23-24" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.24</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>Agora deu vontade de me alistar… #sqn #exercitosuperfaturaatecerveja https://t.co/Pp6vx36jzN</p>
+</blockquote>
+</div>
+<div id="exm-cap23-25" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 16.25</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>Agora a festa dos europeus comemorando o Mundial é contagiante hein?</p>
+</blockquote>
+</div>
+<p>O conjunto de dados de treinamento foi desenvolvido por <span class="citation" data-cites="Freitas2014">Freitas et al. (<a href="../../shared/referencias/referencias.html#ref-Freitas2014" role="doc-biblioref">2014</a>)</span>, <span class="citation" data-cites="Silva2018">Silva (<a href="../../shared/referencias/referencias.html#ref-Silva2018" role="doc-biblioref">2018</a>)</span> e <span class="citation" data-cites="Schubert2020">Schubert; Freitas (<a href="../../shared/referencias/referencias.html#ref-Schubert2020" role="doc-biblioref">2020</a>)</span>. Os participantes usaram abordagens tradicionais de AM (como: SVM, NB e outros) e/ou AP (como: Transformers). Os times que atingiram os melhores resultados foram o BERT4EVER <span class="citation" data-cites="Jiang2021">(<a href="../../shared/referencias/referencias.html#ref-Jiang2021" role="doc-biblioref">Jiang et al., 2021</a>)</span> e PiLN <span class="citation" data-cites="Anchieta2021">(<a href="../../shared/referencias/referencias.html#ref-Anchieta2021" role="doc-biblioref">Anchiêta et al., 2021</a>)</span>. BERT4EVER <span class="citation" data-cites="Jiang2021">(<a href="../../shared/referencias/referencias.html#ref-Jiang2021" role="doc-biblioref">Jiang et al., 2021</a>)</span> utilizou Transformers e obteve uma acurácia balanceada de 92% para conjunto de dados de notícias. Para o conjunto de dados composto por tweets, a equipe PiLN <span class="citation" data-cites="Anchieta2021">(<a href="../../shared/referencias/referencias.html#ref-Anchieta2021" role="doc-biblioref">Anchiêta et al., 2021</a>)</span> utilizou <em>superficial features</em> e SVM e obteve uma acurácia balanceada de 52%.</p>
+</section>
+</section>
+<section id="sec-cap-redes-sociais-consideracoes-finais" class="level2" data-number="16.4">
+<h2 data-number="16.4" class="anchored" data-anchor-id="sec-cap-redes-sociais-consideracoes-finais"><span class="header-section-number">16.4</span> Considerações finais</h2>
+<p>Falar sobre aplicações de PLN em redes sociais é de grande importância por diversas razões. As redes sociais desempenham um papel fundamental na comunicação e interação social na sociedade moderna. Compreender como o PLN é aplicado nessas plataformas é essencial para entender as dinâmicas sociais e o impacto da tecnologia na vida das pessoas. Este capítulo forneceu uma visão geral sobre aplicações de abordagens de PLN em conteúdos de redes sociais. Demos ênfase ao desenvolvimento de pesquisas desenvolvidas com foco na língua portuguesa, dado o foco deste livro e de esta ser ainda uma língua com recursos escassos para algumas tarefas. Nessa primeira versão, deixamos de cobrir tópicos relevantes e atuais como reconhecimento/classificação de emoções, rastreio de transtorno mental, e detecção de postura. Reconhecendo a importância destes tópicos, pretendemos contemplá-los na versão seguinte deste livro.</p>
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="1" role="list" style="display: none">
+<div id="ref-Anchieta2021" class="csl-entry" role="listitem">
+ANCHIÊTA, R. T. et al. <strong>PiLN <span>IDPT</span> 2021: Irony Detection in Portuguese Texts with Superficial Features and Embeddings</strong>. Proceedings of the Iberian Languages Evaluation Forum (IberLEF 2021) co-located with the Conference of the Spanish Society for Natural Language Processing <span>(SEPLN</span> 2021), <span>XXXVII</span> International Conference of the Spanish Society for Natural Language Processing., M<span>á</span>laga, Spain, September, 2021. <strong>Anais</strong>...2021.
+</div>
+<div id="ref-Assi2022" class="csl-entry" role="listitem">
+ASSI, F. M. et al. <strong>UFSCar’s Team at <span>ABSAPT</span> 2022: Using Syntax, Semantics and Context for Solving the Tasks</strong>. Proceedings of the Iberian Languages Evaluation Forum (IberLEF 2022) co-located with the Conference of the Spanish Society for Natural Language Processing <span>(SEPLN</span> 2022), <span>A</span> Coru<span>ñ</span>a, Spain, September 20, 2022. <strong>Anais</strong>...2022.
+</div>
+<div id="ref-Avanco2014" class="csl-entry" role="listitem">
+AVANÇO, L. V.; NUNES, M. DAS G. V. <strong>Lexicon-Based Sentiment Analysis for Reviews of Products in Brazilian Portuguese</strong>. Proceedings of the 2014 Brazilian Conference on Intelligent Systems. <strong>Anais</strong>...2014.
+</div>
+<div id="ref-Filho2013" class="csl-entry" role="listitem">
+BALAGE FILHO, P. P.; PARDO, T. A. S.; ALUÍSIO, S. M. <strong>An Evaluation of the Brazilian Portuguese LIWC Dictionary for Sentiment Analysis</strong>. Proceedings of the 9th Brazilian Symposium in Information and Human Language Technology. <strong>Anais</strong>...2013.
+</div>
+<div id="ref-Breitfeller2019" class="csl-entry" role="listitem">
+BREITFELLER, L. et al. <strong>Finding Microaggressions in the Wild: A Case for Locating Elusive Phenomena in Social Media Posts</strong>. Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP). <strong>Anais</strong>...2019.
+</div>
+<div id="ref-BRUM18.389" class="csl-entry" role="listitem">
+BRUM, H.; NUNES, M. DAS G. V. <strong><span>Building a Sentiment Corpus of Tweets in Brazilian Portuguese</span></strong>. (N. C. (Conference chair) et al., Eds.)Proceedings of the Eleventh International Conference on Language Resources and Evaluation (LREC 2018). <strong>Anais</strong>...Miyazaki, Japan: European Language Resources Association (ELRA), mar. 2018.
+</div>
+<div id="ref-Bueno2019" class="csl-entry" role="listitem">
+BUENO, R. O. et al. <strong>Overview of the Task on Irony Detection in Spanish Variants</strong>. Proceedings of the Iberian Languages Evaluation Forum co-located with 35th Conference of the Spanish Society for Natural Language Processing. <strong>Anais</strong>...2019.
+</div>
+<div id="ref-2021_cabral_fakewhastappDataset" class="csl-entry" role="listitem">
+CABRAL, L. et al. <strong><a href="https://doi.org/10.5220/0010446800630074"><span>FakeWhastApp.BR</span>: <span>NLP</span> and Machine Learning Techniques for Misinformation Detection in Brazilian Portuguese WhatsApp Messages</a></strong>. Proceedings of the 23rd International Conference on Enterprise Information Systems (ICEIS 2021) - Volume 1. <strong>Anais</strong>...2021.
+</div>
+<div id="ref-Carvalho2018" class="csl-entry" role="listitem">
+CARVALHO, F.; SANTOS, G. DOS; GUEDES, G. P. <strong>AffectPT-br: an Affective Lexicon based on LIWC 2015</strong>. Proceedings of the 37th International Conference of the Chilean Computer Science Society. <strong>Anais</strong>...2018.
+</div>
+<div id="ref-Carvalho2009" class="csl-entry" role="listitem">
+CARVALHO, P. et al. <strong>Clues for Detecting Irony in User-Generated Contents: Oh...!! It’s "so Easy" ;-)</strong>. Proceedings of the 1st International CIKM Workshop on Topic-Sentiment Analysis for Mass Opinion. <strong>Anais</strong>...2009.
+</div>
+<div id="ref-Cignarella2018" class="csl-entry" role="listitem">
+CIGNARELLA, A. T. et al. <strong>Overview of the <span>EVALITA</span> 2018 Task on Irony Detection in Italian Tweets (IronITA)</strong>. Proceedings of the Sixth Evaluation Campaign of Natural Language Processing and Speech Tools for Italian. Final Workshop <span>(EVALITA</span> 2018) co-located with the Fifth Italian Conference on Computational Linguistics (CLiC-it 2018). <strong>Anais</strong>...2018.
+</div>
+<div id="ref-Clark2020" class="csl-entry" role="listitem">
+CLARK, K. et al. <strong><span>ELECTRA:</span> Pre-training Text Encoders as Discriminators Rather Than Generators</strong>. 8th International Conference on Learning Representations, <span>ICLR</span> 2020. <strong>Anais</strong>...Addis Ababa, Ethiopia: OpenReview.net, abr. 2020. Disponível em: &lt;<a href="https://openreview.net/forum?id=r1xMH1BtvB">https://openreview.net/forum?id=r1xMH1BtvB</a>&gt;
+</div>
+<div id="ref-Coelho2019" class="csl-entry" role="listitem">
+COELLO, J. M. A.; JUNQUEIRA, B. A. Automatic Analysis of Facebook Posts and Comments Written in Brazilian Portuguese. <strong>International Journal for Innovation Education and Research</strong>, 2019.
+</div>
+<div id="ref-Conneau2020" class="csl-entry" role="listitem">
+CONNEAU, A. et al. <strong>Unsupervised cross-lingual representation learning at scale</strong>. Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics. <strong>Anais</strong>...2020.
+</div>
+<div id="ref-Cordeiro2019" class="csl-entry" role="listitem">
+CORDEIRO, P. R.; PINHEIRO, V. <strong>Um corpus de not<span>ı</span>cias falsas do twitter e verifica<span>ç</span>ao autom<span>á</span>tica de rumores em l<span>ı</span>ngua portuguesa</strong>. Proceedings of the Symposium in Information and Human Language Technology. <strong>Anais</strong>...2019.
+</div>
+<div id="ref-Correa2021b" class="csl-entry" role="listitem">
+CORRÊA, U. B. <strong>Análise de sentimento baseada em aspectos usando aprendizado profundo: uma proposta aplicada à língua portuguesa</strong>. tese de doutorado—[s.l.] Universidade Federal de Pelotas, 2021.
+</div>
+<div id="ref-10.1023/A:1022627411411" class="csl-entry" role="listitem">
+CORTES, C.; VAPNIK, V. <a href="https://doi.org/10.1023/A:1022627411411">Support-Vector Networks</a>. <strong>Machine Learning</strong>, v. 20, n. 3, p. 273–297, set. 1995.
+</div>
+<div id="ref-Cunha2021" class="csl-entry" role="listitem">
+CUNHA, L. C. C. DA. <strong>Um Corpus anotado de mensagens do WhatsApp em PT-BR para detecção automática de desinformação textual</strong>. <a href="https://github.com/cabrau/FakeWhatsApp.Br" class="uri">https://github.com/cabrau/FakeWhatsApp.Br</a>, 2021.
+</div>
+<div id="ref-dadico-phdthesis" class="csl-entry" role="listitem">
+DADICO, C. M. <strong>O Ódio Ancestral Como Elemento Constitutivo Do Estado Moderno e Seus Reflexos Na Compreensão dos Crimes De Ódio: Um Diálogo Entre o Direito Internacional e o Direito Brasileiro</strong>. tese de doutorado—Porto Alegre, RS, Brazil: Programa de Pós-Grduação em Ciências Criminais da Escola de Direito da Pontifícia Universidade Católica do Rio Grande do Sul, 2020.
+</div>
+<div id="ref-Paiva2012" class="csl-entry" role="listitem">
+DE PAIVA, V.; RADEMAKER, A.; MELO, G. DE. <strong>OpenWordNet-PT: An Open <span>B</span>razilian <span>W</span>ordnet for Reasoning</strong>. Proceedings of COLING 2012: Demonstration Papers. <strong>Anais</strong>...2012.
+</div>
+<div id="ref-Devlin19" class="csl-entry" role="listitem">
+DEVLIN, J. et al. <strong><span>BERT:</span> Pre-training of Deep Bidirectional Transformers for Language Understanding</strong>. (J. Burstein, C. Doran, T. Solorio, Eds.)Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, <span>NAACL-HLT</span> 2019. <strong>Anais</strong>...Minneapolis, MN, USA: Association for Computational Linguistics, 2019. Disponível em: &lt;<a href="https://doi.org/10.18653/v1/n19-1423">https://doi.org/10.18653/v1/n19-1423</a>&gt;
+</div>
+<div id="ref-Dias2003" class="csl-entry" role="listitem">
+DIAS-DA-SILVA, B. C.; MORALES, H. R. DE. A Construção de um Thesaurus Eletrônico para o Português. <strong>Alfa</strong>, 2003.
+</div>
+<div id="ref-Farias2016" class="csl-entry" role="listitem">
+FARIAS, D. S. et al. <strong>Opinion-Meter: A Framework for Aspect-Based Sentiment Analysis</strong>. Proceedings of the 22nd Brazilian Symposium on Multimedia and the Web. <strong>Anais</strong>...2016.
+</div>
+<div id="ref-Farzindar2018" class="csl-entry" role="listitem">
+FARZINDAR, A.; INKPEN, D. <strong>Natural Language Processing for Social Media</strong>. Second edition ed. [s.l.] Morgan; Claypool, 2018.
+</div>
+<div id="ref-Ferreira2017" class="csl-entry" role="listitem">
+FERREIRA, A. C. et al. Padrões linguísticos para detecção de ironia em múltiplos idiomas. <strong>Revista Gestão &amp; Tecnologia</strong>, 2017.
+</div>
+<div id="ref-Fortuna2019" class="csl-entry" role="listitem">
+FORTUNA, P. et al. <strong>A Hierarchically-Labeled <span>P</span>ortuguese Hate Speech Dataset</strong>. Proceedings of the Third Workshop on Abusive Language Online. <strong>Anais</strong>...2019.
+</div>
+<div id="ref-fortuna2018survey" class="csl-entry" role="listitem">
+FORTUNA, P.; NUNES, S. A survey on automatic detection of hate speech in text. <strong>ACM Computing Surveys (CSUR)</strong>, 2018.
+</div>
+<div id="ref-Freitas2012" class="csl-entry" role="listitem">
+FREITAS, C. et al. <strong>Vampiro que brilha... rá! Desafios na anotação de opinião em um corpus de resenhas de livros</strong>. Proceedings of XI Encontro de Linguística de Corpus. <strong>Anais</strong>...2012.
+</div>
+<div id="ref-Freitas2013" class="csl-entry" role="listitem">
+FREITAS, C. Sobre a construção de um léxico da afetividade para o processamento computacional do português. <strong>Revista Brasileira de Linguística Aplicada</strong>, 2013.
+</div>
+<div id="ref-Freitas2014" class="csl-entry" role="listitem">
+FREITAS, L. A. DE et al. <strong>Pathways for irony detection in tweets</strong>. Proceedings of the Symposium on Applied Computing (SAC). <strong>Anais</strong>...2014.
+</div>
+<div id="ref-Freitas2015" class="csl-entry" role="listitem">
+FREITAS, L. A. DE. <strong>Feature-level sentiment analysis applied to brazilian portuguese reviews</strong>. tese de doutorado—[s.l.] Pontifícia Universidade Católica do Rio Grande do Sul, 2015.
+</div>
+<div id="ref-Deon2020" class="csl-entry" role="listitem">
+FREITAS, L. A. DE; SANTOS, L. DOS; DEON, D. Padrões linguísticos para detecção de ironia em múltiplos idiomas. <strong>Revista Eletrônica de Iniciação Científica em Computação</strong>, 2020.
+</div>
+<div id="ref-Fuller2006" class="csl-entry" role="listitem">
+FULLER, C. et al. <strong>An Analysis of Text-Based Deception Detection Tools</strong>. Proceedings of the Twelfth Americas Conference on Information Systems. <strong>Anais</strong>...2006.
+</div>
+<div id="ref-Ghanem2019" class="csl-entry" role="listitem">
+GHANEM, B. et al. <strong>IDAT at FIRE2019: Overview of the Track on Irony Detection in Arabic Tweets</strong>. Proceedings of the 11th Forum for Information Retrieval Evaluation. <strong>Anais</strong>...2019.
+</div>
+<div id="ref-Ghosh2015" class="csl-entry" role="listitem">
+GHOSH, A. et al. <strong><span>S</span>em<span>E</span>val-2015 Task 11: Sentiment Analysis of Figurative Language in <span>T</span>witter</strong>. Proceedings of the 9th International Workshop on Semantic Evaluation (<span>S</span>em<span>E</span>val 2015). <strong>Anais</strong>...2015.
+</div>
+<div id="ref-Gibbs2001" class="csl-entry" role="listitem">
+GIBBS, R. W.; COLSTON, H. L. <strong>The Risks and Rewards of Ironic Communication</strong>. Say not to say: new perspectives on miscommunication. <strong>Anais</strong>...2001. Disponível em: &lt;<a href="https://api.semanticscholar.org/CorpusID:12510370">https://api.semanticscholar.org/CorpusID:12510370</a>&gt;
+</div>
+<div id="ref-Gomes2022" class="csl-entry" role="listitem">
+GOMES, J. R. S. et al. <strong>Deep Learning Brasil at ABSAPT 2022: Portuguese Transformer Ensemble Approaches</strong>. Proceedings of the Iberian Languages Evaluation Forum (IberLEF 2022) co-located with the Conference of the Spanish Society for Natural Language Processing <span>(SEPLN</span> 2022), <span>A</span> Coru<span>ñ</span>a, Spain, September 20, 2022. <strong>Anais</strong>...2022.
+</div>
+<div id="ref-Grice1975" class="csl-entry" role="listitem">
+GRICE, H. P. Logic and Conversation. Em: <strong>Syntax and Semantics: Vol. 3: Speech Acts</strong>. [s.l.] Academic Press, 1975.
+</div>
+<div id="ref-Guimaraes2020" class="csl-entry" role="listitem">
+GUIMARÃES, S. S. et al. <strong>Characterizing Toxicity on Facebook Comments in Brazil</strong>. Proceedings of the Brazilian Symposium on Multimedia and the Web. <strong>Anais</strong>...2020.
+</div>
+<div id="ref-VanHee2018" class="csl-entry" role="listitem">
+HEE, C. V.; LEFEVER, E.; HOSTE, V. <strong><span>S</span>em<span>E</span>val-2018 Task 3: Irony Detection in <span>E</span>nglish Tweets</strong>. Proceedings of the 12th International Workshop on Semantic Evaluation. <strong>Anais</strong>...2018.
+</div>
+<div id="ref-Heinrich2022" class="csl-entry" role="listitem">
+HEINRICH, T.; MARCHI, F. <strong>TeamUFPR at <span>ABSAPT</span> 2022: Aspect Extraction with <span>CRF</span> and <span>BERT</span></strong>. Proceedings of the Iberian Languages Evaluation Forum (IberLEF 2022) co-located with the Conference of the Spanish Society for Natural Language Processing <span>(SEPLN</span> 2022), <span>A</span> Coru<span>ñ</span>a, Spain, September 20, 2022. <strong>Anais</strong>...2022.
+</div>
+<div id="ref-10.1162/neco.1997.9.8.1735" class="csl-entry" role="listitem">
+HOCHREITER, S.; SCHMIDHUBER, J. <a href="https://doi.org/10.1162/neco.1997.9.8.1735"><span>Long Short-Term Memory</span></a>. <strong>Neural Computation</strong>, v. 9, n. 8, p. 1735–1780, nov. 1997.
+</div>
+<div id="ref-Hu2004" class="csl-entry" role="listitem">
+HU, M.; LIU, B. <strong>Mining Opinion Features in Customer Reviews</strong>. Proceedings of the 19th National Conference on Artifical Intelligence. <strong>Anais</strong>...2004.
+</div>
+<div id="ref-JAHAN2023126232" class="csl-entry" role="listitem">
+JAHAN, M. S.; OUSSALAH, M. A systematic review of hate speech automatic detection using natural language processing. <strong>Neurocomputing</strong>, 2023.
+</div>
+<div id="ref-Jiang2021" class="csl-entry" role="listitem">
+JIANG, S. et al. <strong>Irony Detection in the Portuguese Language using <span>BERT</span></strong>. Proceedings of the Iberian Languages Evaluation Forum (IberLEF 2021) co-located with the Conference of the Spanish Society for Natural Language Processing <span>(SEPLN</span> 2021), <span>XXXVII</span> International Conference of the Spanish Society for Natural Language Processing., M<span>á</span>laga, Spain, September, 2021. <strong>Anais</strong>...2021.
+</div>
+<div id="ref-10.1145/3543507.3583522" class="csl-entry" role="listitem">
+KUMAR, D. et al. <strong>Understanding the Behaviors of Toxic Accounts on Reddit</strong>. Proceedings of the ACM Web Conference 2023. <strong>Anais</strong>...2023.
+</div>
+<div id="ref-Leite2020" class="csl-entry" role="listitem">
+LEITE, H. et al. <strong><span>WRITEME</span>: uma Ferramenta de Auxílio à Escrita de <span>README</span>s Baseada em Dados Abertos</strong>. Anais do XVII Congresso Latino-Americano de Software Livre e Tecnologias Abertas. <strong>Anais</strong>...Porto Alegre, RS, Brasil: SBC, 2020.
+</div>
+<div id="ref-Liu2012" class="csl-entry" role="listitem">
+LIU, B. Sentiment Analysis and Opinion Mining. <strong>Synthesis Lectures on Human Language Technologies</strong>, 2012.
+</div>
+<div id="ref-10.1007/978-3-030-84186-7_31" class="csl-entry" role="listitem">
+LIU, Z. et al. <strong>A Robustly Optimized BERT Pre-Training Approach with Post-Training</strong>. Chinese Computational Linguistics: 20th China National Conference, CCL 2021, Hohhot, China, August 13–15, 2021, Proceedings. <strong>Anais</strong>...Berlin, Heidelberg: Springer-Verlag, 2021. Disponível em: &lt;<a href="https://doi.org/10.1007/978-3-030-84186-7_31">https://doi.org/10.1007/978-3-030-84186-7_31</a>&gt;
+</div>
+<div id="ref-Lo2017" class="csl-entry" role="listitem">
+LO, S. L. et al. Multilingual Sentiment Analysis: From Formal to Informal and Scarce Resource Languages. <strong>Artificial Intelligence Review</strong>, 2017.
+</div>
+<div id="ref-Machado2015" class="csl-entry" role="listitem">
+MACHADO, A. A. A. et al. <strong>Personalitatem Lexicon: um léxico em português brasileiro para mineração de traços de personalidade em textos</strong>. Proceedings of the Brazilian Symposium on Computers in Education. <strong>Anais</strong>...2015.
+</div>
+<div id="ref-Machado2022" class="csl-entry" role="listitem">
+MACHADO, M. T.; PARDO, T. A. S. <strong><span>NILC</span> at <span>ABSAPT</span> 2022: Aspect Extraction for Portuguese</strong>. Proceedings of the Iberian Languages Evaluation Forum (IberLEF 2022) co-located with the Conference of the Spanish Society for Natural Language Processing <span>(SEPLN</span> 2022), <span>A</span> Coru<span>ñ</span>a, Spain, September 20, 2022. <strong>Anais</strong>...2022.
+</div>
+<div id="ref-Machado2018" class="csl-entry" role="listitem">
+MACHADO, M. T.; PARDO, T. A. S.; RUIZ, E. E. S. <strong>Creating a portuguese context sensitive lexicon for sentiment analysis</strong>. Proceedings of the 13th international conference on computational processing of the Portuguese Language (PROPOR). <strong>Anais</strong>...2018.
+</div>
+<div id="ref-evalita2020" class="csl-entry" role="listitem">
+MATTEI, L. D. et al. ATE ABSITA@ EVALITA2020: Overview of the Aspect Term Extraction and Aspect-based Sentiment Analysis Task. <strong>Proceedings of the 7th Evaluation Campaign of Natural Language Processing and Speech tools for Italian (EVALITA 2020)</strong>, 2020.
+</div>
+<div id="ref-Mohan2017" class="csl-entry" role="listitem">
+MOHAN, S. et al. <strong>The Impact of Toxic Language on the Health of Reddit Communities</strong>. Proceedings of the Canadian Conference on AI. <strong>Anais</strong>...2017.
+</div>
+<div id="ref-Mollas_2022" class="csl-entry" role="listitem">
+MOLLAS, I. et al. <span>ETHOS</span>: a multi-label hate speech detection dataset. <strong>Complex &amp; Intelligent Systems</strong>, 2022.
+</div>
+<div id="ref-Monteiro2018" class="csl-entry" role="listitem">
+MONTEIRO, R. A. et al. <strong>Contributions to the Study of Fake News in Portuguese: New Corpus and Automatic Detection Results</strong>. Proceedings of the 13th international conference on computational processing of the Portuguese Language. <strong>Anais</strong>...Canela, Rio Grande do Sul, Brazil: Springer International Publishing, set. 2018.
+</div>
+<div id="ref-Narde2021" class="csl-entry" role="listitem">
+NARDE, W. <strong>Análise de notícias falsas em rede social: uma abordagem utilizando transferência de aprendizagem e Transformers</strong>. <a href="https://www.monografias.ufop.br/bitstream/35400000/3122/6/MONOGRAFIA_AnáliseNotíciasFalsas.pdf" class="uri">https://www.monografias.ufop.br/bitstream/35400000/3122/6/MONOGRAFIA_AnáliseNotíciasFalsas.pdf</a>, 2021.
+</div>
+<div id="ref-nascimento2019hate" class="csl-entry" role="listitem">
+NASCIMENTO, G. et al. <strong>Hate speech detection using brazilian imageboards</strong>. Proceedings of the 25th Brazillian Symposium on Multimedia and the Web. <strong>Anais</strong>...2019.
+</div>
+<div id="ref-Newman2020" class="csl-entry" role="listitem">
+NEWMAN, N. et al. <strong>Reuters institute digital news report 2020</strong>. [s.l.] Report of the Reuters Institute for the Study of Journalism, 2020.
+</div>
+<div id="ref-Oliveira2020" class="csl-entry" role="listitem">
+OLIVEIRA, N. et al. Processamento de Linguagem Natural para Identificação de Notícias Falsas em Redes Sociais: Ferramentas, Tendências e Desafios. Em: [s.l.] SBC, 2020.
+</div>
+<div id="ref-Pasqualotti2015" class="csl-entry" role="listitem">
+PASQUALOTTI, P. R. <strong>WordNet Affect BR – uma base de expressões de emoção em Português</strong>. [s.l.] Novas Edições Acadêmicas, 2015.
+</div>
+<div id="ref-Pelle2017" class="csl-entry" role="listitem">
+PELLE, R. P. DE; MOREIRA, V. <strong>Offensive Comments in the Brazilian Web: a dataset and baseline results</strong>. Anais do VI Brazilian Workshop on Social Network Analysis and Mining. <strong>Anais</strong>...2017.
+</div>
+<div id="ref-Pennebaker2001" class="csl-entry" role="listitem">
+PENNEBAKER, J. W.; FRANCIS, M. E.; BOOTH, R. J. <strong>Linguistic Inquiry and Word Count</strong>. [s.l.] Lawerence Erlbaum Associates, 2001.
+</div>
+<div id="ref-Pereira2021" class="csl-entry" role="listitem">
+PEREIRA, D. A. A Survey of Sentiment Analysis in the Portuguese Language. <strong>Artificial Intelligence Review</strong>, 2021.
+</div>
+<div id="ref-Pirina2018" class="csl-entry" role="listitem">
+PIRINA, I.; ÇÖLTEKIN, ÇAĞRI. <strong>Identifying Depression on <span>R</span>eddit: The Effect of Training Data</strong>. Proceedings of the 2018 <span>EMNLP</span> Workshop <span>SMM</span>4<span>H</span>: The 3rd Social Media Mining for Health Applications Workshop <span>&amp;</span> Shared Task. <strong>Anais</strong>...2018.
+</div>
+<div id="ref-semeval2014" class="csl-entry" role="listitem">
+PONTIKI, M. et al. <strong><span>S</span>em<span>E</span>val-2014 Task 4: Aspect Based Sentiment Analysis</strong>. Proceedings of the 8th International Workshop on Semantic Evaluation (SemEval 2014). <strong>Anais</strong>...Association for Computational Linguistics, 2014. Disponível em: &lt;<a href="https://aclanthology.org/S14-2004/">https://aclanthology.org/S14-2004/</a>&gt;
+</div>
+<div id="ref-semeval2015" class="csl-entry" role="listitem">
+PONTIKI, M. et al. <strong><span>S</span>em<span>E</span>val-2015 Task 12: Aspect Based Sentiment Analysis</strong>. Proceedings of the 9th International Workshop on Semantic Evaluation. <strong>Anais</strong>...2015.
+</div>
+<div id="ref-semeval2016" class="csl-entry" role="listitem">
+PONTIKI, M. et al. <strong><span>S</span>em<span>E</span>val-2016 Task 5: Aspect Based Sentiment Analysis</strong>. Proceedings of the 10th International Workshop on Semantic Evaluation (<span>S</span>em<span>E</span>val-2016). <strong>Anais</strong>...2016.
+</div>
+<div id="ref-Recuero2009" class="csl-entry" role="listitem">
+RECUERO, R. <strong>Redes Sociais na Internet</strong>. [s.l.] Ciber Cultura, 2009.
+</div>
+<div id="ref-Resende2019" class="csl-entry" role="listitem">
+RESENDE, G. et al. <strong>(Mis)Information Dissemination in WhatsApp: Gathering, Analyzing and Countermeasures</strong>. Proceedings of the World Wide Web Conference. <strong>Anais</strong>...2019.
+</div>
+<div id="ref-Reyes2012" class="csl-entry" role="listitem">
+REYES, A.; ROSSO, P.; BUSCALDI, D. From Humor Recognition to Irony Detection: The Figurative Language of Social Media. <strong>Data &amp; Knowledge Engineering</strong>, 2012.
+</div>
+<div id="ref-Neto2022" class="csl-entry" role="listitem">
+RICARTE NETO, F. A. et al. <strong>Team PiLN at ABSAPT 2022: Lexical and BERT Strategies for Aspect-Based Sentiment Analysis in Portuguese</strong>. Proceedings of the Iberian Languages Evaluation Forum (IberLEF 2022) co-located with the Conference of the Spanish Society for Natural Language Processing <span>(SEPLN</span> 2022), <span>A</span> Coru<span>ñ</span>a, Spain, September 20, 2022. <strong>Anais</strong>...2022.
+</div>
+<div id="ref-Russell2011" class="csl-entry" role="listitem">
+RUSSELL, M. A. <strong>Mineração de Dados da Web Social</strong>. Primeira edição ed. São Paulo: O’Reilly Novatec, 2011.
+</div>
+<div id="ref-Brenda2023Tese" class="csl-entry" role="listitem">
+SANTANA, B. S. <strong>A computational-linguistic-based approach to support the analysis of the discursive configuration of violence on social media</strong>. tese de doutorado—[s.l.] Universidade Federal do Rio Grande do Sul, 2023.
+</div>
+<div id="ref-Schubert2020" class="csl-entry" role="listitem">
+SCHUBERT, G.; FREITAS, L. A. DE. <strong>A Construção de um Corpus para Detecção de Ironia e Sarcasmo em Português</strong>. Anais do XVII Encontro Nacional de Inteligência Artificial e Computacional. <strong>Anais</strong>...2020.
+</div>
+<div id="ref-Silva2022" class="csl-entry" role="listitem">
+SILVA, F. L. V. DA et al. <a href="http://journal.sepln.org/sepln/ojs/ojs/index.php/pln/article/view/6440"><span>ABSAPT</span> 2022 at IberLEF: Overview of the Task on Aspect-Based Sentiment Analysis in Portuguese</a>. <strong>Procesamiento del Lenguaje Natural</strong>, v. 69, p. 199–205, 2022.
+</div>
+<div id="ref-Silva2018" class="csl-entry" role="listitem">
+SILVA, F. R. A. DA. <strong>Detecção de Ironia e Sarcasmo em Língua Portuguesa: uma abordagem utilizando Deep Learning</strong>. <a href="https://github.com/fabio-ricardo/deteccao-ironia" class="uri">https://github.com/fabio-ricardo/deteccao-ironia</a>, 2018.
+</div>
+<div id="ref-Silva2012" class="csl-entry" role="listitem">
+SILVA, M. J.; CARVALHO, P.; SARMENTO, L. <strong>Building a Sentiment Lexicon for Social Judgement Mining</strong>. Proceedings of the 10th International Conference on Computational Processing of the Portuguese Language. <strong>Anais</strong>...2012.
+</div>
+<div id="ref-Sousa2019" class="csl-entry" role="listitem">
+SOUSA, R. F. DE; BRUM, H. B.; NUNES, M. DAS G. V. <strong>A bunch of helpfulness and sentiment corpora in brazilian portuguese</strong>. Proceedings of Symposium in Information and Human Language Technology. <strong>Anais</strong>...2019.
+</div>
+<div id="ref-Souza2020" class="csl-entry" role="listitem">
+SOUZA, F.; NOGUEIRA, R.; LOTUFO, R. <strong>BERTimbau: pretrained BERT models for Brazilian Portuguese</strong>. (R. Cerri, R. C. Prati, Eds.)Proceedings of the 2020 Brazilian Conference on Intelligent Systems. <strong>Anais</strong>...Springer International Publishing, 2020.
+</div>
+<div id="ref-Souza2011" class="csl-entry" role="listitem">
+SOUZA, M. et al. <strong>Construction of a <span>P</span>ortuguese Opinion Lexicon from multiple resources</strong>. Proceedings of the 8th Brazilian Symposium in Information and Human Language Technology. <strong>Anais</strong>...2011.
+</div>
+<div id="ref-Tan2023" class="csl-entry" role="listitem">
+TAN, K. L.; LEE, C. P.; LIM, K. M. A Survey of Sentiment Analysis: Approaches, Datasets, and Future Research. <strong>Applied Sciences</strong>, 2023.
+</div>
+<div id="ref-teixeira2019pensando" class="csl-entry" role="listitem">
+TEIXEIRA, S. H.; ZAMORA, M. H. Pensando a interseccionalidade a partir da vida e morte de <span>M</span>arielle <span>F</span>ranco. <strong>Dignidade Re-Vista</strong>, 2019.
+</div>
+<div id="ref-Tirrell2018" class="csl-entry" role="listitem">
+TIRRELL, L. Toxic Speech: Inoculations and Antidotes. <strong>The Southern Journal of Philosophy</strong>, 2018.
+</div>
+<div id="ref-Trajano2023" class="csl-entry" role="listitem">
+TRAJANO, D.; BORDINI, R. H.; VIEIRA, R. OLID-BR: offensive language identification dataset for Brazilian Portuguese. <strong>Language Resources and Evaluation</strong>, 2023.
+</div>
+<div id="ref-Vargas2022" class="csl-entry" role="listitem">
+VARGAS, F. et al. <strong><span>H</span>ate<span>BR</span>: A Large Expert Annotated Corpus of <span>B</span>razilian <span>I</span>nstagram Comments for Offensive Language and Hate Speech Detection</strong>. Proceedings of the Thirteenth Language Resources and Evaluation Conference. <strong>Anais</strong>...2022.
+</div>
+<div id="ref-Vargas2020" class="csl-entry" role="listitem">
+VARGAS, F. A.; SANTOS, R. S. S. D.; ROCHA, P. R. <strong>Identifying Fine-Grained Opinion and Classifying Polarity on Coronavirus Pandemic</strong>. Proceedings of the Brazilian Conference on Intelligent Systems. <strong>Anais</strong>...2020.
+</div>
+<div id="ref-Wasserman1994" class="csl-entry" role="listitem">
+WASSERMAN, S.; FAUST, K. <strong>Social network analysis: Methods and applications</strong>. [s.l.] Cambridge university press, 1994.
+</div>
+<div id="ref-Zhang2023" class="csl-entry" role="listitem">
+ZHANG, A. et al. <strong>Dive into Deep Learning</strong>. [s.l.] Cambridge University Press, 2023.
+</div>
+<div id="ref-Zhang2004" class="csl-entry" role="listitem">
+ZHANG, H. <strong>The Optimality of Naive Bayes</strong>. Proceedings of the Seventeenth International Florida Artificial Intelligence Research Society Conference. <strong>Anais</strong>...2004.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p><a href="http://orkut.com/" class="uri">http://orkut.com/</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://developer.twitter.com/en/docs/twitter-api" class="uri">https://developer.twitter.com/en/docs/twitter-api</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://www.reddit.com/dev/api/" class="uri">https://www.reddit.com/dev/api/</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="https://www.facebook.com/" class="uri">https://www.facebook.com/</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a href="https://www.reddit.com/" class="uri">https://www.reddit.com/</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p><a href="https://www.youtube.com/" class="uri">https://www.youtube.com/</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p><a href="https://twitter.com/" class="uri">https://twitter.com/</a>. O Twitter mudou de nome em 2023 e agora se chama X. Por esse motivo, ao longo do texto, iremos usar o termo Twitter/X quando mencionarmos essa rede social.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p><a href="https://www.whatsapp.com/" class="uri">https://www.whatsapp.com/</a><a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p><a href="https://www.instagram.com/" class="uri">https://www.instagram.com/</a><a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>Em <a href="https://hatespeechdata.com" class="uri">https://hatespeechdata.com</a> alguns <em>corpora</em> anotados sobre discurso de ódio, abuso online e linguagem ofensiva são catalogados e podem ser utilizados como base para o desenvolvimento de estudos que buscam detectá-los.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p><a href="https://github.com/JAugusto97/ToLD-Br" class="uri">https://github.com/JAugusto97/ToLD-Br</a><a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p><a href="https://cloud.gate.ac.uk" class="uri">https://cloud.gate.ac.uk</a><a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p><a href="https://b2share.eudat.eu/records/9005efe2d6be4293b63c3cffd4cf193e" class="uri">https://b2share.eudat.eu/records/9005efe2d6be4293b63c3cffd4cf193e</a><a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p><a href="https://github.com/franciellevargas/HateBR" class="uri">https://github.com/franciellevargas/HateBR</a><a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p><a href="https://github.com/DougTrajano/olid-br" class="uri">https://github.com/DougTrajano/olid-br</a><a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p><a href="https://github.com/LaCAfe/Dataset-Hatespeech" class="uri">https://github.com/LaCAfe/Dataset-Hatespeech</a><a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p><a href="https://www.tripadvisor.com.br/" class="uri">https://www.tripadvisor.com.br/</a><a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p><a href="https://www.booking.com/" class="uri">https://www.booking.com/</a><a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p><a href="https://www.airbnb.com.br/" class="uri">https://www.airbnb.com.br/</a><a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20"><p>Veja exemplo na área do Direito no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito/cap-direito.html#sec-cap-direito" target="_blank" title="Volume 3">PLN no Direito</a></span>.<a href="#fnref20" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn21"><p><a href="https://www.inf.pucrs.br/linatural/wordpress/recursos-e-ferramentas/oplexicon/" class="uri">https://www.inf.pucrs.br/linatural/wordpress/recursos-e-ferramentas/oplexicon/</a><a href="#fnref21" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn22"><p><a href="https://github.com/own-pt/openWordnet-PT" class="uri">https://github.com/own-pt/openWordnet-PT</a><a href="#fnref22" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn23"><p><a href="https://b2find.eudat.eu/dataset/b6bd16c2-a8ab-598f-be41-1e7aeecd60d3" class="uri">https://b2find.eudat.eu/dataset/b6bd16c2-a8ab-598f-be41-1e7aeecd60d3</a><a href="#fnref23" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn24"><p><a href="https://www.linguateca.pt/Repositorio/ReLi/" class="uri">https://www.linguateca.pt/Repositorio/ReLi/</a><a href="#fnref24" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn25"><p><a href="http://143.107.183.175:21380/portlex/index.php/pt/projetos/liwc" class="uri">http://143.107.183.175:21380/portlex/index.php/pt/projetos/liwc</a><a href="#fnref25" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn26"><p><a href="https://www.inf.pucrs.br/linatural/wordpress/recursos-e-ferramentas/wordnetaffectbr/" class="uri">https://www.inf.pucrs.br/linatural/wordpress/recursos-e-ferramentas/wordnetaffectbr/</a><a href="#fnref26" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn27"><p><a href="https://github.com/LaCAfe/AffectPT-br" class="uri">https://github.com/LaCAfe/AffectPT-br</a><a href="#fnref27" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn28"><p><a href="http://www.nilc.icmc.usp.br/tep2/" class="uri">http://www.nilc.icmc.usp.br/tep2/</a><a href="#fnref28" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn29"><p><a href="https://wordnet.princeton.edu/" class="uri">https://wordnet.princeton.edu/</a><a href="#fnref29" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn30"><p><a href="https://github.com/avanco/LBC" class="uri">https://github.com/avanco/LBC</a><a href="#fnref30" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn31"><p><a href="https://metatext.io/datasets/tweetsentbr" class="uri">https://metatext.io/datasets/tweetsentbr</a><a href="#fnref31" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn32"><p><a href="https://github.com/RogerFig/UTLCorpus" class="uri">https://github.com/RogerFig/UTLCorpus</a><a href="#fnref32" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn33"><p><a href="https://sites.google.com/view/iberlef2022/" class="uri">https://sites.google.com/view/iberlef2022/</a><a href="#fnref33" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn34"><p><a href="https://sites.google.com/inf.ufpel.edu.br/absapt2022/" class="uri">https://sites.google.com/inf.ufpel.edu.br/absapt2022/</a><a href="#fnref34" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn35"><p><a href="https://piaui.folha.uol.com.br/lupa/" class="uri">https://piaui.folha.uol.com.br/lupa/</a><a href="#fnref35" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn36"><p><a href="https://www.aosfatos.org/" class="uri">https://www.aosfatos.org/</a><a href="#fnref36" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn37"><p><a href="https://g1.globo.com/fato-ou-fake/" class="uri">https://g1.globo.com/fato-ou-fake/</a><a href="#fnref37" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn38"><p><a href="https://projetocomprova.com.br/" class="uri">https://projetocomprova.com.br/</a><a href="#fnref38" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn39"><p><a href="https://wp.ufpel.edu.br/midiars/datasets/" class="uri">https://wp.ufpel.edu.br/midiars/datasets/</a><a href="#fnref39" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn40"><p><a href="https://github.com/prc992/FakeTweet.Br" class="uri">https://github.com/prc992/FakeTweet.Br</a><a href="#fnref40" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn41"><p><a href="https://github.com/roneysco/Fake.br-Corpus" class="uri">https://github.com/roneysco/Fake.br-Corpus</a><a href="#fnref41" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn42"><p><a href="https://github.com/cabrau/FakeWhatsApp.Br" class="uri">https://github.com/cabrau/FakeWhatsApp.Br</a><a href="#fnref42" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn43"><p><a href="https://g1.globo.com/" class="uri">https://g1.globo.com/</a><a href="#fnref43" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn44"><p><a href="http://m.folha.uol.com.br/" class="uri">http://m.folha.uol.com.br/</a><a href="#fnref44" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn45"><p><a href="https://www.estadao.com.br/" class="uri">https://www.estadao.com.br/</a><a href="#fnref45" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn46"><p><a href="https://sites.google.com/view/iberlef2021/" class="uri">https://sites.google.com/view/iberlef2021/</a><a href="#fnref46" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn47"><p><a href="https://sites.google.com/inf.ufpel.edu.br/idpt2021/" class="uri">https://sites.google.com/inf.ufpel.edu.br/idpt2021/</a><a href="#fnref47" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" class="pagination-link" aria-label="PLN e Humanidades Digitais">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" class="pagination-link" aria-label="PLN e Responsabilidade Social">
+        <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">PLN e Responsabilidade Social</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://brasileiraspln.com/">
+<p>Brasileiras em PLN, 2026. Todos os direitos reservados</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

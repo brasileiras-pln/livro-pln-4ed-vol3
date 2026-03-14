@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Daniela Barreiro Claro">
+<meta name="author" content="Joaquim Santos">
+<meta name="author" content="Marlo Souza">
+<meta name="author" content="Renata Vieira">
+<meta name="author" content="Vládia Pinheiro">
+
+<title>3&nbsp; Extração de Informação – Processamento de Linguagem Natural</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 1em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../aplicacoes-e-dominios/cap-mt/cap-mt.html" rel="next">
+<link href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8676d8d0f01772f2903466dda9733bcf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sem resultados",
+    "search-matching-documents-text": "Resultados encontrados",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-111J572WMR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-111J572WMR');
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../shared/bpln.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../shared/logos/bpln.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Processamento de Linguagem Natural</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../Livro_PLN_BPLN_4ed_vol3.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
+    <div class="dropdown">
+      <a href="" title="Compartilhar" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Compartilhar"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sobre o Volume 3</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Aplicações e Domínios</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Classificação de texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-mt/cap-mt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tradução Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sumarização Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Complexidade Textual e suas Tarefas Relacionadas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Classificação de Áudio aplicada à Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">PLN e Responsabilidade Social</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/referencias/referencias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referências</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Apêndices</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Considerações prévias à sumarização automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice-abstrativa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Exemplo de sumarização abstrativa</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../autores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Sobre as/os autoras/es</strong></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Conteúdo</h2>
+   
+  <ul>
+  <li><a href="#sec-cap-ie-intro" id="toc-sec-cap-ie-intro" class="nav-link active" data-scroll-target="#sec-cap-ie-intro"><span class="header-section-number">3.1</span> Introdução</a></li>
+  <li><a href="#um-pouco-de-história" id="toc-um-pouco-de-história" class="nav-link" data-scroll-target="#um-pouco-de-história"><span class="header-section-number">3.2</span> Um pouco de história</a></li>
+  <li><a href="#sec-conceito" id="toc-sec-conceito" class="nav-link" data-scroll-target="#sec-conceito"><span class="header-section-number">3.3</span> Conceituação formal: Relação e Entidade</a>
+  <ul class="collapse">
+  <li><a href="#entidade" id="toc-entidade" class="nav-link" data-scroll-target="#entidade"><span class="header-section-number">3.3.1</span> Entidade</a></li>
+  <li><a href="#relação" id="toc-relação" class="nav-link" data-scroll-target="#relação"><span class="header-section-number">3.3.2</span> Relação</a></li>
+  </ul></li>
+  <li><a href="#sec-ei" id="toc-sec-ei" class="nav-link" data-scroll-target="#sec-ei"><span class="header-section-number">3.4</span> Extração de Informação (EI)</a>
+  <ul class="collapse">
+  <li><a href="#reconhecimento-de-entidades-nomeadas" id="toc-reconhecimento-de-entidades-nomeadas" class="nav-link" data-scroll-target="#reconhecimento-de-entidades-nomeadas"><span class="header-section-number">3.4.1</span> Reconhecimento de Entidades Nomeadas</a></li>
+  <li><a href="#extração-de-relações" id="toc-extração-de-relações" class="nav-link" data-scroll-target="#extração-de-relações"><span class="header-section-number">3.4.2</span> Extração de Relações</a></li>
+  <li><a href="#extração-conjunta-de-entidades-e-relações" id="toc-extração-conjunta-de-entidades-e-relações" class="nav-link" data-scroll-target="#extração-conjunta-de-entidades-e-relações"><span class="header-section-number">3.4.3</span> Extração Conjunta de Entidades e Relações</a></li>
+  <li><a href="#métodos-empregados-para-ei-na-literatura" id="toc-métodos-empregados-para-ei-na-literatura" class="nav-link" data-scroll-target="#métodos-empregados-para-ei-na-literatura"><span class="header-section-number">3.4.4</span> Métodos empregados para EI na literatura</a></li>
+  </ul></li>
+  <li><a href="#extração-de-informação-aberta" id="toc-extração-de-informação-aberta" class="nav-link" data-scroll-target="#extração-de-informação-aberta"><span class="header-section-number">3.5</span> Extração de Informação Aberta</a>
+  <ul class="collapse">
+  <li><a href="#formalização" id="toc-formalização" class="nav-link" data-scroll-target="#formalização"><span class="header-section-number">3.5.1</span> Formalização</a></li>
+  <li><a href="#abordagens" id="toc-abordagens" class="nav-link" data-scroll-target="#abordagens"><span class="header-section-number">3.5.2</span> Abordagens</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-ie-aval" id="toc-sec-cap-ie-aval" class="nav-link" data-scroll-target="#sec-cap-ie-aval"><span class="header-section-number">3.6</span> Avaliação</a></li>
+  <li><a href="#considerações-finais" id="toc-considerações-finais" class="nav-link" data-scroll-target="#considerações-finais"><span class="header-section-number">3.7</span> Considerações finais</a></li>
+  <li><a href="#sec-cap-ie-agradecimentos" id="toc-sec-cap-ie-agradecimentos" class="nav-link" data-scroll-target="#sec-cap-ie-agradecimentos">Agradecimentos</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-cap-ie" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading"></div>
+    <div class="quarto-title-meta-contents">
+             <p>Daniela Barreiro Claro </p>
+             <p>Joaquim Santos </p>
+             <p>Marlo Souza </p>
+             <p>Renata Vieira </p>
+             <p>Vládia Pinheiro </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Publicado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">26/09/2023</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Atualizado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">13/04/2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+
+</div>
+<div>
+<div class="callout-body-container callout-body">
+<p>Este capítulo também está disponível em <a href="cap-ie.pdf">PDF</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" aria-expanded="false" aria-label="Toggle callout" data-bs-toggle="collapse" data-bs-target=".callout-cite-contents" aria-controls="callout-cite">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Como citar
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
+<i class="callout-toggle"></i>
+</div>
+</div>
+<div id="callout-cite" class="callout-cite-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>@InCollection{BPLN_livro_cap-ie:2026,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    author    = {Claro, Daniela Barreiro and Santos, Joaquim and Souza, Marlo and Vieira, Renata and Pinheiro, Vládia},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    title     = {Extração de Informação},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    publisher = {BPLN},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    year      = {2026},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    editor    = {Caseli, H. M. and Nunes, M. G. V.},</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    type      = {Book Chapter},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    chapter   = {3},</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    edition   = {4},</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    volume    = {3},</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    isbn      = {XXXXXXXXXXXXXXXX},</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    url       = {https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ie/cap-ie.html},</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mais recursos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="https://youtu.be/2G95Vf2NRuA?si=bRKxDXF_ZmNC4kj3">Vídeo</a> e <a href="2o_Ciclo_PLN_BPLN-ExtracaoInformacao_11032025.pdf">Slides</a></p>
+</div>
+</div>
+<section id="sec-cap-ie-intro" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="sec-cap-ie-intro"><span class="header-section-number">3.1</span> Introdução</h2>
+<p>A Extração de Informação (EI) é desenvolvida com o objetivo de se obter informação estruturada de dados não-estruturados <span class="citation" data-cites="jurafsky2023 konstantinova2014review">(<a href="../../shared/referencias/referencias.html#ref-jurafsky2023" role="doc-biblioref">Jurafsky; Martin, 2023</a>; <a href="../../shared/referencias/referencias.html#ref-konstantinova2014review" role="doc-biblioref">Konstantinova, 2014</a>)</span>.</p>
+<p>Os primeiros trabalhos a debruçarem-se sobre o problema remontam à década de 1970, com a aplicação de gramáticas formais e <em>parsers</em> sintáticos para a estruturação de informação em domínios como prontuários médicos <span class="citation" data-cites="sager1978natural sager1987medical">(<a href="../../shared/referencias/referencias.html#ref-sager1978natural" role="doc-biblioref">Sager, 1978</a>; <a href="../../shared/referencias/referencias.html#ref-sager1987medical" role="doc-biblioref">Sager et al., 1987</a>)</span> e textos jornalísticos <span class="citation" data-cites="dejong1979prediction">(<a href="../../shared/referencias/referencias.html#ref-dejong1979prediction" role="doc-biblioref">DeJong, 1979</a>)</span>. A comunidade científica demonstrou grande interesse pela área nas décadas posteriores devido à sua utilidade prática, seu foco no processamento de dados reais, suas tarefas bem-definidas e a facilidade de mensurar a qualidade dos resultados em comparação com o desempenho humano na mesma tarefa <span class="citation" data-cites="cowie1996information">(<a href="../../shared/referencias/referencias.html#ref-cowie1996information" role="doc-biblioref">Cowie; Lehnert, 1996</a>)</span>.</p>
+<p>Para autores como <span class="citation" data-cites="eisenstein2018natural">Eisenstein (<a href="../../shared/referencias/referencias.html#ref-eisenstein2018natural" role="doc-biblioref">2019</a>)</span> e <span class="citation" data-cites="jurafsky2023">Jurafsky; Martin (<a href="../../shared/referencias/referencias.html#ref-jurafsky2023" role="doc-biblioref">2023</a>)</span>, a EI é normalmente dividida em diversas tarefas de interesse, com foco no tipo de informação a ser extraída do texto. Entre as mais comumente citadas na literatura estão o Reconhecimento de Entidades Nomeadas (REN), a Extração de Relações (ER) e a Extração de Eventos (EE).</p>
+<p>O Reconhecimento de Entidades Nomeadas (REN) consiste em identificar e classificar entidades mencionadas em textos através de designadores rígidos como nomes próprios, expressões temporais e espécies biológicas <span class="citation" data-cites="nadeau2007">(<a href="../../shared/referencias/referencias.html#ref-nadeau2007" role="doc-biblioref">Nadeau, 2007</a>)</span>. Esse é considerado por alguns como um primeiro passo na análise semântica de um texto <span class="citation" data-cites="santos2007breve">(<a href="../../shared/referencias/referencias.html#ref-santos2007breve" role="doc-biblioref">Santos; Cardoso, 2007a</a>)</span>, pois permite identificar as entidades às quais se faz referência nele.</p>
+<p>A Extração de Relações (ER), também chamada de extração de informação tradicional ou somente extração de informação, por sua vez, diz respeito à identificação de relacionamentos semânticos entre duas ou mais entidades, ou seja, identificar “quem fez o que para quem e quando”. <span class="citation" data-cites="mcnaught2005text">Ananiadou; Mcnaught (<a href="../../shared/referencias/referencias.html#ref-mcnaught2005text" role="doc-biblioref">2005</a>)</span> a definem como o processo de extrair fatos (em nossa terminologia, relacionamentos) a partir de uma fonte textual e representá-los a partir de um gabarito (em inglês, <em>template</em>). As <em>relações</em> são elementos essenciais para o entendimento da informação relatada no texto e sua identificação é passo essencial para a estruturação da mesma. Assim, identificar relações entre entidades é tarefa essencial para construção de bases de conhecimento e de grande utilidade na construção de soluções para a resposta automática a perguntas (em inglês, <em>query answering</em>), sumarização, recuperação de informação e mais <span class="citation" data-cites="nasar2021named">(<a href="../../shared/referencias/referencias.html#ref-nasar2021named" role="doc-biblioref">Nasar et al., 2021</a>)</span>.</p>
+<p>A extração de eventos consiste na tarefa de identificação de uma menção a um evento em uma sentença e, se existirem, extração de outras informações sobre o evento. Um evento pode, por sua vez, ser entendido como uma ocorrência específica envolvendo participantes <span class="citation" data-cites="linguistic2005ace">(<a href="../../shared/referencias/referencias.html#ref-linguistic2005ace" role="doc-biblioref">Consortium, 2005</a>)</span>, i.e., algo que acontece e que pode ser descrito como uma mudança de estado da qual participam entidades como agentes. Devido a intrínseca natureza temporal dos eventos, tal problema possui uma natureza mais complexa e costuma possuir tratamento específico.</p>
+<p>Assim, nesse capítulo, iniciaremos com um pouco de história da Extração de Informação (EI) e sua evolução para Extração de Informação Aberta, e destacaremos as tarefas de Reconhecimeno de Entidades Nomeadas (REN) e Extração de Relação (ER).</p>
+</section>
+<section id="um-pouco-de-história" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="um-pouco-de-história"><span class="header-section-number">3.2</span> Um pouco de história</h2>
+<p>Os primeiros trabalhos que abordaram o problema de EI dos quais temos conhecimento surgiram no final da década de 1970. Esses primeiros trabalhos da década de 1970 e 1980 tinham como modelo geral a aplicação de regras para a identificação de informações especificadas em um gabarito. Tais sistemas empregavam analisadores sintáticos (<em>parsers</em>) e regras definidas especificamente para o domínio e gênero textual estudado.</p>
+<p>Entre esses primeiros trabalhos, estão aqueles de <span class="citation" data-cites="sager1978natural">Sager (<a href="../../shared/referencias/referencias.html#ref-sager1978natural" role="doc-biblioref">1978</a>)</span>, <span class="citation" data-cites="sager1987medical">Sager et al. (<a href="../../shared/referencias/referencias.html#ref-sager1987medical" role="doc-biblioref">1987</a>)</span>, de <span class="citation" data-cites="dejong1979prediction">DeJong (<a href="../../shared/referencias/referencias.html#ref-dejong1979prediction" role="doc-biblioref">1979</a>)</span> e de <span class="citation" data-cites="cowie1983automatic">Cowie (<a href="../../shared/referencias/referencias.html#ref-cowie1983automatic" role="doc-biblioref">1983</a>)</span>. Sager et al.&nbsp;exploraram como identificar informações do estado de saúde de pacientes através dos textos de prontuários médicos. <span class="citation" data-cites="dejong1979prediction">DeJong (<a href="../../shared/referencias/referencias.html#ref-dejong1979prediction" role="doc-biblioref">1979</a>)</span>, por sua vez, descrevem o sistema FRUMP que, a partir de um <em>parser</em> e regras de análise conceitual baseadas em uma arquitetura cognitiva proposta pelos autores e no conceito de dependência conceitual de <span class="citation" data-cites="schank1973margie">Schank et al. (<a href="../../shared/referencias/referencias.html#ref-schank1973margie" role="doc-biblioref">1973</a>)</span>, processavam textos de notícias e realizavam tarefas como sumarização e identificação de papéis semânticos associados aos constituintes da sentença. <span class="citation" data-cites="cowie1983automatic">Cowie (<a href="../../shared/referencias/referencias.html#ref-cowie1983automatic" role="doc-biblioref">1983</a>)</span>, por fim, descreve um sistema que emprega regras simples de segmentação e análise sintática rasa para identificar propriedades de plantas a partir de textos descritivos no campo da botânica. Diferente dos métodos anteriores, o trabalho dos autores se baseia em grande parte no estudo de padrões de descrição das informações a serem identificadas, em detrimento do emprego de <em>parsers</em> robustos da língua.</p>
+<p>A década de 1990 traz um grande interesse na área de EI com a implementação das conferências MUC (do inglês, <em>Message Understanding Conference</em>, ou Conferência de Compreensão de Mensagem), promovidas pela Agência de Projetos de Pesquisa Avançada de Defesa (DARPA, do inglês <em>Defense Advanced Research Projects Agency</em>). As conferências MUC, realizadas e financiadas pelo exército americano, representaram um esforço em avançar a tecnologia de EI e consistiam de tarefas de avaliação conjunta de métodos desenvolvidos por pesquisadores para problemas propostos pelos organizadores. As sete conferências realizadas de 1987 a 1997, foram cruciais para definir aspectos centrais da área, como estruturar a tarefa de ER, definindo suas métricas de avaliação, e propor a tarefa de REN <span class="citation" data-cites="grishman-sundheim-1996-message">(<a href="../../shared/referencias/referencias.html#ref-grishman-sundheim-1996-message" role="doc-biblioref">Grishman; Sundheim, 1996</a>)</span>.</p>
+<p>A partir da MUC-3, em 1991, a conferência passa a ter foco no processamento de textos jornalísticos em detrimento dos relatórios militares utilizados anteriormente <span class="citation" data-cites="muc3">(<a href="../../shared/referencias/referencias.html#ref-muc3" role="doc-biblioref">DARPA, 1991</a>)</span>. Com a disponibilidade de dados e o incentivo no desenvolvimento de soluções para a tarefa, vemos na década de 1990 o surgimento das primeiras aplicações comerciais de EI, como o JASPER <span class="citation" data-cites="andersen1992automatic">(<a href="../../shared/referencias/referencias.html#ref-andersen1992automatic" role="doc-biblioref">Andersen et al., 1992</a>)</span>., construído para a agência de notícias Reuters.</p>
+<p>A MUC-6, ocorrida em 1995, introduz a tarefa de REN com o intuito de ser uma tarefa de uso prático, independente de domínio e que poderia ser realizada automaticamente em um futuro próximo <span class="citation" data-cites="grishman-sundheim-1996-message">(<a href="../../shared/referencias/referencias.html#ref-grishman-sundheim-1996-message" role="doc-biblioref">Grishman; Sundheim, 1996</a>)</span>. Enquanto os trabalhos em REN se avolumaram a partir de sua proposição na MUC-6, trabalhos anteriores como <span class="citation" data-cites="rau1991extracting">Rau (<a href="../../shared/referencias/referencias.html#ref-rau1991extracting" role="doc-biblioref">1991</a>)</span> e <span class="citation" data-cites="wolinski1995automatic">Wolinski et al. (<a href="../../shared/referencias/referencias.html#ref-wolinski1995automatic" role="doc-biblioref">1995</a>)</span> já se debruçavam sobre o problema de identificação e classificação de nomes próprios. Desde então, o interesse na tarefa cresceu significativamente e outras conferências de avaliação conjunta têm sido dedicadas a essa tarefa, como a <em>Automatic Content Extraction</em> (ACE) e a conferência Avaliação de Sistemas de Reconhecimento de Entidades Mencionadas (HAREM), dedicada exclusivamente à língua portuguesa, com sua primeira edição em 2005 <span class="citation" data-cites="santos2007breve">(<a href="../../shared/referencias/referencias.html#ref-santos2007breve" role="doc-biblioref">Santos; Cardoso, 2007a</a>)</span>.</p>
+<p>Por outro lado, houve um crescimento de abordagens baseadas em dados nesta década, a partir da análise de <em>corpora</em>. Tais esforços são impulsionados pelos resultados positivos na área, como o trabalho de <span class="citation" data-cites="hearst1992automatic">Hearst (<a href="../../shared/referencias/referencias.html#ref-hearst1992automatic" role="doc-biblioref">1992</a>)</span>. Logo, métodos baseados em dados passaram também a explorar o emprego de análise estatística e aprendizado de máquina na construção de padrões para a extração de relações <span class="citation" data-cites="riloff1993automatically soderland1995crystal riloff1999learning roark2000noun">(<a href="../../shared/referencias/referencias.html#ref-riloff1993automatically" role="doc-biblioref">Riloff et al., 1993</a>, <a href="../../shared/referencias/referencias.html#ref-riloff1999learning" role="doc-biblioref">1999</a>; <a href="../../shared/referencias/referencias.html#ref-roark2000noun" role="doc-biblioref">Roark; Charniak, 2000</a>; <a href="../../shared/referencias/referencias.html#ref-soderland1995crystal" role="doc-biblioref">Soderland et al., 1995</a>)</span></p>
+<p>Não foi somente na extração de padrões que métodos de aprendizado de máquina, em particular aprendizado supervisionado, foram aplicados. A década de 2000 viu a proliferação de métodos supervisionados aplicados à ER <span class="citation" data-cites="zhao2005extracting zelenko2003kernel kambhatla2004combining culotta2006integrating">(<a href="../../shared/referencias/referencias.html#ref-culotta2006integrating" role="doc-biblioref">Culotta et al., 2006</a>; <a href="../../shared/referencias/referencias.html#ref-kambhatla2004combining" role="doc-biblioref">Kambhatla, 2004</a>; <a href="../../shared/referencias/referencias.html#ref-zelenko2003kernel" role="doc-biblioref">Zelenko et al., 2003</a>; <a href="../../shared/referencias/referencias.html#ref-zhao2005extracting" role="doc-biblioref">Zhao; Grishman, 2005</a>)</span> e ao REN <span class="citation" data-cites="sekine1998description asahara2003japanese mccallum2003early">(<a href="../../shared/referencias/referencias.html#ref-asahara2003japanese" role="doc-biblioref">Asahara; Matsumoto, 2003</a>; <a href="../../shared/referencias/referencias.html#ref-mccallum2003early" role="doc-biblioref">McCallum; Li, 2003</a>; <a href="../../shared/referencias/referencias.html#ref-sekine1998description" role="doc-biblioref">Sekine, 1998</a>)</span>.</p>
+<p>Devido à dificuldade de construção de dados para treinamento e padrões para extração, além da pouca adaptabilidade dos sistemas construídos para outros escopos e domínios, nos anos 2000, sistemas baseados em métodos de aprendizado semi-supervisionado, como o DIPRE&nbsp;<span class="citation" data-cites="brin1998extracting">(<a href="../../shared/referencias/referencias.html#ref-brin1998extracting" role="doc-biblioref">Brin, 1998</a>)</span> e Snowball&nbsp;<span class="citation" data-cites="agichtein2000snowball">(<a href="../../shared/referencias/referencias.html#ref-agichtein2000snowball" role="doc-biblioref">Agichtein; Gravano, 2000</a>)</span> começaram a aparecer, juntamente com os estudos sobre expansão automatizada de anotações (<em>bootstrapping</em>) <span class="citation" data-cites="riloff1999learning">(<a href="../../shared/referencias/referencias.html#ref-riloff1999learning" role="doc-biblioref">Riloff et al., 1999</a>)</span>. Também para entidades nomeadas, estudos investigaram como utilizar recursos da Web <span class="citation" data-cites="nadeau2007 etzioni2005unsupervised">(<a href="../../shared/referencias/referencias.html#ref-etzioni2005unsupervised" role="doc-biblioref">Etzioni et al., 2005</a>; <a href="../../shared/referencias/referencias.html#ref-nadeau2007" role="doc-biblioref">Nadeau, 2007</a>)</span> ou <em>corpora</em> <span class="citation" data-cites="cucchiarelli2001unsupervised">(<a href="../../shared/referencias/referencias.html#ref-cucchiarelli2001unsupervised" role="doc-biblioref">Cucchiarelli; Velardi, 2001</a>)</span> para aprender entidades com pouco ou nenhum esforço de anotação.</p>
+<p>Buscando superar as dificuldades da limitação de escopo, i.e.&nbsp;das relações-alvo a serem extraídas e categorias de entidades a serem identificadas, ainda restritas à definição de padrões desde a criação dessas tarefas, <span class="citation" data-cites="banko2007">Banko et al. (<a href="../../shared/referencias/referencias.html#ref-banko2007" role="doc-biblioref">2007</a>)</span> propõe a tarefa de extração de informação aberta (EIA), também conhecida como <strong>Open Information Extraction</strong>, OpenIE ou OIE, a qual busca extrair todas as relações possíveis expressas em um texto, sem necessidade de pré-definição de relações e entidades.</p>
+<p>Devido ao recente sucesso da aplicação de métodos baseados em redes neurais, em particular <em>deep learning</em> e grandes modelos de linguagem, às tarefas de Processamento de Linguagem Natural, uma tendência atual da área se delineou como o estudo de arquiteturas neurais para os problemas de EI e a geração de grandes conjuntos de dados por supervisão fraca. <em>Surveys</em> recentes, como <span class="citation" data-cites="konstantinova2014review cui2018neural nasar2021named">(<a href="../../shared/referencias/referencias.html#ref-cui2018neural" role="doc-biblioref">Cui et al., 2018</a>; <a href="../../shared/referencias/referencias.html#ref-konstantinova2014review" role="doc-biblioref">Konstantinova, 2014</a>; <a href="../../shared/referencias/referencias.html#ref-nasar2021named" role="doc-biblioref">Nasar et al., 2021</a>)</span>, nos mostram a evolução da área em direção à aplicação de métodos neurais. Na vertente de geração de dados, vemos o emprego da Wikipédia e Freebase como fontes mais usadas para obter anotações de entidades e relações em textos <span class="citation" data-cites="takamatsu2012reducing nguyen2016j smirnova2018relation">(<a href="../../shared/referencias/referencias.html#ref-nguyen2016j" role="doc-biblioref">Nguyen et al., 2016</a>; <a href="../../shared/referencias/referencias.html#ref-smirnova2018relation" role="doc-biblioref">Smirnova; Cudré-Mauroux, 2018</a>; <a href="../../shared/referencias/referencias.html#ref-takamatsu2012reducing" role="doc-biblioref">Takamatsu et al., 2012</a>)</span>.</p>
+<p>Porém, toda a tarefa de EI necessita de uma concordância entre as definições de Entidade e Relação. Neste sentido, a próxima seção discute a conceituação de relação adotada neste capítulo, assim como o conceito de entidade.</p>
+</section>
+<section id="sec-conceito" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="sec-conceito"><span class="header-section-number">3.3</span> Conceituação formal: Relação e Entidade</h2>
+<p>A natureza das relações estudadas na área de Extração de Informação e os critérios para reconhecer sua ocorrência em um texto têm recebido pouca atenção na literatura. Este é um passo importante para estabelecer metodologias adequadas para avaliar os sistemas, bem como para criar conjuntos de dados que possam apoiar a criação de sistemas futuros.</p>
+<p>Enquanto as noções de Relação e Entidade são de grande importância e já bem estudadas nas áreas de Computação, Linguística, Ciência da Informação e Filosofia da Linguagem, esses conceitos não são empregados de forma consistente entre as áreas, ou mesmo entre suas subáreas.</p>
+<section id="entidade" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="entidade"><span class="header-section-number">3.3.1</span> Entidade</h3>
+<p>Para <span class="citation" data-cites="chen1976entity">Chen (<a href="../../shared/referencias/referencias.html#ref-chen1976entity" role="doc-biblioref">1976</a>)</span>, uma entidade é um objeto que pode ser concreto, tal como pessoa, livro, casa ou ainda abstrato, tal como um emprego, um sentimento, uma disciplina. As entidades podem estabelecer relações entre si. Duas ou mais entidades são vinculadas, ou seja conectadas por uma relação<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>Tradicionalmente em reconhecimento de entidades nomeadas, as entidades consideradas são aquelas referenciadas por um nome próprio, acrescidas das referências temporais e valores que são expressões numéricas. Essas expressões, portanto, geralmente não constituem uma entrada em uma base lexical. Porém a tarefa se expandiu para domínios especializados, onde as entidades de interesse são mais conceituais. No domínio bio-médico por exemplo, podemos ter como exemplo de entidades de interesse, sintomas e tratamento que não são referenciadas por nomes próprios.</p>
+</section>
+<section id="relação" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="relação"><span class="header-section-number">3.3.2</span> Relação</h3>
+<p>Os conceitos de <em>relação</em> e <em>relacionamento</em> são noções fundamentais que vêm sendo estudadas em áreas como Ciência da Computação, Linguística e Filosofia.</p>
+<p>No campo de bancos de dados e modelagem conceitual, <span class="citation" data-cites="chen1976entity">Chen (<a href="../../shared/referencias/referencias.html#ref-chen1976entity" role="doc-biblioref">1976</a>)</span> define um relacionamento, no contexto da modelagem de Entidade-Relacionamento, como uma associação entre entidades. <span class="citation" data-cites="guarino2015">Guarino; Guizzardi (<a href="../../shared/referencias/referencias.html#ref-guarino2015" role="doc-biblioref">2015</a>)</span>, por sua vez, estudando a natureza ontológica dos relacionamentos com base na semântica de veridadores (<em>truthmaker semantics</em>) <span class="citation" data-cites="fine2017truthmaker">(<a href="../../shared/referencias/referencias.html#ref-fine2017truthmaker" role="doc-biblioref">Fine, 2017</a>)</span>, postulam relacionamentos como entidades que atuam como veridadores (<em>thruthmakers</em>) de alguma proposição relacionando duas ou mais entidades, ou seja, <em>uma relação mantida entre essas entidades</em>. Um veridador é um elemento cuja existência torna verdadeira uma proposição particular. Por exemplo, considerando a sentença (1) “<em>a</em> é uma maçã”, a existência de um objeto denotado pelo nome <em>a</em> que por acaso é uma maçã é uma condição suficiente para a verdade da frase (1). Como tal, dizemos que esse objeto é o veridador de (1). Tal definição nos permite adotar critérios ontológicos para validar a existência de relacionamentos a partir da informação relatada em um texto e, por isso, adotaremos tal definição de relacionamento neste capítulo.</p>
+<p>O conceito de relações é muito menos consistente na literatura. Ainda na área de modelagem conceitual, <span class="citation" data-cites="guarino2015">Guarino; Guizzardi (<a href="../../shared/referencias/referencias.html#ref-guarino2015" role="doc-biblioref">2015</a>)</span> definem as relações como proposições para as quais os relacionamentos são veridadores e, portanto, possuem conteúdo proposicional. Assim, podemos entender uma relação como um tipo para entidades como relacionamentos. Ou seja, relações são universais ontológicos que descrevem a natureza dos relacionamentos.</p>
+<p><span class="citation" data-cites="xavier2015open">Xavier et al. (<a href="../../shared/referencias/referencias.html#ref-xavier2015open" role="doc-biblioref">2015</a>)</span>, no entanto, argumentam que a noção de relacionamento adotada na área de Extração de Informação é mais geral do que isso, não se limitando àquelas entre objetos e propriedades, mas também àquelas que descrevem ou implicam propriedades de classes gerais como descrito pela sentença (2) “Filósofos são autores de Livros”. Assim, para o contexto de EI consideramos relações como tipos de relacionamentos de primeira ou segunda ordem. Isso significa que uma relação é um tipo de relacionamento que existe entre objetos, suas propriedades e classes de objetos ou suas propriedades.</p>
+<p>Enquanto os métodos tradicionais de Extração de Informação dependem de um conjunto pré-existente de relações semânticas bem definidas que são relevantes para um domínio específico, a noção de “relação” e “entidade” na literatura da área mais recente, tais como a Extração de Informação Aberta, requer mais aprofundamento por demandar um significado diferente, principalmente com diferente visões de autores. Esta indeterminação terminológica pode trazer problemas para comparar os resultados dos métodos propostos ou para reutilizar os conjuntos de dados criados na área.</p>
+<p>As seções seguintes exploram essas duas áreas: Extração de Informação e Extração de Informação Aberta.</p>
+</section>
+</section>
+<section id="sec-ei" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="sec-ei"><span class="header-section-number">3.4</span> Extração de Informação (EI)</h2>
+<p>A Extração de Informação é caracterizada por obter informação estruturada a partir de textos, sendo entidades ou fatos, i.e.&nbsp;relacionamentos entre entidades, de tipos previamente definidos, conforme exemplo no <a href="#def-cap-ie-quadro-especifica" class="quarto-xref">Quadro&nbsp;<span>3.1</span></a>. Métodos com limitação de escopo possuem como uma de suas principais desvantagens a necessidade de intervenção humana para especificar novos fatos a serem extraídos. Esta limitação impede que sistemas de Extração de Informação, doravante denominados de EI tradicional extraiam fatos fora do escopo pré-definido.</p>
+<div id="def-cap-ie-quadro-especifica" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 3.1</strong></span> Exemplos de relações específicas na EI tradicional</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 36%">
+<col style="width: 31%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Relação Específica</strong></th>
+<th style="text-align: left;"><strong>Exemplo de Sentença</strong></th>
+<th style="text-align: left;"><strong>Extração</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">location-of(algo/alguém, local)</td>
+<td style="text-align: left;">Um aluno pode ser encontrado na escola</td>
+<td style="text-align: left;">location-of(aluno, escola)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">is-a(subclasse, superclasse)</td>
+<td style="text-align: left;">Salvador é uma cidade</td>
+<td style="text-align: left;">is-a(Salvador, cidade)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">part-of(todo, parte)</td>
+<td style="text-align: left;">Roda é um componente de um carro</td>
+<td style="text-align: left;">part-of(roda, carro)</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+</div>
+</div>
+</div>
+<p>Fonte: <span class="citation" data-cites="erick2014linguamatica">(<a href="../../shared/referencias/referencias.html#ref-erick2014linguamatica" role="doc-biblioref">Souza; Claro, 2014</a>)</span></p>
+</div>
+<p></p>
+<section id="reconhecimento-de-entidades-nomeadas" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="reconhecimento-de-entidades-nomeadas"><span class="header-section-number">3.4.1</span> Reconhecimento de Entidades Nomeadas</h3>
+<p>O Reconhecimento de Entidades Nomeadas (REN) consiste na tarefa de identificar e classificar expressões linguísticas, denominadas entidades nomeadas (EN), que referenciam entidades específicas num domínio de discurso, como nomes próprios, expressões temporais e espécies biológicas <span class="citation" data-cites="mota2007avaliaccao nadeau2007">(<a href="../../shared/referencias/referencias.html#ref-mota2007avaliaccao" role="doc-biblioref">Mota et al., 2007</a>; <a href="../../shared/referencias/referencias.html#ref-nadeau2007" role="doc-biblioref">Nadeau, 2007</a>)</span>. De uma forma geral, o REN pode ser dividido em duas etapas: a identificação (ou delimitação) da expressão, na qual as palavras que formam a EN são selecionadas; a classificação, em que é atribuída uma categoria semântica à EN.</p>
+<p>A classificação das ENs determina os tipos de entidades a serem consideradas e são especificadas a partir do escopo definido previamente para a tarefa. Algumas das categorias mais comumente utilizadas incluem as entidades que referenciam Pessoas Singulares (antropônimos); Coletivas (empresas e organizações) e Lugares (topônimos) <span class="citation" data-cites="mota2007avaliaccao">(<a href="../../shared/referencias/referencias.html#ref-mota2007avaliaccao" role="doc-biblioref">Mota et al., 2007</a>)</span>. Para exemplificar tomemos a sentença: “Renata Silva e Maria Costa palestraram na Universidade Federal da Bahia”. No exemplo temos três ENs: “Renata Silva”, “Maria Costa”, “Universidade Federal da Bahia”, sendo as duas primeiras correspondentes à categoria semântica Pessoa e a última, à categoria semântica Organização. Entretanto, existem outras categorias de ENs, como as menções a Obras (por exemplo, “Código Da Vinci”); Acontecimentos (por exemplo, “Festa de Santo Antônio”), Tempo (por exemplo, “meio-dia”); Coisa (por exemplo, “barco”), entre outras.</p>
+<p>O REN é uma tarefa com grande importância para o Processamento de Linguagem Natural, pois consiste numa primeira tarefa de análise semântica de um texto, com potencial aplicações a diversas tarefas. Por exemplo, em sistemas de perguntas e respostas, as perguntas frequentemente se referem a informações sobre entidades. Também, métodos de identificação de estruturas mais complexas, como eventos ou relações, dependem do bom desempenho do REN como uma etapa de pré-processamento <span class="citation" data-cites="zelenko2003kernel socher2012semantic">(<a href="../../shared/referencias/referencias.html#ref-socher2012semantic" role="doc-biblioref">Socher et al., 2012</a>; <a href="../../shared/referencias/referencias.html#ref-zelenko2003kernel" role="doc-biblioref">Zelenko et al., 2003</a>)</span>.</p>
+</section>
+<section id="extração-de-relações" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="extração-de-relações"><span class="header-section-number">3.4.2</span> Extração de Relações</h3>
+<p>A tarefa de extração de relações (ou de relacionamentos) (ER) refere-se a identificar relacionamentos entre entidades de um determinado escopo mencionadas em um texto <span class="citation" data-cites="jurafsky2023">(<a href="../../shared/referencias/referencias.html#ref-jurafsky2023" role="doc-biblioref">Jurafsky; Martin, 2023</a>)</span>. O escopo, no contexto da ER, refere-se a um conjunto de relações-alvo de um determinado domínio de conhecimento ou aplicação a ser investigado. Por exemplo, o <a href="#def-cap-ie-quadro-exemplogeo" class="quarto-xref">Quadro&nbsp;<span>3.2</span></a> apresenta alguns exemplos de relações no domínio de geografia brasileira. Na descrição das relações, os elementos em negrito referem-se às entidades em um dado relacionamento descrito pelo termo em itálico.</p>
+<div id="def-cap-ie-quadro-exemplogeo" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 3.2</strong></span> Exemplos de relações no domínio da geografia brasileira.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 44%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Relação</strong></th>
+<th style="text-align: left;"><strong>Descrição</strong></th>
+<th style="text-align: left;"><strong>Exemplo</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Pertence(Cidade, Unidade Federativa)</td>
+<td style="text-align: left;">Sobre uma <strong>cidade</strong> que está localizada em uma determinada <strong>Unidade Federativa</strong>, dizemos que a primeira <em>pertence</em> a esta última.</td>
+<td style="text-align: left;">Pertence(Salvador, Bahia)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tem_Prefeito(Cidade, Pessoa)</td>
+<td style="text-align: left;">Uma <strong>pessoa</strong> que executa a função administrativa de gestão do executivo em nível municipal de uma dada <strong>cidade</strong> é denominada de seu(sua) <em>prefeito(a)</em>.</td>
+<td style="text-align: left;">Tem_Prefeito(Salvador, Bruno Reis)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fundação(Cidade, Data)</td>
+<td style="text-align: left;">A <strong>data</strong> em que uma <strong>cidade</strong> foi fundada, é dita sua data de <em>fundação</em>.</td>
+<td style="text-align: left;">Fundação(Salvador, 29 de março de 1549)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<p></p>
+<p>Nesse contexto, a delimitação de um escopo ou domínio de interesse, concentra-se na determinação das relações a serem processadas, i.e.&nbsp;nos tipos de relacionamentos de interesse, assim como da natureza das entidades associadas por tais relações.</p>
+</section>
+<section id="extração-conjunta-de-entidades-e-relações" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="extração-conjunta-de-entidades-e-relações"><span class="header-section-number">3.4.3</span> Extração Conjunta de Entidades e Relações</h3>
+<p>As tarefas de reconhecimento de entidades nomeadas e extração de relações são interdependentes, no sentido de que a definição do escopo a ser estudado delimita tanto as categorias e natureza das entidades a serem extraídas, como também as relações entre essas entidades. Também, note-se que, pelo fato de as relações serem comumente definidas entre entidades de tipo especificado, como o caso da relação <em>Tem_Prefeito</em> no <a href="#def-cap-ie-quadro-exemplogeo" class="quarto-xref">Quadro&nbsp;<span>3.2</span></a> que ocorre entre entidades das classes <strong>Cidade</strong> e <strong>Pessoa</strong>, tanto as informações das entidades mencionadas no texto são úteis para a extração de relações, quanto a informação das relações identificadas pode ser útil ao processo de identificação de entidades.</p>
+<p>De fato, na literatura recente, existem vários trabalhos que consideram a tarefa de extração conjunta de entidades e relações (ERE, do inglês <em>Entity and Relation Joint Extraction</em>), composta das tarefas de REN e ER <span class="citation" data-cites="agichtein2000snowball yuan2021relation shaowei2022survey">(<a href="../../shared/referencias/referencias.html#ref-agichtein2000snowball" role="doc-biblioref">Agichtein; Gravano, 2000</a>; <a href="../../shared/referencias/referencias.html#ref-shaowei2022survey" role="doc-biblioref">Shaowei et al., 2022</a>; <a href="../../shared/referencias/referencias.html#ref-yuan2021relation" role="doc-biblioref">Yuan et al., 2021</a>)</span>. Enquanto normalmente abordagens estruturam suas soluções de forma sequencial, usualmente realizando REN inicialmente e, posteriormente, realizando ER, como nos trabalhos de <span class="citation" data-cites="hasegawa2004discovering">(<a href="../../shared/referencias/referencias.html#ref-hasegawa2004discovering" role="doc-biblioref">Hasegawa et al., 2004</a>)</span> e de <span class="citation" data-cites="socher2012semantic">(<a href="../../shared/referencias/referencias.html#ref-socher2012semantic" role="doc-biblioref">Socher et al., 2012</a>)</span>, a literatura recente aponta para as vantagens da identificação conjunta ao permitir um melhor aprendizado de restrições para identificação de entidades e relações, c.f. o recente <em>survey</em> realizado por <span class="citation" data-cites="shaowei2022survey">(<a href="../../shared/referencias/referencias.html#ref-shaowei2022survey" role="doc-biblioref">Shaowei et al., 2022</a>)</span> sobre métodos para tal tarefa.</p>
+</section>
+<section id="métodos-empregados-para-ei-na-literatura" class="level3" data-number="3.4.4">
+<h3 data-number="3.4.4" class="anchored" data-anchor-id="métodos-empregados-para-ei-na-literatura"><span class="header-section-number">3.4.4</span> Métodos empregados para EI na literatura</h3>
+<p>Várias abordagens foram adotadas para o problema de EI durante seu desenvolvimento histórico. Enquanto abordagens iniciais privilegiavam métodos ricos em conhecimento, como regras e recursos linguísticos e de conhecimento de mundo, a literatura recente na área privilegia métodos baseados em dados, como o aprendizado de máquina, com o recente emprego de arquiteturas neurais aos problemas.</p>
+<p>A seguir faremos uma breve apresentação das abordagens descritas na literatura para os problemas de EI.</p>
+<section id="ren" class="level4" data-number="3.4.4.1">
+<h4 data-number="3.4.4.1" class="anchored" data-anchor-id="ren"><span class="header-section-number">3.4.4.1</span> REN</h4>
+<p>As abordagens iniciais para REN baseavam-se, majoritariamente, no emprego de regras léxico-sintáticas e consulta a almanaques (<em>gazetteers</em>). Tais abordagens dependem da construção de listas de nomes próprios como antropônimos, topônimos etc., e outras palavras, como “Ltda.”, “Jr.” etc., que auxiliam no processo de identificação e classificação de ENs complexas ou desconhecidas. Essa é, por exemplo, a abordagem empregada por <span class="citation" data-cites="wolinski1995automatic">Wolinski et al. (<a href="../../shared/referencias/referencias.html#ref-wolinski1995automatic" role="doc-biblioref">1995</a>)</span> que combina almanaques e regras para a identificação e classificação de ENs. Posteriormente, almanaques foram também empregados em conjunção com métodos baseados em dados, como o trabalho de <span class="citation" data-cites="florian2003named">Florian et al. (<a href="../../shared/referencias/referencias.html#ref-florian2003named" role="doc-biblioref">2003</a>)</span> que os emprega aliados aos classificadores, enquanto <span class="citation" data-cites="liu2019towards">Liu et al. (<a href="../../shared/referencias/referencias.html#ref-liu2019towards" role="doc-biblioref">2019a</a>)</span> os utilizam durante o treinamento de uma rede neural, como um sinal de treinamento (parte da função de perda, ou <em>loss</em> em inglês).</p>
+<p>Muitos trabalhos debruçaram-se também sobre o problema de construção automática ou semi-automática de almanaques, dos quais os trabalhos de <span class="citation" data-cites="nadeau2007">Nadeau (<a href="../../shared/referencias/referencias.html#ref-nadeau2007" role="doc-biblioref">2007</a>)</span>, de <span class="citation" data-cites="riloff1999learning">Riloff et al. (<a href="../../shared/referencias/referencias.html#ref-riloff1999learning" role="doc-biblioref">1999</a>)</span> e de <span class="citation" data-cites="etzioni2005unsupervised">Etzioni et al. (<a href="../../shared/referencias/referencias.html#ref-etzioni2005unsupervised" role="doc-biblioref">2005</a>)</span> são alguns dos mais importantes.</p>
+<p>Enquanto as abordagens iniciais para o problema baseavam-se em regras, com a disponibilidade de dados anotados para a tarefa, tais métodos foram rapidamente suplantados por métodos baseados em dados, tais como: os métodos baseados em classificação <span class="citation" data-cites="sekine1998description asahara2003japanese">(<a href="../../shared/referencias/referencias.html#ref-asahara2003japanese" role="doc-biblioref">Asahara; Matsumoto, 2003</a>; <a href="../../shared/referencias/referencias.html#ref-sekine1998description" role="doc-biblioref">Sekine, 1998</a>)</span> e classificação sequencial <span class="citation" data-cites="bikel1999algorithm mccallum2003early">(<a href="../../shared/referencias/referencias.html#ref-bikel1999algorithm" role="doc-biblioref">Bikel et al., 1999</a>; <a href="../../shared/referencias/referencias.html#ref-mccallum2003early" role="doc-biblioref">McCallum; Li, 2003</a>)</span>.</p>
+<p>A redução de REN à tarefa de classificação sequencial merece destaque pelos bons resultados obtidos. Tal redução se dá através de um esquema de codificação do problema que nos permite representar fragmentos textuais e sua classificação como um problema de rotulação ou etiquetação.</p>
+<p>Partindo-se do pressuposto de que os fragmentos textuais descrevendo entidades nomeadas são contíguos, podemos codificar a tarefa de delimitação de entidades como classificação sequencial empregando rótulos que descrevem os limites de uma EN, e.g.&nbsp;o esquema BIO com os rótulos <strong>B</strong> (do inglês, <em>begin</em>) para designar a palavra inicial de uma EN, <strong>I</strong> (do inglês, <em>inside</em>) para designar palavras que fazem parte da EN mas não a iniciam e <strong>O</strong> (do inglês, <em>outside</em>) para designar palavras que não pertencem a uma entidade. Da mesma forma, podemos estender nosso esquema de codificação para incluir as classes de interesse. Assim, seguindo o esquema BIO, teremos os rótulos <strong>B-PER</strong> e <strong>I-PER</strong> para descrever entidades da classe <strong>Pessoa</strong>.</p>
+<p>A redução do problema de REN à classificação sequencial está ilustrada no <a href="#exm-cap-ie-1" class="quarto-xref">Exemplo&nbsp;<span>3.1</span></a>.</p>
+<div id="exm-cap-ie-1" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 3.1</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>Renata/B-PER Silva/I-PER e/O Maria/B-PER Costa/I-PER palestraram/O na/O Universidade/B-ORG Federal/I-ORG da/I-ORG Bahia/I-ORG.</p>
+</blockquote>
+</div>
+<p>Recentemente, destacam-se na literatura abordagens baseadas em redes neurais profundas, com uma grande concentração nos últimos anos em modelos gerativos de linguagem, devido aos resultados positivos obtidos por tais arquiteturas em diversas tarefas.</p>
+<p>Na literatura são de grande destaque os modelos recentes BART&nbsp;<span class="citation" data-cites="DBLP:conf/acl/LewisLGGMLSZ20">(<a href="../../shared/referencias/referencias.html#ref-DBLP:conf/acl/LewisLGGMLSZ20" role="doc-biblioref">Lewis et al., 2020</a>)</span>, RoBERTa&nbsp;<span class="citation" data-cites="DBLP:journals/corr/abs-1907-11692">(<a href="../../shared/referencias/referencias.html#ref-DBLP:journals/corr/abs-1907-11692" role="doc-biblioref">Liu et al., 2019b</a>)</span>, T5&nbsp;<span class="citation" data-cites="raffel2020exploring">(<a href="../../shared/referencias/referencias.html#ref-raffel2020exploring" role="doc-biblioref">Raffel et al., 2020</a>)</span>, BERT&nbsp;<span class="citation" data-cites="Devlin19">(<a href="../../shared/referencias/referencias.html#ref-Devlin19" role="doc-biblioref">Devlin et al., 2019</a>)</span> e GPT-3&nbsp;<span class="citation" data-cites="gpt3">(<a href="../../shared/referencias/referencias.html#ref-gpt3" role="doc-biblioref">Brown et al., 2020</a>)</span>, conforme descritos no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol2/modelos/cap-modelos-linguagem/cap-modelos-linguagem.html#sec-cap-modelos-linguagem" target="_blank" title="Volume 2">Modelos de linguagem</a></span>.</p>
+<p>Similarmente, na língua portuguesa, nas duas edições do HAREM&nbsp;<span class="citation" data-cites="santos2007reconhecimento mota2008desafios">(<a href="../../shared/referencias/referencias.html#ref-mota2008desafios" role="doc-biblioref">Mota; Santos, 2008</a>; <a href="../../shared/referencias/referencias.html#ref-santos2007reconhecimento" role="doc-biblioref">Santos; Cardoso, 2007b</a>)</span>, o primeiro esforço sistemático de desenvolvimento de soluções para a tarefa na língua, a maioria dos sistemas participantes baseava-se em métodos ricos em conhecimento, como regras e almanaques. De fato, nas duas avaliações, somente os sistemas MALINCHE&nbsp;<span class="citation" data-cites="solorio2007malinche">(<a href="../../shared/referencias/referencias.html#ref-solorio2007malinche" role="doc-biblioref">Solorio, 2007</a>)</span>, NEURA&nbsp;<span class="citation" data-cites="ferrandez2007tackling">(<a href="../../shared/referencias/referencias.html#ref-ferrandez2007tackling" role="doc-biblioref">Ferrández et al., 2007</a>)</span> e R3M&nbsp;<span class="citation" data-cites="mota2008r3m">(<a href="../../shared/referencias/referencias.html#ref-mota2008r3m" role="doc-biblioref">Mota, 2008</a>)</span> não se baseavam em regras. Métodos baseados em classificação sequencial se seguiram para a língua portuguesa, como o RELP-CRF&nbsp;<span class="citation" data-cites="amaral2014nerp">(<a href="../../shared/referencias/referencias.html#ref-amaral2014nerp" role="doc-biblioref">Amaral; Vieira, 2014</a>)</span> baseado em um classificador sequencial. Mais recentemente, abordagens baseadas em redes neurais e modelos de linguagem foram desenvolvidas tornando-se o estado da arte da tarefa na língua. A <a href="#tbl-cap-ie-trabs_portugues" class="quarto-xref">Tabela&nbsp;<span>3.1</span></a> apresenta o atual estado da arte em português, com base no <em>corpus</em> HAREM. A métrica de avaliação apresentada, medida F1, será discutida na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ie/cap-ie.html#sec-cap-ie-aval" target="_blank" title="Volume 3">Avaliação</a></span>.</p>
+<p></p>
+<div id="tbl-cap-ie-trabs_portugues" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cap-ie-trabs_portugues-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;3.1: Trabalhos estado da arte no REN em português
+</figcaption>
+<div aria-describedby="tbl-cap-ie-trabs_portugues-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Modelo</th>
+<th style="text-align: center;">Medida F1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">BERT-CRF&nbsp;<span class="citation" data-cites="Souza2020">(<a href="../../shared/referencias/referencias.html#ref-Souza2020" role="doc-biblioref">Souza et al., 2020</a>)</span></td>
+<td style="text-align: center;">83,70%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">BiLSTM-CRF+FlairBBP&nbsp;<span class="citation" data-cites="DBLP:conf/bracis/SantosCSTCV19">(<a href="../../shared/referencias/referencias.html#ref-DBLP:conf/bracis/SantosCSTCV19" role="doc-biblioref">Santos et al., 2019</a>)</span></td>
+<td style="text-align: center;">82,26%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LSTM-CRF&nbsp;<span class="citation" data-cites="DBLP:conf/propor/CastroSS18">(<a href="../../shared/referencias/referencias.html#ref-DBLP:conf/propor/CastroSS18" role="doc-biblioref">Castro et al., 2018</a>)</span></td>
+<td style="text-align: center;">76,27%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CharWNN&nbsp;<span class="citation" data-cites="DBLP:conf/aclnews/SantosG15">(<a href="../../shared/referencias/referencias.html#ref-DBLP:conf/aclnews/SantosG15" role="doc-biblioref">Santos; Guimarães, 2015</a>)</span></td>
+<td style="text-align: center;">65,41%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p></p>
+<p><span class="citation" data-cites="Souza2020">Souza et al. (<a href="../../shared/referencias/referencias.html#ref-Souza2020" role="doc-biblioref">2020</a>)</span> desenvolveram um modelo BERT para o Português com 2,68 bilhões de <em>tokens</em> e aplicaram o modelo em um classificador CRF. Santos et al., avaliaram o impacto do modelo contextualizado Flair Embeddings aplicado a tarefa de REN junto com uma rede neural BiLSTM-CRF. Os autores também desenvolveram um modelo Flair Embeddings para o português, o FlairBBP, treinado com 4,9 bilhões de <em>tokens</em>&nbsp;<span class="citation" data-cites="DBLP:conf/bracis/SantosCSTCV19">(<a href="../../shared/referencias/referencias.html#ref-DBLP:conf/bracis/SantosCSTCV19" role="doc-biblioref">Santos et al., 2019</a>)</span>. <span class="citation" data-cites="DBLP:conf/propor/CastroSS18">Castro et al. (<a href="../../shared/referencias/referencias.html#ref-DBLP:conf/propor/CastroSS18" role="doc-biblioref">2018</a>)</span> utilizou uma rede LSTM e um classificador CRF junto com modelos <em>word embeddings</em> pré-treinados. <span class="citation" data-cites="DBLP:conf/aclnews/SantosG15">Santos; Guimarães (<a href="../../shared/referencias/referencias.html#ref-DBLP:conf/aclnews/SantosG15" role="doc-biblioref">2015</a>)</span> desenvolveram uma rede neural convolucional capaz de capturar características a nível de caracteres e também de incorporar <em>word embeddings</em> pré-treinados.</p>
+<section id="reconhecimento-de-entidades-em-domínios-específicos" class="level5" data-number="3.4.4.1.1">
+<h5 data-number="3.4.4.1.1" class="anchored" data-anchor-id="reconhecimento-de-entidades-em-domínios-específicos"><span class="header-section-number">3.4.4.1.1</span> Reconhecimento de Entidades em Domínios Específicos</h5>
+<p>O reconhecimento de entidades tem sido aplicado em muitas áreas específicas, como direito, saúde e geologia. Nesses casos há uma demanda de adaptação dos modelos preditivos de acordo com a nova linguagem especializada do domínio e um novo conjunto de rótulos que devem ser aprendidos. Da mesma forma, são necessários novos conjuntos de dados para o processo de aprendizado, uma vez que abordagens de aprendizado de máquina necessitam de exemplos anotados para se chegar a um modelo preditivo eficaz.</p>
+<p>Muitos trabalhos endereçam domínios específicos, citamos exemplos em diversas línguas. Para o inglês, uma rede neural BiLSTM-CRF para o domínio biomédico é proposta em <span class="citation" data-cites="deep2017habibi">(<a href="../../shared/referencias/referencias.html#ref-deep2017habibi" role="doc-biblioref">Habibi et al., 2017</a>)</span>.</p>
+<p>Um conjunto de dados do domínio jurídico em língua alemã é apresentado por&nbsp;<span class="citation" data-cites="Leitner2019Fine">Leitner et al. (<a href="../../shared/referencias/referencias.html#ref-Leitner2019Fine" role="doc-biblioref">2019</a>)</span>, que empregam redes neurais BiLSTM para a rotulação dos textos. Em <span class="citation" data-cites="DBLP:journals/esi/QiuXWTL19">(<a href="../../shared/referencias/referencias.html#ref-DBLP:journals/esi/QiuXWTL19" role="doc-biblioref">Qiu et al., 2019</a>)</span>, uma rede neural BiLSTM-CRF com mecanismo de atenção é aplicada para reconhecer entidades geológicas para a língua chinesa.</p>
+<p>Para o português, um <em>corpus</em> para detecção de eventos de quedas de pacientes em prontuários eletrônicos é descrito em <span class="citation" data-cites="DBLP:conf/cbms/SantosSV20">(<a href="../../shared/referencias/referencias.html#ref-DBLP:conf/cbms/SantosSV20" role="doc-biblioref">Santos et al., 2020</a>)</span>. Os autores usaram uma rede neural BiLSTM-CRF+Flair para gerar um modelo classificador de <em>tokens</em>. Um <em>corpus</em> no domínio jurídico, tendo categorias específicas como legislação e jurisprudência é proposto por <span class="citation" data-cites="LuzdeAraujo2018">Araujo et al. (<a href="../../shared/referencias/referencias.html#ref-LuzdeAraujo2018" role="doc-biblioref">2018</a>)</span>, que usaram uma rede neural BiLSTM-CRF para criar um primeiro <em>baseline</em> para esse <em>corpus</em>. Ademais, <span class="citation" data-cites="DBLP:conf/lrec/ConsoliSGCVM20">Consoli et al. (<a href="../../shared/referencias/referencias.html#ref-DBLP:conf/lrec/ConsoliSGCVM20" role="doc-biblioref">2020</a>)</span> analisam um <em>corpus</em> no domínio de geologia usando uma rede neural BiLSTM-CRF com um modelo contextualizado Flair Embeddings.</p>
+<p>Desde a terceira edição, este livro conta com um capítulo de reconhecimento de entidades nomeadas no domínio jurídico, o <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html#sec-cap-direito-ren" target="_blank" title="Volume 3">Reconhecimento de Entidades Nomeadas no Domínio Legal</a></span>.</p>
+</section>
+</section>
+<section id="extração-de-relações-1" class="level4" data-number="3.4.4.2">
+<h4 data-number="3.4.4.2" class="anchored" data-anchor-id="extração-de-relações-1"><span class="header-section-number">3.4.4.2</span> Extração de Relações</h4>
+<p>As abordagens iniciais para o problema de ER baseavam-se na definição de gabaritos e regras de extração, com base em informação sintática obtida de analisadores sintáticos rasos ou profundos <span class="citation" data-cites="sager1978natural cowie1983automatic">(<a href="../../shared/referencias/referencias.html#ref-cowie1983automatic" role="doc-biblioref">Cowie, 1983</a>; <a href="../../shared/referencias/referencias.html#ref-sager1978natural" role="doc-biblioref">Sager, 1978</a>)</span>. Tais métodos foram rapidamente suplantados por métodos baseados em dados e padrões obtidos de <em>corpora</em>, como os famosos padrões de <span class="citation" data-cites="hearst1992automatic">Hearst (<a href="../../shared/referencias/referencias.html#ref-hearst1992automatic" role="doc-biblioref">1992</a>)</span> para identificação de relações de hiponímia.</p>
+<p>O trabalho de <span class="citation" data-cites="hearst1992automatic">Hearst (<a href="../../shared/referencias/referencias.html#ref-hearst1992automatic" role="doc-biblioref">1992</a>)</span> se baseou na definição de padrões léxico-sintáticos para expressão de relações de hiponímia e hiperonímia a partir de uma análise de <em>corpus</em>. Ao escolher a relação de hiponímia, que ocorre em todo domínio, e padrões gerais baseados em aspectos da língua, como os representados no <a href="#def-cap-ie-quadro-hearst" class="quarto-xref">Quadro&nbsp;<span>3.3</span></a>, garante-se a generalização dos padrões obtidos para diversos domínios e aplicações.</p>
+<p></p>
+<div id="def-cap-ie-quadro-hearst" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 3.3</strong></span> Exemplos de Padrões de Hearst para hiponímia</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 28%">
+<col style="width: 24%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Padrão</strong></th>
+<th style="text-align: left;"><strong>Exemplo</strong></th>
+<th style="text-align: left;"><strong>Extração</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(NP\)</span>, tais quais <span class="math inline">\(\{NP\}^\ast NP\)</span></td>
+<td style="text-align: left;">… países, tais quais França, Brasil e China</td>
+<td style="text-align: left;">Is_a(França, país)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(NP \{, NP\}^\ast\)</span> e outros(as) <span class="math inline">\(NP\)</span></td>
+<td style="text-align: left;">Contusões, feridas, osso quebrados e outras lesões</td>
+<td style="text-align: left;">Is_a(contusão, lesão)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<p></p>
+<p>Devido à dificuldade de construção manual das regras, os métodos de <span class="citation" data-cites="riloff1993automatically">Riloff et al. (<a href="../../shared/referencias/referencias.html#ref-riloff1993automatically" role="doc-biblioref">1993</a>)</span>, empregam heurísticas para geração de padrões baseadas em informação gramatical, e de <span class="citation" data-cites="soderland1995crystal">Soderland et al. (<a href="../../shared/referencias/referencias.html#ref-soderland1995crystal" role="doc-biblioref">1995</a>)</span>, que se baseia numa semântica de quadros (<em>frames</em>) empregando um analisador semântico e medidas de qualidade de identificação de exemplos, baseado no percentual de acerto sobre relacionamentos previamente conhecidos, para identificação de quadros relevantes.</p>
+<p>As abordagens baseadas em aprendizado de máquina, hoje as mais comuns e com melhor desempenho na literatura <span class="citation" data-cites="konstantinova2014review nasar2021named">(<a href="../../shared/referencias/referencias.html#ref-konstantinova2014review" role="doc-biblioref">Konstantinova, 2014</a>; <a href="../../shared/referencias/referencias.html#ref-nasar2021named" role="doc-biblioref">Nasar et al., 2021</a>)</span> dividem-se em abordagens que realizam reconhecimento de entidades e extração de relações de forma conjunta e separada.</p>
+<p>Abordagens baseadas na realização de REN e ER de forma separada baseiam-se em um fluxo de processamento em que, em geral, as entidades são identificadas primeiro e a tarefa de ER se reduz a identificar quando uma sentença ou fragmento textual denota uma relação semântica entre duas entidades. Consideremos o <a href="#exm-cap-ie-2" class="quarto-xref">Exemplo&nbsp;<span>3.2</span></a>, retirado de <span class="citation" data-cites="socher2012semantic">(<a href="../../shared/referencias/referencias.html#ref-socher2012semantic" role="doc-biblioref">Socher et al., 2012</a>)</span>:</p>
+<div id="exm-cap-ie-2" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 3.2</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>[Gripe&nbsp;aviária]<span class="math inline">\(_{e1}\)</span> é uma doença infecciosa causada pelo vírus da [influenza&nbsp;tipo&nbsp;a]<span class="math inline">\(_{e2}\)</span></p>
+</blockquote>
+</div>
+<p>Podemos, então, reduzir o problema de identificar a relação Causa-Efeito(<span class="math inline">\(e1\)</span>,<span class="math inline">\(e2\)</span>) a um problema de classificação textual, identificando se a sentença acima fornece indícios para a expressão da relação de interesse. As soluções propostas na literatura para o problema são variadas e baseadas em diferentes métodos.</p>
+<p><span class="citation" data-cites="zelenko2003kernel">Zelenko et al. (<a href="../../shared/referencias/referencias.html#ref-zelenko2003kernel" role="doc-biblioref">2003</a>)</span>, por exemplo, propõem funções de <em>kernel</em> para árvores sintáticas rasas, i.e.&nbsp;funções que descrevem medidas de similaridade entre tais árvores. Eles empregam tais medidas para treinar um classificador de <em>perceptron</em> com votação (<em>voted perceptron</em>) sobre relações no domínio de organizações extraídas de um <em>corpus</em> de textos jornalísticos. De forma similar, <span class="citation" data-cites="zhao2005extracting">Zhao; Grishman (<a href="../../shared/referencias/referencias.html#ref-zhao2005extracting" role="doc-biblioref">2005</a>)</span> empregam diferentes funções de <em>kernel</em> sobre informações sintáticas relevantes para a identificação de relação e argumentos visando treinar um classificador SVM sobre o <em>corpus</em> de ER da conferência ACE.</p>
+<p><span class="citation" data-cites="culotta2006integrating">Culotta et al. (<a href="../../shared/referencias/referencias.html#ref-culotta2006integrating" role="doc-biblioref">2006</a>)</span>, por outro lado, empregam um classificador sequencial baseado em modelos escondidos de Markov para identificação de relações em um texto. Ao restringir sua análise a textos biográficos, os autores reduzem o processo de identificar instâncias de relações à identificação de fragmento textual que delimita o argumento e sua classificação, tarefa para a qual a classificação sequencial já é comumente utilizada. Consideremos o <a href="#exm-cap-ie-3" class="quarto-xref">Exemplo&nbsp;<span>3.3</span></a> sobre George W. Bush, retirado de <span class="citation" data-cites="culotta2006integrating">(<a href="../../shared/referencias/referencias.html#ref-culotta2006integrating" role="doc-biblioref">Culotta et al., 2006</a>)</span>:</p>
+<div id="exm-cap-ie-3" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 3.3</strong></span> &nbsp;</p>
+<blockquote class="blockquote">
+<p>George é filho de <span class="math inline">\(\underbrace{\mbox{George H. W. Bush}}_{\mbox{pai}}\)</span> e <span class="math inline">\(\underbrace{\mbox{Barbara Bush}}_{\mbox{mãe}}\)</span>.</p>
+</blockquote>
+</div>
+<p>Ao identificar o papel de pai e mãe, os autores conseguem construir a relação Pai(George&nbsp;H.&nbsp;W.&nbsp;Bush,&nbsp;George&nbsp;W.&nbsp;Bush) e Mãe(Barbara&nbsp;Bush,&nbsp;George&nbsp;W.&nbsp;Bush).</p>
+<p>Métodos baseados em redes neurais, de forma geral, costumam empregar técnicas de aprendizado de representação <span class="citation" data-cites="bengio2013representation">(<a href="../../shared/referencias/referencias.html#ref-bengio2013representation" role="doc-biblioref">Bengio et al., 2013</a>)</span> para aprender representações do conteúdo semântico dos fragmentos textuais e reduzem o problema de ER à classificação textual. É o caso de <span class="citation" data-cites="socher2012semantic">Socher et al. (<a href="../../shared/referencias/referencias.html#ref-socher2012semantic" role="doc-biblioref">2012</a>)</span>, que propõem a MV-RNN, uma rede neural que constrói um espaço de representação baseado em matrizes e vetores com o objetivo de capturar a composicionalidade de sentido de sintagmas e sentenças e os aplica para ER. Similarmente, <span class="citation" data-cites="zeng2014relation">Zeng et al. (<a href="../../shared/referencias/referencias.html#ref-zeng2014relation" role="doc-biblioref">2014</a>)</span> e <span class="citation" data-cites="wang2016relation">Wang et al. (<a href="../../shared/referencias/referencias.html#ref-wang2016relation" role="doc-biblioref">2016</a>)</span> empregam redes neurais convolucionais para obter representações vetoriais de sentenças que serão empregadas no processo de classificação quanto à relação expressa pela mesma.</p>
+</section>
+<section id="extração-conjunta-de-entidades-e-relações-1" class="level4" data-number="3.4.4.3">
+<h4 data-number="3.4.4.3" class="anchored" data-anchor-id="extração-conjunta-de-entidades-e-relações-1"><span class="header-section-number">3.4.4.3</span> Extração Conjunta de Entidades e Relações</h4>
+<p>Abordagens baseadas em identificação sequencial de entidades e relações possuem desvantagens observadas na literatura. Primeiramente, como a ER é guiada pelas entidades identificadas no processo de REN, a propagação de erros da primeira tarefa pode ter impacto considerável na performance dos sistemas desenvolvidos. Segundo, uma vez que o contexto determinado limita tanto as tarefas de REN, quanto as de ER, existe uma interdependência entre as tarefas. Assim, propostas visando realizar a extração de entidades e relações de forma conjunta começaram a surgir na literatura recente, ganhando certo interesse da comunidade.</p>
+<p>As abordagens empregadas para tal tarefa são diversificadas, incluindo desde métodos de aprendizado relacional a redes neurais</p>
+<p><span class="citation" data-cites="roth2007global">Roth; Yih (<a href="../../shared/referencias/referencias.html#ref-roth2007global" role="doc-biblioref">2007</a>)</span> propõem a utilização de métodos de programação inteira ao problema, baseados na teoria estatística de aprendizado relacional. Os autores utilizam classificadores locais para a identificação de entidades e relações e um classificador global que combina as informações dos classificadores locais em uma predição que maximiza a qualidade da extração, codificada por meio de restrições em programação inteira. Também baseados em modelos estatísticos, <span class="citation" data-cites="yu2010jointly">Yu; Lam (<a href="../../shared/referencias/referencias.html#ref-yu2010jointly" role="doc-biblioref">2010</a>)</span> propõem o uso de modelos gráficos globais para identificação de um descritor de relação e uma segmentação do texto para identificação dos argumentos.</p>
+<p><span class="citation" data-cites="li2014incremental">Li; Ji (<a href="../../shared/referencias/referencias.html#ref-li2014incremental" role="doc-biblioref">2014</a>)</span> e <span class="citation" data-cites="miwa2016end">Miwa; Bansal (<a href="../../shared/referencias/referencias.html#ref-miwa2016end" role="doc-biblioref">2016</a>)</span>, por sua vez, reduzem a tarefa de ERE à classificação sequencial, utilizando redes neurais recorrentes bidirecionais sequenciais e estruturadas com base na estrutura superficial e na árvore de dependências sintáticas da entrada para identificação conjunta de entidades e relações.</p>
+</section>
+</section>
+</section>
+<section id="extração-de-informação-aberta" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="extração-de-informação-aberta"><span class="header-section-number">3.5</span> Extração de Informação Aberta</h2>
+<p>A Extração de Informação Aberta (EIA), também conhecida como <em>Open Information Extraction</em>, Open IE ou OIE em inglês, é a tarefa de extrair informações estruturadas de documentos sem necessitar da pré-definição do contexto da tarefa, i.e.&nbsp;das relações e tipos de entidade de interesse. A tarefa foi inicialmente proposta pelo trabalho de <span class="citation" data-cites="banko2007">(<a href="../../shared/referencias/referencias.html#ref-banko2007" role="doc-biblioref">Banko et al., 2007</a>)</span> e ganhou popularidade nas últimas décadas devido à sua aplicabilidade para processar e estruturar o conhecimento a partir de grandes volumes de dados disponíveis na Web, seguindo o paradigma da Web como um <em>Corpus</em> (WaC) <span class="citation" data-cites="meyer2003world">(<a href="../../shared/referencias/referencias.html#ref-meyer2003world" role="doc-biblioref">Meyer et al., 2003</a>)</span>.</p>
+<p>A EIA surge visando generalizar a tarefa de Extração de Relações. A principal diferença entre as duas abordagens, porém, reside na dependência da ER de uma especificação prévia do domínio de aplicação, bem como das relações alvo a serem identificadas, que a EIA visa eliminar.</p>
+<p>Seguindo o trabalho original de <span class="citation" data-cites="banko2007">Banko et al. (<a href="../../shared/referencias/referencias.html#ref-banko2007" role="doc-biblioref">2007</a>)</span>, que propôs o sistema TextRunner, vários métodos e sistemas para EIA foram propostos na literatura <span class="citation" data-cites="fader-etal-2011-identifying del2013clausie xavier2015open">(<a href="../../shared/referencias/referencias.html#ref-del2013clausie" role="doc-biblioref">Del Corro; Gemulla, 2013</a>; <a href="../../shared/referencias/referencias.html#ref-fader-etal-2011-identifying" role="doc-biblioref">Fader et al., 2011</a>; <a href="../../shared/referencias/referencias.html#ref-xavier2015open" role="doc-biblioref">Xavier et al., 2015</a>)</span>, mas, como observado por <span class="citation" data-cites="systematicmapping">Glauber; Claro (<a href="../../shared/referencias/referencias.html#ref-systematicmapping" role="doc-biblioref">2018</a>)</span>, os principais avanços na área se concentraram principalmente no idioma inglês.</p>
+<p>A EIA para a língua portuguesa tem uma história bastante recente. A partir dos trabalhos de <span class="citation" data-cites="erick2014linguamatica">Souza; Claro (<a href="../../shared/referencias/referencias.html#ref-erick2014linguamatica" role="doc-biblioref">2014</a>)</span>, <span class="citation" data-cites="pereira2015report">Pereira; Pinheiro (<a href="../../shared/referencias/referencias.html#ref-pereira2015report" role="doc-biblioref">2015</a>)</span> e de <span class="citation" data-cites="george2016">(<a href="../../shared/referencias/referencias.html#ref-george2016" role="doc-biblioref">Barbosa et al., 2016</a>)</span>, têm crescido o número de estudos sobre a tarefa assim como os resultados obtidos por esses estudos, com recentes desenvolvimentos de métodos <span class="citation" data-cites="dptoie Sena2017ICEIS eric:jucs:SGS2018 inferportoie2019 pragmaticoie2020">(<a href="../../shared/referencias/referencias.html#ref-dptoie" role="doc-biblioref">Oliveira et al., 2022</a>; <a href="../../shared/referencias/referencias.html#ref-Sena2017ICEIS" role="doc-biblioref">Sena et al., 2017</a>; <a href="../../shared/referencias/referencias.html#ref-inferportoie2019" role="doc-biblioref">Sena; Claro, 2019</a>, <a href="../../shared/referencias/referencias.html#ref-pragmaticoie2020" role="doc-biblioref">2020</a>; <a href="../../shared/referencias/referencias.html#ref-eric:jucs:SGS2018" role="doc-biblioref">Souza et al., 2018</a>)</span>, construção do <em>corpus</em> <span class="citation" data-cites="challenges2018">(<a href="../../shared/referencias/referencias.html#ref-challenges2018" role="doc-biblioref">Glauber et al., 2018</a>)</span> e avaliação dos sistemas disponíveis <span class="citation" data-cites="iberlef2019:dptoie iberlef2019:pragmaticoie Malenchini2019:QA:benchmark">(<a href="../../shared/referencias/referencias.html#ref-iberlef2019:dptoie" role="doc-biblioref">Glauber et al., 2019a</a>, <a href="../../shared/referencias/referencias.html#ref-iberlef2019:pragmaticoie" role="doc-biblioref">2019b</a>; <a href="../../shared/referencias/referencias.html#ref-Malenchini2019:QA:benchmark" role="doc-biblioref">Malenchini et al., 2019</a>)</span>.</p>
+<p>Embora a área tenha visto um crescimento recente para o desenvolvimento de métodos para línguas como o inglês, principalmente com a aplicação de métodos supervisionados e redes neurais, esses avanços ainda não foram incorporados na literatura sobre EIA para a língua portuguesa. A razão para isso é principalmente a falta de recursos linguísticos disponíveis para orientar o desenvolvimento de pesquisas para a língua. Embora o foco no idioma inglês possa ser devido ao seu uso generalizado em todo o mundo, foi reconhecido pela comunidade científica que esse foco no inglês com suas características particulares pode introduzir algum viés na área&nbsp;<span class="citation" data-cites="bender-2009-linguistically">(<a href="../../shared/referencias/referencias.html#ref-bender-2009-linguistically" role="doc-biblioref">Bender, 2009</a>)</span>.</p>
+<p>Assim, esta seção aborda EIA para a língua portuguesa, incluindo uma formalização e a evolução das abordagens da área.</p>
+<section id="formalização" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="formalização"><span class="header-section-number">3.5.1</span> Formalização</h3>
+<p>A tarefa de EIA pode ser formalmente definida sendo <span class="math inline">\(X = \langle x_{1}, x_{2}, \cdots, x_{n}\rangle\)</span> uma sentença composta de <em>tokens</em> <span class="math inline">\(x_i\)</span>. Um extrator EIA é uma função que mapeia <span class="math inline">\(X\)</span> em um conjunto <span class="math inline">\(Y = \langle y_{1}, y_{2}, \cdots, y_{j} \rangle\)</span> como um conjunto de tuplas <span class="math inline">\(y \_i = \langle rel_i, arg1_i, arg2_i, \cdots, argn_i\rangle\)</span>, que descrevem as informações expressas na sentença X. Neste capítulo, consideramos que as tuplas estão sempre no formato <span class="math inline">\(y = (arg_{1 }, rel, arg_{2})\)</span>, onde <span class="math inline">\(arg1\)</span> e <span class="math inline">\(arg2\)</span> são sintagmas nominais, não necessariamente formados por <em>tokens</em> presentes em X, e <span class="math inline">\(rel\)</span> é um descritor de um relacionamento entre <span class="math inline">\(arg_{1}\)</span> e <span class="math inline">\(arg_{2}\)</span>. Não consideraremos extrações formadas por mais de dois argumentos neste capítulo.</p>
+</section>
+<section id="abordagens" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="abordagens"><span class="header-section-number">3.5.2</span> Abordagens</h3>
+<p>Os primeiros métodos de EIA empregavam padrões de inspiração linguística para extração, como ArgOE <span class="citation" data-cites="gamallo2015multilingual">(<a href="../../shared/referencias/referencias.html#ref-gamallo2015multilingual" role="doc-biblioref">Gamallo; Garcia, 2015</a>)</span>, ou adaptação de métodos para a língua inglesa, como SGS&nbsp;<span class="citation" data-cites="eric:jucs:SGS2018">(<a href="../../shared/referencias/referencias.html#ref-eric:jucs:SGS2018" role="doc-biblioref">Souza et al., 2018</a>)</span>, InferReVerbPT&nbsp;<span class="citation" data-cites="Sena2017ICEIS">Sena et al. (<a href="../../shared/referencias/referencias.html#ref-Sena2017ICEIS" role="doc-biblioref">2017</a>)</span> e RePort&nbsp;<span class="citation" data-cites="pereira2015report">Pereira; Pinheiro (<a href="../../shared/referencias/referencias.html#ref-pereira2015report" role="doc-biblioref">2015</a>)</span>. Os trabalhos são principalmente influenciados por métodos baseados no inglês da chamada segunda geração de EIA <span class="citation" data-cites="fader-etal-2011-identifying">(<a href="../../shared/referencias/referencias.html#ref-fader-etal-2011-identifying" role="doc-biblioref">Fader et al., 2011</a>)</span>.</p>
+<p>O primeiro sistema de EIA para o português de que temos conhecimento foi o DepOE&nbsp;<span class="citation" data-cites="gamallo2012dependency">(<a href="../../shared/referencias/referencias.html#ref-gamallo2012dependency" role="doc-biblioref">Gamallo et al., 2012</a>)</span>. Ele executa a extração aberta multilíngue de triplas (inglês, espanhol, português e galego) usando o analisador sintático de dependências baseado em regras <em>DepPattern</em>. No entanto, nenhuma avaliação ou resultados são relatados para a língua portuguesa. Os autores apresentam somente uma comparação dos seus resultados com <em>Reverb</em> na língua inglesa.</p>
+<p><span class="citation" data-cites="erick2014linguamatica">Souza; Claro (<a href="../../shared/referencias/referencias.html#ref-erick2014linguamatica" role="doc-biblioref">2014</a>)</span> se propuseram a analisar o conjunto de características mais representativas da língua portuguesa para a identificação de extrações válidas no contexto de EIA, tal qual empregado na língua inglesa com o sistema ReVerb <span class="citation" data-cites="fader-etal-2011-identifying">(<a href="../../shared/referencias/referencias.html#ref-fader-etal-2011-identifying" role="doc-biblioref">Fader et al., 2011</a>)</span>.</p>
+<p>O sistema RePort <span class="citation" data-cites="pereira2015report">(<a href="../../shared/referencias/referencias.html#ref-pereira2015report" role="doc-biblioref">Pereira; Pinheiro, 2015</a>)</span>, por outro lado, é uma adaptação do ReVerb para a língua portuguesa baseada em análise sintática rasa com regras sintáticas e lexicais. Os autores relatam que suas extrações apresentam grande similaridade com suas correlatas extraídas pelo ReVerb (dos textos traduzidos para o inglês).</p>
+<p>O RELP, proposto por <span class="citation" data-cites="de2017relp">Abreu; Vieira (<a href="../../shared/referencias/referencias.html#ref-de2017relp" role="doc-biblioref">2017</a>)</span>, é um sistema aberto de extração de relações que extrai relações entre entidades nomeadas em um domínio de organização aplicando classificação sequencial com CRF (<em>Conditional Random Fields</em>). O sistema RelP extrai qualquer descritor de relação que expressa um relacionamento entre pares de entidades nomeadas (Organização, Pessoa ou Lugar), caracterizando-o como uma abordagem híbrida da REN com a EIA.</p>
+<p>O InferReVerbPT desenvolvido por <span class="citation" data-cites="Sena2017ICEIS">Sena et al. (<a href="../../shared/referencias/referencias.html#ref-Sena2017ICEIS" role="doc-biblioref">2017</a>)</span> baseia-se numa adaptação do sistema ReVerb para a língua portuguesa, expandindo-o com a extração de relacionamentos implícitos obtidos por inferência por propriedades de simetria e transitividade das relações com inferência transitiva e simétrica. Um classificador SVM foi empregado para realizar a inferência baseado nas propriedades semânticas do verbo central no descritor de relação.</p>
+<p><span class="citation" data-cites="eric:jucs:SGS2018">Souza et al. (<a href="../../shared/referencias/referencias.html#ref-eric:jucs:SGS2018" role="doc-biblioref">2018</a>)</span> analisaram que a maior desvantagem dos estudos baseados em recursos linguísticos, como dados anotados, reside na escassez de tais recursos na maioria dos idiomas além do inglês. Assim, para mitigar esse problema, eles propõem um método de classificação de fatos baseado na similaridade de estruturas gramaticais (SGS). Sua abordagem modela estruturas morfosintáticas dos fatos (triplas descrevendo relacionamentos) para identificar padrões de semelhanças que podem ser usados para distinguir entre fatos válidos e inválidos. Eles aplicaram algoritmos de isomorfismo de grafos para detectar subgrafos descrevendo tais padrões.</p>
+<p>Um novo sistema de EIA baseado em análise de dependência foi proposto por <span class="citation" data-cites="gamallo2015multilingual">Gamallo; Garcia (<a href="../../shared/referencias/referencias.html#ref-gamallo2015multilingual" role="doc-biblioref">2015</a>)</span>, chamado ArgOE. Tal sistema é multilíngue, baseado em heurísticas e utiliza a informação de dependência sintáticas do texto para analisar a estrutura de dependência do verbo, bem como um conjunto de regras para gerar os relacionamentos. A introdução de um Analisador de Dependência em sistemas de EIA focados inteiramente na língua portuguesa foi feita pelos autores <span class="citation" data-cites="dptoie">Oliveira et al. (<a href="../../shared/referencias/referencias.html#ref-dptoie" role="doc-biblioref">2022</a>)</span>. O DptOIE é baseado em análise de dependência e regras elaboradas manualmente. As sentenças são pré-processadas por meio de um tokenizador, um PoS <em>Tagger</em> e um analisador de dependências. Os autores propõem um acoplamento de três módulos para tratar casos particulares: conjunções coordenadas, orações subordinadas e aposto.</p>
+<p>Com a evolução dos métodos de EIA para a língua inglesa utilizando os modelos neurais, novas abordagens foram propostas também para a língua portuguesa.</p>
+<p>O primeiro trabalho que utilizou aprendizado supervisionado com rede neural profunda para o português foi o de <span class="citation" data-cites="ro-etal-2020-multi">Ro et al. (<a href="../../shared/referencias/referencias.html#ref-ro-etal-2020-multi" role="doc-biblioref">2020</a>)</span> que descreve o sistema <strong>Multi2OIE</strong>. Os autores utilizaram o modelo de linguagem BERT multilíngue <span class="citation" data-cites="Devlin19">(<a href="../../shared/referencias/referencias.html#ref-Devlin19" role="doc-biblioref">Devlin et al., 2019</a>)</span> para obter representações vetoriais das palavras e reduzem a tarefa de EIA à classificação sequencial, identificado os fragmentos do texto que determinam os argumentos (<span class="math inline">\(arg_1, arg_2\)</span>) e o descritor de relação (<span class="math inline">\(rel\)</span>). Seu sistema foi capaz de produzir extrações para vários idiomas (inglês, português e espanhol), treinados, entretanto, sobre dados traduzidos do inglês.</p>
+<p><span class="citation" data-cites="stanovsky2018supervised">Stanovsky et al. (<a href="../../shared/referencias/referencias.html#ref-stanovsky2018supervised" role="doc-biblioref">2018</a>)</span> propuseram uma abordagem de EIA para a língua inglesa baseada em triplas. Os mesmos fazem uso de uma classificação sequencial cuja limitação define uma tripla extraída para cada sentença. Este método utiliza uma arquitetura de Redes Neurais Recursivas (RNN) para realizar EIA. A EIA é formulada como uma tarefa de rotulagem de sequências, utilizando estratégias semelhantes às que foram aplicadas anteriormente a tarefas como o Reconhecimento de Entidades Nomeadas. Já os autores em <span class="citation" data-cites="cui2018neural">Cui et al. (<a href="../../shared/referencias/referencias.html#ref-cui2018neural" role="doc-biblioref">2018</a>)</span> e <span class="citation" data-cites="zhang2017mt">Zhang et al. (<a href="../../shared/referencias/referencias.html#ref-zhang2017mt" role="doc-biblioref">2017</a>)</span> propõem modelar o problema da EIA como um problema de aprendizado sequência a sequência (<em>seq2seq</em>). Eles definem uma estrutura <em>encoder-decoder</em> para aprender argumentos e tuplas de relação inicializadas a partir de um sistema de EIA.</p>
+<p>Seguindo o trabalho de&nbsp;<span class="citation" data-cites="stanovsky2018supervised">(<a href="../../shared/referencias/referencias.html#ref-stanovsky2018supervised" role="doc-biblioref">Stanovsky et al., 2018</a>)</span>, em 2022, <span class="citation" data-cites="cabral2022portnoie">Cabral et al. (<a href="../../shared/referencias/referencias.html#ref-cabral2022portnoie" role="doc-biblioref">2022</a>)</span> propuseram <strong>PortNOIE</strong>, uma arquitetura neural para EIA em português que combina representações contextuais de palavras com codificadores neurais para extrair relacionamentos baseado em classificação sequencial iterativa. Diferente de outros métodos de classificação sequencial para EIA, os autores focam na extração de múltiplas triplas de uma mesma sentença.</p>
+</section>
+</section>
+<section id="sec-cap-ie-aval" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="sec-cap-ie-aval"><span class="header-section-number">3.6</span> Avaliação</h2>
+<p>A avaliação sistemática de sistemas de EI foi estabelecida primeiramente nas conferências MUC, em particular na sua segunda edição, com o estabelecimento de gabaritos-padrão que deveriam ser utilizados por todos os sistemas participantes e a adoção de métricas de qualidade, baseadas naquelas usadas na área de recuperação de informação, que foram abordadas no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir" target="_blank" title="Volume 3">Recuperação de Informação</a></span>. Para avaliar a tarefa de extração de relações, a MUC-2 estabeleceu como métricas de qualidade do sistema as medidas de precisão e cobertura, também denominada de <em>Recall</em> ou Revocação.</p>
+<p>A precisão de um sistema reflete a qualidade de suas extrações, i.e., quantas das extrações realizadas estão corretas, dado um <em>corpus</em> de teste. A medida de precisão pode ser calculada como:</p>
+<p> <span id="eq-cap-ie-precisao"><span class="math display">\[
+P = \frac{\#(\mbox{relacionamentos corretamente extraídos})}{\#(\mbox{relacionamentos extraídos pelo sistema})}
+\tag{3.1}\]</span></span> </p>
+<p>A cobertura também conhecida como revocação, reflete quão abrangente um sistema é em suas extrações, i.e., quantas das extrações a serem realizadas em um <em>corpus</em> de teste, o sistema é capaz de realizar. A medida de cobertura pode ser calculada como:</p>
+<p> <span id="eq-cap-ie-recall"><span class="math display">\[
+R = \frac{\#(\mbox{relacionamentos extraídos})}{\#(\mbox{relacionamentos no \textit{corpus}})}
+\tag{3.2}\]</span></span> </p>
+<p>Enquanto a MUC-3 adicionou duas novas métricas de avaliação, a saber sobre-geração (<em>overgeneration</em>) e sub-geração (<em>fallout</em>), tais métricas receberam pouco interesse na literatura. De fato, <span class="citation" data-cites="lehnert1991performance">Lehnert; Sundheim (<a href="../../shared/referencias/referencias.html#ref-lehnert1991performance" role="doc-biblioref">1991</a>)</span> argumentam que tais métricas foram pouco informativas ou difíceis de calcular para a tarefa de EI e, portanto, abandonadas. Foi também empregado nessa conferência um sistema automático de avaliação disponibilizado às equipes participantes que permitiu uma maior compreensão do modelo de avaliação e, como discutem <span class="citation" data-cites="lehnert1991performance">Lehnert; Sundheim (<a href="../../shared/referencias/referencias.html#ref-lehnert1991performance" role="doc-biblioref">1991</a>)</span>, um avanço qualitativo nos sistemas gerados.</p>
+<p>Além das medidas de precisão e cobertura, assim como em tarefas de classificação de texto e recuperação de informação, utilizamos a média harmônica entre essas medidas, chamada medida F1, a fim de condensar a informação contida nas duas. A medida F1 pode ser calculada como:</p>
+<p> <span id="eq-cap-ie-f1"><span class="math display">\[
+F1 = \frac{2*P*R}{P+R}
+\tag{3.3}\]</span></span> </p>
+<p>A avaliação da tarefa de REN segue padrões semelhantes aos aplicados à tarefa de ER. De fato, desde a MUC-6 <span class="citation" data-cites="grishman-sundheim-1996-message">(<a href="../../shared/referencias/referencias.html#ref-grishman-sundheim-1996-message" role="doc-biblioref">Grishman; Sundheim, 1996</a>)</span>, as medidas de precisão, cobertura e F1 tem sido usada consistentemente como métricas de avaliação da tarefa de REN em diversos esforços de avaliação, como a CoNNL <span class="citation" data-cites="tjong2003Conll">(<a href="../../shared/referencias/referencias.html#ref-tjong2003Conll" role="doc-biblioref">Sang; De Meulder, 2003</a>)</span>, para a língua inglesa, e das duas edições do HAREM <span class="citation" data-cites="santos2007avaliaccao gonccalo2008avaliaccao">(<a href="../../shared/referencias/referencias.html#ref-gonccalo2008avaliaccao" role="doc-biblioref">Gonçalo Oliveira et al., 2008</a>; <a href="../../shared/referencias/referencias.html#ref-santos2007avaliaccao" role="doc-biblioref">Santos et al., 2007</a>)</span>, com excessão à ACE <span class="citation" data-cites="Doddingtonetal2004">(<a href="../../shared/referencias/referencias.html#ref-Doddingtonetal2004" role="doc-biblioref">Doddington et al., 2004</a>)</span> que apresenta uma combinação da tarefa de REN com reconhecimento de co-referência entre entidades e utiliza um sistema de pontuação próprio.</p>
+<p>A avaliação de sistemas de EIA, por sua vez, possui algumas peculiaridades que precisam ser discutidas. Uma vez que a tarefa é postulada por <span class="citation" data-cites="banko2007">Banko et al. (<a href="../../shared/referencias/referencias.html#ref-banko2007" role="doc-biblioref">2007</a>)</span> como a extração de todas as relações identificadas em um dado fragmento textual, sem limitação de domínio de interesse, tal tarefa impõe imensa dificuldade aos esforços de avaliação.</p>
+<p>De fato, <span class="citation" data-cites="challenges2018">Glauber et al. (<a href="../../shared/referencias/referencias.html#ref-challenges2018" role="doc-biblioref">2018</a>)</span> relatam um esforço de anotação de dados para a tarefa em língua portuguesa em que foram identificados por anotadores humanos mais de 400 relacionamentos em um <em>corpus</em> de 25 sentenças retiradas de textos jornalísticos e de enciclopédia. Assim, a avaliação de EIA deu-se, em grande parte de seu desenvolvimento e maturação, em conjuntos de dados não anotados, recorrendo a avaliações qualitativas das saídas dos sistemas e comparação direta por humanos das extrações obtidas.</p>
+<p>Nesses esforços de avaliação, a precisão do sistema pode ser mensurada a partir da avaliação humana das saídas. Não é possível, entretanto, avaliar medidas como cobertura e F1, dada a inexistência de uma referência do conjunto total de relacionamentos a serem identificados. Assim, os autores da área propuseram diferentes métricas a fim de estimar tais valores, como a métrica rendimento (<em>yield</em>)&nbsp;<span class="citation" data-cites="fader-etal-2011-identifying schmitz2012open">(<a href="../../shared/referencias/referencias.html#ref-fader-etal-2011-identifying" role="doc-biblioref">Fader et al., 2011</a>; <a href="../../shared/referencias/referencias.html#ref-schmitz2012open" role="doc-biblioref">Schmitz et al., 2012</a>)</span>.</p>
+<p>A métrica de rendimento consiste no núemro de extrações válidas, i.e.&nbsp;corretas, de um dado sistema. Como calcular tal medida é, na maioria dos casos, impraticável dada a grande quantidade de extrações realizadas pelos sistemas, ela pode ser estimada a partir da precisão do sistema calculada sobre uma amostra aleatória das extrações realizadas (<span class="math inline">\(P'\)</span>). Assim, podemos estimar o rendimento como:</p>
+<p> <span id="eq-cap-ie-yield"><span class="math display">\[
+Y = P'\cdot \#(\mbox{extrações realizadas})
+\tag{3.4}\]</span></span> </p>
+<p>Foi também explorada a estratégia de criação (semi-)automática de conjuntos de dados usando vários sistemas <span class="citation" data-cites="del2013clausie">(<a href="../../shared/referencias/referencias.html#ref-del2013clausie" role="doc-biblioref">Del Corro; Gemulla, 2013</a>)</span>, estratégias de supervisão fraca <span class="citation" data-cites="smirnova2018relation">(<a href="../../shared/referencias/referencias.html#ref-smirnova2018relation" role="doc-biblioref">Smirnova; Cudré-Mauroux, 2018</a>)</span>, ou a geração de <em>corpora</em> para a tarefa a partir da transformação de anotações de tarefas próximas, como identificação de papéis temáticos (<em>Semantic Role Labeling</em>) por <span class="citation" data-cites="stanovsky2018supervised">(<a href="../../shared/referencias/referencias.html#ref-stanovsky2018supervised" role="doc-biblioref">Stanovsky et al., 2018</a>)</span>. <em>Corpora</em> gerados de forma semi-automática vêm ganhando atenção na literatura recente, particularmente para a língua inglesa, devido a necessidade de dados anotados para se utilizar técnicas de aprendizado de máquina e redes neurais em EIA. <em>Corpora</em> como o OIE2016&nbsp;<span class="citation" data-cites="stanovsky2018supervised">(<a href="../../shared/referencias/referencias.html#ref-stanovsky2018supervised" role="doc-biblioref">Stanovsky et al., 2018</a>)</span>, Wire57 <span class="citation" data-cites="lechelle2018wire57">(<a href="../../shared/referencias/referencias.html#ref-lechelle2018wire57" role="doc-biblioref">Léchelle et al., 2018</a>)</span> e CARB&nbsp;<span class="citation" data-cites="bhardwaj2019carb">(<a href="../../shared/referencias/referencias.html#ref-bhardwaj2019carb" role="doc-biblioref">Bhardwaj et al., 2019</a>)</span> vêm se tornando <em>corpora</em> de referência em língua inglesa para o problema, apesar dos problemas existentes na construção de tais recursos – a não exaustividade das relações anotadas.</p>
+<p>Para a língua portuguesa, foram propostas algumas iniciativas para avaliar os sistemas da OIE. Uma avaliação conjunta foi promovida durante o Fórum Ibérico de Avaliação de Línguas (IberLEF) em 2019 <span class="citation" data-cites="Collovinietal2019">(<a href="../../shared/referencias/referencias.html#ref-Collovinietal2019" role="doc-biblioref">Collovini et al., 2019</a>)</span>.&nbsp;A avaliação foi feita usando o <em>corpus</em> proposto por <span class="citation" data-cites="challenges2018">Glauber et al. (<a href="../../shared/referencias/referencias.html#ref-challenges2018" role="doc-biblioref">2018</a>)</span>, que é composto por 442 relacionamentos extraídos de 25 frases de fontes como a seção em português da Wikipédia, o <em>corpus</em> CETENFolha, resenhas de filmes do portal Adoro Cinema<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> e o <em>corpus</em> Europarl. Apesar desta tarefa ter contemplado quatro cenários de avaliação, a avaliação geral dos sistemas permaneceu consistente nos diferentes cenários, indicando robustez nos resultados da avaliação. No geral, os sistemas DPTOIE&nbsp;<span class="citation" data-cites="dptoie">(<a href="../../shared/referencias/referencias.html#ref-dptoie" role="doc-biblioref">Oliveira et al., 2022</a>)</span> e Linguakit&nbsp;<span class="citation" data-cites="gamallo2015multilingual">(<a href="../../shared/referencias/referencias.html#ref-gamallo2015multilingual" role="doc-biblioref">Gamallo; Garcia, 2015</a>)</span> tiveram o melhor desempenho, com o Linguakit2 dominando as avaliações de correspondência exata e o DPTOIE as avaliações de correspondências parciais&nbsp;<span class="citation" data-cites="Collovinietal2019">(<a href="../../shared/referencias/referencias.html#ref-Collovinietal2019" role="doc-biblioref">Collovini et al., 2019</a>)</span>.</p>
+<p>Outra abordagem de avaliação foi idealizada por <span class="citation" data-cites="Malenchini2019:QA:benchmark">(<a href="../../shared/referencias/referencias.html#ref-Malenchini2019:QA:benchmark" role="doc-biblioref">Malenchini et al., 2019</a>)</span>. Seu foco foi a avaliação extrínseca dos sistemas de EIA através de sua contribuição na tarefa de respostas automáticas a perguntas. Os autores apresentaram um conjunto de dados de referência (<em>benchmark</em>) para avaliação extrínseca de sistemas de EIA em textos de língua portuguesa. Os sistemas que alcançaram os melhores valores na avaliação realizada pelos autores foram os sistemas ArgOE <span class="citation" data-cites="gamallo2015multilingual">(<a href="../../shared/referencias/referencias.html#ref-gamallo2015multilingual" role="doc-biblioref">Gamallo; Garcia, 2015</a>)</span>, DependentIE <span class="citation" data-cites="iberlef2019:dptoie">(<a href="../../shared/referencias/referencias.html#ref-iberlef2019:dptoie" role="doc-biblioref">Glauber et al., 2019a</a>)</span> e DptOIE <span class="citation" data-cites="dptoie">(<a href="../../shared/referencias/referencias.html#ref-dptoie" role="doc-biblioref">Oliveira et al., 2022</a>)</span>.</p>
+</section>
+<section id="considerações-finais" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="considerações-finais"><span class="header-section-number">3.7</span> Considerações finais</h2>
+<p>Este capítulo descreveu uma visão geral da área de Extração de Informação, apresentando a Extração de Informação Tradicional e a Extração de Informação Aberta. Transversalmente, apresentamos as formalizações necessárias e os conceitos fundamentais para a compreensão da EIA, assim como a avaliação da área e as heranças de outras áreas afins, tais como RI.</p>
+<p>Nessa primeira versão, este capítulo descreveu de maneira bem sucinta as abordagens propostas para EI e EIA durante seu desenvolvimento histórico e as abordagens atuais da literatura, como as utilizando modelos de linguagens. Especificamente, a utilização da arquitetura Transformers, descritas no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol2/modelos/cap-modelos-linguagem/cap-modelos-linguagem.html#sec-cap-modelos-linguagem" target="_blank" title="Volume 2">Modelos de linguagem</a></span> para as tarefas de EI e EIA tem sido bastante difundida para a língua inglesa e tem atuado em diversas áreas da PLN.</p>
+</section>
+<section id="sec-cap-ie-agradecimentos" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="sec-cap-ie-agradecimentos">Agradecimentos</h2>
+<p>Agradecemos as colaborações dos autores deste Capítulo e suas indicações, assim como agradecemos a Adriana Pagano e Aline Macohin pela revisão e comentários.</p>
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="1" role="list" style="display: none">
+<div id="ref-de2017relp" class="csl-entry" role="listitem">
+ABREU, S. C. DE; VIEIRA, R. Relp: Portuguese open relation extraction. <strong>KO KNOWLEDGE ORGANIZATION</strong>, v. 44, n. 3, p. 163–177, 2017.
+</div>
+<div id="ref-agichtein2000snowball" class="csl-entry" role="listitem">
+AGICHTEIN, E.; GRAVANO, L. <strong>Snowball: Extracting relations from large plain-text collections</strong>. Proceedings of the fifth ACM conference on Digital libraries. <strong>Anais</strong>...2000.
+</div>
+<div id="ref-amaral2014nerp" class="csl-entry" role="listitem">
+AMARAL, D.; VIEIRA, R. Nerp-crf: uma ferramenta para o reconhecimento de entidades nomeadas por meio de conditional random fields. <strong>Linguam<span>á</span>tica (Braga)</strong>, 2014.
+</div>
+<div id="ref-mcnaught2005text" class="csl-entry" role="listitem">
+ANANIADOU, S.; MCNAUGHT, J. <strong>Text Mining for Biology And Biomedicine</strong>. Norwood, MA, USA: Artech House, Inc., 2005.
+</div>
+<div id="ref-andersen1992automatic" class="csl-entry" role="listitem">
+ANDERSEN, P. M. et al. <strong>Automatic extraction of facts from press releases to generate news stories</strong>. Third Conference on Applied Natural Language Processing. <strong>Anais</strong>...1992.
+</div>
+<div id="ref-LuzdeAraujo2018" class="csl-entry" role="listitem">
+ARAUJO, P. H. L. DE et al. <strong>LeNER-Br: A Dataset for Named Entity Recognition in Brazilian Legal Text</strong>. (A. Villavicencio et al., Eds.)Computational Processing of the Portuguese Language. <strong>Anais</strong>...Cham: Springer International Publishing, 2018. Disponível em: &lt;<a href="https://github.com/peluz/lener-br">https://github.com/peluz/lener-br</a>&gt;
+</div>
+<div id="ref-asahara2003japanese" class="csl-entry" role="listitem">
+ASAHARA, M.; MATSUMOTO, Y. <strong>Japanese named entity extraction with redundant morphological analysis</strong>. Proceedings of the 2003 human language technology conference of the North American chapter of the association for computational linguistics. <strong>Anais</strong>...2003.
+</div>
+<div id="ref-banko2007" class="csl-entry" role="listitem">
+BANKO, M. et al. <strong>Open Information Extraction from the Web</strong>. Proceedings of the 20th International Joint Conference on Artifical Intelligence. <strong>Anais</strong>...: IJCAI’07.San Francisco, CA, USA: Morgan Kaufmann Publishers Inc., 2007. Disponível em: &lt;<a href="http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=9909B5C03DA1A3CCFFF4263898B69100?doi=10.1.1.74.5174&amp;rep=rep1&amp;type=pdf">http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=9909B5C03DA1A3CCFFF4263898B69100?doi=10.1.1.74.5174&amp;rep=rep1&amp;type=pdf</a>&gt;
+</div>
+<div id="ref-george2016" class="csl-entry" role="listitem">
+BARBOSA, G. C. G.; GLAUBER, R.; CLARO, D. B. <strong>Classificação de Relações Abertas Utilizando Features Independentes do Idioma</strong>. Proceedings of the 4th Symposium on Knowledge Discovery, Mining and Learning (KDMiLe). <strong>Anais</strong>...SBC, 2016.
+</div>
+<div id="ref-bender-2009-linguistically" class="csl-entry" role="listitem">
+BENDER, E. M. <strong>Linguistically Na<span>ï</span>ve != Language Independent: Why <span>NLP</span> Needs Linguistic Typology</strong>. Proceedings of the <span>EACL</span> 2009 Workshop on the Interaction between Linguistics and Computational Linguistics: Virtuous, Vicious or Vacuous? <strong>Anais</strong>...Athens, Greece: Association for Computational Linguistics, mar. 2009. Disponível em: &lt;<a href="https://www.aclweb.org/anthology/W09-0106">https://www.aclweb.org/anthology/W09-0106</a>&gt;
+</div>
+<div id="ref-bengio2013representation" class="csl-entry" role="listitem">
+BENGIO, Y.; COURVILLE, A.; VINCENT, P. Representation learning: A review and new perspectives. <strong>IEEE transactions on pattern analysis and machine intelligence</strong>, v. 35, n. 8, p. 1798–1828, 2013.
+</div>
+<div id="ref-bhardwaj2019carb" class="csl-entry" role="listitem">
+BHARDWAJ, S.; AGGARWAL, S.; MAUSAM, M. <strong>CaRB: A crowdsourced benchmark for open IE</strong>. Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP). <strong>Anais</strong>...2019.
+</div>
+<div id="ref-bikel1999algorithm" class="csl-entry" role="listitem">
+BIKEL, D. M.; SCHWARTZ, R.; WEISCHEDEL, R. M. An algorithm that learns what’s in a name. <strong>Machine learning</strong>, v. 34, p. 211–231, 1999.
+</div>
+<div id="ref-brin1998extracting" class="csl-entry" role="listitem">
+BRIN, S. <strong>Extracting patterns and relations from the world wide web</strong>. International workshop on the world wide web and databases. <strong>Anais</strong>...Springer, 1998.
+</div>
+<div id="ref-gpt3" class="csl-entry" role="listitem">
+BROWN, T. B. et al. <strong>Language Models are Few-Shot Learners</strong>. (H. Larochelle et al., Eds.)Advances in Neural Information Processing Systems. <strong>Anais</strong>...Curran Associates, Inc., 2020. Disponível em: &lt;<a href="https://proceedings.neurips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html">https://proceedings.neurips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html</a>&gt;
+</div>
+<div id="ref-cabral2022portnoie" class="csl-entry" role="listitem">
+CABRAL, B.; SOUZA, M.; CLARO, D. B. <strong>PortNOIE: A Neural Framework for Open Information Extraction for the Portuguese Language</strong>. International Conference on Computational Processing of the Portuguese Language. <strong>Anais</strong>...Springer, 2022.
+</div>
+<div id="ref-DBLP:conf/propor/CastroSS18" class="csl-entry" role="listitem">
+CASTRO, P. V. Q. DE; SILVA, N. F. F. DA; SOARES, A. DA S. <strong>Portuguese Named Entity Recognition Using <span>LSTM-CRF</span></strong>. (A. Villavicencio et al., Eds.)Proceedings of the 13th International Conference on the Computational Processing of the Portuguese Language. <strong>Anais</strong>...2018.
+</div>
+<div id="ref-chen1976entity" class="csl-entry" role="listitem">
+CHEN, P. P. <a href="http://dblp.uni-trier.de/db/journals/tods/tods1.html#Chen76">The Entity-Relationship Model - Toward a Unified View of Data.</a> <strong>ACM Trans. Database Syst.</strong>, v. 1, n. 1, p. 9–36, 1976.
+</div>
+<div id="ref-Collovinietal2019" class="csl-entry" role="listitem">
+COLLOVINI, S. et al. <strong><span>IberLEF 2019 Portuguese Named Entity Recognition and Relation Extraction Tasks</span></strong>. <span>Proceedings of the Iberian Languages Evaluation Forum co-located with 35th Conference of the Spanish Society for Natural Language Processing</span>. <strong>Anais</strong>...2019. Disponível em: &lt;<a href="http://ceur-ws.org/Vol-2421/NER\_Portuguese\_overview.pdf">http://ceur-ws.org/Vol-2421/NER\_Portuguese\_overview.pdf</a>&gt;
+</div>
+<div id="ref-DBLP:conf/lrec/ConsoliSGCVM20" class="csl-entry" role="listitem">
+CONSOLI, B. S. et al. <strong>Embeddings for Named Entity Recognition in Geoscience Portuguese Literature</strong>. Proceedings of The 12th Language Resources and Evaluation Conference. <strong>Anais</strong>...2020.
+</div>
+<div id="ref-linguistic2005ace" class="csl-entry" role="listitem">
+CONSORTIUM, L. D. <span>ACE (Automatic Content Extraction)</span> English Annotation Guidelines for Events. <strong>Version</strong>, n. 5.4.3, 2005.
+</div>
+<div id="ref-cowie1983automatic" class="csl-entry" role="listitem">
+COWIE, J. R. <strong>Automatic analysis of descriptive texts</strong>. First Conference on Applied Natural Language Processing. <strong>Anais</strong>...1983.
+</div>
+<div id="ref-cowie1996information" class="csl-entry" role="listitem">
+COWIE, J.; LEHNERT, W. Information extraction. <strong>Communications of the ACM</strong>, v. 39, n. 1, p. 80–91, 1996.
+</div>
+<div id="ref-cucchiarelli2001unsupervised" class="csl-entry" role="listitem">
+CUCCHIARELLI, A.; VELARDI, P. Unsupervised named entity recognition using syntactic and semantic contextual evidence. <strong>Computational Linguistics</strong>, v. 27, n. 1, p. 123–131, 2001.
+</div>
+<div id="ref-cui2018neural" class="csl-entry" role="listitem">
+CUI, L.; WEI, F.; ZHOU, M. <strong>Neural Open Information Extraction</strong>. Proceedings of the 56th Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers). <strong>Anais</strong>...2018.
+</div>
+<div id="ref-culotta2006integrating" class="csl-entry" role="listitem">
+CULOTTA, A.; MCCALLUM, A.; BETZ, J. <strong>Integrating probabilistic extraction models and data mining to discover relations and patterns in text</strong>. Proceedings of the Human Language Technology Conference of the NAACL, Main Conference. <strong>Anais</strong>...2006.
+</div>
+<div id="ref-muc3" class="csl-entry" role="listitem">
+DARPA (ED.). <strong>Proceedings of the 3rd Message Understanding Conference (MUC-3)</strong>. San Diego, EUA: Morgan Kaufmann, 1991.
+</div>
+<div id="ref-dejong1979prediction" class="csl-entry" role="listitem">
+DEJONG, G. Prediction and substantiation: A new approach to natural language processing. <strong>Cognitive Science</strong>, v. 3, n. 3, p. 251–273, 1979.
+</div>
+<div id="ref-del2013clausie" class="csl-entry" role="listitem">
+DEL CORRO, L.; GEMULLA, R. <strong>Clausie: clause-based open information extraction</strong>. Proceedings of the 22nd international conference on World Wide Web. <strong>Anais</strong>...: WWW ’13.New York, NY, USA: ACM; ACM, 2013. Disponível em: &lt;<a href="http://doi.acm.org/10.1145/2488388.2488420">http://doi.acm.org/10.1145/2488388.2488420</a>&gt;
+</div>
+<div id="ref-Devlin19" class="csl-entry" role="listitem">
+DEVLIN, J. et al. <strong><span>BERT:</span> Pre-training of Deep Bidirectional Transformers for Language Understanding</strong>. (J. Burstein, C. Doran, T. Solorio, Eds.)Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, <span>NAACL-HLT</span> 2019. <strong>Anais</strong>...Minneapolis, MN, USA: Association for Computational Linguistics, 2019. Disponível em: &lt;<a href="https://doi.org/10.18653/v1/n19-1423">https://doi.org/10.18653/v1/n19-1423</a>&gt;
+</div>
+<div id="ref-Doddingtonetal2004" class="csl-entry" role="listitem">
+DODDINGTON, G. et al. <strong><span>The Automatic Content Extraction (ACE) Program: Tasks, Data, and Evaluation</span></strong>. (M. T. Lino et al., Eds.)<span>Proceedings of LREC’2004, Fourth International Conference on Language resources and Evaluation (Lisboa, 26-28 May 2004)</span>. <strong>Anais</strong>...2004. Disponível em: &lt;<a href="http://www.lrec-conf.org/proceedings/lrec2004/pdf/5.pdf">http://www.lrec-conf.org/proceedings/lrec2004/pdf/5.pdf</a>&gt;
+</div>
+<div id="ref-eisenstein2018natural" class="csl-entry" role="listitem">
+EISENSTEIN, J. <strong>Introduction to Natural Language Processing</strong>. [s.l.] The MIT Press, 2019.
+</div>
+<div id="ref-etzioni2005unsupervised" class="csl-entry" role="listitem">
+ETZIONI, O. et al. Unsupervised named-entity extraction from the web: An experimental study. <strong>Artificial intelligence</strong>, v. 165, n. 1, p. 91–134, 2005.
+</div>
+<div id="ref-fader-etal-2011-identifying" class="csl-entry" role="listitem">
+FADER, A.; SODERLAND, S.; ETZIONI, O. <strong>Identifying Relations for Open Information Extraction</strong>. Proceedings of the 2011 Conference on Empirical Methods in Natural Language Processing. <strong>Anais</strong>...Edinburgh, Scotland, UK.: Association for Computational Linguistics, jul. 2011. Disponível em: &lt;<a href="https://www.aclweb.org/anthology/D11-1142">https://www.aclweb.org/anthology/D11-1142</a>&gt;
+</div>
+<div id="ref-ferrandez2007tackling" class="csl-entry" role="listitem">
+FERRÁNDEZ, Ó. et al. Tackling HAREM’s portuguese named entity recognition task with spanish resources. <strong>Reconhecimento de entidades mencionadas em portugu<span>ê</span>s: Documenta<span>ç</span><span>ã</span>o e actas do HAREM, a primeira avalia<span>ç</span><span>ã</span>o conjunta na <span>á</span>rea. Linguateca (http://www. linguateca. pt/aval_conjunta/LivroHAREM/Cap11-SantosCardoso2007-Ferrandezetal. pdf)</strong>, 2007.
+</div>
+<div id="ref-fine2017truthmaker" class="csl-entry" role="listitem">
+FINE, K. Truthmaker semantics. <strong>A Companion to the Philosophy of Language</strong>, p. 556–577, 2017.
+</div>
+<div id="ref-florian2003named" class="csl-entry" role="listitem">
+FLORIAN, R. et al. <strong>Named entity recognition through classifier combination</strong>. Proceedings of the seventh conference on Natural language learning at HLT-NAACL 2003. <strong>Anais</strong>...2003.
+</div>
+<div id="ref-gamallo2015multilingual" class="csl-entry" role="listitem">
+GAMALLO, P.; GARCIA, M. <strong>Multilingual open information extraction</strong>. (F. Pereira et al., Eds.)Portuguese Conference on Artificial Intelligence. <strong>Anais</strong>...Cham: Springer; Springer International Publishing, 2015. Disponível em: &lt;<a href="https://doi.org/10.1007/978-3-319-23485-4_72">https://doi.org/10.1007/978-3-319-23485-4_72</a>&gt;
+</div>
+<div id="ref-gamallo2012dependency" class="csl-entry" role="listitem">
+GAMALLO, P.; GARCIA, M.; FERNÁNDEZ-LANZA, S. <strong>Dependency-based open information extraction</strong>. Proceedings of the joint workshop on unsupervised and semi-supervised learning in NLP. <strong>Anais</strong>...: ROBUS-UNSUP ’12.Stroudsburg, PA, USA: Association for Computational Linguistics; Association for Computational Linguistics, 2012. Disponível em: &lt;<a href="http://dl.acm.org/citation.cfm?id=2389961.2389963">http://dl.acm.org/citation.cfm?id=2389961.2389963</a>&gt;
+</div>
+<div id="ref-challenges2018" class="csl-entry" role="listitem">
+GLAUBER, R. et al. <strong>Challenges of an Annotation Task for Open Information Extraction in Portuguese</strong>. (A. Villavicencio et al., Eds.)Computational Processing of the Portuguese Language. <strong>Anais</strong>...Cham: Springer International Publishing, 2018.
+</div>
+<div id="ref-systematicmapping" class="csl-entry" role="listitem">
+GLAUBER, R.; CLARO, D. B. <a href="https://doi.org/10.1016/j.eswa.2018.06.046">A systematic mapping study on open information extraction</a>. <strong>Expert Systems with Applications</strong>, v. 112, p. 372–387, 2018.
+</div>
+<div id="ref-iberlef2019:dptoie" class="csl-entry" role="listitem">
+GLAUBER, R.; CLARO, D. B.; OLIVEIRA, L. S. <strong>Dependency Parser on Open Information Extraction for Portuguese Texts - DptOIE and DependentIE on IberLEF</strong>. Proceedings of the Iberian Languages Evaluation Forum (IberLEF 2019) co-located with 35th Conference of the Spanish Society for Natural Language Processing (SEPLN 2019). <strong>Anais</strong>...http://ceur-ws.org/Vol-2421/: CEUR Workshop Proceedings, a2019.
+</div>
+<div id="ref-iberlef2019:pragmaticoie" class="csl-entry" role="listitem">
+GLAUBER, R.; CLARO, D. B.; SENA, C. F. DE L. <strong>Towards a Pragmatic Open Information Extraction for Portuguese Text - ICEIS17, InferPortOIE and PragmaticOIE on IberLEF</strong>. Proceedings of the Iberian Languages Evaluation Forum (IberLEF 2019) co-located with 35th Conference of the Spanish Society for Natural Language Processing (SEPLN 2019). <strong>Anais</strong>...http://ceur-ws.org/Vol-2421/: CEUR Workshop Proceedings, b2019.
+</div>
+<div id="ref-gonccalo2008avaliaccao" class="csl-entry" role="listitem">
+GONÇALO OLIVEIRA, H. et al. <strong>Avalia<span>ç</span><span>ã</span>o <span>à</span> medida no Segundo HAREM</strong>. (C. Mota, D. Santos, Eds.)Desafios na avalia<span>ç</span><span>ã</span>o conjunta do reconhecimento de entidades mencionadas: O Segundo HAREM. <strong>Anais</strong>...Linguateca, 2008.
+</div>
+<div id="ref-grishman-sundheim-1996-message" class="csl-entry" role="listitem">
+GRISHMAN, R.; SUNDHEIM, B. <strong><span>M</span>essage <span>U</span>nderstanding <span>C</span>onference- 6: A Brief History</strong>. <span>COLING</span> 1996 Volume 1: The 16th International Conference on Computational Linguistics. <strong>Anais</strong>...1996. Disponível em: &lt;<a href="https://aclanthology.org/C96-1079">https://aclanthology.org/C96-1079</a>&gt;
+</div>
+<div id="ref-guarino2015" class="csl-entry" role="listitem">
+GUARINO, N.; GUIZZARDI, G. <strong><span>We need to Discuss the Relationship: Revisiting Relationships as Modeling Constructs</span></strong>. <span>Proceedings of the 27th International Conference on Advanced Information Systems Engineering (CAISE 2015)</span>. <strong>Anais</strong>...<span>Springer-Verlag</span>, 2015.
+</div>
+<div id="ref-deep2017habibi" class="csl-entry" role="listitem">
+HABIBI, M. et al. <span>Deep learning with word embeddings improves biomedical named entity recognition</span>. <strong>Bioinformatics</strong>, v. 33, n. 14, p. i37–i48, 2017.
+</div>
+<div id="ref-hasegawa2004discovering" class="csl-entry" role="listitem">
+HASEGAWA, T.; SEKINE, S.; GRISHMAN, R. <strong>Discovering relations among named entities from large corpora</strong>. Proceedings of the 42nd Annual Meeting of the Association for Computational Linguistics (acl-04). <strong>Anais</strong>...2004.
+</div>
+<div id="ref-hearst1992automatic" class="csl-entry" role="listitem">
+HEARST, M. A. <strong>Automatic acquisition of hyponyms from large text corpora</strong>. Proceedings of the 14th conference on Computational linguistics-Volume 2. <strong>Anais</strong>...Association for Computational Linguistics, 1992.
+</div>
+<div id="ref-jurafsky2023" class="csl-entry" role="listitem">
+JURAFSKY, D.; MARTIN, J. H. <strong>Speech and Language Processing: An Introduction to Natural Language Processing, Computational Linguistics, and Speech Recognition</strong>. 3rd. ed. USA: Prentice Hall PTR, 2023.
+</div>
+<div id="ref-kambhatla2004combining" class="csl-entry" role="listitem">
+KAMBHATLA, N. <strong>Combining lexical, syntactic, and semantic features with maximum entropy models for information extraction</strong>. Proceedings of the ACL interactive poster and demonstration sessions. <strong>Anais</strong>...2004.
+</div>
+<div id="ref-konstantinova2014review" class="csl-entry" role="listitem">
+KONSTANTINOVA, N. <strong>Review of relation extraction methods: What is new out there?</strong> Analysis of Images, Social Networks and Texts: Third International Conference, AIST 2014, Yekaterinburg, Russia, April 10-12, 2014, Revised Selected Papers 3. <strong>Anais</strong>...Springer, 2014.
+</div>
+<div id="ref-lechelle2018wire57" class="csl-entry" role="listitem">
+LÉCHELLE, W.; GOTTI, F.; LANGLAIS, P. WiRe57: A Fine-Grained Benchmark for Open Information Extraction. <strong>arXiv preprint arXiv:1809.08962</strong>, 2018.
+</div>
+<div id="ref-lehnert1991performance" class="csl-entry" role="listitem">
+LEHNERT, W.; SUNDHEIM, B. A performance evaluation of text-analysis technologies. <strong>AI magazine</strong>, v. 12, n. 3, p. 81–81, 1991.
+</div>
+<div id="ref-Leitner2019Fine" class="csl-entry" role="listitem">
+LEITNER, E.; REHM, G.; MORENO-SCHNEIDER, J. <strong><a href="https://doi.org/10.1007/978-3-030-33220-4_20">Fine-Grained Named Entity Recognition in Legal Documents</a></strong>. (M. Acosta et al., Eds.)Semantic Systems. The Power of AI and Knowledge Graphs. <strong>Anais</strong>...Cham: Springer International Publishing, 2019.
+</div>
+<div id="ref-DBLP:conf/acl/LewisLGGMLSZ20" class="csl-entry" role="listitem">
+LEWIS, M. et al. <strong><span>BART:</span> Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension</strong>. (D. Jurafsky et al., Eds.)Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics, <span>ACL</span> 2020, Online, July 5-10, 2020. <strong>Anais</strong>...Association for Computational Linguistics, 2020. Disponível em: &lt;<a href="https://doi.org/10.18653/v1/2020.acl-main.703">https://doi.org/10.18653/v1/2020.acl-main.703</a>&gt;
+</div>
+<div id="ref-li2014incremental" class="csl-entry" role="listitem">
+LI, Q.; JI, H. <strong>Incremental joint extraction of entity mentions and relations</strong>. Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers). <strong>Anais</strong>...2014.
+</div>
+<div id="ref-liu2019towards" class="csl-entry" role="listitem">
+LIU, T.; YAO, J.-G.; LIN, C.-Y. <strong>Towards improving neural named entity recognition with gazetteers</strong>. Proceedings of the 57th annual meeting of the association for computational linguistics. <strong>Anais</strong>...a2019.
+</div>
+<div id="ref-DBLP:journals/corr/abs-1907-11692" class="csl-entry" role="listitem">
+LIU, Y. et al. <strong>RoBERTa: A Robustly Optimized BERT Pretraining Approach</strong>., b2019. Disponível em: &lt;<a href="https://arxiv.org/abs/1907.11692">https://arxiv.org/abs/1907.11692</a>&gt;
+</div>
+<div id="ref-Malenchini2019:QA:benchmark" class="csl-entry" role="listitem">
+MALENCHINI, F. M. et al. <strong>Um Benchmark para Sistemas de Extração de Informação Aberta em Português</strong>. Proceedings of theSymposium in Information and Human Language Technology (STIL 2019). <strong>Anais</strong>...Salvador, Bahia: SBC, out. 2019.
+</div>
+<div id="ref-mccallum2003early" class="csl-entry" role="listitem">
+MCCALLUM, A.; LI, W. <strong>Early results for named entity recognition with conditional random fields, feature induction and web-enhanced lexicons</strong>. Proceedings of the seventh conference on Natural language learning at HLT-NAACL 2003-Volume 4. <strong>Anais</strong>...2003.
+</div>
+<div id="ref-meyer2003world" class="csl-entry" role="listitem">
+MEYER, C. F. et al. The world wide web as linguistic corpus. Em: <strong>Corpus Analysis</strong>. [s.l.] Brill Rodopi, 2003. p. 241–254.
+</div>
+<div id="ref-miwa2016end" class="csl-entry" role="listitem">
+MIWA, M.; BANSAL, M. <strong>End-to-End Relation Extraction using LSTMs on Sequences and Tree Structures</strong>. Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers). <strong>Anais</strong>...Association for Computational Linguistics, 2016.
+</div>
+<div id="ref-mota2008r3m" class="csl-entry" role="listitem">
+MOTA, C. R3M, uma participa<span>ç</span><span>ã</span>o minimalista no Segundo HAREM. <strong>quot; In Cristina Mota; Diana Santos (ed) Desafios na avalia<span>ç</span><span>ã</span>o conjunta do reconhecimento de entidades mencionadas: O Segundo HAREM Linguateca 2008</strong>, 2008.
+</div>
+<div id="ref-mota2008desafios" class="csl-entry" role="listitem">
+MOTA, C.; SANTOS, D. (EDS.). <strong><a href="http://hdl.handle.net/10400.26/254">Desafios na avaliação conjunta do reconhecimento de entidades mencionadas: O Segundo HAREM</a></strong>. [s.l.] Linguateca, 2008.
+</div>
+<div id="ref-mota2007avaliaccao" class="csl-entry" role="listitem">
+MOTA, C.; SANTOS, D.; RANCHHOD, E. Avalia<span>ç</span><span>ã</span>o de reconhecimento de entidades mencionadas: princ<span>ı́</span>pio de <span>HAREM</span>. <strong>Avalia<span>ç</span><span>ã</span>o conjunta: um novo paradigma no processamento computacional da l<span>ı́</span>ngua portuguesa</strong>, p. 161–175, 2007.
+</div>
+<div id="ref-nadeau2007" class="csl-entry" role="listitem">
+NADEAU, D. <strong><a href="http://cogprints.org/5859/">Semi-Supervised Named Entity Recognition: Learning to Recognize 100 Entity Types with Little Supervision</a></strong>. tese de doutorado—[s.l.] University of Ottawa, 2007.
+</div>
+<div id="ref-nasar2021named" class="csl-entry" role="listitem">
+NASAR, Z.; JAFFRY, S. W.; MALIK, M. K. Named entity recognition and relation extraction: State-of-the-art. <strong>ACM Computing Surveys (CSUR)</strong>, v. 54, n. 1, p. 1–39, 2021.
+</div>
+<div id="ref-nguyen2016j" class="csl-entry" role="listitem">
+NGUYEN, D. B.; THEOBALD, M.; WEIKUM, G. J-NERD: joint named entity recognition and disambiguation with rich linguistic features. <strong>Transactions of the Association for Computational Linguistics</strong>, v. 4, p. 215–229, 2016.
+</div>
+<div id="ref-dptoie" class="csl-entry" role="listitem">
+OLIVEIRA, L.; CLARO, D.; SOUZA, M. <a href="https://doi.org/10.1007/s10462-022-10349-4">DptOIE: a Portuguese open information extraction based on dependency analysis</a>. <strong>Artificial Intelligence Review</strong>, v. 56, p. 1–32, dez. 2022.
+</div>
+<div id="ref-pereira2015report" class="csl-entry" role="listitem">
+PEREIRA, V.; PINHEIRO, V. <strong>Report - um sistema de extra<span>ç</span><span>ã</span>o de informa<span>ç</span><span>õ</span>es aberta para língua portuguesa</strong>. Anais do X Simp<span>ó</span>sio Brasileiro de Tecnologia da Informa<span>ç</span><span>ã</span>o e da Linguagem Humana. <strong>Anais</strong>...SBC, 2015.
+</div>
+<div id="ref-DBLP:journals/esi/QiuXWTL19" class="csl-entry" role="listitem">
+QIU, Q. et al. BiLSTM-CRF for geological named entity recognition from the geoscience literature. <strong>Earth Science Informatics</strong>, v. 12, n. 4, p. 565–579, 2019.
+</div>
+<div id="ref-raffel2020exploring" class="csl-entry" role="listitem">
+RAFFEL, C. et al. <a href="http://jmlr.org/papers/v21/20-074.html">Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer</a>. <strong>Journal of Machine Learning Research</strong>, v. 21, n. 140, p. 1–67, 2020.
+</div>
+<div id="ref-rau1991extracting" class="csl-entry" role="listitem">
+RAU, L. F. <strong>Extracting company names from text</strong>. Proceedings the Seventh IEEE Conference on Artificial Intelligence Application. <strong>Anais</strong>...IEEE Computer Society, 1991.
+</div>
+<div id="ref-riloff1993automatically" class="csl-entry" role="listitem">
+RILOFF, E. et al. <strong>Automatically constructing a dictionary for information extraction tasks</strong>. AAAI. <strong>Anais</strong>...Citeseer, 1993.
+</div>
+<div id="ref-riloff1999learning" class="csl-entry" role="listitem">
+RILOFF, E.; JONES, R.; et al. <strong>Learning dictionaries for information extraction by multi-level bootstrapping</strong>. AAAI/IAAI. <strong>Anais</strong>...1999.
+</div>
+<div id="ref-ro-etal-2020-multi" class="csl-entry" role="listitem">
+RO, Y.; LEE, Y.; KANG, P. <strong><span>M</span>ulti<span>^</span>2<span>OIE</span>: Multilingual Open Information Extraction Based on Multi-Head Attention with <span>BERT</span></strong>. Findings of the Association for Computational Linguistics: EMNLP 2020. <strong>Anais</strong>...Online: Association for Computational Linguistics, nov. 2020. Disponível em: &lt;<a href="https://aclanthology.org/2020.findings-emnlp.99">https://aclanthology.org/2020.findings-emnlp.99</a>&gt;
+</div>
+<div id="ref-roark2000noun" class="csl-entry" role="listitem">
+ROARK, B.; CHARNIAK, E. Noun-phrase co-occurrence statistics for semi-automatic semantic lexicon construction. <strong>arXiv preprint cs/0008026</strong>, 2000.
+</div>
+<div id="ref-roth2007global" class="csl-entry" role="listitem">
+ROTH, D.; YIH, W. Global inference for entity and relation identification via a linear programming formulation. <strong>Introduction to statistical relational learning</strong>, p. 553–580, 2007.
+</div>
+<div id="ref-sager1978natural" class="csl-entry" role="listitem">
+SAGER, N. Natural language information formatting: the automatic conversion of texts to a structured data base. Em: <strong>Advances in computers</strong>. [s.l.] Elsevier, 1978. v. 17p. 89–162.
+</div>
+<div id="ref-sager1987medical" class="csl-entry" role="listitem">
+SAGER, N.; FRIEDMAN, C.; LYMAN, M. S. <strong>Medical language processing: computer management of narrative data</strong>. [s.l.] Addison-Wesley Longman Publishing Co., Inc., 1987.
+</div>
+<div id="ref-tjong2003Conll" class="csl-entry" role="listitem">
+SANG, E. F. T. K.; DE MEULDER, F. <strong>Introduction to the <span>C</span>o<span>NLL</span>-2003 Shared Task: Language-Independent Named Entity Recognition</strong>. Proceedings of the Seventh Conference on Natural Language Learning at <span>HLT</span>-<span>NAACL</span> 2003. <strong>Anais</strong>...2003. Disponível em: &lt;<a href="https://aclanthology.org/W03-0419">https://aclanthology.org/W03-0419</a>&gt;
+</div>
+<div id="ref-DBLP:conf/aclnews/SantosG15" class="csl-entry" role="listitem">
+SANTOS, C. N. DOS; GUIMARÃES, V. <strong>Boosting Named Entity Recognition with Neural Character Embeddings</strong>. (X. Duan et al., Eds.)Proceedings of the 5th Named Entity Workshop. <strong>Anais</strong>...Association for Computational Linguistics, 2015.
+</div>
+<div id="ref-santos2007breve" class="csl-entry" role="listitem">
+SANTOS, D.; CARDOSO, N. <strong>Breve introdução ao HAREM</strong>. (D. Santos, N. Cardoso, Eds.)Reconhecimento de entidades mencionadas em portugu<span>ê</span>s: Documentação e actas do HAREM, a primeira avaliação conjunta na <span>á</span>rea. <strong>Anais</strong>...Linguateca, a2007. Disponível em: &lt;<a href="http://www.linguateca.pt/LivroHAREM/">http://www.linguateca.pt/LivroHAREM/</a>&gt;
+</div>
+<div id="ref-santos2007reconhecimento" class="csl-entry" role="listitem">
+SANTOS, D.; CARDOSO, N. <strong><a href="https://doi.org/10.1007/11751984_8">A golden resource for named entity recognition in portuguese</a></strong>. Proceeding of the 7th International conference on the computational processing of portuguese. <strong>Anais</strong>...Springer, b2007.
+</div>
+<div id="ref-santos2007avaliaccao" class="csl-entry" role="listitem">
+SANTOS, D.; CARDOSO, N.; SECO, N. <strong>Avaliação no HAREM: Métodos e medidas</strong>. (D. Santos, N. Cardoso, Eds.)Reconhecimento de entidades mencionadas em português: Documentação e actas do HAREM, a primeira avaliação conjunta na área. <strong>Anais</strong>...Linguateca, 2007.
+</div>
+<div id="ref-DBLP:conf/bracis/SantosCSTCV19" class="csl-entry" role="listitem">
+SANTOS, J. et al. <strong>Assessing the Impact of Contextual Embeddings for Portuguese Named Entity Recognition</strong>. Proceedings of the 8th Brazilian Conference on Intelligent Systems. <strong>Anais</strong>...2019.
+</div>
+<div id="ref-DBLP:conf/cbms/SantosSV20" class="csl-entry" role="listitem">
+SANTOS, J.; SANTOS, H. D. P. DOS; VIEIRA, R. <strong>Fall Detection in Clinical Notes using Language Models and Token Classifier</strong>. (A. G. S. de Herrera et al., Eds.)Proceedings of the 33rd <span>IEEE</span> International Symposium on Computer-Based Medical Systems. <strong>Anais</strong>...2020.
+</div>
+<div id="ref-schank1973margie" class="csl-entry" role="listitem">
+SCHANK, R. C. et al. <strong>MARGIE: Memory Analysis Response Generation, and Inference on English.</strong> IJCAI. <strong>Anais</strong>...1973.
+</div>
+<div id="ref-schmitz2012open" class="csl-entry" role="listitem">
+SCHMITZ, M. et al. <strong>Open language learning for information extraction</strong>. Proceedings of the 2012 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning. <strong>Anais</strong>...: EMNLP-CoNLL ’12.Stroudsburg, PA, USA: Association for Computational Linguistics; Association for Computational Linguistics, 2012. Disponível em: &lt;<a href="http://dl.acm.org/citation.cfm?id=2390948.2391009">http://dl.acm.org/citation.cfm?id=2390948.2391009</a>&gt;
+</div>
+<div id="ref-sekine1998description" class="csl-entry" role="listitem">
+SEKINE, S. <strong>Description of the Japanese NE system used for MET-2</strong>. Seventh Message Understanding Conference (MUC-7): Proceedings of a Conference Held in Fairfax, Virginia, April 29-May 1, 1998. <strong>Anais</strong>...1998.
+</div>
+<div id="ref-inferportoie2019" class="csl-entry" role="listitem">
+SENA, C. F. L.; CLARO, D. B. InferPortOIE: A Portuguese Open Information Extraction system with inferences. <strong>Natural Language Engineering</strong>, v. 25, n. 2, p. 287–306, 2019.
+</div>
+<div id="ref-pragmaticoie2020" class="csl-entry" role="listitem">
+SENA, C. F. L.; CLARO, D. B. <a href="https://doi.org/10.1007/s10115-020-01442-7">PragmaticOIE: a pragmatic open information extraction for Portuguese language</a>. <strong>Knowl. Inf. Syst.</strong>, v. 62, n. 9, p. 3811–3836, 2020.
+</div>
+<div id="ref-Sena2017ICEIS" class="csl-entry" role="listitem">
+SENA, C. F. L.; GLAUBER, R.; CLARO, D. B. <strong><a href="https://doi.org/10.5220/0006338204420451">Inference Approach to Enhance a Portuguese Open Information Extraction</a></strong>. Proceedings of the 19th International Conference on Enterprise Information Systems - Volume 3: ICEIS. <strong>Anais</strong>...INSTICC; SciTePress, 2017.
+</div>
+<div id="ref-shaowei2022survey" class="csl-entry" role="listitem">
+SHAOWEI, Z. et al. Survey of Supervised Joint Entity Relation Extraction Methods. <strong>Journal of Frontiers of Computer Science &amp; Technology</strong>, v. 16, n. 4, 2022.
+</div>
+<div id="ref-smirnova2018relation" class="csl-entry" role="listitem">
+SMIRNOVA, A.; CUDRÉ-MAUROUX, P. Relation extraction using distant supervision: A survey. <strong>ACM Computing Surveys (CSUR)</strong>, v. 51, n. 5, p. 1–35, 2018.
+</div>
+<div id="ref-socher2012semantic" class="csl-entry" role="listitem">
+SOCHER, R. et al. <strong>Semantic compositionality through recursive matrix-vector spaces</strong>. Proceedings of the 2012 joint conference on empirical methods in natural language processing and computational natural language learning. <strong>Anais</strong>...2012.
+</div>
+<div id="ref-soderland1995crystal" class="csl-entry" role="listitem">
+SODERLAND, S. et al. <strong>CRYSTAL inducing a conceptual dictionary</strong>. Proceedings of the 14th international joint conference on Artificial intelligence-Volume 2. <strong>Anais</strong>...1995.
+</div>
+<div id="ref-solorio2007malinche" class="csl-entry" role="listitem">
+SOLORIO, T. MALINCHE: A NER system for Portuguese that reuses knowledge from Spanish. <strong>Reconhecimento de entidades mencionadas em portugu<span>ê</span>s: Documenta<span>ç</span><span>ã</span>o e atas do HAREM, a primeira avalia<span>ç</span><span>ã</span>o conjunta na <span>á</span>rea, Cap<span>ı́</span>tulo</strong>, v. 10, p. 123–136, 2007.
+</div>
+<div id="ref-eric:jucs:SGS2018" class="csl-entry" role="listitem">
+SOUZA, E. N. P. DE; CLARO, D. B.; GLAUBER, R. A Similarity Grammatical Structures Based Method for Improving Open Information Systems. <strong>j-jucs</strong>, v. 24, n. 1, p. 43–69, 28 jan. 2018.
+</div>
+<div id="ref-erick2014linguamatica" class="csl-entry" role="listitem">
+SOUZA, E. N. P.; CLARO, D. B. <a href="https://linguamatica.com/index.php/linguamatica/article/view/v6n2-4">Extração de Relações utilizando Features Diferenciadas para Português</a>. <strong>Linguamática</strong>, v. 6, n. 2, p. 57–65, 2014.
+</div>
+<div id="ref-Souza2020" class="csl-entry" role="listitem">
+SOUZA, F.; NOGUEIRA, R.; LOTUFO, R. <strong>BERTimbau: pretrained BERT models for Brazilian Portuguese</strong>. (R. Cerri, R. C. Prati, Eds.)Proceedings of the 2020 Brazilian Conference on Intelligent Systems. <strong>Anais</strong>...Springer International Publishing, 2020.
+</div>
+<div id="ref-stanovsky2018supervised" class="csl-entry" role="listitem">
+STANOVSKY, G. et al. <strong>Supervised open information extraction</strong>. Proceedings of the 2018 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long Papers). <strong>Anais</strong>...2018.
+</div>
+<div id="ref-takamatsu2012reducing" class="csl-entry" role="listitem">
+TAKAMATSU, S.; SATO, I.; NAKAGAWA, H. <strong>Reducing wrong labels in distant supervision for relation extraction</strong>. Proceedings of the 50th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers). <strong>Anais</strong>...2012.
+</div>
+<div id="ref-wang2016relation" class="csl-entry" role="listitem">
+WANG, L. et al. <strong>Relation classification via multi-level attention cnns</strong>. Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers). <strong>Anais</strong>...2016.
+</div>
+<div id="ref-wolinski1995automatic" class="csl-entry" role="listitem">
+WOLINSKI, F.; VICHOT, F.; DILLET, B. <strong>Automatic processing proper names in texts</strong>. Proc. Conference on European Chapter of the Association for Computational Linguistics. <strong>Anais</strong>...EACL, 1995.
+</div>
+<div id="ref-xavier2015open" class="csl-entry" role="listitem">
+XAVIER, C. C.; LIMA, V. L. S. DE; SOUZA, M. Open information extraction based on lexical semantics. <strong>Journal of the Brazilian Computer Society</strong>, v. 21, n. 1, p. 1–14, 2015.
+</div>
+<div id="ref-yu2010jointly" class="csl-entry" role="listitem">
+YU, X.; LAM, W. <strong>Jointly identifying entities and extracting relations in encyclopedia text via a graphical model approach</strong>. Coling 2010: Posters. <strong>Anais</strong>...2010.
+</div>
+<div id="ref-yuan2021relation" class="csl-entry" role="listitem">
+YUAN, Y. et al. <strong>A relation-specific attention network for joint entity and relation extraction</strong>. International joint conference on artificial intelligence. <strong>Anais</strong>...International Joint Conference on Artificial Intelligence, 2021.
+</div>
+<div id="ref-zelenko2003kernel" class="csl-entry" role="listitem">
+ZELENKO, D.; AONE, C.; RICHARDELLA, A. Kernel methods for relation extraction. <strong>Journal of machine learning research</strong>, v. 3, n. Feb, p. 1083–1106, 2003.
+</div>
+<div id="ref-zeng2014relation" class="csl-entry" role="listitem">
+ZENG, D. et al. <strong>Relation classification via convolutional deep neural network</strong>. Proceedings of COLING 2014, the 25th international conference on computational linguistics: technical papers. <strong>Anais</strong>...2014.
+</div>
+<div id="ref-zhang2017mt" class="csl-entry" role="listitem">
+ZHANG, S.; DUH, K.; VAN DURME, B. <strong>Mt/ie: Cross-lingual open information extraction with neural sequence-to-sequence models</strong>. Proceedings of the 15th Conference of the European Chapter of the Association for Computational Linguistics: Volume 2, Short Papers. <strong>Anais</strong>...2017.
+</div>
+<div id="ref-zhao2005extracting" class="csl-entry" role="listitem">
+ZHAO, S.; GRISHMAN, R. <strong>Extracting relations with integrated information using kernel methods</strong>. Proceedings of the 43rd annual meeting of the association for computational linguistics (acl’05). <strong>Anais</strong>...2005.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Em nossa terminologia, por um relacionamento.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://www.adorocinema.com/" class="uri">https://www.adorocinema.com/</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html" class="pagination-link" aria-label="Recuperação de Informação">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../aplicacoes-e-dominios/cap-mt/cap-mt.html" class="pagination-link" aria-label="Tradução Automática">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tradução Automática</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://brasileiraspln.com/">
+<p>Brasileiras em PLN, 2026. Todos os direitos reservados</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

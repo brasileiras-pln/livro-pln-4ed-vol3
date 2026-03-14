@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Viviane P. Moreira">
+
+<title>2&nbsp; Recuperação de Informação – Processamento de Linguagem Natural</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 1em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html" rel="next">
+<link href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8676d8d0f01772f2903466dda9733bcf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sem resultados",
+    "search-matching-documents-text": "Resultados encontrados",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-111J572WMR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-111J572WMR');
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../shared/bpln.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../shared/logos/bpln.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Processamento de Linguagem Natural</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../Livro_PLN_BPLN_4ed_vol3.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
+    <div class="dropdown">
+      <a href="" title="Compartilhar" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Compartilhar"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sobre o Volume 3</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Aplicações e Domínios</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Classificação de texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-mt/cap-mt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tradução Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sumarização Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Complexidade Textual e suas Tarefas Relacionadas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Classificação de Áudio aplicada à Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">PLN e Responsabilidade Social</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/referencias/referencias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referências</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Apêndices</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Considerações prévias à sumarização automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice-abstrativa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Exemplo de sumarização abstrativa</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../autores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Sobre as/os autoras/es</strong></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Conteúdo</h2>
+   
+  <ul>
+  <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução"><span class="header-section-number">2.1</span> Introdução</a>
+  <ul class="collapse">
+  <li><a href="#relação-com-o-pln" id="toc-relação-com-o-pln" class="nav-link" data-scroll-target="#relação-com-o-pln"><span class="header-section-number">2.1.1</span> Relação com o PLN</a></li>
+  <li><a href="#sec-cap-ir-foco" id="toc-sec-cap-ir-foco" class="nav-link" data-scroll-target="#sec-cap-ir-foco"><span class="header-section-number">2.1.2</span> O Foco da Recuperação de Informação</a></li>
+  <li><a href="#o-conceito-de-relevância" id="toc-o-conceito-de-relevância" class="nav-link" data-scroll-target="#o-conceito-de-relevância"><span class="header-section-number">2.1.3</span> O Conceito de Relevância</a></li>
+  <li><a href="#principais-livros" id="toc-principais-livros" class="nav-link" data-scroll-target="#principais-livros"><span class="header-section-number">2.1.4</span> Principais Livros</a></li>
+  <li><a href="#organização-deste-capítulo" id="toc-organização-deste-capítulo" class="nav-link" data-scroll-target="#organização-deste-capítulo"><span class="header-section-number">2.1.5</span> Organização deste Capítulo</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-ir-geral" id="toc-sec-cap-ir-geral" class="nav-link" data-scroll-target="#sec-cap-ir-geral"><span class="header-section-number">2.2</span> Visão Geral de um Sistema Típico de Recuperação de Informação</a>
+  <ul class="collapse">
+  <li><a href="#pré-processamento" id="toc-pré-processamento" class="nav-link" data-scroll-target="#pré-processamento"><span class="header-section-number">2.2.1</span> Pré-Processamento</a></li>
+  <li><a href="#indexação" id="toc-indexação" class="nav-link" data-scroll-target="#indexação"><span class="header-section-number">2.2.2</span> Indexação</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-ir-modelos" id="toc-sec-cap-ir-modelos" class="nav-link" data-scroll-target="#sec-cap-ir-modelos"><span class="header-section-number">2.3</span> Modelos Clássicos de recuperação de informação</a>
+  <ul class="collapse">
+  <li><a href="#modelo-booleano" id="toc-modelo-booleano" class="nav-link" data-scroll-target="#modelo-booleano"><span class="header-section-number">2.3.1</span> Modelo Booleano</a></li>
+  <li><a href="#sec-cap-ir-vsm" id="toc-sec-cap-ir-vsm" class="nav-link" data-scroll-target="#sec-cap-ir-vsm"><span class="header-section-number">2.3.2</span> Modelo Vetorial</a></li>
+  <li><a href="#modelos-probabilísticos" id="toc-modelos-probabilísticos" class="nav-link" data-scroll-target="#modelos-probabilísticos"><span class="header-section-number">2.3.3</span> Modelos Probabilísticos</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-ir-avaliacao" id="toc-sec-cap-ir-avaliacao" class="nav-link" data-scroll-target="#sec-cap-ir-avaliacao"><span class="header-section-number">2.4</span> Avaliação da Qualidade de Sistemas de recuperação de informação</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-ir-metricas" id="toc-sec-cap-ir-metricas" class="nav-link" data-scroll-target="#sec-cap-ir-metricas"><span class="header-section-number">2.4.1</span> Métricas</a></li>
+  <li><a href="#sec-cap-ir-colecoes" id="toc-sec-cap-ir-colecoes" class="nav-link" data-scroll-target="#sec-cap-ir-colecoes"><span class="header-section-number">2.4.2</span> Coleções de Teste</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-ir-QERF" id="toc-sec-cap-ir-QERF" class="nav-link" data-scroll-target="#sec-cap-ir-QERF"><span class="header-section-number">2.5</span> Modificação Automática de Consultas</a></li>
+  <li><a href="#sec-cap-ir-ferramentas" id="toc-sec-cap-ir-ferramentas" class="nav-link" data-scroll-target="#sec-cap-ir-ferramentas"><span class="header-section-number">2.6</span> Ferramentas e Bibliotecas</a>
+  <ul class="collapse">
+  <li><a href="#sistemas-comerciais" id="toc-sistemas-comerciais" class="nav-link" data-scroll-target="#sistemas-comerciais"><span class="header-section-number">2.6.1</span> Sistemas Comerciais</a></li>
+  <li><a href="#ferramentas-para-pesquisa" id="toc-ferramentas-para-pesquisa" class="nav-link" data-scroll-target="#ferramentas-para-pesquisa"><span class="header-section-number">2.6.2</span> Ferramentas para Pesquisa</a></li>
+  </ul></li>
+  <li><a href="#conclusão" id="toc-conclusão" class="nav-link" data-scroll-target="#conclusão"><span class="header-section-number">2.7</span> Conclusão</a></li>
+  <li><a href="#sec-cap-ir-agradecimentos" id="toc-sec-cap-ir-agradecimentos" class="nav-link" data-scroll-target="#sec-cap-ir-agradecimentos">Agradecimentos</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-cap-ir" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading"></div>
+    <div class="quarto-title-meta-contents">
+             <p>Viviane P. Moreira </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Publicado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">26/09/2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+
+</div>
+<div>
+<div class="callout-body-container callout-body">
+<p>Este capítulo também está disponível em <a href="cap-ir.pdf">PDF</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" aria-label="Toggle callout" aria-controls="callout-cite" aria-expanded="false" data-bs-target=".callout-cite-contents" data-bs-toggle="collapse">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Como citar
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
+<i class="callout-toggle"></i>
+</div>
+</div>
+<div id="callout-cite" class="callout-cite-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>@InCollection{BPLN_livro_cap-ir:2026,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    author    = {Moreira, Viviane P.},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    title     = {Recuperação de Informação},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    publisher = {BPLN},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    year      = {2026},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    editor    = {Caseli, H. M. and Nunes, M. G. V.},</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    type      = {Book Chapter},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    chapter   = {2},</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    edition   = {4},</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    volume    = {3},</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    isbn      = {XXXXXXXXXXXXXXXX},</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    url       = {https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html},</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mais recursos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="https://youtu.be/g1CRYyXcRzk?si=opBBIqAe0dEk4nT0">Vídeo</a> e <a href="2o_Ciclo_PLN_BPLN-RecuperacaoInformacao_25022025.pdf">Slides</a></p>
+</div>
+</div>
+<section id="introdução" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="introdução"><span class="header-section-number">2.1</span> Introdução</h2>
+<p>A necessidade de organizar a informação é inerente à espécie humana – bibliotecas existem desde pelo menos o ano 2600 AC. Dado o grande volume de informação que as bibliotecas armazenam, a partir dos anos 1960, iniciaram-se esforços a fim de automatizar o armazenamento e a busca de materiais bibliográficos através da computação. Esses esforços marcaram o início da área de recuperação de informação (RI). A RI trata de encontrar, a partir de grandes coleções, material (geralmente documentos) de natureza não estruturada (geralmente texto) que satisfaça uma necessidade de informação&nbsp;<span class="citation" data-cites="manning2008introduction">(<a href="../../shared/referencias/referencias.html#ref-manning2008introduction" role="doc-biblioref">Manning et al., 2008</a>)</span>. Em outras palavras, o objetivo central da RI é a busca, ou seja, a tarefa de encontrar material <strong>relevante</strong> a partir de uma consulta de um usuário. Esta tarefa é comumente conhecida por <strong>recuperação ad hoc</strong>. Apesar de a RI poder ser aplicada a diferentes tipos de dados não estruturados como imagem, áudio, vídeo etc. o foco deste capítulo é <strong>informações textuais</strong>.</p>
+<section id="relação-com-o-pln" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="relação-com-o-pln"><span class="header-section-number">2.1.1</span> Relação com o PLN</h3>
+<p>Há muita interseção entre RI e PLN, pois ambas lidam com a linguagem humana. Contudo, há algumas diferenças. A primeira diferença é quanto à origem – enquanto que o PLN teve origem na inteligência artificial e na linguística computacional, a RI teve origem na biblioteconomia e na ciência da informação<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Outra diferença é quanto ao escopo – podemos dizer que o escopo do PLN é mais abrangente (i.e., compreensão e geração de linguagem) enquanto que o da RI é mais restrito às tarefas relacionadas à busca por informação.</p>
+</section>
+<section id="sec-cap-ir-foco" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="sec-cap-ir-foco"><span class="header-section-number">2.1.2</span> O Foco da Recuperação de Informação</h3>
+<p>A <strong>tarefa central</strong> da RI é casar a consulta de um usuário com os documentos que são potencialmente relevantes a ela. A principal dificuldade é que os termos utilizados pelo usuário podem não ter sido usados nos documentos relevantes. Este problema é conhecido como <strong>incompatibilidade de vocabulário</strong> (<em>vocabulary mismatch</em>) e é decorrente de dois fenômenos comuns na linguagem: a <strong>sinonímia</strong> e a <strong>polissemia</strong>. A sinonímia refere-se ao fato de usarmos palavras diferentes para nos referirmos ao mesmo conceito, e.g., “bergamota”, “tangerina” e “mexerica”. O problema para RI é que uma consulta pelo termo “bergamota” não consegue recuperar documentos relevantes que contenham “tangerina”. A polissemia refere-se ao fato de que uma mesma palavra pode apresentar sentidos distintos, e.g.,“manga” que tanto pode ser a fruta como a parte da vestimenta que cobre o braço da pessoa. O efeito negativo da polissemia para a RI é a recuperação de documentos que contêm a palavra pesquisada, mas não no sentido pretendido. Ao longo dos anos, houve uma vasta gama de propostas de solução para este problema. Uma visão geral dessas propostas é fornecida na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-QERF" target="_blank" title="Volume 3">Modificação Automática de Consultas</a></span>.</p>
+<p>Até meados dos anos 1990, o interesse em RI estava restrito a bibliotecários, jornalistas e profissionais do direito (i.e., profissões que tinham bastante necessidade de buscar informações). Com a popularização da Internet e dos motores de busca para a web, a RI ganhou muita importância. Sistemas de RI fazem parte da vida diária de uma grande parte da população mundial. Há estimativas que o Google, o motor de busca mais utilizado, receba cerca de 100 mil consultas por segundo e tenha 4,3 bilhões de usuários<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Os desafios de se lidar com coleções contendo bilhões de documentos (i.e., páginas web) motivaram o desenvolvimento de novos algoritmos e técnicas, objetivando tanto eficiência (baixo custo computacional) quanto eficácia (qualidade do resultado).</p>
+<p>Um sistema de RI também pode ser utilizado como um componente em tarefas de PLN como sistemas de perguntas e respostas e de detecção de plágio. A vantagem é que a RI consegue recuperar documentos candidatos com um custo computacional baixo. Assim, as fases subsequentes que requerem comparações exaustivas usando modelos mais custosos podem trabalhar com um conjunto menor de documentos.</p>
+</section>
+<section id="o-conceito-de-relevância" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="o-conceito-de-relevância"><span class="header-section-number">2.1.3</span> O Conceito de Relevância</h3>
+<p>Vimos na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-foco" target="_blank" title="Volume 3">O Foco da Recuperação de Informação</a></span> que a tarefa central de RI é recuperar itens que sejam <strong>relevantes</strong> a uma necessidade de informação expressa por meio de palavras-chave. A relevância é um julgamento feito <strong>pelo usuário</strong> que indica o quão bem um documento satisfaz a consulta. Em sua forma mais simples, ela pode ser tratada como binária – cada documento é considerado como <strong>relevante</strong> ou como <strong>não relevante</strong>. Também é possível utilizar diversos níveis de relevância como por exemplo: “muito relevante”, “moderadamente relevante”, “marginalmente relevante” e “não relevante”.</p>
+<p>É comum ouvirmos que um motor de busca ou sistema de RI retorna os resultados em <strong>ordem de relevância</strong>. Esta afirmação não está tecnicamente correta pois a <strong>relevância é subjetiva</strong> e só pode ser atribuída pelo usuário. Dois usuários podem fazer a mesma consulta <span class="math inline">\(q\)</span> e julgar um mesmo documento <span class="math inline">\(d\)</span> de forma diferente – enquanto um usuário considera que <span class="math inline">\(d\)</span> é relevante, o outro usuário pode considerar que <span class="math inline">\(d\)</span> não é relevante para <span class="math inline">\(q\)</span>. Os sistemas de RI ordenam os documentos utilizando uma função de ranqueamento baseada em evidências que o sistema consegue calcular (e.g., estatísticas de ocorrências das palavras nos documentos, tamanho dos documentos etc.). Idealmente, espera-se que esta função de ranqueamento esteja positivamente correlacionada com a ideia subjetiva de relevância dos usuários.</p>
+</section>
+<section id="principais-livros" class="level3" data-number="2.1.4">
+<h3 data-number="2.1.4" class="anchored" data-anchor-id="principais-livros"><span class="header-section-number">2.1.4</span> Principais Livros</h3>
+<p>A RI é uma área de pesquisa por si só e este capítulo não pretende ser uma revisão exaustiva. vamos focar nos aspectos centrais da área e na sua interseção com PLN. Há diversos livros em <strong>língua inglesa</strong> que são referência em RI. Para o leitor que deseja saber mais sobre a área, indicamos os seguintes livros:</p>
+<ul>
+<li>Introduction to Information Retrieval de Manning, Schütze e Raghavan <span class="citation" data-cites="manning2008introduction">(<a href="../../shared/referencias/referencias.html#ref-manning2008introduction" role="doc-biblioref">Manning et al., 2008</a>)</span>, publicado em 2008 pela Cambridge University Press e disponível gratuitamente online<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</li>
+<li>Search engines: Information retrieval in practice de Croft, Metzler, e Strohman <span class="citation" data-cites="croft2010search">(<a href="../../shared/referencias/referencias.html#ref-croft2010search" role="doc-biblioref">Croft et al., 2010</a>)</span>, publicado em 2010 pela Addison-Wesley e disponível gratuitamente online<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</li>
+<li>Modern Information Retrieval - the concepts and technology behind search de Baeza-Yates e Ribeiro-Neto <span class="citation" data-cites="baeza2011modern">(<a href="../../shared/referencias/referencias.html#ref-baeza2011modern" role="doc-biblioref">Baeza-Yates; Ribeiro-Neto, 2011</a>)</span>, publicado em 2011 pela Addison-Wesley.</li>
+</ul>
+<p>Em português, há uma versão resumida do livro Modern Information Retrieval publicada em 2013&nbsp;<span class="citation" data-cites="baeza2013recuperaccao">(<a href="../../shared/referencias/referencias.html#ref-baeza2013recuperaccao" role="doc-biblioref">Baeza-Yates; Ribeiro-Neto, 2013</a>)</span>. Esta versão contém os principais capítulos do livro original.</p>
+</section>
+<section id="organização-deste-capítulo" class="level3" data-number="2.1.5">
+<h3 data-number="2.1.5" class="anchored" data-anchor-id="organização-deste-capítulo"><span class="header-section-number">2.1.5</span> Organização deste Capítulo</h3>
+<p>Nesta primeira versão do livro <strong>Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português</strong>, o capítulo sobre Recuperação da Informação tem como foco as operações de pré-processamento e indexação (<span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-geral" target="_blank" title="Volume 3">Visão Geral de um Sistema Típico de Recuperação de Informação</a></span>), nos modelos clássicos (<span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-modelos" target="_blank" title="Volume 3">Modelos Clássicos de recuperação de informação</a></span>), no paradigma de avaliação (<span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-avaliacao" target="_blank" title="Volume 3">Avaliação da Qualidade de Sistemas de recuperação de informação</a></span>) e em técnicas de melhoria de qualidade (<span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-QERF" target="_blank" title="Volume 3">Modificação Automática de Consultas</a></span>). Também indicamos algumas bibliotecas e ferramentas amplamente utilizadas (<span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-ferramentas" target="_blank" title="Volume 3">Ferramentas e Bibliotecas</a></span>). As próximas versões do livro irão incluir tópicos avançados como o ranqueamento neural.</p>
+</section>
+</section>
+<section id="sec-cap-ir-geral" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="sec-cap-ir-geral"><span class="header-section-number">2.2</span> Visão Geral de um Sistema Típico de Recuperação de Informação</h2>
+<p>A <a href="#fig-cap-ir-overviewRI" class="quarto-xref">Figura&nbsp;<span>2.1</span></a> mostra uma visão geral do processo de RI. Em uma ponta, há a usuária que tem uma <strong>necessidade de informação</strong> e, na outra ponta, temos uma coleção de documentos textuais. A consulta da usuária é submetida a um sistema de RI (representado pelo retângulo laranja). As Etapas 1 e 2 ocorrem offline, pois o índice precisa estrar pronto antes que o sistema possa receber consultas. Na Etapa 1, os documentos da coleção são pré-processados para então, na Etapa 2, serem indexados. Na Etapa 3, o sistema executa sobre a consulta as mesmas operações de pré-processamento que foram aplicadas na Etapa 1. O texto pré-processado da consulta é utilizado, na Etapa 4, para buscar no índice os documentos que mais bem atendam a consulta. Os resultados da consulta são então retornados à usuária sob a forma de uma lista ordenada.</p>
+<div id="fig-cap-ir-overviewRI" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-ir-overviewRI-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.1: Visão Geral do Processo de RI.
+</figcaption>
+<div aria-describedby="fig-cap-ir-overviewRI-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/overviewRI.png" class="img-fluid figure-img">
+</div>
+</figure>
+</div>
+<section id="pré-processamento" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="pré-processamento"><span class="header-section-number">2.2.1</span> Pré-Processamento</h3>
+<p>As operações de pré-processamento são muito semelhantes às estudadas para as tarefas de PLN relatadas no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/palavras/cap-caracteres-palavras/cap-caracteres-palavras.html#sec-cap-caracteres-palavras" target="_blank" title="Volume 1">Sequência de caracteres e palavras</a></span>. É preciso definir a nossa <strong>unidade de indexação</strong>, ou seja, o que é um <strong>documento</strong> no contexto tratado. Por exemplo, uma notícia, um comentário, um e-mail, um artigo científico, um livro, um capítulo do livro etc.</p>
+<section id="tokenização" class="level4" data-number="2.2.1.1">
+<h4 data-number="2.2.1.1" class="anchored" data-anchor-id="tokenização"><span class="header-section-number">2.2.1.1</span> Tokenização</h4>
+<p>Dada uma sequência de caracteres e uma unidade de indexação, a <strong>tokenização</strong> irá separar a sequência em <em>tokens</em> (i.e., unigramas de palavras). Nesse processo, é comum descartarmos caracteres de pontuação e mantermos apenas as palavras (i.e., também chamadas de termos). Embora à primeira vista este processo pareça bastante trivial (i.e., podemos apenas considerar que os caracteres não alfabéticos como símbolos e sinais de pontuação sejam separadores), há vários casos especiais que podemos precisar tratar. Por exemplo, endereços de email, emojis, e termos que misturam letras e símbolos como C++.</p>
+<p>O processo de tokenização costuma ser implementado utilizando-se expressões regulares e há vários tokenizadores prontos em bibliotecas como NLTK<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> e spaCy<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. Após a tokenização, é comum converter todos os caracteres para letra minúscula. O objetivo é fazer com que a busca não seja <em>case-sensitive</em>, isto é, impactada por texto em letras maiúscula e minúscula. Por outro lado, essa operação dificulta a identificação de entidades nomeadas, uma vez que entidades são geralmente nomes próprios com grafia em letra maiúscula.</p>
+<p>A remoção de acentos, cuja denominação mais apropriada é <strong>remoção de sinais diacríticos</strong> também pode ser realizada, principalmente quando se trata de textos informais nos quais esses sinais são menos utilizados. Um sinal diacrítico é uma marca que colocamos sobre ou sob o caractere como acento agudo, grave, circunflexo, til ou cedilha.</p>
+</section>
+<section id="remoção-de-stop-words" class="level4" data-number="2.2.1.2">
+<h4 data-number="2.2.1.2" class="anchored" data-anchor-id="remoção-de-stop-words"><span class="header-section-number">2.2.1.2</span> Remoção de <em>Stop Words</em></h4>
+<p>As <em>stop words</em> são palavras que têm pouca utilidade para a RI pois ocorrem em muitos documentos e assim não servem para distinguir o conteúdo semântico dos documentos. Preposições, conjunções, artigos e verbos de ligação são normalmente consideradas como <em>stop words</em>. Essas palavras são muitas vezes completamente descartadas em um processo conhecido como <strong>remoção de <em>stop words</em></strong>.</p>
+<p>O processo de remoção de <em>stop words</em> é bastante simples e consiste em verificar a presença de cada palavra do texto em uma lista de <em>stop words</em> previamente construída. Existem listas prontas que podemos usar, como a do NLTK, por exemplo, que contém 204 palavras. Contudo, é recomendável revisar se as listas contêm palavras que podem ser úteis para o contexto da aplicação sendo desenvolvida. Por exemplo, na lista elaborada pela Linguateca<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> com as palavras mais frequentes dos textos da Folha de São Paulo, encontramos a palavra “brasil”. Esta palavra, muito provavelmente, não deve ser removida dos textos da coleção de documentos.</p>
+<p>O principal argumento a favor da remoção de <em>stop words</em> é a redução do tamanho do vocabulário pois elas representam cerca de 40% das ocorrências de palavras em um <em>corpus</em>. Por outro lado, essa remoção pode trazer uma perda de informação relevante. Se pensarmos na famosa expressão “ser ou não ser, eis a questão”, com a remoção de <em>stop words</em>, sobraria apenas “questão”, o que descaracteriza completamente a expressão. O impacto negativo na busca seria que o sistema não mais conseguiria distinguir entre documentos que contenham a expressão completa daqueles que contêm apenas a palavra “questão”.</p>
+</section>
+<section id="sec-cap-ir-stemming" class="level4" data-number="2.2.1.3">
+<h4 data-number="2.2.1.3" class="anchored" data-anchor-id="sec-cap-ir-stemming"><span class="header-section-number">2.2.1.3</span> <em>Stemming</em></h4>
+<p>O objetivo do <em>stemming</em> é gerar uma mesma representação para formas variantes de uma mesma palavra através da remoção dos sufixos. Por exemplo, removendo-se os sufixos de “apresentação”, “apresentando”, e “apresentar”, obteríamos o radical “apresent”. Com isso, uma usuária buscando por “apresentar artigos científico” consegue recuperar um documento com o trecho “apresentando artigos científicos”. O benefício é aumentar o número de documentos relevantes recuperados em resposta à consulta.</p>
+<p>O processo de <em>stemming</em> e seu impacto sobre RI vêm sendo estudado há diversos anos. Para a língua inglesa, o primeiro algoritmo de <em>stemming</em>, ou <em>stemmer</em>, data de 1968 e foi proposto por Julie Beth Lovins <span class="citation" data-cites="lovins1968development">(<a href="../../shared/referencias/referencias.html#ref-lovins1968development" role="doc-biblioref">Lovins, 1968</a>)</span>. Em 1980, Martin Porter propôs o Porter Stemmer <span class="citation" data-cites="Porter_1980">(<a href="../../shared/referencias/referencias.html#ref-Porter_1980" role="doc-biblioref">Porter, 1980</a>)</span> que mostrou obter bons resultados (também para a língua inglesa) e posteriormente foi traduzido para outros idiomas incluindo o português<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>.</p>
+<p>O primeiro <em>stemmer</em> desenvolvido especialmente para a língua portuguesa foi o Removedor de Sufixos da Língua Portuguesa (RSLP)<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> <span class="citation" data-cites="orengo2001stemming">(<a href="../../shared/referencias/referencias.html#ref-orengo2001stemming" role="doc-biblioref">Orengo; Huyck, 2001</a>)</span>. Posteriormente veio o STEMBR <span class="citation" data-cites="alvares2005stembr">(<a href="../../shared/referencias/referencias.html#ref-alvares2005stembr" role="doc-biblioref">Alvares et al., 2005</a>)</span>. Há resultados experimentais que mostram a validade da aplicação de <em>stemmers</em> para RI em português <span class="citation" data-cites="orengo2006study flores2010assessing">(<a href="../../shared/referencias/referencias.html#ref-flores2010assessing" role="doc-biblioref">Flores et al., 2010</a>; <a href="../../shared/referencias/referencias.html#ref-orengo2006study" role="doc-biblioref">Orengo et al., 2006</a>)</span>. Muitas vezes, na média de um conjunto de consultas, o impacto do <em>stemming</em> pode ser pequeno. Contudo, ao analisarmos consultas individuais, percebemos melhorias muito grandes em alguns casos. Em outros, podem aparecer mais documentos não relevantes recuperados pois a remoção do sufixo pode gerar ambiguidade. Os resultados mostram que <em>stemmers</em> menos agressivos, ou seja, com menos regras de remoção tendem a gerar resultados melhores pois têm menos impacto negativo na precisão.</p>
+<p>O <a href="#def-cap-ir-preprocessamento" class="quarto-xref">Quadro&nbsp;<span>2.1</span></a> mostra um trecho do livro O Tempo e o Vento – O Continente, de Érico Veríssimo, e suas versões após cada etapa do pré-processamento. Observemos a redução de 51 para 27 <em>tokens</em> com a remoção de <em>stop words</em>. O <em>stemmer</em> utilizado no exemplo foi o Snowball<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>. Também vale ressaltar a potencial introdução de ambiguidade com a redução de algumas palavras, por exemplo de “legalistas” para “legal”.</p>
+<div id="def-cap-ir-preprocessamento" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 2.1</strong></span> Excerto do livro O Tempo e o Vento – O Continente, de Érico Veríssimo, e suas versões após cada etapa do pré-processamento.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 70%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Original</td>
+<td style="text-align: left;">Quando pela primeira vez aparecera em Santa Fé, no ano em que fora assinada a paz entre farroupilhas e legalistas, causara a pior das impressões. Chegara escoteiro, montado num cavalo magro e manco, e fazendo questão de mostrar a toda a gente que tinha as guaiacas atestadas de moedas de ouro.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Tokenizado</td>
+<td style="text-align: left;">Quando pela primeira vez aparecera em Santa Fé no ano em que fora assinada a paz entre farroupilhas e legalistas causara a pior das impressões Chegara escoteiro montado num cavalo magro e manco e fazendo questão de mostrar a toda a gente que tinha as guaiacas atestadas de moedas de ouro</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Convertido para minúsculo</td>
+<td style="text-align: left;">quando pela primeira vez aparecera em santa fé no ano em que fora assinada a paz entre farroupilhas e legalistas causara a pior das impressões chegara escoteiro montado num cavalo magro e manco e fazendo questão de mostrar a toda a gente que tinha as guaiacas atestadas de moedas de ouro</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Após remoção de <em>stop words</em></td>
+<td style="text-align: left;">primeira vez aparecera santa fé ano assinada paz farroupilhas legalistas causara pior impressões chegara escoteiro montado cavalo magro manco fazendo questão mostrar gente guaiacas atestadas moedas ouro</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Após <em>stemming</em></td>
+<td style="text-align: left;">primeir vez aparec sant fé ano assin paz farroupilh legal caus pior impressõ cheg escoteir mont caval magr manc faz questã mostr gent guaiac atest moed our</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<p></p>
+</section>
+</section>
+<section id="indexação" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="indexação"><span class="header-section-number">2.2.2</span> Indexação</h3>
+<p>A forma que temos para evitar ter de “varrer” os textos da coleção de documentos em busca dos termos da consulta (o que seria um procedimento extremamente lento) é contarmos com um <strong>índice</strong> previamente construído. A indexação recebe como entrada o texto pré-processado e cria um índice chamado de <strong>arquivo invertido</strong>. Um arquivo invertido assemelha-se ao índice remissivo que comumente encontramos ao final de um livro e contém as palavras (únicas) do texto e a lista de documentos em que elas aparecem.</p>
+<p>A <a href="#fig-cap-ir-indice" class="quarto-xref">Figura&nbsp;<span>2.2</span></a> mostra um exemplo de índice que pode ser usado por um sistema de RI. O índice tem dois componentes: (i) o dicionário, também é chamado de vocabulário, que possui a lista de termos únicos da coleção de documentos e (ii) a lista de identificadores de documentos em que o termo aparece (conhecida por lista de <em>postings</em>). Junto ao dicionário, também armazena-se o número de documentos em que o termo aparece, conhecido como <em>document frequency</em> (<span class="math inline">\(DF\)</span>). Observemos que o dicionário fica em ordem alfabética e a lista de <em>postings</em> fica em ordem de identificador de documento.</p>
+<div id="fig-cap-ir-indice" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-ir-indice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.2: Exemplo de um trecho de índice armazenado como um arquivo invertido.
+</figcaption>
+<div aria-describedby="fig-cap-ir-indice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/indice.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+</figure>
+</div>
+<p>Nos casos em que desejamos fazer uma busca sobre um campo específico do documento (e.g., título ou autor), vamos precisar de <strong>índices paramétricos</strong>, um para cada campo. Além disso, se quisermos permitir buscas por múltiplos termos adjacentes (e.g., “memória prodigiosa”), precisaremos de um <strong>índice posicional</strong> que guarde também as posições em que os termos aparecem nos documentos. Certamente, tanto os índices paramétricos como os posicionais possuem um custo maior em termos de espaço de armazenamento e de processamento.</p>
+</section>
+</section>
+<section id="sec-cap-ir-modelos" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="sec-cap-ir-modelos"><span class="header-section-number">2.3</span> Modelos Clássicos de recuperação de informação</h2>
+<p>Um modelo de RI especifica como representar os documentos, as consultas e como compará-los. Ao longo dos anos, diversos modelos de RI foram propostos. Vamos explorar os modelos clássicos. Todos os modelos clássicos pressupõem que a distribuição dos termos nos documentos é independente e utilizam a abordagem <em>bag of words</em> (BoW). Em um BoW, a ordem dos termos nos documentos é desprezada. A vantagem é a simplificação dos modelos, os quais conseguem processar consultas de maneira mais rápida. A desvantagem é a perda de semântica em alguns casos pois as sentenças “João é mais velho do que José”&nbsp;e “José é mais velho do que João”&nbsp;têm representações idênticas apesar de significado oposto.</p>
+<section id="modelo-booleano" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="modelo-booleano"><span class="header-section-number">2.3.1</span> Modelo Booleano</h3>
+<p>O primeiro modelo que foi usado para RI foi o modelo Booleano. Trata-se de um modelo simples, baseado na teoria dos conjuntos e na álgebra booleana. As consultas são compostas por palavras-chave combinadas com os operadores AND, OR e NOT e o seu processamento utiliza o índice.</p>
+<p>Para processar uma consulta do tipo <span class="math inline">\(p_1\)</span> AND <span class="math inline">\(p_2\)</span>, precisamos selecionar as listas de <em>postings</em> de <span class="math inline">\(p_1\)</span> e <span class="math inline">\(p_2\)</span> e computar a sua interseção. Por exemplo, com o trecho de índice da <a href="#fig-cap-ir-indice" class="quarto-xref">Figura&nbsp;<span>2.2</span></a>, podemos ver que a consulta “comitiva”&nbsp;AND “médico” retornaria apenas o documento 5. Já a consulta “baleia”&nbsp;AND “padre” não retornaria nenhum documento.</p>
+<p>Consultas com OR implicam na união de conjuntos. Por exemplo, considerando o índice da <a href="#fig-cap-ir-indice" class="quarto-xref">Figura&nbsp;<span>2.2</span></a>, a consulta “comitiva”&nbsp;OR “médico” retornaria os documentos 1, 3, 4 e 5.</p>
+<p>A principal limitação do modelo Booleano é que ele não é capaz de ordenar o resultado da consulta. Ou um documento satisfaz ou não satisfaz a expressão Booleana da consulta; não há a opção “satisfaz parcialmente”. Apesar dessa limitação, este foi o modelo comercial mais usado por três décadas, mesmo após a proposta de modelos superiores. Até hoje ainda vemos o modelo Booleano sendo usado, por exemplo, em alguns sistemas de bibliotecas.</p>
+</section>
+<section id="sec-cap-ir-vsm" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="sec-cap-ir-vsm"><span class="header-section-number">2.3.2</span> Modelo Vetorial</h3>
+<p>Com o objetivo de poder ordenar os documentos em resposta às consultas, há duas premissas simples que podemos utilizar: (i) documentos que contém mais vezes os termos da consulta têm mais chance de estarem relacionados a ela (e de serem relevantes) e (ii) os termos mais raros na coleção são mais úteis para diferenciar o conteúdo dos documentos. A primeira premissa é atribuída ao pesquisador alemão Hans Peter Luhn e data de 1957. E a segunda premissa foi desenvolvida pela pesquisadora inglesa Karen Spärck Jones em 1972.</p>
+<p>Com base nessas premissas, Gerard Salton propôs, na década de 1960, o modelo vetorial (em inglês, <em>vector space model</em>) <span class="citation" data-cites="salton1983introduction">(<a href="../../shared/referencias/referencias.html#ref-salton1983introduction" role="doc-biblioref">Salton; McGill, 1983</a>)</span>. Nesse modelo, os documentos e as consultas são representados como vetores em um espaço de <span class="math inline">\(t\)</span> dimensões, onde <span class="math inline">\(t\)</span> é o número de termos distintos (i.e., o tamanho do dicionário). No espaço vetorial, os termos são os eixos. As consultas e os documentos são representados no espaço de acordo com a força da associação que eles têm com o termo. A força da associação do documento <span class="math inline">\(d_j\)</span> com o termo <span class="math inline">\(i\)</span> (<span class="math inline">\(w_{i,d_j}\)</span>) é computada pelo esquema TF-IDF (<em>Term Frequency times Inverse Document Frequency</em>), segundo a <a href="#eq-cap-ir-tfidf" class="quarto-xref">Equação&nbsp;<span>2.1</span></a>:</p>
+<div style="transform-origin:left; scale:0.9;">
+<p> <span id="eq-cap-ir-tfidf"><span class="math display">\[
+    w_{i,d_j} = TF_{i,d_j} \times IDF_t = freq_{i,d_j} \times log_{10}\frac{N}{DF_i}
+\tag{2.1}\]</span></span> </p>
+</div>
+<p>onde <span class="math inline">\(freq_{i,d_j}\)</span> é o número de ocorrências do termo <span class="math inline">\(i\)</span> no documento <span class="math inline">\(d_j\)</span>, <span class="math inline">\(N\)</span> é o número de documentos da coleção e <span class="math inline">\(DF_i\)</span> é o número de documentos que contêm o termo <span class="math inline">\(i\)</span>. É comum normalizar o componente <span class="math inline">\(TF\)</span> para evitar que documentos longos sejam beneficiados, pois um documento longo tem mais chances de possuir os termos da consulta. A normalização do componente <span class="math inline">\(TF\)</span> pode ser feita de diferentes formas: (i) dividindo-se o número de ocorrências do termo no documento pelo número de palavras no documento ou (ii) dividindo-se o número de ocorrências do termo no documento pelo número de ocorrências do termo mais comum naquele documento.</p>
+<p>O componente <span class="math inline">\(IDF\)</span> tem por objetivo dar um peso maior para os termos raros pois eles são mais úteis para discriminar o conteúdo dos documentos. Pensando em uma situação extrema, um termo que ocorra em todos os documentos não tem nenhuma utilidade para diferenciar um documento de outro. Sendo assim, valores de <span class="math inline">\(IDF\)</span> mais altos serão atribuídos para termos que ocorram em poucos documentos. Note-se que o <span class="math inline">\(IDF\)</span> não tem efeito caso a consulta tenha apenas um termo. Em consultas com dois ou mais termos, o efeito do <span class="math inline">\(IDF\)</span> é dar mais importância para os termos que ocorrem em menos documentos. Por exemplo, imaginemos uma coleção que trata de instrumentos musicais. Um usuário faz a consulta “flauta bansuri”. Considerando que o termo “flauta”&nbsp;é muito mais comum do que o termo “bansuri”&nbsp;(que se refere a um tipo específico de flauta transversal), o efeito do <span class="math inline">\(IDF\)</span> será atribuir bem mais importância ao termo “bansuri”. Os vetores gerados pelo TF-IDF são longos e esparsos. <strong>Longos</strong> pois o número de dimensões é igual ao número de palavras do vocabulário (o que pode chegar a centenas de milhares para algumas coleções). <strong>Esparsos</strong> pois a grande maioria dos elementos têm valor zero já que os documentos possuem uma pequena fração dos termos do vocabulário.</p>
+<p>A similaridade entre um documento e uma consulta é dada pelo <strong>cosseno</strong> entre os seus vetores. O cosseno entre uma consulta <span class="math inline">\(q\)</span> e um documento <span class="math inline">\(d_j\)</span> é o produto escalar normalizado dos vetores <span class="math inline">\(\vec{q}\)</span> e <span class="math inline">\(\vec{d_j}\)</span>, dado pela <a href="#eq-cap-ir-cosseno" class="quarto-xref">Equação&nbsp;<span>2.2</span></a>:</p>
+<div style="transform-origin:left; scale:0.9;">
+<p> <span id="eq-cap-ir-cosseno"><span class="math display">\[
+  cosseno(q,d_j) = \frac{\vec{q} \cdot \vec{d_j}}{|\vec{q}| \times |\vec{d_j}|} = \frac{\sum_{i=1}^t w_{i,q} \times w_{i,d_j}}{\sqrt{{\sum_{i=1}^t w_{i,q}}^2} \times \sqrt{{\sum_{i=1}^t w_{i,d_j}}^2}}
+\tag{2.2}\]</span></span> </p>
+</div>
+<p>onde <span class="math inline">\(w_{i,q}\)</span> e <span class="math inline">\(w_{i,d_j}\)</span> representam o peso do <span class="math inline">\(i\)</span>-ésimo termo na consulta <span class="math inline">\(q\)</span> e no documento <span class="math inline">\(d_j\)</span>, respectivamente.</p>
+<p>O cosseno é máximo (i.e., igual a 1) se os vetores possuem um ângulo de 0 graus e é mínimo (i.e., igual a 0) se os vetores formarem um ângulo de 90 graus<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>. Em outras palavras, o cosseno será mínimo se o documento e a consulta não compartilharem nenhum termo. Vale ressaltar que não é preciso computar o cosseno entre a consulta e todos os documentos. Utilizando um índice (como o da <a href="#fig-cap-ir-indice" class="quarto-xref">Figura&nbsp;<span>2.2</span></a>), podemos selecionar apenas os documentos que têm pelo menos uma das palavras da consulta, e calcular o cosseno somente entre a consulta e esses documentos. Também é possível estender essa noção e selecionar apenas documentos com valores de TF-IDF que ultrapassem um limiar para os termos da consulta ou restringir ainda mais e calcular o cosseno apenas para documentos que possuam duas ou mais das palavras da consulta.</p>
+<div id="exm-cap-ir-1" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 2.1</strong></span> Para ilustrar o conceito de TF-IDF e o ranqueamento dos documentos no modelo vetorial através do cosseno, vamos trabalhar com um exemplo. Nossa coleção de documentos é composta por cinco importantes livros da literatura brasileira. São eles:</p>
+<ul>
+<li><span class="math inline">\(d_1\)</span> – O Alienista de Machado de Assis;</li>
+<li><span class="math inline">\(d_2\)</span> – Vidas Secas de Graciliano Ramos;</li>
+<li><span class="math inline">\(d_3\)</span> – O Continente (de O Tempo e o Vento) de Érico Veríssimo;</li>
+<li><span class="math inline">\(d_4\)</span> – Capitães de Areia de Jorge Amado; e</li>
+<li><span class="math inline">\(d_5\)</span> – Os Sertões de Euclides da Cunha.</li>
+</ul>
+</div>
+<p>Essa pequena coleção possui 350.260 <em>tokens</em>, e um vocabulário de 32.594 termos (já desconsiderando-se as <em>stop words</em>) – isso quer dizer que os documentos e as consultas são representados por vetores de 32.594 dimensões. Como seria inviável mostrarmos todos esses termos, iremos focar em sete termos selecionados: amarelo, baleia, casa, comitiva, dinheiro, médico e padre. A <a href="#tbl-cap-ir-idf" class="quarto-xref">Tabela&nbsp;<span>2.1</span></a> mostra os sete termos selecionados juntamente com o número de documentos em que cada um deles aparece (DF). A partir do DF, podemos computar o IDF (segundo elemento da <a href="#eq-cap-ir-tfidf" class="quarto-xref">Equação&nbsp;<span>2.1</span></a>). Por exemplo, o termo “comitiva”&nbsp;ocorre em dois documentos, então <span class="math inline">\(IDF_{comitiva} = log_{10} \frac{5}{2} = 0,3979\)</span>. Já para o termo “casa”&nbsp;que ocorre em todos os cinco documentos, o <span class="math inline">\(IDF_{casa} = log_{10} \frac{5}{5} = 0\)</span>.</p>
+<p></p>
+<div id="tbl-cap-ir-idf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cap-ir-idf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;2.1: Exemplo de DF e IDF para algumas palavras do texto
+</figcaption>
+<div aria-describedby="tbl-cap-ir-idf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Termo</strong></th>
+<th style="text-align: center;"><strong>DF</strong></th>
+<th style="text-align: center;"><strong>IDF</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">amarelo</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0,0969</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">baleia</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0,6990</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">casa</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0,0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">comitiva</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0,3979</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">dinheiro</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0,0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">médico</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0,0969</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">padre</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0,0969</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p></p>
+<p></p>
+<div id="tbl-cap-ir-tf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cap-ir-tf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;2.2: Exemplo de matriz de incidência de termos em documentos com valores de TF (i.e., o número de ocorrências dos termos nos documentos).
+</figcaption>
+<div aria-describedby="tbl-cap-ir-tf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 24%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Termo</th>
+<th style="text-align: center;"><span class="math inline">\(d_1\)</span><br>
+O Alienista</th>
+<th style="text-align: center;"><span class="math inline">\(d_2\)</span><br>
+Vidas Secas</th>
+<th style="text-align: center;"><span class="math inline">\(d_3\)</span><br>
+O Tempo e O Vento</th>
+<th style="text-align: center;"><span class="math inline">\(d_4\)</span><br>
+Capitães de areia</th>
+<th style="text-align: center;"><span class="math inline">\(d_5\)</span><br>
+Os Sertões</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">amarelo</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">42</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">baleia</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">86</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">casa</td>
+<td style="text-align: center;">109</td>
+<td style="text-align: center;">37</td>
+<td style="text-align: center;">247</td>
+<td style="text-align: center;">120</td>
+<td style="text-align: center;">30</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">comitiva</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">dinheiro</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">33</td>
+<td style="text-align: center;">43</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">médico</td>
+<td style="text-align: center;">18</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">157</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">padre</td>
+<td style="text-align: center;">22</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">120</td>
+<td style="text-align: center;">252</td>
+<td style="text-align: center;">9</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p></p>
+<p></p>
+<div id="tbl-cap-ir-tfidf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cap-ir-tfidf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;2.3: Exemplo de matriz de incidência de termos em documentos com valores de TF-IDF
+</figcaption>
+<div aria-describedby="tbl-cap-ir-tfidf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 24%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Termo</th>
+<th style="text-align: center;"><span class="math inline">\(d_1\)</span><br>
+O Alienista</th>
+<th style="text-align: center;"><span class="math inline">\(d_2\)</span><br>
+Vidas Secas</th>
+<th style="text-align: center;"><span class="math inline">\(d_3\)</span><br>
+O Tempo e O Vento</th>
+<th style="text-align: center;"><span class="math inline">\(d_4\)</span><br>
+Capitães de areia</th>
+<th style="text-align: center;"><span class="math inline">\(d_5\)</span><br>
+Os Sertões</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">amarelo</td>
+<td style="text-align: center;">0,0009</td>
+<td style="text-align: center;">0,0473</td>
+<td style="text-align: center;">0,0024</td>
+<td style="text-align: center;">0,0012</td>
+<td style="text-align: center;">0,0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">baleia</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,6990</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">casa</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">comitiva</td>
+<td style="text-align: center;">0,0146</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0549</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">dinheiro</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">médico</td>
+<td style="text-align: center;">0,0160</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0616</td>
+<td style="text-align: center;">0,0031</td>
+<td style="text-align: center;">0,0258</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">padre</td>
+<td style="text-align: center;">0,0196</td>
+<td style="text-align: center;">0,0000</td>
+<td style="text-align: center;">0,0471</td>
+<td style="text-align: center;">0,0969</td>
+<td style="text-align: center;">0,0291</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p></p>
+<p>Para computar os vetores de pesos TF-IDF para os cinco documentos da coleção, vamos iniciar com uma matriz de incidência dos termos nos documentos. Temos sete termos e cinco documentos; então, nossa matriz terá sete linhas e cinco colunas. Nessa matriz, ilustrada na <a href="#tbl-cap-ir-tf" class="quarto-xref">Tabela&nbsp;<span>2.2</span></a>, temos o número de ocorrências dos termos nos documentos. A seguir, vamos normalizar o componente TF dividindo-o pelo número de ocorrências do termo mais comum (i.e., o termo que mais ocorre no documento), que para <span class="math inline">\(d_1\)</span> é “casa”. Com isso, valor de TF-IDF para o termo “padre”&nbsp;no documento <span class="math inline">\(d_1\)</span> é <span class="math inline">\((22/109) \times 0,0969 = 0,0196\)</span>. Esses valores estão na <a href="#tbl-cap-ir-tfidf" class="quarto-xref">Tabela&nbsp;<span>2.3</span></a>. Note-se que os escores para os termos “casa”&nbsp;e “dinheiro”&nbsp;são iguais a zero pois eles aparecem em todos os cinco documentos, resultando em um IDF = 0. Também podemos observar que o maior escore é o do termo “baleia” no documento <span class="math inline">\(d_2\)</span>. Isso ocorre porque esse termo ocorre muitas vezes em <span class="math inline">\(d_2\)</span> e nenhuma vez nos outros quatro documentos – ele é, portanto, um termo que tem bastante poder de diferenciar esse documento dos demais.</p>
+<p>Para exemplificar o cálculo do cosseno, vamos imaginar uma consulta <span class="math inline">\(q\)</span> = {comitiva, médico}. Assim como os documentos, o vetor da consulta terá sete dimensões e será composto por pesos TF-IDF. Os termos que não aparecem na consulta têm peso zero. Assim, o vetor da consulta será <span class="math inline">\(\vec{q}=[0; 0; 0; 0,3979; 0; 0,0961; 0]\)</span>. Para montar o <em>ranking</em> dos documentos em relação à consulta, calculamos o cosseno entre <span class="math inline">\(\vec{q}\)</span> e os vetores dos documentos que estão na <a href="#tbl-cap-ir-tfidf" class="quarto-xref">Tabela&nbsp;<span>2.3</span></a> utilizando a <a href="#eq-cap-ir-cosseno" class="quarto-xref">Equação&nbsp;<span>2.2</span></a>. Por exemplo, o cosseno entre <span class="math inline">\(\vec{q}\)</span> e <span class="math inline">\(\vec{d_1}\)</span> é:</p>
+<div style="transform-origin:left; scale:0.7;">
+<p></p>
+<p><span class="math display">\[
+  \frac{0 \times 0,009 + 0 \times 0 + 0 \times 0 +0,3979 \times 0,0146 + 0 \times 0 + 0,0969 \times 0,0160 + 0 \times 0,0196}{\sqrt{0^2+0^2+0^2+0,3979^2+0^2+0,0969^2+0^2} \times \sqrt{0,0009^2+0^2+0^2+0,0146^2+0^2+0,0160^2+0,0196^2}} =
+\]</span></p>
+<p><span class="math display">\[
+  \frac{0 + 0 + 0 + 0,0058 + 0 + 0,0016 + 0 }{\sqrt{0+0+0+0,1583+0+0,0009+0} \times  \sqrt{0+0+0+0,0002+0+0,0003+0,0004}} =
+\]</span></p>
+<p><span class="math display">\[
+  \frac{0,0074}{\sqrt{0,1677} \times{\sqrt{0,0009}}} =  \frac{0,0074}{0,4096 \times {0,0292}} = \frac{0,0074}{0,012} = 0,6156
+\]</span> </p>
+</div>
+<p>Os escores de cosseno entre <span class="math inline">\(\vec{q}\)</span> e os cinco documentos estão na <a href="#tbl-cosseno" class="quarto-xref">Tabela&nbsp;<span>2.4</span></a>. Note que como <span class="math inline">\(q\)</span> e <span class="math inline">\(d_2\)</span> não têm nenhum termo em comum, o escore desse documento é zero. Para montar o <em>ranking</em>, ordenamos os documentos em ordem decrescente de cosseno. Dessa forma, o primeiro do <em>ranking</em> seria <span class="math inline">\(d_5\)</span>, seguido por <span class="math inline">\(d_1\)</span>, <span class="math inline">\(d_3\)</span> e <span class="math inline">\(d_4\)</span>.</p>
+<p></p>
+<div id="tbl-cosseno" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cosseno-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;2.4: Cosseno entre o vetor da consulta <span class="math inline">\(q\)</span> e os vetores dos documentos da coleção.
+</figcaption>
+<div aria-describedby="tbl-cosseno-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(d_1\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(d_2\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(d_3\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(d_4\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(d_5\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.6156</td>
+<td style="text-align: center;">0.0000</td>
+<td style="text-align: center;">0.1879</td>
+<td style="text-align: center;">0.0075</td>
+<td style="text-align: center;">0.8765</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p></p>
+</section>
+<section id="modelos-probabilísticos" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="modelos-probabilísticos"><span class="header-section-number">2.3.3</span> Modelos Probabilísticos</h3>
+<p>Há diversos modelos que utilizam abordagens para RI baseadas em um arcabouço probabilístico. A principal motivação é que a teoria das probabilidades fornece uma base sólida para representar e manipular a incerteza que é inerente ao processo de casamento entre consultas e documentos.</p>
+<p>A ideia original foi proposta por <span class="citation" data-cites="vanRijsbergen1979">Rijsbergen (<a href="../../shared/referencias/referencias.html#ref-vanRijsbergen1979" role="doc-biblioref">1979</a>)</span> e intitulada <em>Probability Ranking Principle</em>. A ideia é ranquear os documentos da coleção em ordem decrescente de probabilidade de relevância para a consulta. Se tivéssemos uma amostra de documentos sabidamente relevantes ou não relevantes, seria possível estimar a probabilidade de um termo aparecer em um documento relevante. Essa informação poderia então ser usada para ranquear os documentos. As probabilidades são estimadas com a maior precisão possível com base em estatísticas que conseguimos calcular. O primeiro modelo probabilístico foi proposto por <span class="citation" data-cites="robertson1976relevance">Robertson; Spärck Jones (<a href="../../shared/referencias/referencias.html#ref-robertson1976relevance" role="doc-biblioref">1976</a>)</span> – o <em>Binary Independence Model</em> (BIM). O BIM é um modelo binário, ou seja, ele considera apenas se o termo está ou não presente no documento. Outra simplificação é a utilização do princípio da independência, que supõe que os termos ocorrem nos documentos de maneira independente. Esse é um modelo simples que não incorpora algumas características, como a frequência dos termos nos documentos e a importância dos termos na coleção (vistas na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-vsm" target="_blank" title="Volume 3">Modelo Vetorial</a></span>), que contribuem para a geração de resultados melhores para as consultas (i.e., uma melhor ordenação dos documentos).</p>
+<p>O modelo probabilístico mais influente até os dias de hoje é o <strong>Okapi BM25</strong> que foi projetado entre os anos 1980 e 1990 por <span class="citation" data-cites="jones2000probabilistic">Spärck Jones et al. (<a href="../../shared/referencias/referencias.html#ref-jones2000probabilistic" role="doc-biblioref">2000</a>)</span>. O Okapi era um sistema de busca para o catálogo da biblioteca da City University de Londres. O modelo BM25 (BM é a abreviatura de <em>best match</em>) foi resultado de uma série de experimentos com variações de fórmulas de modelos probabilísticos. Os pesquisadores usaram identificadores para as variações da fórmulas e a que obteve melhores resultados foi a BM25, que é dada conforme a <a href="#eq-cap-ir-bm25" class="quarto-xref">Equação&nbsp;<span>2.3</span></a> a seguir:</p>
+<div style="transform-origin:left; scale:0.7;">
+<p> <span id="eq-cap-ir-bm25"><span class="math display">\[\begin{aligned}
+  BM25(q,d_j) =
+  \sum_{i \in q} log \frac{(r_i + 0,5)/(R - r_i + 0,5)}{(df_i - r_i + 0,5)/(N - df_i + r_i + 0,5)} \times \\
+  \frac{(k_1 + 1)tf_i}{K + tf_i} \times \frac{(k_2 + 1)qf_i}{k_2 + qf_i}
+\end{aligned} \tag{2.3}\]</span></span> </p>
+</div>
+<p>onde <span class="math inline">\(R\)</span> é o número de documentos sabidamente relevantes para a consulta <span class="math inline">\(q\)</span>; <span class="math inline">\(r_i\)</span> é o número de documentos sabidamente relevantes que contêm o termo <span class="math inline">\(i\)</span>; <span class="math inline">\(N\)</span> é o número de documentos da coleção; <span class="math inline">\(df_i\)</span> é o número de documentos que contêm o termo <span class="math inline">\(i\)</span>; <span class="math inline">\(tf_i\)</span> é o número de ocorrências do termo <span class="math inline">\(i\)</span> no documento <span class="math inline">\(j\)</span>; <span class="math inline">\(qf_i\)</span> é o número de ocorrências do termo <span class="math inline">\(i\)</span> na consulta <span class="math inline">\(q\)</span>; <span class="math inline">\(K\)</span>, <span class="math inline">\(k_1\)</span> e <span class="math inline">\(k_2\)</span> são parâmetros que precisam ser definidos empiricamente. A adição de 0,5 em cada termo da equação é para evitar a divisão por zero. Note que o somatório é efetuado para todos os termos da consulta.</p>
+<p>O parâmetro <span class="math inline">\(k_1\)</span> controla a escala da frequência dos termos (<span class="math inline">\(tf\)</span>) nos documentos. Usar <span class="math inline">\(k_1\)</span> = 0 faz com que o modelo se comporte como um modelo binário. Por outro lado, altos valores de <span class="math inline">\(k_1\)</span> correspondem ao uso do TF sem normalização. Na prática, é comum usarmos <span class="math inline">\(k_1\)</span> = 1,2. De forma similar, o parâmetro <span class="math inline">\(k_2\)</span> controla a escala da frequência dos termos na consulta (<span class="math inline">\(qf\)</span>). Os valores recomendados para <span class="math inline">\(k_2\)</span> são entre 0 e 1000.</p>
+<p>Por fim, o parâmetro <span class="math inline">\(K\)</span> é calculado por:</p>
+<p> <span class="math display">\[K = k_1 ((1-b) + b \times \frac{dl}{avdl})\]</span> </p>
+<p>onde <span class="math inline">\(dl\)</span> é o tamanho do documento, <span class="math inline">\(avdl\)</span> é o tamanho médio dos documentos da coleção e <span class="math inline">\(b\)</span> controla a normalização em função do tamanho do documento. Se <span class="math inline">\(b = 0\)</span>, então a normalização não é realizada. Já <span class="math inline">\(b = 1\)</span> normaliza os pesos em função do tamanho dos documentos. O valor recomendado para <span class="math inline">\(b\)</span> é 0,75.</p>
+<p>É importante ressaltar que os escores gerados pelos modelos probabilísticos não são probabilidades, i.e., não estão no intervalo [0,1]. Isso não representa um problema pois a utilidade do escore é apenas ordenar os documentos, sem a necessidade de permitir uma interpretação probabilística.</p>
+<p>Como na imensa maioria dos casos práticos nós não temos conhecimento de uma amostra de documentos relevantes, o BM25 também pode ser computado <strong>sem a informação de relevância</strong>. Em outras palavras, <span class="math inline">\(R\)</span> e <span class="math inline">\(r_i\)</span> são zero. Com isso, a <a href="#eq-cap-ir-bm25" class="quarto-xref">Equação&nbsp;<span>2.3</span></a> pode ser simplificada para:</p>
+<div style="transform-origin:left; scale:0.8;">
+<p> <span id="eq-cap-ir-bm25_"><span class="math display">\[
+  BM25(q,d_j) = \sum_{i \in q} log \frac{N - df_i + 0,5}{df_i + 0,5} \times \frac{(k_1 + 1)tf_i}{K + tf_i} \times \frac{(k_2 + 1)qf_i}{k_2 + qf_i}
+\tag{2.4}\]</span></span> </p>
+</div>
+<div id="exm-cap-ir-2" class="theorem example">
+<p><span class="theorem-title"><strong>Exemplo 2.2</strong></span> Para ilustrar o cálculo do BM25, vamos utilizar a mesma consulta da <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-vsm" target="_blank" title="Volume 3">Modelo Vetorial</a></span> <span class="math inline">\(q\)</span> = {comitiva, médico} e faremos o cálculo do escore passo a passo para o <span class="math inline">\(d_1\)</span>. Não temos informação prévia de relevância, então vamos usar a <a href="#eq-cap-ir-bm25_" class="quarto-xref">Equação&nbsp;<span>2.4</span></a>. Cada termo ocorre apenas uma vez na consulta, então <span class="math inline">\(qf_1\)</span> = 1 e <span class="math inline">\(qf_2\)</span> = 1. O escore final é formado pela soma dos escores das palavras da consulta que aparecem no documento <span class="math inline">\(d_1\)</span>. Para facilitar o entendimento, os cálculos referentes ao termo “comitiva” estão em laranja e os os cálculos referentes ao termo “médico” estão em azul. As estatísticas da coleção estão nas Tabelas <a href="#tbl-cap-ir-idf" class="quarto-xref"><span>2.1</span></a>, <a href="#tbl-cap-ir-tf" class="quarto-xref"><span>2.2</span></a>, <a href="#tbl-cap-ir-tfidf" class="quarto-xref"><span>2.3</span></a>. Os parâmetros utilizados foram <span class="math inline">\(k_1\)</span> = 1,2, <span class="math inline">\(k_2\)</span> = 100 e <span class="math inline">\(b=0,75\)</span>. O tamanho médio dos documentos da coleção (<span class="math inline">\(avdl\)</span>) é de 276 e o tamanho de <span class="math inline">\(d1\)</span> é 161. Com isso, <span class="math inline">\(K= 1,2 ((1 - 0,75) + 0,75 \times 161/279) = 0,825\)</span>. Observe que o escore final para o documento é negativo, mas o valor absoluto não é importante pois estamos interessados apenas em ranquear os documentos. Calculando o escore para os outros quatro documentos, verificamos que o primeiro documento do <em>ranking</em> seria <span class="math inline">\(d_5\)</span>, seguido por <span class="math inline">\(d_1\)</span>, <span class="math inline">\(d_4\)</span> e <span class="math inline">\(d_3\)</span>. Note-se que o ordenamento fica quase igual ao gerado pelo modelo vetorial – apenas os documentos <span class="math inline">\(d_4\)</span> e <span class="math inline">\(d_3\)</span> invertem as posições.</p>
+</div>
+<div style="transform-origin:left; scale:0.8;">
+<p> <span class="math display">\[\begin{aligned}
+    BM25(q,d_1) = {\color{orange}log\frac{5 - 2 + 0,5}{2 + 0,5} \times \frac{(1,2 + 1)4}{0,825 + 4} \times \frac{(100 + 1)1}{100 + 1}} + \\
+    {\color{blue}log\frac{5 - 4 + 0,5}{4 + 0,5} \times \frac{(1,2 + 1)18}{0,825 + 18} \times \frac{(100 + 1)1}{100 + 1}} = \\
+     \\
+    {\color{orange}log \frac{3,5}{2,5} \times \frac{8,8}{4,825} \times \frac{101}{101}} +
+    {\color{blue}log \frac{1,5}{4,5} \times \frac{39,6}{18,825} \times \frac{101}{101}} = \\
+    {\color{orange}log 1,4 \times 1,824 \times 1} + \color{blue}{log 0,33 \times 2,1 \times 1}   = \\
+    {\color{orange}0,33 \times 1,824} + {\color{blue}-1,10866 \times 2,1} = \\
+    {\color{orange}0,6137} {\color{blue}-2,311}  = -1,6973
+\end{aligned}\]</span> </p>
+</div>
+</section>
+</section>
+<section id="sec-cap-ir-avaliacao" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="sec-cap-ir-avaliacao"><span class="header-section-number">2.4</span> Avaliação da Qualidade de Sistemas de recuperação de informação</h2>
+<p>A RI é uma disciplina altamente empírica e a história da avaliação em sistemas de RI nasceu junto com a área. Os primeiros trabalhos sobre avaliação em RI foram coordenados por Cyril W. Cleverdon na escola de aeronáutica de Cranfield (Inglaterra) nos anos 1960. Por esta razão, o modelo de avaliação até hoje é conhecido como paradigma Cranfield. A avaliação consiste no cálculo de uma série de métricas que são calculadas com base em uma coleção de teste. Nesta seção abordaremos as principais métricas (<span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-metricas" target="_blank" title="Volume 3">Métricas</a></span>) e as coleções de teste para português (<span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-colecoes" target="_blank" title="Volume 3">Coleções de Teste</a></span>). O leitor que deseja se aprofundar no processo de avaliação de RI pode referir-se a <span class="citation" data-cites="sanderson2010test">Sanderson et al. (<a href="../../shared/referencias/referencias.html#ref-sanderson2010test" role="doc-biblioref">2010</a>)</span>.</p>
+<section id="sec-cap-ir-metricas" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="sec-cap-ir-metricas"><span class="header-section-number">2.4.1</span> Métricas</h3>
+<p>As métricas são baseadas na noção de relevância, i.e., uma avaliação que diz se um documento <span class="math inline">\(d_j\)</span> é relevante a uma consulta <span class="math inline">\(q\)</span>. Inicialmente, vamos tratar a relevância como <strong>binária</strong>, ou seja, o <em>ground truth</em> julga o documento como relevante (1) ou não relevante (0). Todas as métricas vistas aqui variam no intervalo [0,1], sendo que 1 representa a recuperação ideal.</p>
+<section id="sec-cap-ir-metricas_conjuntos" class="level4" data-number="2.4.1.1">
+<h4 data-number="2.4.1.1" class="anchored" data-anchor-id="sec-cap-ir-metricas_conjuntos"><span class="header-section-number">2.4.1.1</span> Métricas Baseadas em Conjuntos</h4>
+<p>A <a href="#fig-cap-ir-conjuntos" class="quarto-xref">Figura&nbsp;<span>2.3</span></a> mostra um exemplo do que ocorre tipicamente quando fazemos uma consulta. A coleção de documentos está representada pelo oval cinza. O círculo amarelo representa os documentos que foram recuperados em resposta à consulta, enquanto que os documentos que de fato são relevantes para a consulta estão representados pelo círculo azul. Podemos ver que há documentos relevantes que foram recuperados (i.e., os documentos que estão na intersecção entre os conjuntos, que aparece representada na cor verde), mas há também documentos relevantes que deixaram de ser recuperados e documentos não relevantes que foram recuperados. Com base nesses conjuntos, podemos definir duas métricas básicas para avaliar a qualidade da recuperação: <strong>precisão</strong> e <strong>revocação</strong> (em inglês, <em>recall</em>).</p>
+<ul>
+<li><p>Precisão (<span class="math inline">\(P\)</span>) mede a proporção dos documentos recuperados que de fato é relevante. <span class="math display">\[P = \frac{\#~relevantes~recuperados}{\#~recuperados}\]</span> </p></li>
+<li><p>Revocação (<span class="math inline">\(R\)</span>) mede a proporção dos documentos relevantes que de fato foram recuperados. <span class="math display">\[R = \frac{\#~relevantes~recuperados}{\#~relevantes}\]</span> </p></li>
+</ul>
+<div id="fig-cap-ir-conjuntos" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-ir-conjuntos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.3: Exemplo de recuperação de documentos em resposta a uma consulta.
+</figcaption>
+<div aria-describedby="fig-cap-ir-conjuntos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/Avaliacao_Venn.png" class="img-fluid figure-img">
+</div>
+</figure>
+</div>
+<p>Por exemplo, vamos imaginar uma situação em que um sistema recupera 100 documentos em resposta a uma consulta para a qual existam 30 documentos relevantes. Sabendo-se que entre os recuperados há 15 documentos relevantes, os valores das métricas de avaliação seriam <span class="math inline">\(P = \frac{15}{100} = 15\%\)</span> e <span class="math inline">\(R = \frac{15}{30} = 50\%\)</span>. Imaginemos, então, uma segunda situação em que, na tentativa de aumentar a precisão, reduzimos o número de documentos recuperados para apenas 5 e todos eles sejam relevantes. Como resultado, nossa precisão aumentaria para <span class="math inline">\(P = \frac{5}{5} = 100\%\)</span>. O problema é que, com isso, a nossa revocação cairia para <span class="math inline">\(\frac{5}{30} = 16,67\%\)</span>. Indo na direção oposta, poderíamos tentar aumentar a revocação e recuperar mil documentos em vez de 100. Com isso, haveria uma chance bem maior de recuperarmos documentos relevantes, mas por outro lado, a precisão seria reduzida. Em resumo: altos níveis de revocação costumam ser acompanhados por baixos níveis de precisão e vice-versa. Por esta razão, é comum utilizarmos uma medida que agregue <span class="math inline">\(P\)</span> e <span class="math inline">\(R\)</span>, a conhecida <strong>medida F</strong>, definida a seguir.</p>
+<p> <span class="math display">\[F = \frac{(\beta^2 + 1) \times P \times R}{(\beta^2 \times P) + R}\]</span> </p>
+<p>onde <span class="math inline">\(\beta\)</span> é um parâmetro que permite definirmos a ênfase dada às métricas. Valores de <span class="math inline">\(\beta\)</span> maiores do que 1 enfatizam a revocação enquanto que valores de <span class="math inline">\(\beta\)</span> menores do que 1 enfatizam a precisão. Se quisermos atribuir a mesma ênfase às duas métricas, usamos <span class="math inline">\(\beta = 1\)</span>. Nesse caso, a métrica é comumente chamada de <span class="math inline">\(F1\)</span> e sua fórmula é simplificada para <span class="math inline">\(F1 = \frac{2 \times P \times R}{P + R}\)</span>. Considerando o nosso primeiro exemplo, em que <span class="math inline">\(P = 0,15\)</span> e <span class="math inline">\(R = 0,50\)</span>, a <span class="math inline">\(F1\)</span> seria <span class="math inline">\(F1 = \frac{2 \times 0,15 \times 0,50}{0,15 + 0,50} = 0,23\)</span>.</p>
+</section>
+<section id="métricas-para-rankings" class="level4" data-number="2.4.1.2">
+<h4 data-number="2.4.1.2" class="anchored" data-anchor-id="métricas-para-rankings"><span class="header-section-number">2.4.1.2</span> Métricas para <em>Rankings</em></h4>
+<div id="fig-cap-ir-rankings" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-ir-rankings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.4: Exemplos de <em>rankings</em> de documentos recuperados em resposta a uma consulta por dois sistemas diferentes. Os documentos relevantes à consulta estão representados em verde.
+</figcaption>
+<div aria-describedby="fig-cap-ir-rankings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/rankings.png" class="img-fluid figure-img" style="width:50.0%">
+</div>
+</figure>
+</div>
+<p>Os sistemas de RI retornam os documentos em um <em>ranking</em>. A <a href="#fig-cap-ir-rankings" class="quarto-xref">Figura&nbsp;<span>2.4</span></a> mostra exemplos de <em>rankings</em> de documentos recuperados em resposta a uma mesma consulta por dois sistemas diferentes (Sistemas A e B). São 20 documentos recuperados e, dentre eles, há 5 relevantes (representados em verde). Vamos supor que existam 7 documentos relevantes para essa consulta. As métricas vistas na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-metricas_conjuntos" target="_blank" title="Volume 3">Métricas Baseadas em Conjuntos</a></span> resultariam em <span class="math inline">\(P = \frac{5}{20} = 25\%\)</span>, <span class="math inline">\(R = \frac{5}{7} = 71\%\)</span> e <span class="math inline">\(F1 = \frac{2 \times 0,25 \times 0,71}{0,25 + 0,71} = 0,37\)</span> tanto para o Sistema A quanto para o Sistema B. Esse resultado não é o ideal pois podemos ver que o Sistema A recuperou os documentos relevantes mais perto do topo do <em>ranking</em> e por isso deveria receber um escore mais alto do que o Sistema B. Esse problema ocorre porque precisão, revocação e medida-F são baseadas em conjuntos – e conjuntos, por definição, não têm ordenação. Então concluímos que precisão, revocação e F1 <strong>não são adequadas para avaliar <em>rankings</em></strong>. Uma boa métrica para avaliar resultados ranqueados deve conseguir calcular quantos documentos relevantes foram recuperados e o <strong>quão próximos estão do topo do ranking</strong>. Com isso em mente, a métrica <strong>precisão média</strong> (do inglês, <em>average precision</em>, AP) foi proposta.</p>
+<p> <span class="math display">\[AP = \frac{\sum_{k=1}^n P(k) \times rel(k)}{\#~relevantes}\]</span> </p>
+<p>onde <span class="math inline">\(rel(k)\)</span> é uma função de relevância binária que resulta em 1 caso o documento na <span class="math inline">\(k\)</span>-ésima posição do <em>ranking</em> seja relevante. Os documentos relevantes que são foram recuperados serão penalizados com <span class="math inline">\(P=0\)</span>. Em outras palavras, percorreremos o <em>ranking</em> calculando, para cada documento relevante recuperado, a precisão naquele ponto. Para o Sistema A da <a href="#fig-cap-ir-rankings" class="quarto-xref">Figura&nbsp;<span>2.4</span></a>, temos a seguinte <span class="math inline">\(AP = \frac{1/1~+~2/2~+~3/4~+~4/5~+~5/7}{7} = 0,61\)</span>. E para o Sistema B temos <span class="math inline">\(AP = \frac{1/9~+~2/12~+~3/14~+~4/17~+~5/20}{7} = 0,14\)</span>. Concluímos, então, que a <span class="math inline">\(AP\)</span> consegue capturar a fato do Sistema A ter sido superior ao B.</p>
+<p>Quando temos um conjunto de consultas, calculamos a média das precisões médias (do inglês, <em>mean average precision</em>, MAP), que é simplesmente a média das APs para <span class="math inline">\(|Q|\)</span> consultas.</p>
+<p> <span class="math display">\[MAP = \frac{\sum_{q=1}^{|Q|} AP_q}{|Q|}\]</span> </p>
+<p>Muitas vezes, é útil fazermos uma comparação visual do desempenho de dois sistemas. Neste caso, podemos utilizar as <strong>curvas de revocação e precisão</strong>. Para desenhar as curvas, precisamos ter os valores de precisão calculados para 11 pontos de revocação padrão (de 0 a 1 com incrementos de 0,1). Para calcular a precisão nesses 11 pontos, é necessário utilizar uma regra de interpolação que diz que “a precisão interpolada para um nível de revocação <span class="math inline">\(j\)</span> é o maior valor de precisão para qualquer nível de revocação maior ou igual a <span class="math inline">\(j\)</span>”. Aplicando-se a regra da interpolação, teremos curvas monotonicamente decrescentes, como as que vemos na <a href="#fig-cap-ir-curvas" class="quarto-xref">Figura&nbsp;<span>2.5</span></a>. Quanto maior a área sob a curva, melhor o resultado do sistema. Podemos ver claramente que a função <span class="math inline">\(A\)</span> é pior do que as outras duas e que as funções <span class="math inline">\(B\)</span> e <span class="math inline">\(C\)</span> obtiveram resultados muito similares, com uma leve superioridade da função <span class="math inline">\(C\)</span>. Para sabermos se as diferenças entre os sistemas são significativas, é comum fazermos testes estatísticos. O teste-T pareado é bastante usado e podemos fazê-lo comparando as precisões médias (AP) para um mesmo conjunto de consultas executadas em sistemas diferentes. Para os resultados das consultas que deram origem às curvas da <a href="#fig-cap-ir-curvas" class="quarto-xref">Figura&nbsp;<span>2.5</span></a>, quando comparamos os resultados da função C com a função A, o teste-T resulta em um p-valor = 4.6e-08. Utilizando um nível de significância <span class="math inline">\(\alpha=0.01\)</span>, a interpretação é que a função C é significativamente melhor do que a função A pois o p-valor é <span class="math inline">\(\ll\)</span> 0.01. Já quando comparamos a função C com a função B, o p-valor é 0.12. Então concluímos que não há diferença significativa entre B e C pois o p-valor é <span class="math inline">\(&gt;\)</span> 0.01.</p>
+<div id="fig-cap-ir-curvas" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-ir-curvas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.5: Exemplos de curvas de revocação e precisão para a comparação de três funções de <em>ranking</em>.
+</figcaption>
+<div aria-describedby="fig-cap-ir-curvas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/curvas.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+</figure>
+</div>
+<p>Além da MAP, é comum avaliar-se <em>rankings</em> com a métrica <strong>P@<span class="math inline">\(k\)</span></strong>, onde <span class="math inline">\(k\)</span> é uma posição específica do <em>ranking</em> (ex: 1, 5, 10, 100 etc.). Basta calcular o número de documentos relevantes encontrados até a <span class="math inline">\(k\)</span>-ésima posição do <em>ranking</em>. Por exemplo, a P@10 conta quantos documentos relevantes foram encontrados até a décima posição do <em>ranking</em>. Essas métricas são especialmente úteis quando não sabemos o número de documentos relevantes para cada consulta, como é o caso das buscas na Web.</p>
+<p>Outra métrica por vezes usada é o <em>mean reciprocal rank</em>&nbsp;(MRR) que calcula o inverso da posição do primeiro documento relevante retornado. Por exemplo, caso o primeiro documento relevante esteja na segunda posição do <em>ranking</em>, <span class="math inline">\(MRR = 1/2\)</span>. Para agregar os resultados para um conjunto de consultas, fazemos a média:</p>
+<p> <span class="math display">\[MRR = \frac{1}{|Q|} \sum_{i=1}^{|Q|}\frac{1}{rank_i}\]</span> </p>
+<p>Até agora, abordamos apenas métricas que utilizam a relevância como binária. Contudo, em alguns casos, é importante diferenciar um documento muito relevante de um documentos marginalmente relevante. Nesses casos, podemos calcular o <strong>ganho acumulado descontado normalizado</strong> (do inglês, <em>normalized discounted cumulative gain</em>, NDCG) <span class="citation" data-cites="jarvelin2002cumulated">(<a href="../../shared/referencias/referencias.html#ref-jarvelin2002cumulated" role="doc-biblioref">Järvelin; Kekäläinen, 2002</a>)</span>. Para entender o NDCG, primeiro temos que entender o DCG e o IDCG.</p>
+<p> <span class="math display">\[DCG = \sum_{i=1}^n \frac{2^{rel_i} - 1}{log_2(i+1)}\]</span> </p>
+<p>onde <span class="math inline">\(n\)</span> é o número de documentos recuperados, <span class="math inline">\(i\)</span> é a posição do documento no <em>ranking</em> e <span class="math inline">\(rel_i\)</span> é o nível de relevância do documento (i.e., podemos usar quatro níveis onde o escore 3 indica um documento altamente relevante, 2 indica um documento moderadamente relevante e 1 indica um documento marginalmente relevante e 0 é um documento não relevante). O IDCG é o DGC ideal, ou seja, a pontuação de DCG obtida se a ordenação fosse perfeita. Em outras palavras, primeiramente teríamos todos os documentos de escore 3, seguidos pelos de escore 2, depois os de escore 1 e por fim os de escore zero. O NDCG é a fração <span class="math inline">\(\frac{DCG}{IDCG}\)</span> A normalização é importante para fazer com que a métrica fique no intervalo [0,1].</p>
+<p>Além dessas medidas, muitas outras continuam sendo propostas e apresentadas nos fóruns de RI. Contudo, ainda não são amplamente adotadas. Há também muitos estudos sobre a validade e estabilidade das métricas, como por exemplo o trabalho de <span class="citation" data-cites="buckley2017evaluating">Buckley; Voorhees (<a href="../../shared/referencias/referencias.html#ref-buckley2017evaluating" role="doc-biblioref">2017</a>)</span>.</p>
+</section>
+</section>
+<section id="sec-cap-ir-colecoes" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="sec-cap-ir-colecoes"><span class="header-section-number">2.4.2</span> Coleções de Teste</h3>
+<p>O cálculo das métricas apresentadas na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-metricas" target="_blank" title="Volume 3">Métricas</a></span> só é possível caso exista uma coleção de teste com três componentes: (i) um conjunto de documentos, (ii) um conjunto de tópicos de consulta e (iii) os julgamentos de relevância. O primeiro componente é o mais fácil de ser obtido, pois é trivial fazer uma coleta a partir da Web e obter um grande número de documentos. O segundo componente, i.e., as consultas, necessita da intervenção humana na sua elaboração pois é preciso imaginar o tipo de consulta que um usuário que estivesse pesquisando a coleção de documentos poderia fazer. É comum a avaliação de consultas ad hoc utilizar por volta de 50 tópicos de consulta. O maior custo na elaboração de uma coleção de testes está no terceiro componente, i.e., os julgamentos de relevância. Os julgamentos de relevância dizem quais são os documentos relevantes para cada tópico de consulta e necessitam de intervenção humana na sua elaboração.</p>
+<p>A primeira coleção de testes elaborada, a Cranfield Collection, tem 1398 resumos de artigos sobre aerodinâmica e 225 tópicos de consulta. A elaboração dos julgamentos de relevância foi exaustiva, ou seja, a relevância de todos os documentos foi avaliada em relação a cada consulta. Além disso, cada par {documento, consulta} foi julgado por dois avaliadores – ou seja 1398 documentos <span class="math inline">\(\times\)</span> 225 consultas <span class="math inline">\(\times\)</span> 2 avaliadores = 629.100, i.e., mais de meio milhão de avaliações para uma coleção muito pequena. Aplicar essa mesma abordagem em uma coleção com 100 mil documentos e 50 consultas, demandaria 10 milhões de julgamentos de relevância, o que seria impraticável.</p>
+<p>A solução amplamente adotada foi a criação de um método em que nem todos os documentos são avaliados em relação às consultas – apenas os documentos que têm alguma chance de serem relevantes. Essa foi a ideia do método <em>pooling</em> <span class="citation" data-cites="spark1975report">(<a href="../../shared/referencias/referencias.html#ref-spark1975report" role="doc-biblioref">Spärck Jones, 1975</a>)</span> que tem esse nome pois são criados repositórios (<em>pools</em>) com o subconjunto de documentos que serão avaliados. O processo envolve a criação de um repositório para cada consulta. Os repositórios são populados com documentos recuperados utilizando diferentes funções de <em>ranking</em>, variando-se parâmetros e sistemas. Os documentos do repositório são então ordenados de acordo com alguma heurística – por exemplo documentos que foram retornados mais vezes ficam no topo do <em>ranking</em>. Então, apenas os <span class="math inline">\(n\)</span> primeiros são analisados pelos avaliadores humanos. Os documentos que não foram avaliados são considerados como não relevantes. É possível que essa estratégia deixe de identificar alguns documentos relevantes, mas há evidências de que ainda assim ela é robusta. Um estudo realizado por <span class="citation" data-cites="zobel1998reliable">Zobel (<a href="../../shared/referencias/referencias.html#ref-zobel1998reliable" role="doc-biblioref">1998</a>)</span> identificou que a ordenação entre funções de <em>ranking</em> (ou sistemas) permanecia a mesma ainda que o conjunto de julgamentos de relevância mudasse. Em outras palavras, a superioridade de um método em relação a outro é mantida mesmo com conjuntos diferentes de julgamentos de relevância.</p>
+<p>Mesmo com a grande redução no esforço manual de avaliação na criação de coleções trazida pelo método <em>pooling</em>, este processo ainda é bastante trabalhoso. As coleções de teste foram criadas, na imensa maioria das vezes, dentro do escopo de campanhas de avaliação. Essas campanhas tiveram um grande impacto no desenvolvimento de técnicas para RI. Para a língua inglesa, as campanhas TREC (<em>Text REtrieval Conference</em>)<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a> mantiveram tarefas de recuperação ad hoc entre os anos de 1992 e 1999. Posteriormente, uma iniciativa europeia deu origem às campanhas CLEF (<em>Cross Language Evaluation Forum</em>) que entre 2000 e 2009 organizaram tarefas de recuperação ad hoc para idiomas europeus. Semelhante a essas campanhas, há o NTCIR<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a> dedicado aos idiomas do leste da Ásia.</p>
+<p>Foi no contexto das campanhas CLEF e por iniciativa da Linguateca<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> que a primeira coleção de teste para a língua portuguesa foi elaborada – a coleção CHAVE<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> <span class="citation" data-cites="santos2004key">(<a href="../../shared/referencias/referencias.html#ref-santos2004key" role="doc-biblioref">Santos; Rocha, 2004</a>)</span>. A coleção CHAVE é composta por cerca de 209 mil notícias dos jornais Folha de São Paulo e Público (de Portugal), publicadas nos anos de 1994 e 1995. Há 100 tópicos de consulta com os seus respectivos julgamentos de relevância. Por muitos anos, esta foi a única coleção de teste disponível para português e sem dúvida ainda representa o recurso mais valioso para a recuperação ad hoc neste idioma.</p>
+<p>A segunda coleção de teste para a recuperação ad hoc na língua portuguesa é a coleção REGIS<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a> (<em>Retrieval Evaluation for Geoscientific Information Systems</em>). Ela é composta por teses, dissertações e artigos científicos no domínio geocientífico. São mais de 20 mil documentos e 34 tópicos de consulta. Uma característica distintiva é que os documentos são bem mais longos do que os encontrados em coleções de notícias de jornal e tratam de um domínio mais restrito. Além disso, os julgamentos de relevância foram feitos em quatro níveis (muito relevante, moderadamente relevante, marginalmente relevante e não relevante).</p>
+<p>Recentemente, uma versão traduzida da MS MARCO (<em>Microsoft Machine Reading Comprehension</em>)<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> foi disponibilizada para português e mais 12 idiomas <span class="citation" data-cites="bonifacio2021mmarco">(<a href="../../shared/referencias/referencias.html#ref-bonifacio2021mmarco" role="doc-biblioref">Bonifacio et al., 2021</a>)</span>. A MS MARCO contém um conjunto de <em>datasets</em> que são amplamente utilizados no treinamento de algoritmos de aprendizado profundo. Para RI, há uma coleção com 8,8 milhões de documentos e 6980 consultas. As consultas foram obtidas a partir de buscas reais submetidas ao Bing e os documentos são passagens curtas extraídas de páginas web.</p>
+<p>O <a href="#def-cap-ir-topicos" class="quarto-xref">Quadro&nbsp;<span>2.2</span></a> mostra exemplos de tópicos de consulta das três coleções de teste existentes para a língua portuguesa. O formato adotado pelas coleções CHAVE e REGIS é o formato tradicional utilizado pelas campanhas TREC e CLEF. Cada tópico de consulta é composto por um identificador, um <strong>título</strong> que descreve sucintamente o tópico, uma <strong>descrição</strong> mais detalhada e uma <strong>narrativa</strong> que visa auxiliar o avaliador humano a distinguir os documentos relevantes dos não relevantes. Já os tópicos da MS MARCO são diferentes, há apenas um identificador e o texto da consulta submetida ao motor de busca.</p>
+<div id="def-cap-ir-topicos" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 2.2</strong></span> Exemplos de tópicos de consulta das coleções de teste de RI em português</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<p><strong>CHAVE</strong></p>
+<p>&lt;top&gt;<br>
+&lt;num&gt; C267 &lt;/num&gt;<br>
+&lt;PT-title&gt; Melhor Filme Estrangeiro &lt;/PT-title&gt;<br>
+&lt;PT-desc&gt; Quais foram os filmes candidatos ao Oscar de Melhor Filme Estrangeiro? &lt;/PT-desc&gt;<br>
+&lt;PT-narr&gt; Documentos relevantes devem indicar o título e nacionalidade dos filmes indicados para o Óscar na categoria de Melhor Filme em Língua Estrangeira. &lt;/PT-narr&gt;<br>
+&lt;/top&gt;</p>
+<p><br>
+</p>
+<p><strong>REGIS</strong></p>
+<p>&lt;top&gt;<br>
+&lt;num&gt;Q5&lt;/num&gt;<br>
+&lt;title&gt;Permeabilidade em Marlim&lt;/title&gt;<br>
+&lt;desc&gt;Informações sobre o campo de Marlim, mas não dos campos de “Marlim Sul”&nbsp; ou de “Marlim Leste”.&lt;/desc&gt;<br>
+&lt;narr&gt;Interessam documentos que contenham informação sobre a permeabilidade das rochas do campo de Marlim. Principalmente, interessam informações quantitativas (como dados de permeabilidade expressos em Darcies ou milidarcies).&lt;/narr&gt;<br>
+&lt;/top&gt;</p>
+<p><br>
+</p>
+<p><strong>MS MARCO</strong></p>
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">350,732</td>
+<td style="text-align: left;">como limpar copos de melamina manchados</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1,067,511</td>
+<td style="text-align: left;">por que meu ligamento colateral lateral dói</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">906,071</td>
+<td style="text-align: left;">o que adicionar à sua água para ser mais saudável</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<p></p>
+</section>
+</section>
+<section id="sec-cap-ir-QERF" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="sec-cap-ir-QERF"><span class="header-section-number">2.5</span> Modificação Automática de Consultas</h2>
+<p>Conforme visto na Introdução, o problema central da RI é casar a consulta com os documentos que a satisfazem. Contudo, o casamento puramente léxico aplicado pelos Modelos Clássicos (vistos na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-modelos" target="_blank" title="Volume 3">Modelos Clássicos de recuperação de informação</a></span>) implica que uma consulta somente recupera documentos que possuam alguma de suas palavras-chave. A consulta não é capaz de recuperar um documento que contenha apenas sinônimos das suas palavras-chave e isso tem um impacto negativo na revocação. Por exemplo, se um usuário consulta “tributos pagos por donos de carros” um documento que não contenha as palavras da consulta mas mencione “imposto sobre a propriedade de veículos automotores” não seria recuperado. Desde os anos 1960, os pesquisadores vêm propondo formas de solucionar esses problemas. Essa sub-área de pesquisa é conhecida como <strong>modificação automática de consultas</strong><a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> (<em>automatic query modification</em>) AQM e conta com dezenas de milhares de artigos publicados. Esta seção apresenta um breve resumo e fornece referências para que o leitor possa encontrar mais informações. A AQM é um ponto forte de interseção entre RI e PLN pois os diversos métodos adotados em PLN para solucionar o problema da sinonímia encontram aqui uma ótima área de aplicação.</p>
+<p>Um bom ponto de partida para quem quer se inteirar-se sobre esse tema é o <em>survey</em> de <span class="citation" data-cites="carpineto2012survey">Carpineto; Romano (<a href="../../shared/referencias/referencias.html#ref-carpineto2012survey" role="doc-biblioref">2012</a>)</span>. vamos adotar a taxonomia introduzida nesse trabalho para classificar as abordagens para AQM.</p>
+<ul>
+<li><strong>Análise Linguística.</strong> Uma das técnicas mais simples que pode ser enquadrada nessa categoria é o uso de <em>stemming</em> (ver <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-stemming" target="_blank" title="Volume 3"><em>Stemming</em></a></span>). O <em>stemming</em> reduz as formas variantes de uma palavra ao mesmo radical e assim conseguiria, por exemplo, que uma consulta pelo termo “imposto” recuperasse documentos com a forma plural “impostos”. Contudo, o <em>stemming</em> não é capaz de recuperar um documento que contenha apenas o sinônimo “tributo”. Para isso, poderíamos nos valer de dicionários de sinônimos, tesauros ou ontologias. A modificação da consulta consiste em adicionar termos sinônimos à consulta original. A adição de sinônimos irá recuperar mais documentos. O problema ocorre quando os sinônimos adicionados mudam o significado da consulta, por exemplo “homenagem” é sinônimo de “tributo”, mas sua adição à consulta iria trazer documentos irrelevantes, baixando a precisão. Alguns domínios como a medicina dispõe de tesauros que podem ser diretamente usados. Por outro lado, essa é uma exceção – a maioria dos domínios não dispõem desses recursos e a sua construção manual é cara. Uma solução seria descobrir automaticamente essas relações a partir de <em>corpora</em>.</li>
+<li><strong>Técnicas baseadas em <em>corpora</em>.</strong> Esse grupo de técnicas analisa o conteúdo da coleção de documentos para extrair padrões de coocorrência de termos. A ideia é que termos que coocorrem (i.e., que frequentemente aparecem juntos nos mesmos documentos) estão correlacionados e a sua adição à consulta pode fornecer contexto adicional. A informação de coocorrência pode ser obtida a partir de métodos diferentes como a Indexação Semântica Latente&nbsp;<span class="citation" data-cites="deerwester1990indexing">(<a href="../../shared/referencias/referencias.html#ref-deerwester1990indexing" role="doc-biblioref">Deerwester et al., 1990</a>)</span> ou <em>word embeddings</em>&nbsp;<span class="citation" data-cites="mikolov2013word2vec">(<a href="../../shared/referencias/referencias.html#ref-mikolov2013word2vec" role="doc-biblioref">Mikolov et al., 2013</a>)</span> discutidas no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/significado/cap-semantica-distribucional/cap-semantica-distribucional.html#sec-cap-semantica-distribucional" target="_blank" title="Volume 1">Semântica distribucional</a></span>. Há experimentos que obtiveram resultados positivos <span class="citation" data-cites="kuzi2016query">(<a href="../../shared/referencias/referencias.html#ref-kuzi2016query" role="doc-biblioref">Kuzi et al., 2016</a>)</span>, contudo se as embeddings forem obtidas a partir de textos genéricos e a coleção for de um domínio específico, os termos adicionados podem piorar a qualidade do <em>ranking</em>.</li>
+<li><strong>Técnicas baseadas no resultado da consulta</strong> analisam os documentos recuperados pela consulta inicial para então modificá-la. A primeira técnica nessa categoria é a <strong>realimentação de relevância</strong> (em inglês, <em>relevance feedback</em>) <span class="citation" data-cites="rocchio1971relevance">(<a href="../../shared/referencias/referencias.html#ref-rocchio1971relevance" role="doc-biblioref">Rocchio-Jr, 1971</a>)</span>. Ela consiste em solicitar que o usuário marque alguns documentos que ele considera relevantes e não relevantes. A reformulação da consulta consiste em modificar seu vetor para que ele se aproxime mais dos vetores dos documentos marcados como relevantes e se afaste dos vetores dos documentos não relevantes. Essa técnica costuma obter bons resultados, mas o ponto negativo é que os usuários não gostam de investir seu tempo fornecendo feedback. A alternativa então é supor que os primeiros <span class="math inline">\(k\)</span> documentos recuperados pela consulta original sejam relevantes e modificar o vetor da consulta com base neles. Este processo é conhecido como <strong>pseudo realimentação de relevância</strong> e pode ter o efeito negativo de piorar ainda mais os resultados caso o primeiro conjunto de documentos recuperados não tenha sido bom. Outras propostas que se enquadram nessa categoria incluem o uso de <em>word embeddings</em> geradas a partir do resultado da consulta <span class="citation" data-cites="diaz2016query">(<a href="../../shared/referencias/referencias.html#ref-diaz2016query" role="doc-biblioref">Diaz et al., 2016</a>)</span>.</li>
+<li><strong>Análise de logs de consulta</strong> de motores de busca pode fornecer termos que os usuários frequentemente adicionam às suas consultas. Esses termos podem então ser usados para expandir a consulta original. Essa abordagem mostrou resultados positivos em <span class="citation" data-cites="cui2002probabilistic">(<a href="../../shared/referencias/referencias.html#ref-cui2002probabilistic" role="doc-biblioref">Cui et al., 2002</a>)</span>.</li>
+</ul>
+<p>Mais recentemente, uma nova gama de trabalhos têm focado no caminho inverso, i.e., expandir os documentos. Nessa linha de investigação, destaca-se o trabalho de <span class="citation" data-cites="nogueira2019document">Nogueira et al. (<a href="../../shared/referencias/referencias.html#ref-nogueira2019document" role="doc-biblioref">2019</a>)</span> em que os documentos são enriquecidos com consultas que poderiam ser feitas com o intuito de recuperar o documento.</p>
+</section>
+<section id="sec-cap-ir-ferramentas" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="sec-cap-ir-ferramentas"><span class="header-section-number">2.6</span> Ferramentas e Bibliotecas</h2>
+<p>Há várias ferramentas (ou sistemas) de RI disponíveis tanto para fins comerciais como para fins de pesquisa. Esta seção aborda algumas das mais utilizadas.</p>
+<section id="sistemas-comerciais" class="level3" data-number="2.6.1">
+<h3 data-number="2.6.1" class="anchored" data-anchor-id="sistemas-comerciais"><span class="header-section-number">2.6.1</span> Sistemas Comerciais</h3>
+<p>Os sistemas comerciais mais populares são da Apache e baseiam-se no <strong>Lucene</strong><a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a>, uma biblioteca Java de código aberto. A biblioteca não é um sistema de RI completo. Com base nela, foram desenvolvidos o <strong>Solr</strong><a href="#fn20" class="footnote-ref" id="fnref20" role="doc-noteref"><sup>20</sup></a> e o <strong>Elasticsearch</strong><a href="#fn21" class="footnote-ref" id="fnref21" role="doc-noteref"><sup>21</sup></a> que fornecem interfaces de consulta mais amigável além de indexação distribuída para fins de escalabilidade. Tanto o Solr como o Elasticsearch são ferramentas de código aberto, possuem vasta documentação e são amplamente adotados na indústria. O Elasticsearch fornece melhor suporte a sistemas distribuídos e pode ser integrado com ferramentas de análise e visualização. Por outro lado, o Solr possui mais flexibilidade para customização.</p>
+</section>
+<section id="ferramentas-para-pesquisa" class="level3" data-number="2.6.2">
+<h3 data-number="2.6.2" class="anchored" data-anchor-id="ferramentas-para-pesquisa"><span class="header-section-number">2.6.2</span> Ferramentas para Pesquisa</h3>
+<p>Há várias ferramentas de código aberto construídas por pesquisadores dá área de RI que estão disponíveis e são usadas em trabalhos acadêmicos. Dentre elas, as mais utilizadas atualmente são:</p>
+<ul>
+<li>O <strong>Anserini</strong><a href="#fn22" class="footnote-ref" id="fnref22" role="doc-noteref"><sup>22</sup></a> e sua interface em Python (Pyserini<a href="#fn23" class="footnote-ref" id="fnref23" role="doc-noteref"><sup>23</sup></a>) foram elaborados por pesquisadores das universidades de Delaware e Waterloo&nbsp;<span class="citation" data-cites="yang2017anserini">(<a href="../../shared/referencias/referencias.html#ref-yang2017anserini" role="doc-biblioref">Yang et al., 2017</a>)</span> e tem o objetivo de facilitar o processo experimental em RI com ênfase na reprodutibilidade.</li>
+<li>O <strong>Terrier</strong><a href="#fn24" class="footnote-ref" id="fnref24" role="doc-noteref"><sup>24</sup></a> e sua interface em Python, o Pyterrier<a href="#fn25" class="footnote-ref" id="fnref25" role="doc-noteref"><sup>25</sup></a> <span class="citation" data-cites="pyterrier2020ictir">(<a href="../../shared/referencias/referencias.html#ref-pyterrier2020ictir" role="doc-biblioref">Macdonald; Tonellotto, 2020</a>)</span>, foram criados por pesquisadores da universidade de Glasgow que tem longa tradição na pesquisa em RI. O Terrier também dispõe de uma interface gráfica que permite indexar e consultar uma coleção sem a necessidade de escrever código.</li>
+<li>O projeto <strong>Lemur</strong><a href="#fn26" class="footnote-ref" id="fnref26" role="doc-noteref"><sup>26</sup></a> reúne uma série de componentes. O Indri é o motor de busca em si. O projeto é uma colaboração entre as Universidades de Massachusetts e Carnegie Mellon. O sistema Galago também é parte desse projeto e foi disponibilizado em conjunto com o livro de <span class="citation" data-cites="croft2010search">Croft et al. (<a href="../../shared/referencias/referencias.html#ref-croft2010search" role="doc-biblioref">2010</a>)</span>.</li>
+</ul>
+</section>
+</section>
+<section id="conclusão" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="conclusão"><span class="header-section-number">2.7</span> Conclusão</h2>
+<p>Este capítulo forneceu uma visão geral sobre a área de RI. O processo típico de RI foi introduzido, bem como os modelos clássicos. Demos ênfase à metodologia de avaliação dos resultados das consultas, dada a importância que esse tema tem na área. Também foram apontadas coleções de teste em português e ferramentas que podem ser usadas tanto no meio acadêmico como na indústria.</p>
+<p>Nessa primeira versão, o capítulo não abordou um tópico relevante e atual: a RI utilizando vetores densos. Em especial, o emprego da arquitetura Transformers <span class="citation" data-cites="aVaswani17">(<a href="../../shared/referencias/referencias.html#ref-aVaswani17" role="doc-biblioref">Vaswani et al., 2017</a>)</span> tem sido bastante difundido em RI (assim como em diversas tarefas de PLN). Por ora, o leitor interessado pode referir-se o artigo de <span class="citation" data-cites="lin2020pretrained">(<a href="../../shared/referencias/referencias.html#ref-lin2020pretrained" role="doc-biblioref">Lin et al., 2020</a>)</span> que apresenta um levantamento abrangente.</p>
+</section>
+<section id="sec-cap-ir-agradecimentos" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="sec-cap-ir-agradecimentos">Agradecimentos</h2>
+<p>Agradeço a Helena Caseli e a Graça Nunes pelo convite a contribuir com este livro. Também sou grata a Adriana Pagano, Felipe Paula, Lucas Pessutto, Luciana Bencke e João Comba pela revisão e comentários.</p>
+<!-- [^cap-ir-10]: em inglês, *vector space model* Comentário da Helena: por uma questão de padronização com o restante do livro, notas de rodapé como esta foram inseridas no texto -->
+<!-- [^cap-ir-12]: em inglês, *recall*
+
+[^cap-ir-13]: do inglês, *average precision*.
+
+[^cap-ir-14]: do inglês, *mean average precision*
+
+[^cap-ir-15]: do inglês, *normalized discounted cumulative gain* -->
+<!--[^cap-ir-23]: em inglês, *relevance feedback*-->
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="1" role="list" style="display: none">
+<div id="ref-alvares2005stembr" class="csl-entry" role="listitem">
+ALVARES, R. V.; GARCIA, A. C. B.; FERRAZ, I. <strong>STEMBR: A stemming algorithm for the Brazilian Portuguese language</strong>. Portuguese conference on artificial intelligence. <strong>Anais</strong>...Springer, 2005.
+</div>
+<div id="ref-baeza2011modern" class="csl-entry" role="listitem">
+BAEZA-YATES, R. A.; RIBEIRO-NETO, B. A. Modern Information Retrieval-the concepts and technology behind search. 2011.
+</div>
+<div id="ref-baeza2013recuperaccao" class="csl-entry" role="listitem">
+BAEZA-YATES, R.; RIBEIRO-NETO, B. <strong>Recupera<span>ç</span><span>ã</span>o de Informa<span>ç</span><span>ã</span>o-: Conceitos e Tecnologia das M<span>á</span>quinas de Busca</strong>. [s.l.] Bookman Editora, 2013.
+</div>
+<div id="ref-bonifacio2021mmarco" class="csl-entry" role="listitem">
+BONIFACIO, L. H. et al. <strong>mMARCO: A Multilingual Version of MS MARCO Passage Ranking Dataset</strong>., 2021. Disponível em: &lt;<a href="https://arxiv.org/abs/2108.13897">https://arxiv.org/abs/2108.13897</a>&gt;
+</div>
+<div id="ref-buckley2017evaluating" class="csl-entry" role="listitem">
+BUCKLEY, C.; VOORHEES, E. M. <strong>Evaluating evaluation measure stability</strong>. ACM SIGIR Forum. <strong>Anais</strong>...ACM New York, NY, USA, 2017.
+</div>
+<div id="ref-carpineto2012survey" class="csl-entry" role="listitem">
+CARPINETO, C.; ROMANO, G. A survey of automatic query expansion in information retrieval. <strong>Acm Computing Surveys (CSUR)</strong>, v. 44, n. 1, p. 1–50, 2012.
+</div>
+<div id="ref-croft2010search" class="csl-entry" role="listitem">
+CROFT, W. B.; METZLER, D.; STROHMAN, T. <strong>Search engines: Information retrieval in practice</strong>. [s.l.] Addison-Wesley, 2010. v. 520
+</div>
+<div id="ref-cui2002probabilistic" class="csl-entry" role="listitem">
+CUI, H. et al. <strong>Probabilistic query expansion using query logs</strong>. Proceedings of the 11th international conference on World Wide Web. <strong>Anais</strong>...2002.
+</div>
+<div id="ref-deerwester1990indexing" class="csl-entry" role="listitem">
+DEERWESTER, S. et al. Indexing by latent semantic analysis. <strong>Journal of the American society for information science</strong>, v. 41, n. 6, p. 391–407, 1990.
+</div>
+<div id="ref-diaz2016query" class="csl-entry" role="listitem">
+DIAZ, F.; MITRA, B.; CRASWELL, N. <strong>Query Expansion with Locally-Trained Word Embeddings</strong>. Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics. <strong>Anais</strong>...2016.
+</div>
+<div id="ref-flores2010assessing" class="csl-entry" role="listitem">
+FLORES, F. N.; MOREIRA, V. P.; HEUSER, C. A. <strong>Assessing the impact of stemming accuracy on information retrieval</strong>. International Conference on Computational Processing of the Portuguese Language. <strong>Anais</strong>...Springer, 2010.
+</div>
+<div id="ref-jarvelin2002cumulated" class="csl-entry" role="listitem">
+JÄRVELIN, K.; KEKÄLÄINEN, J. Cumulated gain-based evaluation of IR techniques. <strong>ACM Transactions on Information Systems (TOIS)</strong>, v. 20, n. 4, p. 422–446, 2002.
+</div>
+<div id="ref-kuzi2016query" class="csl-entry" role="listitem">
+KUZI, S.; SHTOK, A.; KURLAND, O. <strong>Query expansion using word embeddings</strong>. Proceedings of the 25th ACM international on conference on information and knowledge management. <strong>Anais</strong>...2016.
+</div>
+<div id="ref-lesk1995seven" class="csl-entry" role="listitem">
+LESK, M. <strong>The seven ages of information retrieval</strong>., 1995. Disponível em: &lt;<a href="https://archive.ifla.org/VI/5/op/udtop5/udt-op5.pdf">https://archive.ifla.org/VI/5/op/udtop5/udt-op5.pdf</a>&gt;
+</div>
+<div id="ref-lin2020pretrained" class="csl-entry" role="listitem">
+LIN, J.; NOGUEIRA, R.; YATES, A. Pretrained Transformers for Text Ranking: BERT and Beyond. <strong>arXiv preprint arXiv:2010.06467</strong>, 2020.
+</div>
+<div id="ref-lovins1968development" class="csl-entry" role="listitem">
+LOVINS, J. B. Development of a stemming algorithm. <strong>Mech. Transl. Comput. Linguistics</strong>, v. 11, n. 1-2, p. 22–31, 1968.
+</div>
+<div id="ref-pyterrier2020ictir" class="csl-entry" role="listitem">
+MACDONALD, C.; TONELLOTTO, N. <strong>Declarative Experimentation in Information Retrieval using PyTerrier</strong>. Proceedings of ICTIR 2020. <strong>Anais</strong>...2020.
+</div>
+<div id="ref-manning2008introduction" class="csl-entry" role="listitem">
+MANNING, C. D.; SCHÜTZE, H.; RAGHAVAN, P. <strong>Introduction to information retrieval</strong>. [s.l.] Cambridge University Press Cambridge, 2008.
+</div>
+<div id="ref-mikolov2013word2vec" class="csl-entry" role="listitem">
+MIKOLOV, T. et al. <strong>Distributed Representations of Words and Phrases and their Compositionality</strong>. (C. J. Burges et al., Eds.)Advances in Neural Information Processing Systems. <strong>Anais</strong>...Curran Associates, Inc., 2013. Disponível em: &lt;<a href="https://proceedings.neurips.cc/paper_files/paper/2013/file/9aa42b31882ec039965f3c4923ce901b-Paper.pdf">https://proceedings.neurips.cc/paper_files/paper/2013/file/9aa42b31882ec039965f3c4923ce901b-Paper.pdf</a>&gt;
+</div>
+<div id="ref-nogueira2019document" class="csl-entry" role="listitem">
+NOGUEIRA, R. et al. Document expansion by query prediction. <strong>arXiv preprint arXiv:1904.08375</strong>, 2019.
+</div>
+<div id="ref-orengo2006study" class="csl-entry" role="listitem">
+ORENGO, V. M.; BURIOL, L. S.; COELHO, A. R. <strong>A study on the use of stemming for monolingual ad-hoc Portuguese information retrieval</strong>. Workshop of the Cross-Language Evaluation Forum for European Languages. <strong>Anais</strong>...Springer, 2006.
+</div>
+<div id="ref-orengo2001stemming" class="csl-entry" role="listitem">
+ORENGO, V. M.; HUYCK, C. <strong><a href="https://doi.org/10.1109/SPIRE.2001.989755">A Stemming Algorithmm for the Portuguese Language</a></strong>. Proceedings Eighth Symposium on String Processing and Information Retrieval. <strong>Anais</strong>...IEEE Computer Society, 2001.
+</div>
+<div id="ref-Porter_1980" class="csl-entry" role="listitem">
+PORTER, M. F. <a href="https://doi.org/10.1108/eb046814">An algorithm for suffix stripping</a>. <strong>Program</strong>, v. 14, n. 3, p. 130–137, 1980.
+</div>
+<div id="ref-vanRijsbergen1979" class="csl-entry" role="listitem">
+RIJSBERGEN, C. JOOST. VAN. <strong>Information Retrieval</strong>. [s.l.] Butterworths, 1979.
+</div>
+<div id="ref-robertson1976relevance" class="csl-entry" role="listitem">
+ROBERTSON, S. E.; SPÄRCK JONES, K. Relevance weighting of search terms. <strong>Journal of the American Society for Information science</strong>, v. 27, n. 3, p. 129–146, 1976.
+</div>
+<div id="ref-rocchio1971relevance" class="csl-entry" role="listitem">
+ROCCHIO-JR, J. J. Relevance feedback in information retrieval. <strong>The SMART retrieval system: experiments in automatic document processing</strong>, 1971.
+</div>
+<div id="ref-salton1983introduction" class="csl-entry" role="listitem">
+SALTON, G.; MCGILL, M. J. <strong>Introduction to Modern Information Retrieval</strong>. [s.l.] McGraw-Hill, 1983.
+</div>
+<div id="ref-sanderson2010test" class="csl-entry" role="listitem">
+SANDERSON, M. et al. Test collection based evaluation of information retrieval systems. <strong>Foundations and Trends<span></span> in Information Retrieval</strong>, v. 4, n. 4, p. 247–375, 2010.
+</div>
+<div id="ref-santos2004key" class="csl-entry" role="listitem">
+SANTOS, D.; ROCHA, P. <strong>The key to the first <span>CLEF</span> with Portuguese: Topics, questions and answers in <span>CHAVE</span></strong>. Workshop of the Cross-Language Evaluation Forum for European Languages. <strong>Anais</strong>...2004.
+</div>
+<div id="ref-spark1975report" class="csl-entry" role="listitem">
+SPÄRCK JONES, K. Report on the need for and provision of an ’ideal’ information retrieval test collection. <strong>Computer Laboratory</strong>, 1975.
+</div>
+<div id="ref-jones2000probabilistic" class="csl-entry" role="listitem">
+SPÄRCK JONES, K.; WALKER, S.; ROBERTSON, S. E. A probabilistic model of information retrieval: development and comparative experiments. <strong>Information processing &amp; management</strong>, v. 36, n. 6, p. 809–840, 2000.
+</div>
+<div id="ref-aVaswani17" class="csl-entry" role="listitem">
+VASWANI, A. et al. <strong>Attention is All you Need</strong>. (I. Guyon et al., Eds.)Advances in Neural Information Processing Systems. <strong>Anais</strong>...Curran Associates, Inc., 2017. Disponível em: &lt;<a href="https://proceedings.neurips.cc/paper/2017/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html">https://proceedings.neurips.cc/paper/2017/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html</a>&gt;
+</div>
+<div id="ref-yang2017anserini" class="csl-entry" role="listitem">
+YANG, P.; FANG, H.; LIN, J. <strong>Anserini: Enabling the use of lucene for information retrieval research</strong>. Proceedings of the 40th international ACM SIGIR conference on research and development in information retrieval. <strong>Anais</strong>...2017.
+</div>
+<div id="ref-zobel1998reliable" class="csl-entry" role="listitem">
+ZOBEL, J. <strong>How reliable are the results of large-scale information retrieval experiments?</strong> Proceedings of the 21st annual international ACM SIGIR conference on Research and development in information retrieval. <strong>Anais</strong>...ACM, 1998.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Para um relato mais detalhado sobre as origens da RI, há o artigo de <span class="citation" data-cites="lesk1995seven">Lesk (<a href="../../shared/referencias/referencias.html#ref-lesk1995seven" role="doc-biblioref">1995</a>)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://wpdevshed.com/how-many-people-use-google/" class="uri">https://wpdevshed.com/how-many-people-use-google/</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://nlp.stanford.edu/IR-book/" class="uri">https://nlp.stanford.edu/IR-book/</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="https://ciir.cs.umass.edu/irbook/" class="uri">https://ciir.cs.umass.edu/irbook/</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a href="https://www.nltk.org/" class="uri">https://www.nltk.org/</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p><a href="https://spacy.io/models/pt" class="uri">https://spacy.io/models/pt</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p><a href="https://www.linguateca.pt/chave/stopwords/" class="uri">https://www.linguateca.pt/chave/stopwords/</a><a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p><a href="http://snowball.tartarus.org/algorithms/portuguese/stemmer.html" class="uri">http://snowball.tartarus.org/algorithms/portuguese/stemmer.html</a><a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p><a href="https://www.vivianemoreira.org/rslp" class="uri">https://www.vivianemoreira.org/rslp</a><a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p><a href="https://snowballstem.org/" class="uri">https://snowballstem.org/</a><a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>Note que o valor do cosseno irá ficar no intervalo [0,1] e não [-1,1] pois os escores gerados pelo TF-IDF são positivos.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p><a href="https://trec.nist.gov/" class="uri">https://trec.nist.gov/</a><a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p><a href="https://research.nii.ac.jp/ntcir/" class="uri">https://research.nii.ac.jp/ntcir/</a><a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p><a href="https://www.linguateca.pt/" class="uri">https://www.linguateca.pt/</a><a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p><a href="https://www.linguateca.pt/CLEF/" class="uri">https://www.linguateca.pt/CLEF/</a><a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p><a href="https://github.com/Petroles/regis-collection" class="uri">https://github.com/Petroles/regis-collection</a><a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p><a href="https://microsoft.github.io/msmarco/" class="uri">https://microsoft.github.io/msmarco/</a><a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p>O termo <strong>expansão automática de consultas</strong> é bastante empregado. Contudo, a consulta nem sempre é expandida e, por isso, preferimos adotar o termo <strong>modificação automática de consultas</strong>.<a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p><a href="https://lucene.apache.org/" class="uri">https://lucene.apache.org/</a><a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20"><p><a href="https://solr.apache.org/" class="uri">https://solr.apache.org/</a><a href="#fnref20" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn21"><p><a href="https://www.elastic.co/" class="uri">https://www.elastic.co/</a><a href="#fnref21" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn22"><p><a href="https://github.com/castorini/anserini" class="uri">https://github.com/castorini/anserini</a><a href="#fnref22" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn23"><p><a href="http://pyserini.io/" class="uri">http://pyserini.io/</a><a href="#fnref23" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn24"><p><a href="http://terrier.org/" class="uri">http://terrier.org/</a><a href="#fnref24" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn25"><p><a href="https://github.com/terrier-org/pyterrier" class="uri">https://github.com/terrier-org/pyterrier</a><a href="#fnref25" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn26"><p><a href="https://lemurproject.org/" class="uri">https://lemurproject.org/</a><a href="#fnref26" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html" class="pagination-link" aria-label="Classificação de texto">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Classificação de texto</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html" class="pagination-link" aria-label="Extração de Informação">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://brasileiraspln.com/">
+<p>Brasileiras em PLN, 2026. Todos os direitos reservados</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

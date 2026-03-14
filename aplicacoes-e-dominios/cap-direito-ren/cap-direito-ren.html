@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ellen Souza">
+<meta name="author" content="Hidelberg O. Albuquerque">
+<meta name="author" content="Nádia F. F. Silva">
+<meta name="author" content="Matheus Cerqueira">
+<meta name="author" content="André C. P. L. F. de Carvalho">
+<meta name="author" content="Adriano L. I. Oliveira">
+
+<title>13&nbsp; Reconhecimento de Entidades Nomeadas no Domínio Legal – Processamento de Linguagem Natural</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 1em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" rel="next">
+<link href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8676d8d0f01772f2903466dda9733bcf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sem resultados",
+    "search-matching-documents-text": "Resultados encontrados",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-111J572WMR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-111J572WMR');
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../shared/bpln.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../shared/logos/bpln.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Processamento de Linguagem Natural</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../Livro_PLN_BPLN_4ed_vol3.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
+    <div class="dropdown">
+      <a href="" title="Compartilhar" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Compartilhar"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sobre o Volume 3</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Aplicações e Domínios</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Classificação de texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-mt/cap-mt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tradução Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sumarização Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Complexidade Textual e suas Tarefas Relacionadas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Classificação de Áudio aplicada à Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">PLN e Responsabilidade Social</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/referencias/referencias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referências</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Apêndices</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Considerações prévias à sumarização automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice-abstrativa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Exemplo de sumarização abstrativa</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../autores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Sobre as/os autoras/es</strong></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Conteúdo</h2>
+   
+  <ul>
+  <li><a href="#sec-direito-ren-introducao" id="toc-sec-direito-ren-introducao" class="nav-link active" data-scroll-target="#sec-direito-ren-introducao"><span class="header-section-number">13.1</span> Introdução</a></li>
+  <li><a href="#sec-direito-ren-contextualizacao" id="toc-sec-direito-ren-contextualizacao" class="nav-link" data-scroll-target="#sec-direito-ren-contextualizacao"><span class="header-section-number">13.2</span> Contextualização</a></li>
+  <li><a href="#iniciativas-de-ren-legal" id="toc-iniciativas-de-ren-legal" class="nav-link" data-scroll-target="#iniciativas-de-ren-legal"><span class="header-section-number">13.3</span> Iniciativas de REN-Legal</a></li>
+  <li><a href="#iniciativas-de-ren-legal-em-língua-portuguesa" id="toc-iniciativas-de-ren-legal-em-língua-portuguesa" class="nav-link" data-scroll-target="#iniciativas-de-ren-legal-em-língua-portuguesa"><span class="header-section-number">13.4</span> Iniciativas de REN-Legal em língua portuguesa</a>
+  <ul class="collapse">
+  <li><a href="#CorporaREN-Legal" id="toc-CorporaREN-Legal" class="nav-link" data-scroll-target="#CorporaREN-Legal"><span class="header-section-number">13.4.1</span> <em>Corpora</em> para REN-Legal</a></li>
+  <li><a href="#modelos-de-linguagem-neurais-para-ren-legal" id="toc-modelos-de-linguagem-neurais-para-ren-legal" class="nav-link" data-scroll-target="#modelos-de-linguagem-neurais-para-ren-legal"><span class="header-section-number">13.4.2</span> Modelos de linguagem neurais para REN-Legal</a></li>
+  </ul></li>
+  <li><a href="#modelos-de-linguagem-de-grande-escala-llm-para-ren" id="toc-modelos-de-linguagem-de-grande-escala-llm-para-ren" class="nav-link" data-scroll-target="#modelos-de-linguagem-de-grande-escala-llm-para-ren"><span class="header-section-number">13.5</span> Modelos de linguagem de grande escala (LLM) para REN</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-direito-ren-REN-Legal-LLM-PT" id="toc-sec-cap-direito-ren-REN-Legal-LLM-PT" class="nav-link" data-scroll-target="#sec-cap-direito-ren-REN-Legal-LLM-PT"><span class="header-section-number">13.5.1</span> LLM para REN-Legal em língua portuguesa</a></li>
+  </ul></li>
+  <li><a href="#aplicação-de-ren-em-sistema-de-recuperação-de-informação-legislativa" id="toc-aplicação-de-ren-em-sistema-de-recuperação-de-informação-legislativa" class="nav-link" data-scroll-target="#aplicação-de-ren-em-sistema-de-recuperação-de-informação-legislativa"><span class="header-section-number">13.6</span> Aplicação de REN em sistema de recuperação de informação legislativa</a></li>
+  <li><a href="#considerações-finais" id="toc-considerações-finais" class="nav-link" data-scroll-target="#considerações-finais"><span class="header-section-number">13.7</span> Considerações finais</a></li>
+  <li><a href="#agradecimentos" id="toc-agradecimentos" class="nav-link" data-scroll-target="#agradecimentos">Agradecimentos</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-cap-direito-ren" class="quarto-section-identifier"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span></h1>
+<p class="subtitle lead">Um Panorama para a Língua Portuguesa</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading"></div>
+    <div class="quarto-title-meta-contents">
+             <p>Ellen Souza </p>
+             <p>Hidelberg O. Albuquerque </p>
+             <p>Nádia F. F. Silva </p>
+             <p>Matheus Cerqueira </p>
+             <p>André C. P. L. F. de Carvalho </p>
+             <p>Adriano L. I. Oliveira </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Publicado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">20/11/2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+
+</div>
+<div>
+<div class="callout-body-container callout-body">
+<p>Este capítulo também está disponível em <a href="cap-direito-ren.pdf">PDF</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-target=".callout-cite-contents" aria-controls="callout-cite" aria-label="Toggle callout" aria-expanded="false" data-bs-toggle="collapse">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Como citar
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
+<i class="callout-toggle"></i>
+</div>
+</div>
+<div id="callout-cite" class="callout-cite-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>@InCollection{BPLN_livro_cap-direito-ren:2026,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    author    = {Souza, Ellen and Albuquerque, Hidelberg O. and Silva, Nádia F. F. and Cerqueira, Matheus and Carvalho, André C. P. L. F. de and Oliveira, Adriano L. I.},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    title     = {Reconhecimento de Entidades Nomeadas no Domínio Legal: Um Panorama para a Língua Portuguesa},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    publisher = {BPLN},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    year      = {2026},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    editor    = {Caseli, H. M. and Nunes, M. G. V.},</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    type      = {Book Chapter},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    chapter   = {13},</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    edition   = {4},</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    volume    = {3},</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    isbn      = {XXXXXXXXXXXXXXXX},</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    url       = {https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html},</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mais recursos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="https://www.youtube.com/watch?v=O9c1tXbvQ7Y">Vídeo</a></p>
+</div>
+</div>
+<section id="sec-direito-ren-introducao" class="level2" data-number="13.1">
+<h2 data-number="13.1" class="anchored" data-anchor-id="sec-direito-ren-introducao"><span class="header-section-number">13.1</span> Introdução</h2>
+<p>Neste capítulo, são apresentadas as principais iniciativas na área de reconhecimento de entidades nomeadas no domínio legal, com foco na língua portuguesa. São descritos os principais <em>corpora</em>, modelos de linguagem neurais e de larga escala, além de exemplo de aplicação de entidades nomeadas na recuperação de documentos legislativos.</p>
+<p>O <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ie/cap-ie.html#sec-cap-ie" target="_blank" title="Volume 3">Extração de Informação</a></span> apresenta conceitos relacionados à Extração de Informação (EI), que é, normalmente, dividida em diversas tarefas de interesse, com foco no tipo de informação a ser extraída do texto, entre elas, o Reconhecimento de Entidades Nomeadas (REN), a Extração de Relações (ER) e a Extração de Eventos (EE). Com relação ao REN, são apresentadas informações históricas, conceituação formal, abordagens para rotulação, métricas de avaliação, principais entidades e <em>corpora</em>, e estado da arte dos modelos de REN para a língua portuguesa.</p>
+<p>O <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito/cap-direito.html#sec-cap-direito" target="_blank" title="Volume 3">PLN no Direito</a></span>, por sua vez, apresenta diferentes aspectos associados ao Processamento de Linguagem Natural (PLN) na esfera do Direito. As tarefas de PLN envolvidas, em geral, são a análise textual e a representação de conteúdos por meio de diferentes técnicas, mas há várias abordagens e estudos voltados para diferentes finalidades. São descritos desafios e perspectivas no âmbito de trabalhos que exploram materiais produzidos em português, considerando somente o cenário do Direito brasileiro. Também, é exemplificada uma aplicação de análise de sentimentos em Direito.</p>
+</section>
+<section id="sec-direito-ren-contextualizacao" class="level2" data-number="13.2">
+<h2 data-number="13.2" class="anchored" data-anchor-id="sec-direito-ren-contextualizacao"><span class="header-section-number">13.2</span> Contextualização</h2>
+<p>Nos últimos anos, houve um grande crescimento no uso de técnicas de PLN para a área jurídica, que produz uma grande quantidade de dados no formato de texto <span class="citation" data-cites="Zhong2020NLP">(<a href="../../shared/referencias/referencias.html#ref-Zhong2020NLP" role="doc-biblioref">Zhong et al., 2020</a>)</span>. Em várias atividades do meio jurídico, é necessário extrair informações desses textos. No entanto, a crescente quantidade de documentos legais, associada ao tamanho desses documentos, torna muitas vezes impraticável sua análise manual. A Inteligência Artificial (IA), em particular PLN, provê técnicas que podem automatizar a extração de conhecimento de textos. Por conta disso, PLN é cada vez mais utilizada para lidar com a grande quantidade de documentos produzidos pelas organizações legislativas e judiciais. Em muitos países, há um considerável acúmulo de casos jurídicos a serem processados e o número de documentos gerados é enorme <span class="citation" data-cites="Kapoor2022">(<a href="../../shared/referencias/referencias.html#ref-Kapoor2022" role="doc-biblioref">Kapoor et al., 2022</a>)</span>. A Câmara dos Deputados brasileira, desde sua fundação, já processou mais de 144 mil projetos de lei e tem processado aproximadamente 30 mil projetos de lei a cada ano&nbsp;<span class="citation" data-cites="BRANDT2020">(<a href="../../shared/referencias/referencias.html#ref-BRANDT2020" role="doc-biblioref">Brandt, 2020</a>)</span>. Para cada projeto, diversos documentos são produzidos e agregados, em diferentes etapas, até sua discussão e votação.</p>
+<p>O levantamento anual do Conselho Nacional de Justiça revelou um aumento significativo no número de projetos de IA no Poder Judiciário Brasileiro em 2023<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, como parte do Programa Justiça 4.0. Em comparação com 2022, houve um crescimento de 17% no número de tribunais com projetos de IA. Das 140 soluções tecnológicas mapeadas, 63 já estão em uso ou aptas a serem utilizadas e 46 estão em fase final de desenvolvimento. Os principais motivadores para o uso da IA pelos tribunais incluem o aumento da produtividade, a busca por inovação, a melhoria na qualidade dos serviços e a redução dos custos. Em 2018, em parceira com a Universidade de Brasília (UnB), o Supremo Tribunal Federal (STF) desenvolveu o Victor&nbsp;<span class="citation" data-cites="HartmannPeixotoVictor2020">(<a href="../../shared/referencias/referencias.html#ref-HartmannPeixotoVictor2020" role="doc-biblioref">Hartmann Peixoto, 2020</a>)</span>, uma IA que separa e classifica as peças processuais mais usadas nas atividades do STF e identifica os temas de repercussão geral de maior incidência. Além do projeto Victor, o STF desenvolveu a VitorIA que identifica, no acervo do Tribunal, os processos que tratam do mesmo assunto e os agrupa automaticamente, e a RAFA 2030 (Redes Artificiais Focadas na Agenda 2030), uma IA, lançada em 2022, para apoiar a classificação de processos de acordo com os Objetivos de Desenvolvimento Sustentável da Agenda 2030 da Organização das Nações Unidas<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>Em 2019, a Câmara dos Deputados lançou o Ulysses, um conjunto institucional de iniciativas de IA com o propósito de aumentar a transparência, melhorar a relação da Câmara com os cidadãos e apoiar a atividade legislativa com análises complexas&nbsp;<span class="citation" data-cites="ALMEIDA2021">(<a href="../../shared/referencias/referencias.html#ref-ALMEIDA2021" role="doc-biblioref">Almeida, 2021</a>)</span>. Inicialmente, o Ulysses analisava, classificava e distribuía os pedidos dos parlamentares entre as 22 áreas de conhecimento da Consultoria Legislativa da Câmara. Posteriormente, em parceria com pesquisadores do Instituto de Ciências Matemáticas e de Computação da Universidade de São Paulo (ICMC-USP), novos algoritmos<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> foram desenvolvidos, permitindo a busca por documentos similares&nbsp;<span class="citation" data-cites="Souza2021JURIX DouglasBracis2022UlyssesRFQ AlbuquerquePROPOR2024UlyssesNERQ DouglasUlyssesRF-CorpusLRE2024">(<a href="../../shared/referencias/referencias.html#ref-AlbuquerquePROPOR2024UlyssesNERQ" role="doc-biblioref">Albuquerque et al., 2024</a>; <a href="../../shared/referencias/referencias.html#ref-Souza2021JURIX" role="doc-biblioref">Souza et al., 2021</a>; <a href="../../shared/referencias/referencias.html#ref-DouglasBracis2022UlyssesRFQ" role="doc-biblioref">Vitório et al., 2022</a>, <a href="../../shared/referencias/referencias.html#ref-DouglasUlyssesRF-CorpusLRE2024" role="doc-biblioref">2024</a>)</span>, análise do posicionamento de cidadãos sobre um projeto de lei em tramitação <span class="citation" data-cites="NadiaBracis2021TopicModels DyonnatanEPIA2022UlyssesSD-Br">(<a href="../../shared/referencias/referencias.html#ref-DyonnatanEPIA2022UlyssesSD-Br" role="doc-biblioref">Maia et al., 2022</a>; <a href="../../shared/referencias/referencias.html#ref-NadiaBracis2021TopicModels" role="doc-biblioref">Silva et al., 2021</a>)</span>, reconhecimento de entidades relevantes para o domínio legislativo <span class="citation" data-cites="Albuquerque2022UlyssesNER Rosimeire2022 AlbuquerqueEPIA2023-DLUlyssesNER">(<a href="../../shared/referencias/referencias.html#ref-Albuquerque2022UlyssesNER" role="doc-biblioref">Albuquerque et al., 2022</a>, <a href="../../shared/referencias/referencias.html#ref-AlbuquerqueEPIA2023-DLUlyssesNER" role="doc-biblioref">2023a</a>; <a href="../../shared/referencias/referencias.html#ref-Rosimeire2022" role="doc-biblioref">Costa et al., 2022</a>)</span>, além da construção de modelos de linguagem específicos para o domínio legislativo <span class="citation" data-cites="EduardoPROPOR2024RoBERTaLexPT">(<a href="../../shared/referencias/referencias.html#ref-EduardoPROPOR2024RoBERTaLexPT" role="doc-biblioref">Garcia et al., 2024</a>)</span> e um grande <em>corpus</em>, o Ulysses Tesemõ <span class="citation" data-cites="FelipeUlyssesTesemoLRE2024">(<a href="../../shared/referencias/referencias.html#ref-FelipeUlyssesTesemoLRE2024" role="doc-biblioref">Siqueira et al., 2024</a>)</span>, composto por mais de 3,5 milhões de arquivos, totalizando 30,7 GiB de texto bruto, coletados de 159 fontes que abrangem dados judiciais, legislativos, acadêmicos, notícias e outros documentos relacionados.</p>
+<p>O domínio legal abrange uma grande variedade de textos jurídicos, incluindo legislação, jurisprudência e trabalhos acadêmicos&nbsp;<span class="citation" data-cites="maxwell2008">(<a href="../../shared/referencias/referencias.html#ref-maxwell2008" role="doc-biblioref">Maxwell; Schafer, 2008</a>)</span>. A natureza dos documentos legais também acrescenta um novo desafio às aplicações de PLN que pode não estar presente em outros domínios, pois esses documentos são, tipicamente, muito longos, desestruturados, contém ruídos, e são escritos usando jargão e uma linguagem específica do domínio <span class="citation" data-cites="Kapoor2022">(<a href="../../shared/referencias/referencias.html#ref-Kapoor2022" role="doc-biblioref">Kapoor et al., 2022</a>)</span>. Há iniciativas em várias tarefas de PLN e IA, como: Recuperação de Informação Legal <span class="citation" data-cites="Souza2021JURIX Chalkidis2021">(<a href="../../shared/referencias/referencias.html#ref-Chalkidis2021" role="doc-biblioref">Chalkidis et al., 2021</a>; <a href="../../shared/referencias/referencias.html#ref-Souza2021JURIX" role="doc-biblioref">Souza et al., 2021</a>)</span>, Sumarização de Texto <span class="citation" data-cites="Kornilova2019">(<a href="../../shared/referencias/referencias.html#ref-Kornilova2019" role="doc-biblioref">Kornilova; Eidelman, 2019</a>)</span>, Previsão de Julgamentos <span class="citation" data-cites="Chalkidis2019">(<a href="../../shared/referencias/referencias.html#ref-Chalkidis2019" role="doc-biblioref">Chalkidis et al., 2019</a>)</span>, Segmentação Semântica <span class="citation" data-cites="Malik2021">(<a href="../../shared/referencias/referencias.html#ref-Malik2021" role="doc-biblioref">Malik et al., 2021</a>)</span> e Reconhecimento de Entidades Nomeadas&nbsp;<span class="citation" data-cites="LuzdeAraujo2018 castro2019deep ALLES2018DOUCorpus Albuquerque2022UlyssesNER Rosimeire2022">(<a href="../../shared/referencias/referencias.html#ref-Albuquerque2022UlyssesNER" role="doc-biblioref">Albuquerque et al., 2022</a>; <a href="../../shared/referencias/referencias.html#ref-ALLES2018DOUCorpus" role="doc-biblioref">Alles, 2018</a>; <a href="../../shared/referencias/referencias.html#ref-LuzdeAraujo2018" role="doc-biblioref">Araujo et al., 2018</a>; <a href="../../shared/referencias/referencias.html#ref-castro2019deep" role="doc-biblioref">Castro, 2019</a>; <a href="../../shared/referencias/referencias.html#ref-Rosimeire2022" role="doc-biblioref">Costa et al., 2022</a>)</span>.</p>
+<p><em>Legal Named Entity Recognition</em> ou reconhecimento de entidades nomeadas no domínio legal (REN-Legal), tem como objetivo detectar e rotular todas as instâncias de entidades nomeadas específicas, juridicamente relevantes, dentro de textos legais <span class="citation" data-cites="cardellino-etal-2017-legal Bonifacio2020DrugSeizuresCorpus cabrera-diego-gheewala-2023-jus">(<a href="../../shared/referencias/referencias.html#ref-Bonifacio2020DrugSeizuresCorpus" role="doc-biblioref">Bonifacio et al., 2020</a>; <a href="../../shared/referencias/referencias.html#ref-cabrera-diego-gheewala-2023-jus" role="doc-biblioref">Cabrera-Diego; Gheewala, 2023</a>; <a href="../../shared/referencias/referencias.html#ref-cardellino-etal-2017-legal" role="doc-biblioref">Cardellino et al., 2017</a>)</span>. Considerando que os relatórios jurídicos contêm um grande número de termos e terminologias complexas, identificar entidades é um aspecto crucial na organização de informações e conhecimento dentro do domínio. É uma tarefa com grande importância, pois consiste no primeiro passo da análise semântica do texto, com potencial aplicação em diversas tarefas. Contudo, estudos sobre REN-Legal para a língua portuguesa evidenciam que os modelos utilizados para este idioma enfrentam desafios não encontrados para outros idiomas, o que pode ser explicado pelo baixo volume de <em>corpora</em>, ferramentas e modelos pré-treinados desenvolvidos para a língua portuguesa&nbsp;<span class="citation" data-cites="castro2019deep Albuquerque2023-NERSurvey">(<a href="../../shared/referencias/referencias.html#ref-Albuquerque2023-NERSurvey" role="doc-biblioref">Albuquerque et al., 2023b</a>; <a href="../../shared/referencias/referencias.html#ref-castro2019deep" role="doc-biblioref">Castro, 2019</a>)</span>, necessitando de um esforço maior, principalmente no desenvolvimento de recursos e abordagens, como ocorre com a língua inglesa&nbsp;<span class="citation" data-cites="pirovani2019crf+">(<a href="../../shared/referencias/referencias.html#ref-pirovani2019crf+" role="doc-biblioref">Pirovani, 2019</a>)</span>.</p>
+</section>
+<section id="iniciativas-de-ren-legal" class="level2" data-number="13.3">
+<h2 data-number="13.3" class="anchored" data-anchor-id="iniciativas-de-ren-legal"><span class="header-section-number">13.3</span> Iniciativas de REN-Legal</h2>
+<p>A revisão sistemática apresentada por <span class="citation" data-cites="Solihin2021RS">Firdaus Solihin; Makarim (<a href="../../shared/referencias/referencias.html#ref-Solihin2021RS" role="doc-biblioref">2021</a>)</span> mapeou 4.798 pesquisas sobre Extração de Informação no domínio legal, entre janeiro de 1990 e dezembro de 2020, extraindo dados de 107 estudos selecionados. Os autores relatam que 53% das pesquisas utilizaram <em>corpora</em> compostos de decisões judiciais, 23% de leis ou regulações, 21% utilizaram outros documentos legais, e os demais 4% utilizaram <em>corpora</em> abertos pré-existentes. Os estudos mostraram que as pesquisas utilizando REN-Legal tiveram maior destaque (acima de 60 estudos), ressaltando sua importância para a EI.</p>
+<p>Para se ter uma ideia do avanço do estado da arte, para a edição deste capítulo foi executada uma pesquisa amostral das publicações sobre REN-Legal utilizando o <em>Google Scholar</em><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Foram utilizadas duas <em>strings</em> de busca sobre REN, uma sem informação de domínio, e a outra com o domínio legal<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. Para nossos propósitos, foram selecionados arbitrariamente os 100 primeiros artigos de cada resultado, filtrados pelo título e pelo resumo, no período de 2010 a 2024<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. A <a href="#fig-direito-ren-state-of-art" class="quarto-xref">Figura&nbsp;<span>13.1</span></a> apresenta o resultado amostral do avanço das pesquisas sobre REN-Legal, principalmente a partir de 2017, ressaltando a importância dada a este domínio nos últimos anos.</p>
+<div id="fig-direito-ren-state-of-art" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-direito-ren-state-of-art-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;13.1: Amostra da evolução do estado da arte de REN-Legal
+</figcaption>
+<div aria-describedby="fig-direito-ren-state-of-art-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/ner-legal-vs-geral_PNG.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+</figure>
+</div>
+<p>Além da natureza global e complexidade documental próprias do domínio, alguns fatores como diferenças culturais, idioma, linguagem, padronização de documentos, entre outros, podem ser determinantes para o sucesso das aplicações desenvolvidas. Também é preciso considerar seus subdomínios jurídicos existentes (e.g., processual, penal, trabalhista, previdenciário etc.), e suas esferas de atuação (e.g., tipos de tribunais, jurisdição etc.)&nbsp;<span class="citation" data-cites="AKBIK Solihin2021RS cabrera-diego-gheewala-2023-jus">(<a href="../../shared/referencias/referencias.html#ref-AKBIK" role="doc-biblioref">Akbik et al., 2016</a>; <a href="../../shared/referencias/referencias.html#ref-cabrera-diego-gheewala-2023-jus" role="doc-biblioref">Cabrera-Diego; Gheewala, 2023</a>; <a href="../../shared/referencias/referencias.html#ref-Solihin2021RS" role="doc-biblioref">Firdaus Solihin; Makarim, 2021</a>)</span>. Neste sentido, alguns trabalhos se destacam por sua relevância para as tarefas de REN-Legal.</p>
+<p><span class="citation" data-cites="Dale2007">Dale; Mazur (<a href="../../shared/referencias/referencias.html#ref-Dale2007" role="doc-biblioref">2007</a>)</span> exploram o uso de aprendizado de máquina supervisionado para desambiguação de entidades em documentos legais, utilizando 13.460 documentos em inglês da Bolsa de Valores Australiana, aplicados na estimação de frequência de conjunções de entidades candidatas. Foram extraídos 16 tipos de entidades utilizando anotação automática, com desambiguações resolvidas manualmente. Dos nove algoritmos de aprendizagem avaliados, o classificador IBk<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> (baseado no algoritmo <em>K-nearest neighbors</em> (KNN)&nbsp;<span class="citation" data-cites="Aha1991KNN">(<a href="../../shared/referencias/referencias.html#ref-Aha1991KNN" role="doc-biblioref">Aha et al., 1991</a>)</span>) obteve o melhor resultado, com 84% de medida F1.</p>
+<p><span class="citation" data-cites="Dozier2010">Dozier et al. (<a href="../../shared/referencias/referencias.html#ref-Dozier2010" role="doc-biblioref">2010</a>)</span> utilizaram REN para identificação de informações legais em 43.936 documentos de processos legais norte-americanos. Os documentos foram anotados manualmente utilizando cinco entidades legais, classificadas através de abordagens híbridas baseadas em pesquisa (utilizando listas de entidades de interesse), regras contextuais (com regras dedutivas) e modelos estatísticos (com indicadores ponderados). O classificador <em>Support Vector Machine</em> (SVM) <span class="citation" data-cites="10.1023/A:1022627411411">(<a href="../../shared/referencias/referencias.html#ref-10.1023/A:1022627411411" role="doc-biblioref">Cortes; Vapnik, 1995</a>)</span> obteve o melhor resultado com 95% de medida F1.</p>
+<p><span class="citation" data-cites="Chalkidis2017">Chalkidis et al. (<a href="../../shared/referencias/referencias.html#ref-Chalkidis2017" role="doc-biblioref">2017</a>)</span> exploram a automação da extração de elementos contratuais, construindo um <em>corpus</em> de <span class="math inline">\(\sim\)</span><!-- -->3.500 contratos em inglês, manualmente anotados com 11 entidades, das quais três são do domínio legal. Utilizando regras manuais e classificadores lineares como Regressão Logística <span class="citation" data-cites="tolles2016logistic">(<a href="../../shared/referencias/referencias.html#ref-tolles2016logistic" role="doc-biblioref">Tolles; Meurer, 2016</a>)</span> e SVM, os melhores resultados foram alcançados através de um método híbrido de aprendizado de máquina e regras pós-processamento, com medida F1 acima de 84%. Posteriormente, o <em>corpus</em> desenvolvido foi utilizado para gerar vetores de palavras utilizando <span class="math inline">\(\sim\)</span><!-- -->750.000 contratos <span class="citation" data-cites="Chalkidis2017deep">(<a href="../../shared/referencias/referencias.html#ref-Chalkidis2017deep" role="doc-biblioref">Chalkidis; Androutsopoulos, 2017</a>)</span>, com melhorias utilizando os modelos <em>Long Short-term Memory</em> (LSTM) <span class="citation" data-cites="10.1162/neco.1997.9.8.1735">(<a href="../../shared/referencias/referencias.html#ref-10.1162/neco.1997.9.8.1735" role="doc-biblioref">Hochreiter; Schmidhuber, 1997</a>)</span>, <em>Bidirectional LSTM</em> (BiLSTM) <span class="citation" data-cites="schuster1997bidirectional">(<a href="../../shared/referencias/referencias.html#ref-schuster1997bidirectional" role="doc-biblioref">Schuster; Paliwal, 1997</a>)</span> e <em>Conditional Random Field</em> (CRF) <span class="citation" data-cites="Lafferty2001CRF">(<a href="../../shared/referencias/referencias.html#ref-Lafferty2001CRF" role="doc-biblioref">Lafferty et al., 2001</a>)</span>. Os resultados obtidos alcançaram medida F1 de 87% na classificação por <em>tokens</em>, e 88% na identificação de elementos nos contratos.</p>
+<p><span class="citation" data-cites="ChalkidisLEGALBERT2020">Chalkidis et al. (<a href="../../shared/referencias/referencias.html#ref-ChalkidisLEGALBERT2020" role="doc-biblioref">2020</a>)</span> exploram a adaptação do modelo <em>Bidirectional Encoder Representations from Transformers</em> (BERT) <span class="citation" data-cites="Devlin19">(<a href="../../shared/referencias/referencias.html#ref-Devlin19" role="doc-biblioref">Devlin et al., 2019</a>)</span> para o domínio legal, através de estratégias de pré-treinamento e ajuste fino do modelo em um <em>corpus</em> de 354.621 textos legais em inglês, composto por leis, decisões de tribunais e contratos de diversas fontes. Para as tarefas de REN, foram utilizados dados de cerca de 2.000 contratos, chamado de Contracts-NER. As entidades utilizadas foram as mesmas dos trabalhos anteriores dos autores. O estudo conclui que o modelo LEGAL-BERT, especialmente uma versão menor (LEGAL-BERT-small), foi eficaz para tarefas específicas do domínio legal, apresentando desempenho comparável a modelos maiores.</p>
+<p><span class="citation" data-cites="pilan2022TABcorpus">Pilán et al. (<a href="../../shared/referencias/referencias.html#ref-pilan2022TABcorpus" role="doc-biblioref">2022</a>)</span> apresentam o <em>corpus</em> TAB (<em>Text Anonymization Benchmark</em>), desenvolvido para a anonimização de dados pessoais utilizando REN. Composto por 1.268 casos judiciais em inglês do Tribunal Europeu dos Direitos Humanos, o <em>corpus</em> foi anotado manualmente utilizando oito entidades universais. No processo de anonimização, entidades marcadas como sensíveis foram categorizadas de acordo com informações como crença filosófica, opinião política, entre outras. Juntamente com o <em>corpus</em>, a pesquisa introduz três métricas específicas de avaliação de anonimização: identificadores diretos, identificadores quase-indiretos, e identificadores diretos e quase-indiretos. Um modelo BERT ajustado ao <em>corpus</em> alcançou o resultado de 99,9% de revocação para identificadores diretos.</p>
+<p><span class="citation" data-cites="aejas2023contracts">Aejas et al. (<a href="../../shared/referencias/referencias.html#ref-aejas2023contracts" role="doc-biblioref">2023</a>)</span> apresentam um método para automação de contratos escritos em linguagem natural no contexto de cadeia de suprimentos, utilizando <em>blockchain</em>, REN e ER. Foram utilizados 200 contratos públicos em inglês, anotados manualmente com nove entidades do domínio. Os experimentos foram executados com modelos de <em>deep learning</em> na avaliação do <em>corpus</em> e na criação de um meta-modelo comum para as diferentes estruturas de REN e ER, utilizadas na representação de regras de negócio padronizadas. A acurácia encontrada nestes modelos foi de 99,4% e 99,6%, utilizando BERT e BiLSTM, respectivamente.</p>
+<p>Pesquisas relevantes sobre REN-Legal também foram executadas em outras línguas, além da língua inglesa. Na língua alemã, <span class="citation" data-cites="Leitner2019Fine">Leitner et al. (<a href="../../shared/referencias/referencias.html#ref-Leitner2019Fine" role="doc-biblioref">2019</a>)</span> apresentam uma metodologia detalhada para REN em documentos legais, com 19 classes de entidades semânticas específicas, generalizadas em sete tipos de classes, que foram avaliados utilizando os modelos CRF e BiLSTM. Mais recentemente, <span class="citation" data-cites="Darji2023GermanBERT">Darji et al. (<a href="../../shared/referencias/referencias.html#ref-Darji2023GermanBERT" role="doc-biblioref">2023</a>)</span> adapta o modelo GermanBERT para o domínio legal, utilizando as mesmas entidades <span class="citation" data-cites="Leitner2019Fine">(<a href="../../shared/referencias/referencias.html#ref-Leitner2019Fine" role="doc-biblioref">Leitner et al., 2019</a>)</span>, com resultados melhores que os modelos originais em 14 tipos de entidades específicas. No grego, <span class="citation" data-cites="angelidis2018named">Angelidis et al. (<a href="../../shared/referencias/referencias.html#ref-angelidis2018named" role="doc-biblioref">2018</a>)</span> combinam os modelos BiLSTM, CRF e Regressão Logística para REN em um <em>corpus</em> governamental, utilizando seis tipos de entidades. A pesquisa desenvolveu um vocabulário de referências para integrar dados legais com outras fontes na internet, criando assim uma rede de informações legais acessíveis. Na língua chinesa, <span class="citation" data-cites="chen2020joint">Chen et al. (<a href="../../shared/referencias/referencias.html#ref-chen2020joint" role="doc-biblioref">2020</a>)</span> desenvolveram um sistema de extração de entidades e suas relações semânticas em documentos criminais relacionados a drogas, utilizando os modelos RoBERTa <span class="citation" data-cites="DBLP:journals/corr/abs-1907-11692">(<a href="../../shared/referencias/referencias.html#ref-DBLP:journals/corr/abs-1907-11692" role="doc-biblioref">Liu et al., 2019</a>)</span>, BiLSTM e a técnica Seq2Seq <span class="citation" data-cites="DBLP:conf/nips/SutskeverVL14">(<a href="../../shared/referencias/referencias.html#ref-DBLP:conf/nips/SutskeverVL14" role="doc-biblioref">Sutskever et al., 2014</a>)</span>. A pesquisa de <span class="citation" data-cites="cetindag2022Turco">Çetindağ et al. (<a href="../../shared/referencias/referencias.html#ref-cetindag2022Turco" role="doc-biblioref">2022</a>)</span> apresenta o primeiro estudo sobre REN-Legal para o idioma turco. Foi utilizado um <em>corpus</em> de casos de tribunais com oito tipos de entidades (04 universais e 04 legais), os modelos BiLSTM e CRF, além de seis diferentes combinações de vetores de palavras. Na língua espanhola, <span class="citation" data-cites="samy2021">Samy (<a href="../../shared/referencias/referencias.html#ref-samy2021" role="doc-biblioref">2021</a>)</span> apresenta uma metodologia para anotação de entidades em textos legais escritos em espanhol peninsular, utilizando uma abordagem híbrida com expressões regulares, listas de fontes externas e ferramentas para REN. Cinco tipos de entidades foram utilizadas.</p>
+<p>O REN também foi explorado em outros idiomas, como árabe <span class="citation" data-cites="Shamma2020Arabic">(<a href="../../shared/referencias/referencias.html#ref-Shamma2020Arabic" role="doc-biblioref">Shamma et al., 2020</a>)</span>, finlandês <span class="citation" data-cites="oksanen2019finlandes oksanen2022finlandes">(<a href="../../shared/referencias/referencias.html#ref-oksanen2019finlandes" role="doc-biblioref">Oksanen et al., 2019a</a>, <a href="../../shared/referencias/referencias.html#ref-oksanen2022finlandes" role="doc-biblioref">2022</a>)</span>, francês <span class="citation" data-cites="andrew2018frances barriere2019frances sleimi2021frances">(<a href="../../shared/referencias/referencias.html#ref-andrew2018frances" role="doc-biblioref">Andrew; Tannier, 2018</a>; <a href="../../shared/referencias/referencias.html#ref-barriere2019frances" role="doc-biblioref">Barriere; Fouret, 2019</a>; <a href="../../shared/referencias/referencias.html#ref-sleimi2021frances" role="doc-biblioref">Sleimi et al., 2021</a>)</span>, holandês <span class="citation" data-cites="schraagen2017holandes Heusden2023holandes">(<a href="../../shared/referencias/referencias.html#ref-Heusden2023holandes" role="doc-biblioref">Heusden et al., 2023</a>; <a href="../../shared/referencias/referencias.html#ref-schraagen2017holandes" role="doc-biblioref">Schraagen et al., 2017</a>)</span>, italiano <span class="citation" data-cites="agnoloni2022italiano lore2023italiano">(<a href="../../shared/referencias/referencias.html#ref-agnoloni2022italiano" role="doc-biblioref">Agnoloni et al., 2022</a>; <a href="../../shared/referencias/referencias.html#ref-lore2023italiano" role="doc-biblioref">Lorè et al., 2023</a>)</span>, romeno <span class="citation" data-cites="pais2021romeno pais2024romeno">(<a href="../../shared/referencias/referencias.html#ref-pais2021romeno" role="doc-biblioref">Pais et al., 2021</a>, <a href="../../shared/referencias/referencias.html#ref-pais2024romeno" role="doc-biblioref">2024</a>)</span>, além dos idiomas russo <span class="citation" data-cites="Averina2022russo">(<a href="../../shared/referencias/referencias.html#ref-Averina2022russo" role="doc-biblioref">Averina et al., 2022</a>)</span>, urdu <span class="citation" data-cites="Iftikhar2019urdu">(<a href="../../shared/referencias/referencias.html#ref-Iftikhar2019urdu" role="doc-biblioref">Iftikhar et al., 2019</a>)</span>, vietnamita <span class="citation" data-cites="Bach2019vietnam">(<a href="../../shared/referencias/referencias.html#ref-Bach2019vietnam" role="doc-biblioref">Bach et al., 2019</a>)</span>, japonês <span class="citation" data-cites="Onaga2023japones">(<a href="../../shared/referencias/referencias.html#ref-Onaga2023japones" role="doc-biblioref">Onaga et al., 2023</a>)</span>, entre outros, incluindo abordagens multilíngues <span class="citation" data-cites="Quaresma2010 MorenoSchneider2022Multilingue kulkarni2023multilingue">(<a href="../../shared/referencias/referencias.html#ref-kulkarni2023multilingue" role="doc-biblioref">Kulkarni et al., 2023</a>; <a href="../../shared/referencias/referencias.html#ref-MorenoSchneider2022Multilingue" role="doc-biblioref">Moreno Schneider et al., 2022</a>; <a href="../../shared/referencias/referencias.html#ref-Quaresma2010" role="doc-biblioref">Quaresma; Gonçalves, 2010</a>)</span>.</p>
+</section>
+<section id="iniciativas-de-ren-legal-em-língua-portuguesa" class="level2" data-number="13.4">
+<h2 data-number="13.4" class="anchored" data-anchor-id="iniciativas-de-ren-legal-em-língua-portuguesa"><span class="header-section-number">13.4</span> Iniciativas de REN-Legal em língua portuguesa</h2>
+<p><span class="citation" data-cites="Albuquerque2023-NERSurvey">Albuquerque et al. (<a href="../../shared/referencias/referencias.html#ref-Albuquerque2023-NERSurvey" role="doc-biblioref">2023b</a>)</span> realizaram um mapeamento das técnicas, métodos e recursos de REN para a língua portuguesa. Foram realizadas buscas manual e automática no período de janeiro de 2010 a junho de 2022, recuperando 447 estudos primários, com 45 estudos incluídos na revisão. Os autores observaram um crescente interesse no desenvolvimento de pesquisas em REN a partir de 2019. Vinte e um estudos primários focaram na análise comparativa entre técnicas e ferramentas, tendo o modelo BiLSTM como o mais utilizado, seguido por métodos mais tradicionais que utilizam apenas CRF. Trabalhos mais recentes utilizaram o modelo BERT. Além disso, 24 estudos descreviam <em>corpora</em> de REN para vários domínios, entre eles o legal, com 8 estudos primários mapeados. A <a href="#fig-direito-ren-temporal-distribution" class="quarto-xref">Figura&nbsp;<span>13.2</span></a> apresenta a evolução de trabalhos mapeados<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>, agrupados de acordo com a variante da língua portuguesa, sendo PT-EU para textos escritos exclusivamente com a variante Europeia e PT-BR com a variante Brasileira.</p>
+<div id="fig-direito-ren-temporal-distribution" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-direito-ren-temporal-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;13.2: Distribuição temporal dos artigos mapeados de REN para a língua portuguesa, entre janeiro/2010 e junho/2022 <span class="citation" data-cites="Albuquerque2023-NERSurvey">(<a href="../../shared/referencias/referencias.html#ref-Albuquerque2023-NERSurvey" role="doc-biblioref">Albuquerque et al., 2023b</a>)</span>
+</figcaption>
+<div aria-describedby="fig-direito-ren-temporal-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/temporal_distribution_ambas_PNG.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+</figure>
+</div>
+<section id="CorporaREN-Legal" class="level3" data-number="13.4.1">
+<h3 data-number="13.4.1" class="anchored" data-anchor-id="CorporaREN-Legal"><span class="header-section-number">13.4.1</span> <em>Corpora</em> para REN-Legal</h3>
+<p>Esforços para a criação e compartilhamento de recursos, como <em>corpora/datasets</em> e modelos, vêm sendo feitos pela comunidade de PLN e EI <span class="citation" data-cites="Oksanen2019Multilingue Solihin2021RS">(<a href="../../shared/referencias/referencias.html#ref-Solihin2021RS" role="doc-biblioref">Firdaus Solihin; Makarim, 2021</a>; <a href="../../shared/referencias/referencias.html#ref-Oksanen2019Multilingue" role="doc-biblioref">Oksanen et al., 2019b</a>)</span>. Estes recursos tornam-se cruciais para impulsionar novas pesquisas e o aprimoramento de pesquisas em curso <span class="citation" data-cites="Bonifacio2020DrugSeizuresCorpus bordino2021garnlp">(<a href="../../shared/referencias/referencias.html#ref-Bonifacio2020DrugSeizuresCorpus" role="doc-biblioref">Bonifacio et al., 2020</a>; <a href="../../shared/referencias/referencias.html#ref-bordino2021garnlp" role="doc-biblioref">Bordino et al., 2021</a>)</span>. O <a href="#def-cap-direito-ren-quadro-corporadetails" class="quarto-xref">Quadro&nbsp;<span>13.1</span></a> apresenta informações sobre alguns <em>corpora</em> para REN-Legal em língua portuguesa encontrados na literatura, destacadas a seguir.</p>
+<!--`\newpage`{=latex}-->
+<div id="def-cap-direito-ren-quadro-corporadetails" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 13.1</strong></span> <em>Corpora</em> REN-Legais em língua portuguesa com acesso público (PB) ou privado (PV)</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;"><em>Corpora</em>/ (Autores)</th>
+<th style="text-align: left;">Entidades</th>
+<th style="text-align: center;">#Docs/Anotação</th>
+<th style="text-align: left;">Arquitetura</th>
+<th style="text-align: left;">Acesso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">LeNER-Br / <span class="citation" data-cites="LuzdeAraujo2018">Araujo et al. (<a href="../../shared/referencias/referencias.html#ref-LuzdeAraujo2018" role="doc-biblioref">2018</a>)</span></td>
+<td style="text-align: left;">Legislação, Local, Jurisprudência, Organização, Pessoa, Tempo</td>
+<td style="text-align: center;">70 / manual</td>
+<td style="text-align: left;">BiLSTM, CRF, Glove</td>
+<td style="text-align: left;">PB<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DOU-corpus / <span class="citation" data-cites="ALLES2018DOUCorpus">Alles (<a href="../../shared/referencias/referencias.html#ref-ALLES2018DOUCorpus" role="doc-biblioref">2018</a>)</span></td>
+<td style="text-align: left;">Cargo, Data, Evento, Lei, Lugar, Número, Organização, Pessoa, Processo, Valor-monetário</td>
+<td style="text-align: center;">470 / híbrida</td>
+<td style="text-align: left;">OpenNLP</td>
+<td style="text-align: left;">PV</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="castro2019deep">Castro (<a href="../../shared/referencias/referencias.html#ref-castro2019deep" role="doc-biblioref">2019</a>)</span></td>
+<td style="text-align: left;">Fundamento, Função, Local, Organização, Pessoa, Tribunal, Valor_Acordo, Valor_Causa, Valor_Condenação, Valor_Custas, Vara</td>
+<td style="text-align: center;">1.305 / híbrida</td>
+<td style="text-align: left;">Elmo, GloVe</td>
+<td style="text-align: left;">PV</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DrugSeizures-Br / <span class="citation" data-cites="Bonifacio2020DrugSeizuresCorpus">Bonifacio et al. (<a href="../../shared/referencias/referencias.html#ref-Bonifacio2020DrugSeizuresCorpus" role="doc-biblioref">2020</a>)</span> <span class="citation" data-cites="Bonifacio2020dissertacao">Bonifacio (<a href="../../shared/referencias/referencias.html#ref-Bonifacio2020dissertacao" role="doc-biblioref">2020</a>)</span></td>
+<td style="text-align: left;">Droga, Local, Pessoa, Organização, Outro, Tempo</td>
+<td style="text-align: center;">6.218 / automática</td>
+<td style="text-align: left;">BERT, ELMo</td>
+<td style="text-align: left;">PV</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">KauaneJunior / <span class="citation" data-cites="fernandes2020KauaneJrCorpus">Fernandes et al. (<a href="../../shared/referencias/referencias.html#ref-fernandes2020KauaneJrCorpus" role="doc-biblioref">2020b</a>)</span></td>
+<td style="text-align: left;">DecMorDm, IncMorDm, InitIntArr, InitMon, ValLegFee, ValMorDm</td>
+<td style="text-align: center;">3.022 / manual</td>
+<td style="text-align: left;">BiLSTM, BIGRU, CRF</td>
+<td style="text-align: left;">PV</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="Fernandes2020EleitoralPortugal">Fernandes et al. (<a href="../../shared/referencias/referencias.html#ref-Fernandes2020EleitoralPortugal" role="doc-biblioref">2020a</a>)</span></td>
+<td style="text-align: left;">Local, Organização, Pessoa</td>
+<td style="text-align: center;">63.380 / automática</td>
+<td style="text-align: left;">CRF, L-BFGS</td>
+<td style="text-align: left;">PB<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="rodriguez2020UPE">Rodrı́guez; Bezerra (<a href="../../shared/referencias/referencias.html#ref-rodriguez2020UPE" role="doc-biblioref">2020</a>)</span></td>
+<td style="text-align: left;">Pessoa</td>
+<td style="text-align: center;">10.000 / manual</td>
+<td style="text-align: left;">NLTK</td>
+<td style="text-align: left;">PB<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Aposentadoria / <span class="citation" data-cites="Neto2021AposentadoriaCorpus">Neto; Faleiros (<a href="../../shared/referencias/referencias.html#ref-Neto2021AposentadoriaCorpus" role="doc-biblioref">2021</a>)</span></td>
+<td style="text-align: left;">Ato, Nome_Ato, Classe, Cod_Matricula_Ato, Empresa_Ato, Fund_Legal, Cargo, Quadro, Padrão, Processo</td>
+<td style="text-align: center;">5.515 sentenças / híbrido</td>
+<td style="text-align: left;">CNN, LSTM, CRF, GloVe</td>
+<td style="text-align: left;">PB<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="batista2021UFRPE">Batista et al. (<a href="../../shared/referencias/referencias.html#ref-batista2021UFRPE" role="doc-biblioref">2021</a>)</span></td>
+<td style="text-align: left;">CPF_CNPJ, Estado_civil, Nacionalidade, Nome, OAB, RG</td>
+<td style="text-align: center;">7.966 / híbrida</td>
+<td style="text-align: left;">BiLSTM, CRF, Glove, Flair</td>
+<td style="text-align: left;">PV</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="mota2021UFRPE">Mota et al. (<a href="../../shared/referencias/referencias.html#ref-mota2021UFRPE" role="doc-biblioref">2021</a>)</span></td>
+<td style="text-align: left;">Jurisprudência, Legislação</td>
+<td style="text-align: center;">74 / manual</td>
+<td style="text-align: left;">BiLSTM, CRF, Flair, Spacy</td>
+<td style="text-align: left;">PV</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="Correia2022FineGrainedSTF">Correia et al. (<a href="../../shared/referencias/referencias.html#ref-Correia2022FineGrainedSTF" role="doc-biblioref">2022</a>)</span></td>
+<td style="text-align: left;">Citação acadêmica, Precedente, Pessoa, Referência legislativa</td>
+<td style="text-align: center;">594 / manual</td>
+<td style="text-align: left;">BiLSTM, CRF</td>
+<td style="text-align: left;">PV</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="Lima2022ModelDODF">Lima; Borges (<a href="../../shared/referencias/referencias.html#ref-Lima2022ModelDODF" role="doc-biblioref">2022</a>)</span></td>
+<td style="text-align: left;">Aditamento Contratual, Aviso de Licitação, Aviso de Revogação/Anulação de Licitação, Aviso de Suspensão de Licitação, Extrato de Contrato, Extrato de Convênio</td>
+<td style="text-align: center;">3.850 / manual</td>
+<td style="text-align: left;">CRF, CNN, LSTM, Word2Vec</td>
+<td style="text-align: left;">PB<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UlyssesNER-Br / <span class="citation" data-cites="Albuquerque2022UlyssesNER">Albuquerque et al. (<a href="../../shared/referencias/referencias.html#ref-Albuquerque2022UlyssesNER" role="doc-biblioref">2022</a>)</span>, <span class="citation" data-cites="Rosimeire2022">Costa et al. (<a href="../../shared/referencias/referencias.html#ref-Rosimeire2022" role="doc-biblioref">2022</a>)</span></td>
+<td style="text-align: left;">Data, Evento, Fundamento, Local, Organização, Pessoa, Produto de Lei</td>
+<td style="text-align: center;">950 + 1000 comentários / manual</td>
+<td style="text-align: left;">BERT, BiLSTM, CRF, Glove</td>
+<td style="text-align: left;">PB<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> (PL e C-corpus)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CDJUR-BR / <span class="citation" data-cites="Brito2023Stil-CDJURBR">Brito et al. (<a href="../../shared/referencias/referencias.html#ref-Brito2023Stil-CDJURBR" role="doc-biblioref">2023</a>)</span></td>
+<td style="text-align: left;">Endereço, Norma, Pena, Pessoa, Prova, Sentença</td>
+<td style="text-align: center;">1.216 / manual</td>
+<td style="text-align: left;">BERT, BiLSTM, CRF, Spacy</td>
+<td style="text-align: left;">PB<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PersoSEG / <span class="citation" data-cites="Guimaraes2024LegalSegmentation">Guimarães et al. (<a href="../../shared/referencias/referencias.html#ref-Guimaraes2024LegalSegmentation" role="doc-biblioref">2024</a>)</span></td>
+<td style="text-align: left;"><strong>Obs.: iniciam com <em>``Ato_’’</em></strong> Abono_Permanencia, Cessao, Exoneracao_Comissionado, Exoneracao_Efetivo, Nomeacao_Comissionado, Nomeacao_Efetivo, Retificacao_Comissionado, Retificacao_Efetivo, Reversao, Substituicao, Tornado_Sem_Efeito_Apo, Tornado_Sem_Efeito_Exo_Nom</td>
+<td style="text-align: center;">127 / manual</td>
+<td style="text-align: left;">CNN, CRF, LSTM</td>
+<td style="text-align: left;">PB<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></td>
+</tr>
+</tbody>
+</table>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+<p></p>
+<p>O <em>corpus</em> LeNER-Br <span class="citation" data-cites="LuzdeAraujo2018">(<a href="../../shared/referencias/referencias.html#ref-LuzdeAraujo2018" role="doc-biblioref">Araujo et al., 2018</a>)</span> é composto por 70 documentos anotados manualmente para a tarefa de REN, sendo 66 provenientes de tribunais judiciais brasileiros, tais como: STF, Superior Tribunal de Justiça, Tribunal de Justiça de Minas Gerais e Tribunal de Contas da União. Outros quatro documentos são legislativos, como a Lei Maria da Penha. Além das entidades Pessoa, Local, Tempo e Organização, o <em>corpus</em> contém etiquetas específicas para as entidades Legislação, específica para leis, e Jurisprudência, para decisões relacionadas a casos legais. Um modelo BiLSTM-CRF <span class="citation" data-cites="lample2016BiLSTM_CRF">(<a href="../../shared/referencias/referencias.html#ref-lample2016BiLSTM_CRF" role="doc-biblioref">Lample et al., 2016</a>)</span> com arquitetura Glove <span class="citation" data-cites="pennington-etal-2014-glove">(<a href="../../shared/referencias/referencias.html#ref-pennington-etal-2014-glove" role="doc-biblioref">Pennington et al., 2014</a>)</span> foi retreinado com o <em>corpus</em>, alcançando as medidas F1 de 97,04%, 88,82% e 92,53% para entidade Legislação, para Jurisprudência e para todas as entidades, respectivamente.</p>
+<p>O DOU-Corpus <span class="citation" data-cites="ALLES2018DOUCorpus">(<a href="../../shared/referencias/referencias.html#ref-ALLES2018DOUCorpus" role="doc-biblioref">Alles, 2018</a>)</span> contém entidades existentes nos documentos do Diário Oficial da União (DOU), um boletim oficial do Governo Federal brasileiro. Para o domínio, foram definidas novas entidades como Cargo, Lei, Número, Organização, Processo e Valor-monetário. A entidade Lei é definida pelos seguintes exemplos: Lei n 5548/97 e LEI 1865/89. A entidade Número descreve todo numerário explorado nos textos do DOU. A entidade Processo contém uma expressão que possui a palavra “processo” com um sequencial de números de um certa formatação. O <em>corpus</em> é composto por 60 mil trechos extraídos de diários dos meses de agosto de 2015 à outubro de 2017, anotados utilizando um processo de anotação híbrida (manual e automática). As diferentes seções que compõem o diário foram avaliadas individualmente, alcançando medida F1 de 44,50% com a ferramenta OpenNLP<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a>.</p>
+<p>O <em>corpus</em> da Justiça Trabalhista&nbsp;<span class="citation" data-cites="castro2019deep">(<a href="../../shared/referencias/referencias.html#ref-castro2019deep" role="doc-biblioref">Castro, 2019</a>)</span> é composto por 1.305 documentos obtidos do Processo judicial eletrônico (PJ-e), distribuídos entre atas de audiência, sentenças e acórdãos, e selecionados a partir de processos distribuídos em todas as 24 regiões da justiça do trabalho brasileira, entre os anos de 2008 e 2018. Utilizando uma abordagem de anotação híbrida, foram anotadas as entidades Função, Fundamento, Local, Organização, Pessoa, Tribunal, Vara e Valores (Acordo, Causa, Condenação e Custas). A categoria Função corresponde ao papel das pessoas mencionadas nos documentos, tais como advogado, juiz, reclamado, entre outras funções. Fundamento refere-se a qualquer dispositivo jurídico que possa ser referenciado no documento. Tribunal e Vara visam a identificação de um órgão específico. Foi treinado um modelo de REN-Legal para a Justiça do Trabalho do Brasil, alcançando a medida F1 de 93,81%, utilizando as arquiteturas ELMo <span class="citation" data-cites="mPetters18">(<a href="../../shared/referencias/referencias.html#ref-mPetters18" role="doc-biblioref">Peters et al., 2018</a>)</span> e GloVe.</p>
+<p>A pesquisa desenvolvida por <span class="citation" data-cites="Fernandes2020EleitoralPortugal">Fernandes et al. (<a href="../../shared/referencias/referencias.html#ref-Fernandes2020EleitoralPortugal" role="doc-biblioref">2020a</a>)</span> analisa o impacto de discursos legislativos na captação de votos em sistemas eleitorais portugueses por localidade. Foi utilizado um <em>corpus</em> composto por 60.000 discursos parlamentares escritos em português europeu, no período de 1999 a 2015. REN-Legal foi utilizada na análise dos discursos, identificando as entidades Local, Organização e Pessoa, que serviram para medir a frequência e o contexto em que os parlamentares mencionavam seus distritos eleitorais ou outros locais relevantes. Foi utilizado o modelo CRF para identificação automática de entidades, ajustado com o algoritmo <em>Limited-memory Broyden-Fletcher-Goldfarb-Shanno</em> (L-BFGS) <span class="citation" data-cites="malouf2002LBFGS">(<a href="../../shared/referencias/referencias.html#ref-malouf2002LBFGS" role="doc-biblioref">Malouf, 2002</a>)</span>, a partir de dados sequenciais anotados manualmente. Além disso, para resolver ambiguidades de entidades geográficas, foi utilizada a técnica de Resolução de Topônimos com um dicionário de localidades e regras heurísticas. Para fundamentar a hipótese da pesquisa, foi utilizada uma avaliação qualitativa baseada em entrevistas. Os resultados indicaram que o localismo nos discursos é mais presente conforme a necessidade eleitoral, independente da magnitude do distrito eleitoral, e que, quanto maior o número de candidatos por distrito, maior a quantidade de localismo presente nos discursos.</p>
+<p>DrugSeizures-Br <span class="citation" data-cites="Bonifacio2020DrugSeizuresCorpus">(<a href="../../shared/referencias/referencias.html#ref-Bonifacio2020DrugSeizuresCorpus" role="doc-biblioref">Bonifacio et al., 2020</a>)</span> é um <em>corpus</em> contendo 6.218 petições relacionadas a procedimentos de apreensão de drogas. Estas petições foram produzidas pelo Ministério Público do Estado de Mato Grosso do Sul (MPMS) entre os anos de 2015 e 2019. O <em>corpus</em> inclui uma tabela de metadados relacionados às petições que compreendem entidades de interesse do MPMS. As entidades anotadas estão divididas em 25 tipos diferentes envolvendo, por exemplo, nome e quantidade da droga apreendida, dados da pessoa denunciada (nome, documentos etc.), local da apreensão, entre outros. Os tipos estão agrupados em 6 categorias: Local, Pessoa, Tempo, Organização, Droga e Outro. Para anotação, foi aplicado um algoritmo simples de busca de <em>string</em>: a partir de uma entidade atrelada a uma denúncia, o algoritmo busca a <em>string</em> da entidade no texto da denúncia. O <em>corpus</em> foi avaliado utilizando a medida F1, com os modelos BERT Multilingual e BERT Acórdãos, alcançando 73,83% e 72,78%, respectivamente, utilizando todas as categorias. Considerando um cenário seletivo, no qual a categoria Outros foi removida do <em>corpus</em>, os modelos alcançaram medida F1 de 80,94% 81,04%.</p>
+<p>O <em>corpus</em> KauaneJunior <span class="citation" data-cites="fernandes2020KauaneJrCorpus">(<a href="../../shared/referencias/referencias.html#ref-fernandes2020KauaneJrCorpus" role="doc-biblioref">Fernandes et al., 2020b</a>)</span> é composto por 3.022 decisões judiciais sobre a matéria “negativação indevida”, do Tribunal de Justiça do Estado do Rio de Janeiro no ano de 2016. Os documentos foram anotados manualmente, utilizando diretrizes específicas de anotação baseadas em exemplos. Foram utilizados seis tipos de entidades legais: três relacionadas à definição de valor, aumento ou diminuição do dano moral (ValMorDm, IncMorDm e DecMorDm, respectivamente), uma para valor de honorários advocatícios (ValLegFee), além de duas entidades relacionadas a prazos iniciais, tanto para correção monetária (InitIntArr), como para juros de mora (InitMon). Foram utilizados cinco modelos de aprendizagem na avaliação da tarefa: <em>Bidirectional Gated Recurrent Units network</em> (BiGRU) <span class="citation" data-cites="Graves2013Speech_recognition_BIGRU">(<a href="../../shared/referencias/referencias.html#ref-Graves2013Speech_recognition_BIGRU" role="doc-biblioref">Graves et al., 2013</a>)</span>, BiLSTM, CRF, e duas combinações destes modelos. Tanto na análise por entidades quanto no resultado geral, o modelo BiLSTM-CRF obteve o melhor desempenho, alcançado a medida F1 de 94,79%.</p>
+<p>O <em>corpus</em> Aposentadoria <span class="citation" data-cites="Neto2021AposentadoriaCorpus">(<a href="../../shared/referencias/referencias.html#ref-Neto2021AposentadoriaCorpus" role="doc-biblioref">Neto; Faleiros, 2021</a>)</span> contém entidades nomeadas de 10 classes associadas a atos de aposentadoria de servidores públicos do Diário Oficial do Distrito Federal (DODF), validadas pelo Tribunal de Contas do Distrito Federal e Territórios. O <em>corpus</em> faz parte de um grande conjunto de dados criado por colaboradores do projeto <em>KnEDLe</em><a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> da Universidade de Brasília. As entidades mapeadas foram Ato, Nome_Ato, Classe, Cod_Matricula_Ato, Empresa_Ato, Fund_Legal, Cargo, Quadro, Padrão, Processo e estão anotadas no formato CoNLL-2003 <span class="citation" data-cites="tjong2003Conll">(<a href="../../shared/referencias/referencias.html#ref-tjong2003Conll" role="doc-biblioref">Sang; De Meulder, 2003</a>)</span>. A divisão entre treinamento, validação e teste foi feita em ordem cronológica dos DODFs, para não dividir entidades do mesmo documento do DODF em diferentes conjuntos. O conjunto de treinamento foi formado por 3.860 sentenças, o de validação por 828 sentenças e o de teste por 827 sentenças.</p>
+<p>O <em>corpus</em> UlyssesNER-Br <span class="citation" data-cites="Albuquerque2022UlyssesNER">(<a href="../../shared/referencias/referencias.html#ref-Albuquerque2022UlyssesNER" role="doc-biblioref">Albuquerque et al., 2022</a>)</span> é composto por 150 projetos de lei (PL-corpus) e 800 consultas legislativas (ST-corpus) da Câmara dos Deputados brasileira. Anotados manualmente em três fases e por três grupos de anotadores, o <em>corpus</em> possui sete categorias semânticas, algumas contendo tipos específicos. A avaliação da concordância entre anotadores alcançou coeficiente Kappa de 91% na média. Além de cinco categorias baseadas no HAREM&nbsp;<span class="citation" data-cites="santos2007reconhecimento">(<a href="../../shared/referencias/referencias.html#ref-santos2007reconhecimento" role="doc-biblioref">Santos; Cardoso, 2007</a>)</span>, Pessoa, Localização, Organização, Evento e Data, o <em>corpus</em> possui duas categorias específicas para o domínio legislativo: Fundamento e Produto de Lei. Fundamento refere-se a entidades relacionadas a leis (FUNDlei e FUNDApelido), resoluções, decretos, bem como a entidades específicas do domínio, como projetos de lei (FUNDprojetodelei), que são propostas de lei em discussão pelo parlamento, e consultas legislativas (FUNDsolicitacaotrabalho), realizadas pelos parlamentares. Produto de Lei refere-se a sistemas (PRODUTOsistema), programas (PRODUTOprograma) e outros produtos (PRODUTOoutros) criados a partir da legislação. O <em>corpus</em> foi avaliado com os modelos HMM e CRF, obtendo melhor resultado com o CRF, alcançando a medida F1 de 81,04%.</p>
+<p>Posteriormente, o <em>corpus</em> UlyssesNER-Br foi expandindo com texto informal gerado pelo usuário <span class="citation" data-cites="Rosimeire2022">(<a href="../../shared/referencias/referencias.html#ref-Rosimeire2022" role="doc-biblioref">Costa et al., 2022</a>)</span>. Para a expansão, foram utilizados, aproximadamente, 1000 comentários públicos de cidadãos (C-corpus), relacionados a projetos de lei em tramitação, coletados de enquetes do portal da Câmara dos Deputados. Foram anotadas manualmente as mesmas entidades da primeira versão <span class="citation" data-cites="Albuquerque2022UlyssesNER">(<a href="../../shared/referencias/referencias.html#ref-Albuquerque2022UlyssesNER" role="doc-biblioref">Albuquerque et al., 2022</a>)</span>, com exceção da FUNDsolicitacaotrabalho, a qual só está presente nos documentos de consultas legislativas. O coeficiente de anotação Kappa alcançou a média de <span class="math inline">\(\sim\)</span><!-- -->80%. O modelo BERT com ajuste fino, treinado com a junção do C-corpus e PL-corpus, melhorou o resultado individual do treinamento para C-corpus, alcançando medida F1 de 73,90%.</p>
+<p><span class="citation" data-cites="Correia2022FineGrainedSTF">Correia et al. (<a href="../../shared/referencias/referencias.html#ref-Correia2022FineGrainedSTF" role="doc-biblioref">2022</a>)</span> disponibilizaram um <em>corpus</em> anotado manualmente para REN em português no contexto do Judiciário brasileiro. O <em>corpus</em> contém 594 decisões publicadas pelo STF e anotadas por 76 estudantes de Direito. O processo de anotação foi composto por três fases, duas de treinamento e uma fase final. Os autores utilizaram um processo de anotação detalhada de decisões jurídicas, na qual foram anotados dois níveis de entidades jurídicas aninhadas. No primeiro nível, foram anotadas quatro entidades mais abrangentes (categorias): Precedente, Citação acadêmica, Referência legislativa e Pessoa. No segundo nível, foram anotadas entidades específicas de cada uma das quatro categorias. No total, foram identificadas 24 entidades aninhadas (tipos). Dois grupos de estudantes, ao longo de quase um ano, realizaram a tarefa de anotação sob rigorosa supervisão. Ambos os grupos realizaram anotação na mesma coleção de 1.363 trechos, com um coeficiente de concordância Kappa médio de 70%. Os modelos CRF e BiLSTM-CRF construídos obtiveram a mesma medida F1 de 90%.</p>
+<p>O artigo de <span class="citation" data-cites="Brito2023Stil-CDJURBR">Brito et al. (<a href="../../shared/referencias/referencias.html#ref-Brito2023Stil-CDJURBR" role="doc-biblioref">2023</a>)</span> apresenta uma metologia de anotação manual de documentos jurídicos que serviu como base para construção do CDJUR-BR, um <em>corpus</em> de REN-Legal com 1.216 documentos de processos judiciais brasileiros, contendo 21 entidades específicas das categorias Pessoa, Prova, Pena, Endereço, Sentença e Norma. Um comitê com professores da área do Direito e da Computação, juntamente com os especialistas do domínio, definiu os principais parâmetros do CDJUR-BR, bem como garantiu a adequada aplicação da metodologia. Foram selecionados documentos das classes-CNJ mais representativas dos processos de primeiro grau, encerrados em 2019 no Tribunal de Justiça do Estado do Ceará (85% dos processos de primeiro grau são das classes selecionadas). O processo de anotação foi realizado em duas fases, sendo a primeira de treinamento. Foram definidos três grupos de anotadores formados por especialista. A avaliação da concordância alcançou coeficiente Kappa de 0,69 para 73% dos documentos, e os demais documentos passaram por revisões por especialistas e etapas de refinamento. Com a CDJUR-BR, os resultados apontaram superioridade do modelo BERT com medida F1 média de 58%. Testes comparativos entre CDJUR-BR e LeNER-BR indiciaram que o modelo REN treinado com a CDJUR-BR é superior em reconhecer entidades de outros <em>corpora</em>.</p>
+<p>O <em>corpus</em> PersoSEG <span class="citation" data-cites="Guimaraes2024LegalSegmentation">(<a href="../../shared/referencias/referencias.html#ref-Guimaraes2024LegalSegmentation" role="doc-biblioref">Guimarães et al., 2024</a>)</span> é composto por 127 documentos legais em português, no período de 2001 a 2015, obtidos do DODF. A pesquisa utiliza técnicas de REN aplicadas às tarefas de segmentação e rotulação em documentos legais. Foram utilizadas 12 tipos de entidades manualmente anotadas, representando atos da administração pública, como por exemplo, abono de permanência, (Ato_Abono_Permanencia), nomeação ou exoneração de cargos comissionados (Ato_Nomeacao_Comissionado e Ato_Exoneracao_Comissionado) ou efetivos (Ato_Nomeacao_Efetivo e Ato_Exoneracao_Efetivo), entre outras. O <em>corpus</em> foi avaliado utilizando combinações dos modelos CRF, CNN e LSTM, com melhor medida F1 média de 75,65% para REN com o modelo CRF.</p>
+</section>
+<section id="modelos-de-linguagem-neurais-para-ren-legal" class="level3" data-number="13.4.2">
+<h3 data-number="13.4.2" class="anchored" data-anchor-id="modelos-de-linguagem-neurais-para-ren-legal"><span class="header-section-number">13.4.2</span> Modelos de linguagem neurais para REN-Legal</h3>
+<p>O <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol2/modelos/cap-modelos-linguagem/cap-modelos-linguagem.html#sec-cap-modelos-linguagem" target="_blank" title="Volume 2">Modelos de linguagem</a></span> descreve os conceitos relacionados aos modelos de linguagem, detalhando o funcionamento dos modelos probabilísticos, neurais e de grande escala (<em>Large Language Models</em> ou LLMs). Nesta subseção, são apresentados estudos e modelos neurais específicos para o REN-Legal em língua portuguesa.</p>
+<p>A pesquisa de <span class="citation" data-cites="Bonifacio2020DrugSeizuresCorpus">Bonifacio et al. (<a href="../../shared/referencias/referencias.html#ref-Bonifacio2020DrugSeizuresCorpus" role="doc-biblioref">2020</a>)</span> avalia o uso de modelos de linguagem neural para as tarefas de REN-Legal, utilizando os modelos pré-treinados para a língua portuguesa ELMo e BERT, ajustados para o domínio legal. Os ajustes foram feitos utilizando o <em>corpus</em> Acordãos-TCU, composto de 298 mil documentos do Tribunal de Contas da União (TCU)<a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a>. Os modelos foram avaliados em diferentes cenários, utilizando os <em>corpora</em> HAREM, LeNER-Br e DrugSeizures-Br. Os resultados demonstraram que os modelos treinados no domínio foram melhores. O modelo BERT obteve o melhor desempenho, alcançando a medida F1 de 89,39%, superando o LeNER-Br em cerca de quatro pontos na média.</p>
+<p>O trabalho de <span class="citation" data-cites="Zanuz2022">Zanuz; Rigo (<a href="../../shared/referencias/referencias.html#ref-Zanuz2022" role="doc-biblioref">2022</a>)</span> apresenta os primeiros modelos BERT ajustados para REN-Legal em língua portuguesa. Dois modelos pré-treinados, <code>bert-base-portuguese-cased</code> e <code>bert-large-portuguese-cased</code>, foram utilizados no treinamento. O ajuste fino foi realizado com 10 épocas sobre os dados de treinamento e o melhor modelo, considerando a medida F1, foi selecionado para avaliar os resultados no conjunto de teste. Os modelos propostos foram comparados com resultados anteriormente obtidos para o <em>corpus</em>: LSTM+CRF, BERT-Multi, BERT-Acordaos e ELMo-Acordaos. Para o <em>corpus</em> LeNER-Br, os modelos BERT pré-treinados para língua portuguesa <span class="citation" data-cites="Souza2020">(<a href="../../shared/referencias/referencias.html#ref-Souza2020" role="doc-biblioref">Souza et al., 2020</a>)</span> ajustados para o domínio alcançaram medida F1 de 91,14% no BERTimbau-Large e 90,62% no BERTimbau-Base.</p>
+<p>O estudo de &nbsp;<span class="citation" data-cites="AlbuquerqueEPIA2023-DLUlyssesNER">Albuquerque et al. (<a href="../../shared/referencias/referencias.html#ref-AlbuquerqueEPIA2023-DLUlyssesNER" role="doc-biblioref">2023a</a>)</span> avaliou duas arquiteturas de <em>deep learning</em>, BiLSTM-CRF e BERT+Fine-Tuning, aplicadas a tarefa de REN-Legal em português brasileiro, utilizando os <em>corpora</em> UlyssesNER-Br e LeNER-Br. Para o UlyssesNER-Br, foi utilizado o conjunto de documentos que contém apenas projetos de lei (PL-corpus) visto que estes estão disponíveis publicamente. O modelo BERT+Fine-Tuning alcançou resultados superiores, com medida F1 de 88,27% para o LeNER-Br e 83,17% para o UlyssesNER-Br/PL-corpus, com um aumento de cerca de 7% neste último em relação à primeira versão.</p>
+<p>O trabalho de <span class="citation" data-cites="RafaelPROPOR2024UlyssesNER">Nunes et al. (<a href="../../shared/referencias/referencias.html#ref-RafaelPROPOR2024UlyssesNER" role="doc-biblioref">2024b</a>)</span> explora como o REN pode ser aprimorado usando técnicas semi-supervisionadas. A abordagem consiste em uma estratégia de autoaprendizagem para ajustar um modelo BERT projetado para REN, usando documentos legislativos escritos em português brasileiro como estudo de caso. O UlyssesNER-Br foi utilizado para treinamento e avaliação. O BERTimbau com autoaprendizagem obteve a medida F1 de 86,70 ± 2,28.</p>
+<p>A pesquisa de <span class="citation" data-cites="EduardoPROPOR2024RoBERTaLexPT">Garcia et al. (<a href="../../shared/referencias/referencias.html#ref-EduardoPROPOR2024RoBERTaLexPT" role="doc-biblioref">2024</a>)</span> investiga a aplicação de métodos de PLN na adaptação de modelos para o domínio legal em língua portuguesa. O modelo RoBERTaLexPT foi desenvolvido aplicando técnicas de deduplicação de dados (identificação e eliminação de cópias duplicadas de dados) ao modelo RoBERTa, utilizando os <em>corpora</em> LegalPT (composto de seis <em>corpora</em> legais), o <em>corpus</em> CrawlPT (composto por três <em>corpora</em> do domínio geral) e o Tesemô&nbsp;<span class="citation" data-cites="FelipeUlyssesTesemoLRE2024">(<a href="../../shared/referencias/referencias.html#ref-FelipeUlyssesTesemoLRE2024" role="doc-biblioref">Siqueira et al., 2024</a>)</span>. Os experimentos incluíram pré-treinamento e <em>fine-tuning</em> dos modelos em tarefas de REN-Legal e classificação com <em>benchmarks</em>, comparando os resultados dos modelos genéricos com específicos. Os resultados mostraram que o RoBERTaLexPT treinado com a combinação de <em>corpora</em> legal e geral, superou outros modelos legais, incluindo o RoBERTaTimbau, alcançando medida F1 média de 90,73% para LeNER-Br e 88,56% UlyssesNER-Br (categoria).</p>
+<p>A <a href="#tbl-direito-ren-bechmarkcorpora" class="quarto-xref">Tabela&nbsp;<span>13.1</span></a> apresenta os resultados obtidos para a tarefa de REN-legal em língua portuguesa utilizando modelos de linguagem neural. É possível verificar que, a partir de 2020, com o trabalho de <span class="citation" data-cites="Bonifacio2020DrugSeizuresCorpus">Bonifacio et al. (<a href="../../shared/referencias/referencias.html#ref-Bonifacio2020DrugSeizuresCorpus" role="doc-biblioref">2020</a>)</span>, os trabalhos assumiram o estado da arte utilizando o modelo BERT.</p>
+<p></p>
+<div id="tbl-direito-ren-bechmarkcorpora" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-direito-ren-bechmarkcorpora-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;13.1: Modelos de linguagem neural estado da arte para REN-Legal em português
+</figcaption>
+<div aria-describedby="tbl-direito-ren-bechmarkcorpora-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 52%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><em>Corpus</em></th>
+<th style="text-align: left;">Modelo</th>
+<th style="text-align: left;">Medida F1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Justiça do Trabalho</td>
+<td style="text-align: left;">ELMO+GLOVE <span class="citation" data-cites="castro2019deep">(<a href="../../shared/referencias/referencias.html#ref-castro2019deep" role="doc-biblioref">Castro, 2019</a>)</span></td>
+<td style="text-align: left;">93,81%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DrugSeizures-Br</td>
+<td style="text-align: left;">BERT <span class="citation" data-cites="Bonifacio2020DrugSeizuresCorpus">(<a href="../../shared/referencias/referencias.html#ref-Bonifacio2020DrugSeizuresCorpus" role="doc-biblioref">Bonifacio et al., 2020</a>)</span></td>
+<td style="text-align: left;">89,39%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LeNER-Br</td>
+<td style="text-align: left;">BERTimbau-Large+Fine-Tuning <span class="citation" data-cites="Zanuz2022">(<a href="../../shared/referencias/referencias.html#ref-Zanuz2022" role="doc-biblioref">Zanuz; Rigo, 2022</a>)</span></td>
+<td style="text-align: left;">91,14%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CDJUR-BR</td>
+<td style="text-align: left;">BERT <span class="citation" data-cites="Brito2023Stil-CDJURBR">(<a href="../../shared/referencias/referencias.html#ref-Brito2023Stil-CDJURBR" role="doc-biblioref">Brito et al., 2023</a>)</span></td>
+<td style="text-align: left;">58,00%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UlyssesNER-Br (PL-Corpus)</td>
+<td style="text-align: left;">RoBERTaLexPTbase <span class="citation" data-cites="EduardoPROPOR2024RoBERTaLexPT">(<a href="../../shared/referencias/referencias.html#ref-EduardoPROPOR2024RoBERTaLexPT" role="doc-biblioref">Garcia et al., 2024</a>)</span></td>
+<td style="text-align: left;">88,56% (categoria)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p></p>
+</section>
+</section>
+<section id="modelos-de-linguagem-de-grande-escala-llm-para-ren" class="level2" data-number="13.5">
+<h2 data-number="13.5" class="anchored" data-anchor-id="modelos-de-linguagem-de-grande-escala-llm-para-ren"><span class="header-section-number">13.5</span> Modelos de linguagem de grande escala (LLM) para REN</h2>
+<p>Conforme descrito na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol2/modelos/cap-modelos-linguagem/cap-modelos-linguagem.html#sec-cap-modelos-linguagem-tendencias_llms" target="_blank" title="Volume 2">Tendências</a></span>, os LLMs se diferenciam dos demais modelos de linguagem neural pré-treinados devido a (i) quantidade enorme de parâmetros, o (ii) enquadramento na categoria de métodos de IA Gerativa, e (iii) habilidades emergentes, as quais não costumam ser observadas em modelos menores. Neste sentido, destacamos aqui algumas aplicações de LLMs em tarefas de PLN, independente de língua. Por fim, na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html#sec-cap-direito-ren-REN-Legal-LLM-PT" target="_blank" title="Volume 3">LLM para REN-Legal em língua portuguesa</a></span>, detalhamos as iniciativas de REN-Legal em língua portuguesa.</p>
+<p>O trabalho de <span class="citation" data-cites="wang-etal-2021-want-reduce">Wang et al. (<a href="../../shared/referencias/referencias.html#ref-wang-etal-2021-want-reduce" role="doc-biblioref">2021</a>)</span> foi um dos primeiros a investigar como o modelo de linguagem GPT-3 <span class="citation" data-cites="gpt3">(<a href="../../shared/referencias/referencias.html#ref-gpt3" role="doc-biblioref">Brown et al., 2020</a>)</span> pode ser utilizado como uma ferramenta de rotulagem de dados de baixo custo para treinar outros modelos de PLN. Os autores conduziram um estudo empírico em nove tarefas de PLN, como sumarização, análise de sentimento e classificação de tópico. A pesquisa demonstrou que (i) o uso do GPT-3 para rotulagem de dados pode reduzir os custos de rotulagem em até 96% em comparação com a rotulagem humana, (ii) dados rotulados pelo GPT-3 podem superar o desempenho do próprio GPT-3 em configurações de <em>few-shot learning</em>, (iii) a combinação de rótulos gerados pelo GPT-3 com rótulos humanos pode melhorar ainda mais o desempenho dos modelos e, por fim, (iv) a estratégia de rotulagem ativa proposta no artigo, na qual os rótulos de baixa confiança do GPT-3 são revisados por humanos, melhora a qualidade dos dados anotados.</p>
+<p>Especificamente para REN, <span class="citation" data-cites="wang2023gptner">Wang et al. (<a href="../../shared/referencias/referencias.html#ref-wang2023gptner" role="doc-biblioref">2023</a>)</span> apresentaram o GPT-NER para adaptar modelos de linguagem de grande escala à tarefa de REN, transformando-a em uma tarefa de geração de texto com <em>tokens</em> especiais para entidades. Foi introduzida uma estratégia de auto-verificação para mitigar alucinações do modelo. Foram realizados experimentos em cinco conjuntos de dados de REN para língua inglesa em domínios variados. O GPT-NER alcançou desempenho comparável aos <em>baselines</em> supervisionados utilizando <em>few-shot learning</em>, superando modelos supervisionados com dados de treinamento escassos. De maneira similar, o trabalho de <span class="citation" data-cites="wei2024chatiezeroshotinformationextraction">Wei et al. (<a href="../../shared/referencias/referencias.html#ref-wei2024chatiezeroshotinformationextraction" role="doc-biblioref">2024</a>)</span> apresenta o ChatIE, um framework de extração de informações com <em>few-shot learning</em> através de conversas com o ChatGPT<a href="#fn20" class="footnote-ref" id="fnref20" role="doc-noteref"><sup>20</sup></a>. O ChatIE foi avaliado em três tarefas de EI, entre elas a tarefa de REN, a qual foi transformada em um problema de pergunta e resposta com duas etapas. Na primeira etapa, são identificados os tipos de elementos em uma sentença. Na segunda etapa, é realizada a EI para cada tipo de elemento identificado. Para a tarefa de REN, foram usados dois conjuntos de dados relacionados a notícias, um em inglês e outro em chinês. O ChatIE alcançou excelente desempenho, superando alguns modelos em vários conjuntos de dados.</p>
+<p>No domínio legal, o trabalho de <span class="citation" data-cites="Atin2024LLLLegalNER">Hussain; Thomas (<a href="../../shared/referencias/referencias.html#ref-Atin2024LLLLegalNER" role="doc-biblioref">2024</a>)</span> investiga a aplicação de modelos de LLM na extração de entidades específicas do domínio jurídico, em documentos de casos legais indianos. O estudo avalia a eficácia de várias arquiteturas de LLMs de última geração na identificação de entidades jurídicas. O conjunto de dados utilizado para avaliação foi o InLegalNER, um <em>corpus</em> contendo 14 entidades, sendo 11 entidades específicas do domínio legal, tais como Petição, Vítima, Número do Caso, Juiz, Advogado, entre outras. Foram avaliados quatro modelos de larga escala: LLaMA 3 <span class="citation" data-cites="llama3modelcard">(<a href="../../shared/referencias/referencias.html#ref-llama3modelcard" role="doc-biblioref">AI@Meta, 2024</a>)</span>, Gemma <span class="citation" data-cites="gemma2024gemmamodel">(<a href="../../shared/referencias/referencias.html#ref-gemma2024gemmamodel" role="doc-biblioref">Team et al., 2024</a>)</span>, Mistral <span class="citation" data-cites="jiang2023mistral7b">(<a href="../../shared/referencias/referencias.html#ref-jiang2023mistral7b" role="doc-biblioref">Jiang et al., 2023</a>)</span> e Phi-3 <span class="citation" data-cites="abdin2024phi3">(<a href="../../shared/referencias/referencias.html#ref-abdin2024phi3" role="doc-biblioref">Abdin et al., 2024</a>)</span>, utilizando a técnica de <em>few-shot learning</em>, na qual o <em>prompt</em> foi elaborado instruindo o LLM a gerar respostas em formato JSON, incluindo o texto extraído e os rótulos de entidade correspondentes. Os modelos foram avaliados utilizando precisão, revocação e medida F1 como métricas. O LLaMA 3 alcançou a medida F1 de 59,17%, Gemma de 63,53% , Mistral de 63,76%. Phi-3 de 54,40%. Os principais resultados indicam que os modelos Mistral e Gemma se destacaram em termos de equilíbrio entre precisão e revocação, essenciais para a identificação precisa de entidades.</p>
+<section id="sec-cap-direito-ren-REN-Legal-LLM-PT" class="level3" data-number="13.5.1">
+<h3 data-number="13.5.1" class="anchored" data-anchor-id="sec-cap-direito-ren-REN-Legal-LLM-PT"><span class="header-section-number">13.5.1</span> LLM para REN-Legal em língua portuguesa</h3>
+<p>Visando encontrar alternativas para os métodos tradicionais de anotação manual, reduzindo os custos e esforços de anotação, o trabalho de <span class="citation" data-cites="Oliveira2024LLMLegalNER">Oliveira et al. (<a href="../../shared/referencias/referencias.html#ref-Oliveira2024LLMLegalNER" role="doc-biblioref">2024</a>)</span> investiga o uso de LLM baseados em <em>prompt</em> e supervisão fraca para a tarefa de REN-Legal em português. O estudo utilizou o DODFCorpus I, disponibilizado pelo projeto KnEDLe da Universidade de Brasília. Foi utilizado o <em>corpus</em> “Atos de Contratos e Licitações”, que contém documentos públicos diários que relatam as ações do governo do Distrito Federal do Brasil, particionado em 783 atos de treinamento, 379 atos de validação e 380 atos de teste. Foram comparadas três abordagens: (i) baseada em <em>prompt</em>, com <em>few-shot learning</em>, apresentando três exemplos de dados rotulados ao GPT-3, (ii) supervisão fraca, com sistema baseado em regras e heurísticas para gerar conjuntos de dados rotulados rapidamente e (iii) anotação humana. As 783 instâncias de treinamento foram rotuladas pelo GPT-3, realizando a predição de 1.565.108 <em>tokens</em>, com um custo final de 31,30 dólares utilizando o modelo Davinci. Quatro modelos de linguagem neural pré-treinados, com ajuste fino, foram usados para a construção do modelo de REN: BERTimbau, Lener-BR, RoBERTa e DistilBERT-PT<a href="#fn21" class="footnote-ref" id="fnref21" role="doc-noteref"><sup>21</sup></a>. Para as onze entidades do <em>corpus</em>, considerando a média dos quatro modelos e a métrica de medida F1, os resultados foram: 52,8% (GPT-3), 67,9% (supervisão fraca), 71,3% (anotação humana) e 64,6% (GPT-3 + supervisão fraca). Considerando a métrica de pontuação de preservação, que preserva o desempenho apresentado pelos modelos treinados por humanos, os resultados foram: 74,0% (GPT-3), 95,6%(supervisão fraca), 90,7% (GPT-3 + supervisão fraca) e 83,9% (GPT-3 + 30% de anotação humana). O BERTimbau superou o LenerBR em alguns casos, mesmo este último tendo sido adaptado para documentos legislativos brasileiros.</p>
+<p>O trabalho de <span class="citation" data-cites="Nunes2024LLMLegalNER">Nunes et al. (<a href="../../shared/referencias/referencias.html#ref-Nunes2024LLMLegalNER" role="doc-biblioref">2024a</a>)</span> explora a aplicação do paradigma de Aprendizagem em Contexto (em inglês, <em>In-Context Learning</em> ou ICL), para melhorar o desempenho dos LLMs para o REN-Legal em língua portuguesa. O Sabiá, um LLM em português <span class="citation" data-cites="pires2023sabia">(<a href="../../shared/referencias/referencias.html#ref-pires2023sabia" role="doc-biblioref">Pires et al., 2023</a>)</span>, foi utilizado para extrair entidades nomeadas no domínio. Dois <em>corpora</em> de REN para o domínio legal (LeNER-Br e UlyssesNER-Br) foram utilizados como entrada para a tarefa de <em>prompt</em>. Para a seleção das amostras, foram utilizadas três heurísticas: (i) top K exemplos similares, (ii) top K exemplos similares por tipo de entidade, e (iii) K amostras aleatórias. O modelo generativo foi ensinado a catalogar as entidades e o resultado foi comparado com a anotação original. No <em>corpus</em> LeNER-Br, a heurística K similares por categorias apresentou medida F1 de 51% com oito exemplos. No resultado por tipos, três classes de entidades superaram 50% de medida F1: Pessoa com 68%, Organização com 53%, e Jurisprudência com 53%. No <em>corpus</em> UlyssesNER-Br, a mesma heurística atingiu medida F1 de 48% com oito exemplos, necessitando de onze exemplos para alcançar 51%. No resultado por tipo, três classes também obtiveram mais de 50% de medida F1: Data com 81%, Local com 69%, e Pessoa com 60%. De acordo com os autores, as classificações incorretas são resultados de uma formatação similar de termos que se referem a conceitos diferentes (Jurisprudência e Legislação, por exemplo), ambiguidade semântica (o “jornal diário catarinense” pode ser um Local ou uma Organização) e estruturas e jargões específicos do domínio (Plenário, junto com referências a jurisprudência ou legislação, separadas por um traço, confunde o modelo). A amostragem aleatória apresentou o pior desempenho.</p>
+<p>O trabalho de <span class="citation" data-cites="iceis24CoelhoChatGPTLegalIE-PT">Coelho et al. (<a href="../../shared/referencias/referencias.html#ref-iceis24CoelhoChatGPTLegalIE-PT" role="doc-biblioref">2024</a>)</span> aborda a extração de informações no domínio jurídico brasileiro, especificamente extraindo características estruturadas de pareceres jurídicos relacionados a reclamações de consumidores. O estudo compara dois métodos: técnicas tradicionais de aprendizado supervisionado e o uso de LLM, especificamente o ChatGPT, nas tarefas de classificação de texto e de REN. O <em>corpus</em> utilizado nos experimentos contém 959 pareceres jurídicos manualmente anotados, redigidos por juízes de primeira instância no Tribunal de Justiça do Rio de Janeiro. As entidades anotadas fora: Dano Moral, Dano Material, Honorários Advocatícios e Restituição. Utilizando a versão GPT-3.5-turbo, a técnica de <em>prompt</em> envolveu três principais itens: detalhes das informações a serem extraídas, formato de saída e exemplos opcionais (<em>few-shot</em>). Os resultados obtidos foram em termos de acurácia e raiz quadrática média dos erros (em inglês, <em>Root Mean Squared Errors</em> ou RMSEs): BERT (<em>Fine-tuning</em>) 96,2% e 825,8, BERT-CRF (<em>Fine-tuning</em>) 98,2% e 639,8, BERT-LSTM (<em>Feature-based</em>) 95,4% e 738,6, BERT-LSTM-CRF (<em>Feature-based</em>) 98,9% e 277,2, ChatGPT Entity Extractor 98,4% e 1230,9. Os resultados dos experimentos mostraram que ambas as abordagens (aprendizado supervisionado tradicional e ChatGPT) alcançaram desempenhos semelhantes em termos de métricas de avaliação tradicionais. No entanto, o uso do ChatGPT reduziu substancialmente a complexidade e o tempo necessário para o processo de EI.</p>
+<p>A <a href="#tbl-direito-ren-llms" class="quarto-xref">Tabela&nbsp;<span>13.2</span></a> apresenta os resultados obtidos para a tarefa de REN-legal em língua portuguesa utilizando, exclusivamente, LLMs.</p>
+<p></p>
+<div id="tbl-direito-ren-llms" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-direito-ren-llms-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;13.2: LLMs estado da arte para REN-Legal em português.
+</figcaption>
+<div aria-describedby="tbl-direito-ren-llms-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 67%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><em>Corpus</em></th>
+<th style="text-align: left;">Modelo</th>
+<th style="text-align: left;">Métrica</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">DODFCorpus I</td>
+<td style="text-align: left;">GPT-3 Davinci + <em>few-shot learning</em> com 3 exemplos <span class="citation" data-cites="Oliveira2024LLMLegalNER">(<a href="../../shared/referencias/referencias.html#ref-Oliveira2024LLMLegalNER" role="doc-biblioref">Oliveira et al., 2024</a>)</span></td>
+<td style="text-align: left;">52,8% (F1)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LeNER-Br</td>
+<td style="text-align: left;">Sabiá + <em>in-context learning</em> com 8 exemplos <span class="citation" data-cites="Nunes2024LLMLegalNER">(<a href="../../shared/referencias/referencias.html#ref-Nunes2024LLMLegalNER" role="doc-biblioref">Nunes et al., 2024a</a>)</span></td>
+<td style="text-align: left;">51,0% (F1)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UlyssesNER-Br</td>
+<td style="text-align: left;">Sabiá + <em>in-context learning</em> com 11 exemplos <span class="citation" data-cites="Nunes2024LLMLegalNER">(<a href="../../shared/referencias/referencias.html#ref-Nunes2024LLMLegalNER" role="doc-biblioref">Nunes et al., 2024a</a>)</span></td>
+<td style="text-align: left;">51,0% (F1)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Reclamações de Consumidores</td>
+<td style="text-align: left;">GPT-3.5-turbo + <em>few-shot learning</em> (ChatGPT Entity Extractor) <span class="citation" data-cites="iceis24CoelhoChatGPTLegalIE-PT">(<a href="../../shared/referencias/referencias.html#ref-iceis24CoelhoChatGPTLegalIE-PT" role="doc-biblioref">Coelho et al., 2024</a>)</span></td>
+<td style="text-align: left;">98,4% (Acurácia)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p></p>
+</section>
+</section>
+<section id="aplicação-de-ren-em-sistema-de-recuperação-de-informação-legislativa" class="level2" data-number="13.6">
+<h2 data-number="13.6" class="anchored" data-anchor-id="aplicação-de-ren-em-sistema-de-recuperação-de-informação-legislativa"><span class="header-section-number">13.6</span> Aplicação de REN em sistema de recuperação de informação legislativa</h2>
+<p>O <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir" target="_blank" title="Volume 3">Recuperação de Informação</a></span> destaca a importância da área da Recuperação de Informação (RI) para o PLN. Pesquisas na área de <em>Legal Information Retrieval</em> ou recuperação de informação no domínio legal (RI-Legal) focam principalmente em aplicações que utilizam a linguagem judiciária, forense ou processual <span class="citation" data-cites="SANSONE2022">(<a href="../../shared/referencias/referencias.html#ref-SANSONE2022" role="doc-biblioref">Sansone; Sperlí, 2022</a>)</span>. O <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito/cap-direito.html#sec-cap-direito" target="_blank" title="Volume 3">PLN no Direito</a></span> destaca que a esfera de aplicação do subdomínio legislativo é a criação de textos legais, como leis e estatutos, entre outros. Sistemas RI-Legal têm sido criados ou adaptados para diversas tarefas legislativas <span class="citation" data-cites="Smywi2021 Heusden2023holandes">(<a href="../../shared/referencias/referencias.html#ref-Heusden2023holandes" role="doc-biblioref">Heusden et al., 2023</a>; <a href="../../shared/referencias/referencias.html#ref-Smywi2021" role="doc-biblioref">Smywiński-Pohl et al., 2021</a>)</span>.</p>
+<p>Como mencionado anteriormente, o projeto Ulysses (<span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html#sec-direito-ren-contextualizacao" target="_blank" title="Volume 3">Contextualização</a></span>) é um conjunto de iniciativas de IA aplicados no processo legislativo brasileiro, criado pela Câmara dos Deputados, o qual recebeu recentemente novos recursos em várias frentes de trabalho<a href="#fn22" class="footnote-ref" id="fnref22" role="doc-noteref"><sup>22</sup></a>. Entre estes recursos, foi utilizado o <em>pipeline</em> para um sistema de RI-Legal proposto por <span class="citation" data-cites="Souza2021JURIX">Souza et al. (<a href="../../shared/referencias/referencias.html#ref-Souza2021JURIX" role="doc-biblioref">2021</a>)</span>, visando automatizar tarefas de busca de documentos relevantes. REN-Legal foi inserido neste contexto.</p>
+<div id="fig-direito-ren-ulyssesnerq_pipeline" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-direito-ren-ulyssesnerq_pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;13.3: <em>Pipeline</em> do UlyssesNERQ, adaptado de <span class="citation" data-cites="AlbuquerquePROPOR2024UlyssesNERQ">Albuquerque et al. (<a href="../../shared/referencias/referencias.html#ref-AlbuquerquePROPOR2024UlyssesNERQ" role="doc-biblioref">2024</a>)</span>
+</figcaption>
+<div aria-describedby="fig-direito-ren-ulyssesnerq_pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/ulyssesNERQ_pipeline_novo.png" class="img-fluid figure-img">
+</div>
+</figure>
+</div>
+<p>O UlyssesNERQ <span class="citation" data-cites="AlbuquerquePROPOR2024UlyssesNERQ">(<a href="../../shared/referencias/referencias.html#ref-AlbuquerquePROPOR2024UlyssesNERQ" role="doc-biblioref">Albuquerque et al., 2024</a>)</span> atualiza o <em>pipeline</em> do sistema de RI-Legal original, utilizando NER-Legal e a técnica de expansão de consulta. Através desta técnica, o sistema de RI modifica a <em>string</em> de consulta original, inserindo informações que possam maximizar seus resultados (<span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-QERF" target="_blank" title="Volume 3">Modificação Automática de Consultas</a></span>). A <a href="#fig-direito-ren-ulyssesnerq_pipeline" class="quarto-xref">Figura&nbsp;<span>13.3</span></a> detalha o processo utilizado. O sistema recebe como entrada a <em>query</em> com solicitação de consulta legislativa e o <em>corpus</em> UlyssesNER-Br. Após a aplicação de tarefas de pré-processamento de texto na consulta, é feita a identificação de duas entidades legislativas, FUNDprojetodelei e FUNDsolicitacaotrabalho. Em caso de identificação destas entidades, a consulta é expandida com os conteúdos dos documentos correlacionados: (i) para a entidade FUNDprojetodelei, a consulta é expandida com a ementa dos projetos de lei encontrados; (ii) para FUNDsolicitacaodetrabalho, a expansão é feita com todo o conteúdo da solicitação legislativa encontrada. Em caso de não ter sido encontrada nenhuma entidade, a consulta não é modificada. O <a href="#def-cap-direito-ren-quadro-exemplos_expansao" class="quarto-xref">Quadro&nbsp;<span>13.2</span></a> apresenta exemplos fictícios de consultas legislativas, com e sem expansão utilizando entidades. Ao final, são retornados os <em>top K</em> documentos mais relevantes encontrados.</p>
+<div id="def-cap-direito-ren-quadro-exemplos_expansao" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 13.2</strong></span> Exemplos de expansão de consultas legislativas utilizando REN, adaptado de <span class="citation" data-cites="AlbuquerquePROPOR2024UlyssesNERQ">(<a href="../../shared/referencias/referencias.html#ref-AlbuquerquePROPOR2024UlyssesNERQ" role="doc-biblioref">Albuquerque et al., 2024</a>)</span>. Expansões de consulta em negrito.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Consulta legislativa (<em>query</em>)</th>
+<th style="text-align: left;">Entidades encontradas</th>
+<th style="text-align: left;">Consulta expandida</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Solicito revisão dos projetos de lei PLP 438/2014 e PLP 137/2015.</td>
+<td style="text-align: left;"><a href="https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=817999">PLP 438/2014</a> <a href="https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=1594899">PLP 137/2015</a></td>
+<td style="text-align: left;">Solicito revisão dos projetos de lei PLP 438/2014 e PLP 137/2015. <strong>Dispõe sobre o procedimento para a criação, a incorporação, a fusão e o desmembramento de Municípios, nos termos do § 4º do art. 18 da Constituição Federal, altera a Lei nº 5.172, de 25 de outubro de 1966, e dá outras providências. Dispõe sobre o procedimento para a criação, a incorporação, a fusão e o desmembramento de Municípios, nos termos do § 4º do art. 18 da Constituição Federal, e dá outras providências.</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Solicito complementação de parecer em função da apensação do PL 5165/2019 ao mesmo.</td>
+<td style="text-align: left;"><a href="https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2221141">PL 5165/2019</a></td>
+<td style="text-align: left;">Solicito complementação de parecer em função da apensação do PL 5165/2019 ao mesmo <strong>Altera o art. 3º da Lei n.&nbsp;13.855, de 8 de julho de 2019, para modificar a sua cláusula de vigência</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Parlamentar solicita aprovação</td>
+<td style="text-align: left;">–</td>
+<td style="text-align: left;">Parlamentar solicita aprovação</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+<p></p>
+<p>Para validação do UlyssesNERQ, os experimentos utilizaram 32 configurações de pré-processamento de texto nas <em>strings</em> de busca com as técnicas de <em>stemming</em>, contagem de frequência, modelos de linguagem <em>n-gram</em>, e diversas combinações. A expansão de consulta foi então avaliada aplicando três modelos de REN-Legal ajustados para o domínio: CRF <span class="citation" data-cites="Albuquerque2022UlyssesNER">(<a href="../../shared/referencias/referencias.html#ref-Albuquerque2022UlyssesNER" role="doc-biblioref">Albuquerque et al., 2022</a>)</span>, BERT <span class="citation" data-cites="AlbuquerqueEPIA2023-DLUlyssesNER">(<a href="../../shared/referencias/referencias.html#ref-AlbuquerqueEPIA2023-DLUlyssesNER" role="doc-biblioref">Albuquerque et al., 2023a</a>)</span>, e uma adaptação do modelo Bertikal <span class="citation" data-cites="polo2021bertikal">(<a href="../../shared/referencias/referencias.html#ref-polo2021bertikal" role="doc-biblioref">Polo et al., 2021</a>)</span> ajustado para as entidades legislativas. Além destes modelos, foram utilizadas duas técnicas de expansão de consulta, a primeira utilizando sinônimos, e a segunda utilizando termos relacionados ou representativos ao conteúdo, através do algoritmo RM3 <span class="citation" data-cites="nogueira2019document">(<a href="../../shared/referencias/referencias.html#ref-nogueira2019document" role="doc-biblioref">Nogueira et al., 2019</a>)</span>. Os resultados foram verificados isoladamente e através de análises estatísticas. A métrica utilizada foi a medida de Revocação para 20 documentos (Recall@20). O melhor resultado foi alcançado pelo modelo BERT, alcançado 74,58% de revocação na análise individual, e média de 65,19% ± 0,0840, ultrapassando os resultados do <em>pipeline</em> original. Este modelo foi novamente combinado com as técnicas utilizadas, alcançando o mesmo resultado individual anterior, mas com média um pouco melhor utilizando a combinação de RM3 + BERT, com 65,35% ± 0,0810 de revocação. Comparando com o resultados do pipeline original, houve uma melhoria de cerca de 1,94% para os melhores resultados, e de 8,58% no resultado geral.</p>
+</section>
+<section id="considerações-finais" class="level2" data-number="13.7">
+<h2 data-number="13.7" class="anchored" data-anchor-id="considerações-finais"><span class="header-section-number">13.7</span> Considerações finais</h2>
+<p>Neste capítulo, foram detalhadas as principais iniciativas na área de reconhecimento de entidades nomeadas no domínio legal, com foco na língua portuguesa. Destacou-se o crescimento do uso de técnicas de Processamento de Linguagem Natural nesse campo, especialmente no Brasil. Foram discutidos os desafios inerentes à extração de informações de documentos jurídicos, considerando a grande quantidade e a complexidade desses textos. Além disso, foram mencionadas aplicações relevantes de inteligência artificial nas áreas jurídica e legislativa, como os projetos Victor e Ulysses, respectivamente. Apresentou-se um panorama abrangente das iniciativas em diversas línguas relacionadas ao REN no domínio legal, com suas abordagens e métodos, como aprendizado supervisionado e modelos neurais. Foram descritos <em>corpora</em> importantes para o REN-Legal em língua portuguesa e avaliação de modelos treinados especificamente para esse domínio, destacando seu desempenho em <em>corpora</em> brasileiros. Por fim, explorou-se a aplicação de REN em sistemas de recuperação de informação legislativa, como o UlyssesNERQ, que aprimora as consultas por meio da identificação de entidades nomeadas, aumentando a eficiência na busca de documentos relevantes.</p>
+<p>No campo de pesquisa sobre REN, diversas áreas têm se destacado com foco na melhoria contínua dos modelos. Investigações com LLMs têm se mostrado promissoras, permitindo avanços no processamento de grandes volumes de dados e na adaptação a tarefas específicas. Contudo, o desbalanceamento entre classes de entidades, no qual certas categorias apresentam uma representação desproporcionalmente menor nos dados, continua sendo um desafio. Esse fenômeno, aliado à existência de entidades pouco representativas, podem impactar negativamente o desempenho dos modelos. Estratégias como <em>Data augmentation</em>, que visa aumentar a quantidade de dados de treinamento de forma sintética, e <em>Active learning</em>, que melhora a eficiência do aprendizado ao selecionar amostras mais informativas, têm sido exploradas para mitigar esses problemas. Por fim, a dependência de domínio, dada a especificidade dos textos legais, impõe a necessidade de adaptar os modelos a contextos muito particulares, o que exige uma personalização contínua dos modelos para cada subdomínio do Direito.</p>
+</section>
+<section id="agradecimentos" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="agradecimentos">Agradecimentos</h2>
+<p>Gostaríamos de expressar nossa gratidão à Câmara dos Deputados Brasileira, ao Instituto de Ciências Matemáticas e de Computação da Universidade de São Paulo (ICMC/USP) e ao Instituto Nacional de Inteligência Artificial (IAIA) por possibilitarem o acesso a informações cruciais para o desenvolvimento da pesquisa, assim como a todos os colaboradores do projeto Ulysses. Além disso, agradecemos também à colaboração científica dos autores dos trabalhos citados neste capítulo, que gentilmente nos responderam com dados e recursos de suas pesquisas.</p>
+<!-- [^cap-direito-ren-1]: Todas as referências a outros capítulos referem-se à [Segunda Edição]{style="color: red"} [@BPLN_livro2024_2aedicao], disponível em [https://brasileiraspln.com/livro-pln/2a-edicao](https://brasileiraspln.com/livro-pln/2a-edicao/) JÁ ATUALIZEI TODAS PARA A 3ª EDIÇÃO-->
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="1" role="list" style="display: none">
+<div id="ref-abdin2024phi3" class="csl-entry" role="listitem">
+ABDIN, M. et al. <strong>Phi-3 Technical Report: A Highly Capable Language Model Locally on Your Phone</strong>., 2024. Disponível em: &lt;<a href="https://arxiv.org/abs/2404.14219">https://arxiv.org/abs/2404.14219</a>&gt;
+</div>
+<div id="ref-aejas2023contracts" class="csl-entry" role="listitem">
+AEJAS, B.; BELHI, A.; BOURAS, A. <strong><a href="https://doi.org/10.1007/978-3-031-25182-5_34">Smart Contracts Auto-generation for Supply Chain Contexts</a></strong>. (F. Noël et al., Eds.)Product Lifecycle Management. PLM in Transition Times: The Place of Humans and Transformative Technologies. <strong>Anais</strong>...Cham: Springer Nature Switzerland, 2023.
+</div>
+<div id="ref-agnoloni2022italiano" class="csl-entry" role="listitem">
+AGNOLONI, T. et al. <strong>Making <span>I</span>talian Parliamentary Records Machine-Actionable: the Construction of the <span>P</span>arla<span>M</span>int-<span>IT</span> corpus</strong>. Proceedings of the Workshop ParlaCLARIN III within the 13th Language Resources and Evaluation Conference. <strong>Anais</strong>...Marseille, France: European Language Resources Association, jun. 2022. Disponível em: &lt;<a href="https://aclanthology.org/2022.parlaclarin-1.17">https://aclanthology.org/2022.parlaclarin-1.17</a>&gt;
+</div>
+<div id="ref-Aha1991KNN" class="csl-entry" role="listitem">
+AHA, D. W.; KIBLER, D.; ALBERT, M. K. <a href="https://doi.org/10.1007/BF00153759">Instance-based learning algorithms</a>. <strong>Machine Learning</strong>, v. 6, n. 1, p. 37–66, 1 jan. 1991.
+</div>
+<div id="ref-llama3modelcard" class="csl-entry" role="listitem">
+AI@META. <a href="https://github.com/meta-llama/llama3/blob/main/MODEL_CARD.md">Llama 3 Model Card</a>. 2024.
+</div>
+<div id="ref-AKBIK" class="csl-entry" role="listitem">
+AKBIK, A. et al. <strong>Multilingual information extraction with PolyglotIE</strong>. Proceedings of COLING 2016, the 26th International Conference on Computational Linguistics: System Demonstrations. <strong>Anais</strong>...2016. Disponível em: &lt;<a href="https://aclanthology.org/C16-2056/">https://aclanthology.org/C16-2056/</a>&gt;
+</div>
+<div id="ref-AlbuquerquePROPOR2024UlyssesNERQ" class="csl-entry" role="listitem">
+ALBUQUERQUE, H. et al. <strong><span>U</span>lysses<span>NERQ</span>: Expanding Queries from <span>B</span>razilian <span>P</span>ortuguese Legislative Documents through Named Entity Recognition</strong>. (P. Gamallo et al., Eds.)Proceedings of the 16th International Conference on Computational Processing of Portuguese - Vol. 1. <strong>Anais</strong>...Santiago de Compostela, Galicia/Spain: Association for Computational Lingustics, mar. 2024. Disponível em: &lt;<a href="https://aclanthology.org/2024.propor-1.35">https://aclanthology.org/2024.propor-1.35</a>&gt;
+</div>
+<div id="ref-Albuquerque2022UlyssesNER" class="csl-entry" role="listitem">
+ALBUQUERQUE, H. O. et al. <strong>UlyssesNER-Br: A Corpus of Brazilian Legislative Documents for Named Entity Recognition</strong>. (V. Pinheiro et al., Eds.)Computational Processing of the Portuguese Language. <strong>Anais</strong>...Cham: Springer International Publishing, 2022. Disponível em: &lt;<a href="https://github.com/ulysses-camara/">https://github.com/ulysses-camara/</a>&gt;
+</div>
+<div id="ref-Albuquerque2023-NERSurvey" class="csl-entry" role="listitem">
+ALBUQUERQUE, H. O. et al. <a href="https://doi.org/10.26342/2023-70-14">Named entity recognition: a survey for the portuguese language</a>. <strong>Procesamiento del Lenguaje Natural</strong>, b2023.
+</div>
+<div id="ref-AlbuquerqueEPIA2023-DLUlyssesNER" class="csl-entry" role="listitem">
+ALBUQUERQUE, H. O. et al. <strong><a href="https://doi.org/10.1007/978-3-031-49011-8_8">On the Assessment of Deep Learning Models for Named Entity Recognition of Brazilian Legal Documents</a></strong>. (N. Moniz et al., Eds.)Progress in Artificial Intelligence. <strong>Anais</strong>...Cham: Springer Nature Switzerland, a2023.
+</div>
+<div id="ref-ALLES2018DOUCorpus" class="csl-entry" role="listitem">
+ALLES, V. J. <strong><a href="http://icts.unb.br/jspui/handle/10482/34901">Construção de um corpus para extrair entidades nomeadas do Di<span>á</span>rio Oficial da Uni<span>ã</span>o utilizando aprendizado supervisionado</a></strong>. mathesis—[s.l.] Master’s thesis, Universidade Federal de Bras<span>í</span>lia, 2018.
+</div>
+<div id="ref-ALMEIDA2021" class="csl-entry" role="listitem">
+ALMEIDA, P. G. R. <a href="https://www.redinnovacion.org/revista/red-informaci%C3%B3n-edici%C3%B3n-n%C2%B0-24-marzo-2021">Uma jornada para um Parlamento inteligente: Câmara dos Deputados do Brasil</a>. <strong>Red Información</strong>, v. 24, 2021.
+</div>
+<div id="ref-andrew2018frances" class="csl-entry" role="listitem">
+ANDREW, J. J.; TANNIER, X. <strong><a href="https://doi.org/10.18653/v1/W18-2401">Automatic Extraction of Entities and Relation from Legal Documents</a></strong>. Proceedings of the Seventh Named Entities Workshop. <strong>Anais</strong>...Melbourne, Australia: Association for Computational Linguistics, jul. 2018.
+</div>
+<div id="ref-angelidis2018named" class="csl-entry" role="listitem">
+ANGELIDIS, I.; CHALKIDIS, I.; KOUBARAKIS, M. <strong><a href="https://doi.org/10.3233/978-1-61499-935-5-1">Named entity recognition, linking and generation for greek legislation</a></strong>. Legal Knowledge and Information Systems. <strong>Anais</strong>...IOS Press, 2018.
+</div>
+<div id="ref-LuzdeAraujo2018" class="csl-entry" role="listitem">
+ARAUJO, P. H. L. DE et al. <strong>LeNER-Br: A Dataset for Named Entity Recognition in Brazilian Legal Text</strong>. (A. Villavicencio et al., Eds.)Computational Processing of the Portuguese Language. <strong>Anais</strong>...Cham: Springer International Publishing, 2018. Disponível em: &lt;<a href="https://github.com/peluz/lener-br">https://github.com/peluz/lener-br</a>&gt;
+</div>
+<div id="ref-Averina2022russo" class="csl-entry" role="listitem">
+AVERINA, M.; LEVANOVA, O.; KASATKINA, N. <strong><a href="https://doi.org/10.23919/FRUCT56874.2022.9953892">Named Entity Recognition for Russian Judicial Rulings Text</a></strong>. 2022 32nd Conference of Open Innovations Association (FRUCT). <strong>Anais</strong>...2022.
+</div>
+<div id="ref-Bach2019vietnam" class="csl-entry" role="listitem">
+BACH, N. X. et al. <strong><a href="https://doi.org/10.1145/3368926.3369731">Reference Extraction from Vietnamese Legal Documents</a></strong>. Proceedings of the 10th International Symposium on Information and Communication Technology. <strong>Anais</strong>...: SoICT ’19.New York, NY, USA: Association for Computing Machinery, 2019.
+</div>
+<div id="ref-barriere2019frances" class="csl-entry" role="listitem">
+BARRIERE, V.; FOURET, A. <strong>May <span>I</span> Check Again? <span>—</span> A simple but efficient way to generate and use contextual dictionaries for Named Entity Recognition. Application to <span>F</span>rench Legal Texts.</strong> Proceedings of the 22nd Nordic Conference on Computational Linguistics. <strong>Anais</strong>...Turku, Finland: Link<span>ö</span>ping University Electronic Press, 2019. Disponível em: &lt;<a href="https://aclanthology.org/W19-6136">https://aclanthology.org/W19-6136</a>&gt;
+</div>
+<div id="ref-batista2021UFRPE" class="csl-entry" role="listitem">
+BATISTA, H. H. et al. <strong><a href="https://doi.org/10.5753/eniac.2021.18255">A comparative analysis of text embedding approach to extract named entities in Portuguese legal documents</a></strong>. Anais do XVIII Encontro Nacional de Intelig<span>ê</span>ncia Artificial e Computacional. <strong>Anais</strong>...SBC, 2021.
+</div>
+<div id="ref-Bonifacio2020DrugSeizuresCorpus" class="csl-entry" role="listitem">
+BONIFACIO, L. H. et al. <strong><a href="https://doi.org/10.1007/978-3-030-61377-8_46">A Study on the Impact of Intradomain Finetuning of Deep Language Models for Legal Named Entity Recognition in Portuguese</a></strong>. (R. Cerri, R. C. Prati, Eds.)Intelligent Systems. <strong>Anais</strong>...Cham: Springer International Publishing, 2020.
+</div>
+<div id="ref-Bonifacio2020dissertacao" class="csl-entry" role="listitem">
+BONIFACIO, L. H. N. <strong><a href="https://posgraduacao.ufms.br/portal/trabalho-arquivos/download/7694">Modelos Profundos de Linguagem para Reconhecimento de Entidades Nomeadas em Domínio Jurídico</a></strong>. mathesis—[s.l.] Master’s thesis, Universidade Federal de Mato Grosso do Sul, 2020.
+</div>
+<div id="ref-bordino2021garnlp" class="csl-entry" role="listitem">
+BORDINO, I. et al. <a href="https://10.1007/s10796-020-09997-0">Garnlp: a natural language processing pipeline for garnishment documents</a>. <strong>Information Systems Frontiers</strong>, v. 23, p. 101–114, 2021.
+</div>
+<div id="ref-BRANDT2020" class="csl-entry" role="listitem">
+BRANDT, M. B. <strong><a href="https://repositorio.unesp.br/items/cfdf592e-efb0-40cc-b38c-c2882ab77637">Modelagem da informa<span>ç</span><span>ã</span>o legislativa: arquitetura da informa<span>ç</span><span>ã</span>o para o processo legislativo brasileiro</a></strong>. tese de doutorado—[s.l.] Universidade Estadual Paulista (Unesp), 2020.
+</div>
+<div id="ref-Brito2023Stil-CDJURBR" class="csl-entry" role="listitem">
+BRITO, M. et al. <strong>CDJUR-BR - Uma Coleção Dourada do Judiciário Brasileiro com Entidades Nomeadas Refinadas</strong>. Anais do XIV Simpósio Brasileiro de Tecnologia da Informação e da Linguagem Humana. <strong>Anais</strong>...Porto Alegre, RS, Brasil: SBC, 2023. Disponível em: &lt;<a href="https://github.com/mauriciobritojr/CDJUR-BR">https://github.com/mauriciobritojr/CDJUR-BR</a>&gt;
+</div>
+<div id="ref-gpt3" class="csl-entry" role="listitem">
+BROWN, T. B. et al. <strong>Language Models are Few-Shot Learners</strong>. (H. Larochelle et al., Eds.)Advances in Neural Information Processing Systems. <strong>Anais</strong>...Curran Associates, Inc., 2020. Disponível em: &lt;<a href="https://proceedings.neurips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html">https://proceedings.neurips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html</a>&gt;
+</div>
+<div id="ref-cabrera-diego-gheewala-2023-jus" class="csl-entry" role="listitem">
+CABRERA-DIEGO, L. A.; GHEEWALA, A. <strong><a href="https://doi.org/10.18653/v1/2023.semeval-1.247">Jus Mundi at <span>S</span>em<span>E</span>val-2023 Task 6: Using a Frustratingly Easy Domain Adaption for a Legal Named Entity Recognition System</a></strong>. Proceedings of the 17th International Workshop on Semantic Evaluation (SemEval-2023). <strong>Anais</strong>...Toronto, Canada: Association for Computational Linguistics, jul. 2023.
+</div>
+<div id="ref-cardellino-etal-2017-legal" class="csl-entry" role="listitem">
+CARDELLINO, C. et al. <strong>Legal <span>NERC</span> with ontologies, <span>W</span>ikipedia and curriculum learning</strong>. Proceedings of the 15th Conference of the <span>E</span>uropean Chapter of the Association for Computational Linguistics: Volume 2, Short Papers. <strong>Anais</strong>...Valencia, Spain: Association for Computational Linguistics, abr. 2017. Disponível em: &lt;<a href="https://aclanthology.org/E17-2041">https://aclanthology.org/E17-2041</a>&gt;
+</div>
+<div id="ref-castro2019deep" class="csl-entry" role="listitem">
+CASTRO, P. <strong><a href="https://repositorio.bc.ufg.br/tede/items/92d1db30-68f8-4fde-b007-dcfd0cc81fc9">Aprendizagem profunda para reconhecimento de entidades nomeadas em domínio jurídico</a></strong>. mathesis—[s.l.] Master’s thesis, Universidade Federal de Goi<span>á</span>s, 2019.
+</div>
+<div id="ref-cetindag2022Turco" class="csl-entry" role="listitem">
+ÇETINDAĞ, C.; YAZICIOĞLU, B.; KOÇ, A. <a href="https://doi.org/10.1017/S1351324922000304">Named-entity recognition in Turkish legal texts</a>. <strong>Natural Language Engineering</strong>, p. 1–28, 2022.
+</div>
+<div id="ref-ChalkidisLEGALBERT2020" class="csl-entry" role="listitem">
+CHALKIDIS, I. et al. <strong><a href="https://doi.org/10.18653/v1/2020.findings-emnlp.261"><span>LEGAL</span>-<span>BERT</span>: The Muppets straight out of Law School</a></strong>. Findings of the Association for Computational Linguistics: EMNLP 2020. <strong>Anais</strong>...Online: Association for Computational Linguistics, nov. 2020.
+</div>
+<div id="ref-Chalkidis2021" class="csl-entry" role="listitem">
+CHALKIDIS, I. et al. <strong><a href="https://doi.org/10.18653/v1/2021.eacl-main.305">Regulatory Compliance through <span>D</span>oc2<span>D</span>oc Information Retrieval: A case study in <span>EU</span>/<span>UK</span> legislation where text similarity has limitations</a></strong>. Proceedings of the 16th Conference of the European Chapter of the Association for Computational Linguistics: Main Volume. <strong>Anais</strong>...Online: Association for Computational Linguistics, abr. 2021.
+</div>
+<div id="ref-Chalkidis2017deep" class="csl-entry" role="listitem">
+CHALKIDIS, I.; ANDROUTSOPOULOS, I. <a href="https://doi.org/10.3233/978-1-61499-838-9-155">A deep learning approach to contract element extraction</a>. Em: <strong>Legal knowledge and information systems</strong>. [s.l.] IOS Press, 2017. p. 155–164.
+</div>
+<div id="ref-Chalkidis2019" class="csl-entry" role="listitem">
+CHALKIDIS, I.; ANDROUTSOPOULOS, I.; ALETRAS, N. <strong><a href="https://doi.org/10.18653/v1/P19-1424">Neural Legal Judgment Prediction in <span>E</span>nglish</a></strong>. Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics. <strong>Anais</strong>...Association for Computational Linguistics, 2019.
+</div>
+<div id="ref-Chalkidis2017" class="csl-entry" role="listitem">
+CHALKIDIS, I.; ANDROUTSOPOULOS, I.; MICHOS, A. <strong><a href="https://doi.org/10.1145/3086512.3086515">Extracting Contract Elements</a></strong>. Proceedings of the 16th Edition of the International Conference on Articial Intelligence and Law. <strong>Anais</strong>...: ICAIL ’17.New York, NY, USA: Association for Computing Machinery, 2017.
+</div>
+<div id="ref-chen2020joint" class="csl-entry" role="listitem">
+CHEN, Y. et al. <strong><a href="https://doi.org/10.18653/v1/2020.coling-main.137">Joint Entity and Relation Extraction for Legal Documents with Legal Feature Enhancement</a></strong>. Proceedings of the 28th International Conference on Computational Linguistics. <strong>Anais</strong>...Barcelona, Spain (Online): International Committee on Computational Linguistics, dez. 2020.
+</div>
+<div id="ref-iceis24CoelhoChatGPTLegalIE-PT" class="csl-entry" role="listitem">
+COELHO, G. et al. <strong><a href="https://doi.org/10.5220/0012499800003690">Information Extraction in the Legal Domain: Traditional Supervised Learning vs. ChatGPT</a></strong>. INSTICC; SciTePress, 2024.
+</div>
+<div id="ref-Correia2022FineGrainedSTF" class="csl-entry" role="listitem">
+CORREIA, F. A. et al. <a href="https://doi.org/10.1016/j.ipm.2021.102794">Fine-grained legal entity annotation: A case study on the Brazilian Supreme Court</a>. <strong>Information Processing &amp; Management</strong>, v. 59, n. 1, p. 102794, 2022.
+</div>
+<div id="ref-10.1023/A:1022627411411" class="csl-entry" role="listitem">
+CORTES, C.; VAPNIK, V. <a href="https://doi.org/10.1023/A:1022627411411">Support-Vector Networks</a>. <strong>Machine Learning</strong>, v. 20, n. 3, p. 273–297, set. 1995.
+</div>
+<div id="ref-Rosimeire2022" class="csl-entry" role="listitem">
+COSTA, R. et al. <strong>Expanding <span>UlyssesNER-Br</span> Named Entity Recognition Corpus with Informal User-Generated Text</strong>. (G. Marreiros et al., Eds.)Progress in Artificial Intelligence. <strong>Anais</strong>...Cham: Springer International Publishing, 2022. Disponível em: &lt;<a href="https://github.com/ulysses-camara/">https://github.com/ulysses-camara/</a>&gt;
+</div>
+<div id="ref-Dale2007" class="csl-entry" role="listitem">
+DALE, R.; MAZUR, P. <strong><a href="https://doi.org/10.1007/978-3-540-70939-8_12">Handling Conjunctions in Named Entities</a></strong>. (A. Gelbukh, Ed.)Computational Linguistics and Intelligent Text Processing. <strong>Anais</strong>...Berlin, Heidelberg: Springer Berlin Heidelberg, 2007.
+</div>
+<div id="ref-Darji2023GermanBERT" class="csl-entry" role="listitem">
+DARJI, H.; MITROVIĆ, J.; GRANITZER, M. <strong><a href="https://doi.org/10.5220/0011749400003393">German <span>BERT</span> Model for Legal Named Entity Recognition</a></strong>. Proceedings of the 15th International Conference on Agents and Artificial Intelligence. <strong>Anais</strong>...SCITEPRESS - Science; Technology Publications, 2023.
+</div>
+<div id="ref-Devlin19" class="csl-entry" role="listitem">
+DEVLIN, J. et al. <strong><span>BERT:</span> Pre-training of Deep Bidirectional Transformers for Language Understanding</strong>. (J. Burstein, C. Doran, T. Solorio, Eds.)Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, <span>NAACL-HLT</span> 2019. <strong>Anais</strong>...Minneapolis, MN, USA: Association for Computational Linguistics, 2019. Disponível em: &lt;<a href="https://doi.org/10.18653/v1/n19-1423">https://doi.org/10.18653/v1/n19-1423</a>&gt;
+</div>
+<div id="ref-Dozier2010" class="csl-entry" role="listitem">
+DOZIER, C. et al. <a href="https://doi.org/10.1007/978-3-642-12837-0_2">Named Entity Recognition and Resolution in Legal Text</a>. Em: FRANCESCONI, E. et al. (Eds.). <strong>Semantic Processing of Legal Texts: Where the Language of Law Meets the Law of Language</strong>. Berlin, Heidelberg: Springer Berlin Heidelberg, 2010. p. 27–43.
+</div>
+<div id="ref-Fernandes2020EleitoralPortugal" class="csl-entry" role="listitem">
+FERNANDES, J. M.; WON, M.; MARTINS, B. <a href="https://doi.org/10.1177/0010414019858964">Speechmaking and the Selectorate: Persuasion in Nonpreferential Electoral Systems</a>. <strong>Comparative Political Studies</strong>, v. 53, n. 5, p. 667–699, a2020.
+</div>
+<div id="ref-fernandes2020KauaneJrCorpus" class="csl-entry" role="listitem">
+FERNANDES, W. P. D. et al. <a href="https://doi.org/10.1007/s10506-019-09256-x">Appellate court modifications extraction for Portuguese</a>. <strong>Artificial Intelligence and Law</strong>, v. 28, n. 3, p. 327–360, b2020.
+</div>
+<div id="ref-Solihin2021RS" class="csl-entry" role="listitem">
+FIRDAUS SOLIHIN, R. F. A., Indra Budi; MAKARIM, E. <a href="https://doi.org/10.1080/13600869.2021.1964225">Advancement of information extraction use in legal documents</a>. <strong>International Review of Law, Computers &amp; Technology</strong>, v. 35, n. 3, p. 322–351, 2021.
+</div>
+<div id="ref-EduardoPROPOR2024RoBERTaLexPT" class="csl-entry" role="listitem">
+GARCIA, E. A. S. et al. <strong><span>R</span>o<span>BERT</span>a<span>L</span>ex<span>PT</span>: A Legal <span>R</span>o<span>BERT</span>a Model pretrained with deduplication for <span>P</span>ortuguese</strong>. (P. Gamallo et al., Eds.)Proceedings of the 16th International Conference on Computational Processing of Portuguese - Vol. 1. <strong>Anais</strong>...Santiago de Compostela, Galicia/Spain: Association for Computational Lingustics, mar. 2024. Disponível em: &lt;<a href="https://aclanthology.org/2024.propor-1.38">https://aclanthology.org/2024.propor-1.38</a>&gt;
+</div>
+<div id="ref-Graves2013Speech_recognition_BIGRU" class="csl-entry" role="listitem">
+GRAVES, A.; MOHAMED, A.; HINTON, G. <strong><a href="https://doi.org/10.1109/ICASSP.2013.6638947">Speech recognition with deep recurrent neural networks</a></strong>. 2013 IEEE International Conference on Acoustics, Speech and Signal Processing. <strong>Anais</strong>...2013.
+</div>
+<div id="ref-Guimaraes2024LegalSegmentation" class="csl-entry" role="listitem">
+GUIMARÃES, G. M. C. et al. <a href="https://github.com/UnB-KnEDLe/persoseg-corpus">Legal Document Segmentation and Labeling Through Named Entity Recognition Approaches</a>. <strong>Journal of Information and Data Management</strong>, v. 15, n. 1, 2024.
+</div>
+<div id="ref-HartmannPeixotoVictor2020" class="csl-entry" role="listitem">
+HARTMANN PEIXOTO, F. <a href="https://www.rbiad.com.br/index.php/rbiad/article/view/4">Projeto Victor: relato do desenvolvimento da Inteligência Artificial na Repercussão Geral do Supremo Tribunal Federal</a>. <strong>Revista Brasileira de Inteligência Artificial e Direito - RBIAD</strong>, v. 1, n. 1, p. 1–22, 2020.
+</div>
+<div id="ref-Heusden2023holandes" class="csl-entry" role="listitem">
+HEUSDEN, R. VAN; KAMPS, J.; MARX, M. <a href="https://doi.org/10.3390/data8020034">Neural Coreference Resolution for Dutch Parliamentary Documents with the DutchParliament Dataset</a>. <strong>Data</strong>, v. 8, n. 2, 2023.
+</div>
+<div id="ref-10.1162/neco.1997.9.8.1735" class="csl-entry" role="listitem">
+HOCHREITER, S.; SCHMIDHUBER, J. <a href="https://doi.org/10.1162/neco.1997.9.8.1735"><span>Long Short-Term Memory</span></a>. <strong>Neural Computation</strong>, v. 9, n. 8, p. 1735–1780, nov. 1997.
+</div>
+<div id="ref-Atin2024LLLLegalNER" class="csl-entry" role="listitem">
+HUSSAIN, A. S.; THOMAS, A. <strong>Large Language Models for Judicial Entity Extraction: A Comparative Study</strong>., 2024. Disponível em: &lt;<a href="https://arxiv.org/abs/2407.05786">https://arxiv.org/abs/2407.05786</a>&gt;
+</div>
+<div id="ref-Iftikhar2019urdu" class="csl-entry" role="listitem">
+IFTIKHAR, A.; UL QOUNAIN JAFFRY, S. W.; MALIK, M. K. <a href="https://doi.org/10.1109/ACCESS.2019.2915352">Information Mining From Criminal Judgments of Lahore High Court</a>. <strong>IEEE Access</strong>, v. 7, p. 59539–59547, 2019.
+</div>
+<div id="ref-jiang2023mistral7b" class="csl-entry" role="listitem">
+JIANG, A. Q. et al. <strong>Mistral 7B</strong>., 2023. Disponível em: &lt;<a href="https://arxiv.org/abs/2310.06825">https://arxiv.org/abs/2310.06825</a>&gt;
+</div>
+<div id="ref-Kapoor2022" class="csl-entry" role="listitem">
+KAPOOR, A. et al. <strong><a href="https://doi.org/10.18653/v1/2022.findings-acl.278"><span>HLDC</span>: <span>H</span>indi Legal Documents Corpus</a></strong>. Findings of the Association for Computational Linguistics: ACL 2022. <strong>Anais</strong>...Association for Computational Linguistics, 2022.
+</div>
+<div id="ref-Kornilova2019" class="csl-entry" role="listitem">
+KORNILOVA, A.; EIDELMAN, V. <strong><a href="https://doi.org/10.18653/v1/D19-5406"><span>B</span>ill<span>S</span>um: A Corpus for Automatic Summarization of <span>US</span> Legislation</a></strong>. Proceedings of the 2nd Workshop on New Frontiers in Summarization. <strong>Anais</strong>...Association for Computational Linguistics, 2019.
+</div>
+<div id="ref-kulkarni2023multilingue" class="csl-entry" role="listitem">
+KULKARNI, M. et al. <strong>Towards a Unified Multi-Domain Multilingual Named Entity Recognition Model</strong>. Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics. <strong>Anais</strong>...Dubrovnik, Croatia: Association for Computational Linguistics, 2023. Disponível em: &lt;<a href="https://aclanthology.org/2023.eacl-main.161">https://aclanthology.org/2023.eacl-main.161</a>&gt;
+</div>
+<div id="ref-Lafferty2001CRF" class="csl-entry" role="listitem">
+LAFFERTY, J. D.; MCCALLUM, A.; PEREIRA, F. C. N. <strong>Conditional Random Fields: Probabilistic Models for Segmenting and Labeling Sequence Data</strong>. Proceedings of the Eighteenth International Conference on Machine Learning. <strong>Anais</strong>...: ICML ’01.San Francisco, CA, USA: Morgan Kaufmann Publishers Inc., 2001. Disponível em: &lt;<a href="https://dl.acm.org/doi/abs/10.5555/645530.655813">https://dl.acm.org/doi/abs/10.5555/645530.655813</a>&gt;
+</div>
+<div id="ref-lample2016BiLSTM_CRF" class="csl-entry" role="listitem">
+LAMPLE, G. et al. <strong><a href="https://doi.org/10.18653/v1/N16-1030">Neural Architectures for Named Entity Recognition</a></strong>. (K. Knight, A. Nenkova, O. Rambow, Eds.)Proceedings of the 2016 Conference of the North <span>A</span>merican Chapter of the Association for Computational Linguistics: Human Language Technologies. <strong>Anais</strong>...San Diego, California: Association for Computational Linguistics, jun. 2016.
+</div>
+<div id="ref-Leitner2019Fine" class="csl-entry" role="listitem">
+LEITNER, E.; REHM, G.; MORENO-SCHNEIDER, J. <strong><a href="https://doi.org/10.1007/978-3-030-33220-4_20">Fine-Grained Named Entity Recognition in Legal Documents</a></strong>. (M. Acosta et al., Eds.)Semantic Systems. The Power of AI and Knowledge Graphs. <strong>Anais</strong>...Cham: Springer International Publishing, 2019.
+</div>
+<div id="ref-Lima2022ModelDODF" class="csl-entry" role="listitem">
+LIMA, A. DA S.; BORGES, V. R. <a href="https://github.com/alice7lima/PLN/tree/main/Projeto">Training and evaluating Named Entity Recognition Models using a Legal Corpus of publications from Government Gazettes</a>. 2022.
+</div>
+<div id="ref-DBLP:journals/corr/abs-1907-11692" class="csl-entry" role="listitem">
+LIU, Y. et al. <strong>RoBERTa: A Robustly Optimized BERT Pretraining Approach</strong>., 2019. Disponível em: &lt;<a href="https://arxiv.org/abs/1907.11692">https://arxiv.org/abs/1907.11692</a>&gt;
+</div>
+<div id="ref-lore2023italiano" class="csl-entry" role="listitem">
+LORÈ, F. et al. <a href="https://doi.org/10.1007/s10844-023-00782-4">An <span>AI</span> framework to support decisions on GDPR compliance</a>. <strong>Journal of Intelligent Information Systems</strong>, p. 1–28, 2023.
+</div>
+<div id="ref-DyonnatanEPIA2022UlyssesSD-Br" class="csl-entry" role="listitem">
+MAIA, D. F. et al. <strong><span>UlyssesSD-Br</span>: Stance Detection in Brazilian Political Polls</strong>. (G. Marreiros et al., Eds.)Progress in Artificial Intelligence. <strong>Anais</strong>...Cham: Springer International Publishing, 2022. Disponível em: &lt;<a href="https://github.com/Dyonnatan/UlyssesSD-Br">https://github.com/Dyonnatan/UlyssesSD-Br</a>&gt;
+</div>
+<div id="ref-Malik2021" class="csl-entry" role="listitem">
+MALIK, V. et al. <strong><a href="https://doi.org/10.18653/v1/2021.acl-long.313"><span>ILDC</span> for <span>CJPE</span>: <span>I</span>ndian Legal Documents Corpus for Court Judgment Prediction and Explanation</a></strong>. Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers). <strong>Anais</strong>...Association for Computational Linguistics, 2021.
+</div>
+<div id="ref-malouf2002LBFGS" class="csl-entry" role="listitem">
+MALOUF, R. <strong>A Comparison of Algorithms for Maximum Entropy Parameter Estimation</strong>. <span>COLING</span>-02: The 6th Conference on Natural Language Learning 2002 (<span>C</span>o<span>NLL</span>-2002). <strong>Anais</strong>...2002. Disponível em: &lt;<a href="https://aclanthology.org/W02-2018">https://aclanthology.org/W02-2018</a>&gt;
+</div>
+<div id="ref-maxwell2008" class="csl-entry" role="listitem">
+MAXWELL, K. T.; SCHAFER, B. <a href="https://doi.org/10.3233/978-1-58603-952-3-63">Concept and context in legal information retrieval</a>. Em: <strong>Legal Knowledge and Information Systems</strong>. [s.l.] IOS Press, 2008. p. 63–72.
+</div>
+<div id="ref-MorenoSchneider2022Multilingue" class="csl-entry" role="listitem">
+MORENO SCHNEIDER, J. et al. <a href="https://doi.org/10.1016/j.is.2021.101966">Lynx: A knowledge-based AI service platform for content processing, enrichment and analysis for the legal domain</a>. <strong>Information Systems</strong>, v. 106, p. 101966, 2022.
+</div>
+<div id="ref-mota2021UFRPE" class="csl-entry" role="listitem">
+MOTA, C. C. et al. <strong><a href="https://doi.org/10.5753/eniac.2021.18247">Reconhecimento de entidades nomeadas em documentos jur<span>ı́</span>dicos em portugu<span>ê</span>s utilizando redes neurais</a></strong>. Encontro Nacional de Intelig<span>ê</span>ncia Artificial e Computacional (ENIAC). <strong>Anais</strong>...SBC, 2021.
+</div>
+<div id="ref-Neto2021AposentadoriaCorpus" class="csl-entry" role="listitem">
+NETO, J. R. C. S. A. V. S.; FALEIROS, T. DE P. <strong>Deep Active-Self Learning Applied to Named Entity Recognition</strong>. (A. Britto, K. Valdivia Delgado, Eds.)Intelligent Systems. <strong>Anais</strong>...Cham: Springer International Publishing, 2021. Disponível em: &lt;<a href="https://avio11.github.io/resources/aposentadoria/aposentadoria.html">https://avio11.github.io/resources/aposentadoria/aposentadoria.html</a>&gt;
+</div>
+<div id="ref-nogueira2019document" class="csl-entry" role="listitem">
+NOGUEIRA, R. et al. Document expansion by query prediction. <strong>arXiv preprint arXiv:1904.08375</strong>, 2019.
+</div>
+<div id="ref-Nunes2024LLMLegalNER" class="csl-entry" role="listitem">
+NUNES, R. O. et al. <strong><a href="https://doi.org/10.5220/0012624700003690">Out of Sesame Street: A Study of Portuguese Legal Named Entity Recognition Through In-Context Learning</a></strong>. INSTICC; SciTePress, a2024.
+</div>
+<div id="ref-RafaelPROPOR2024UlyssesNER" class="csl-entry" role="listitem">
+NUNES, R. O. et al. <strong>A Named Entity Recognition Approach for <span>P</span>ortuguese Legislative Texts Using Self-Learning</strong>. (P. Gamallo et al., Eds.)Proceedings of the 16th International Conference on Computational Processing of Portuguese - Vol. 1. <strong>Anais</strong>...Santiago de Compostela, Galicia/Spain: Association for Computational Lingustics, mar. b2024. Disponível em: &lt;<a href="https://aclanthology.org/2024.propor-1.30">https://aclanthology.org/2024.propor-1.30</a>&gt;
+</div>
+<div id="ref-Oksanen2019Multilingue" class="csl-entry" role="listitem">
+OKSANEN, A. et al. <a href="http://doi.org/10.3233/FAIA190023">Semantic Finlex: Transforming, Publishing, and Using Finnish Legislation and Case Law As Linked Open Data on the Web</a>. Em: PERUGINELLI, G.; FARO, S. (Eds.). <strong>Knowledge of the Law in the Big Data Age</strong>. Frontiers em Artificial Intelligence e Applications. [s.l.] IOS Press, 2019b. v. 317p. 212–228.
+</div>
+<div id="ref-oksanen2019finlandes" class="csl-entry" role="listitem">
+OKSANEN, A. et al. <strong><a href="https://doi.org/10.3233/FAIA190335">ANOPPI: A Pseudonymization Service for Finnish Court Documents.</a></strong> JURIX. <strong>Anais</strong>...a2019.
+</div>
+<div id="ref-oksanen2022finlandes" class="csl-entry" role="listitem">
+OKSANEN, A. et al. <strong>An Anonymization Tool for Open Data Publication of Legal Documents</strong>. Joint Proceedings of ISWC2022 Workshops. <strong>Anais</strong>...CEUR-WS. org, 2022. Disponível em: &lt;<a href="https://ceur-ws.org/Vol-3257/">https://ceur-ws.org/Vol-3257/</a>&gt;
+</div>
+<div id="ref-Oliveira2024LLMLegalNER" class="csl-entry" role="listitem">
+OLIVEIRA, V. et al. <a href="https://doi.org/10.1007/s10506-023-09388-1">Combining prompt-based language models and weak supervision for labeling named entity recognition on legal documents</a>. <strong>Artificial Intelligence and Law</strong>, p. 1–21, fev. 2024.
+</div>
+<div id="ref-Onaga2023japones" class="csl-entry" role="listitem">
+ONAGA, T.; FUJITA, M.; YOSHINOBU, K. <strong>Japanese Legal Bar Problem Solver Focusing on Person Names</strong>. Proceedings of the Tenth International Competition on Legal Information Extraction/Entailment (COLIEE 2023). <strong>Anais</strong>...2023. Disponível em: &lt;<a href="https://sites.ualberta.ca/~rabelo/COLIEE2023">https://sites.ualberta.ca/~rabelo/COLIEE2023</a>&gt;
+</div>
+<div id="ref-pais2021romeno" class="csl-entry" role="listitem">
+PAIS, V. et al. <strong><a href="https://doi.org/10.18653/v1/2021.nllp-1.2">Named Entity Recognition in the <span>R</span>omanian Legal Domain</a></strong>. Proceedings of the Natural Legal Language Processing Workshop 2021. <strong>Anais</strong>...Punta Cana, Dominican Republic: Association for Computational Linguistics, nov. 2021.
+</div>
+<div id="ref-pais2024romeno" class="csl-entry" role="listitem">
+PAIS, V. et al. <a href="https://doi.org/10.3233/SW-233351">LegalNERo: A linked corpus for named entity recognition in the Romanian legal domain</a>. <strong>Semantic Web journal</strong>, 2024.
+</div>
+<div id="ref-pennington-etal-2014-glove" class="csl-entry" role="listitem">
+PENNINGTON, J.; SOCHER, R.; MANNING, C. <strong><span>G</span>lo<span>V</span>e: Global Vectors for Word Representation</strong>. Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (<span>EMNLP</span>). <strong>Anais</strong>...Doha, Qatar: Association for Computational Linguistics, out. 2014. Disponível em: &lt;<a href="https://aclanthology.org/D14-1162">https://aclanthology.org/D14-1162</a>&gt;
+</div>
+<div id="ref-mPetters18" class="csl-entry" role="listitem">
+PETERS, M. E. et al. <strong>Deep Contextualized Word Representations</strong>. (M. A. Walker, H. Ji, A. Stent, Eds.)Proceedings of the 2018 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, <span>NAACL-HLT</span> 2018, New Orleans, Louisiana, USA, June 1-6, 2018, Volume 1 (Long Papers). <strong>Anais</strong>...Association for Computational Linguistics, 2018. Disponível em: &lt;<a href="https://doi.org/10.18653/v1/n18-1202">https://doi.org/10.18653/v1/n18-1202</a>&gt;
+</div>
+<div id="ref-pilan2022TABcorpus" class="csl-entry" role="listitem">
+PILÁN, I. et al. The text anonymization benchmark (tab): A dedicated corpus and evaluation framework for text anonymization. <strong>Computational Linguistics</strong>, v. 48, n. 4, p. 1053–1101, 2022.
+</div>
+<div id="ref-pires2023sabia" class="csl-entry" role="listitem">
+PIRES, R. et al. <strong>Sabiá: Portuguese Large Language Models</strong>. (M. C. Naldi, R. A. C. Bianchi, Eds.)Intelligent Systems. <strong>Anais</strong>...Cham: Springer Nature Switzerland, 2023.
+</div>
+<div id="ref-pirovani2019crf+" class="csl-entry" role="listitem">
+PIROVANI, J. P. C. <strong><a href="https://repositorio.ufes.br/items/05fc20a1-b87c-46ab-8ba0-9140245350ad"><span>CRF+ LG</span>: uma abordagem h<span>ı́</span>brida para o reconhecimento de entidades nomeadas em portugu<span>ê</span>s</a></strong>. tese de doutorado—[s.l.] Universidade Federal do Esp<span>ı́</span>rito Santo, Vit<span>ó</span>ria (Brasil), 2019.
+</div>
+<div id="ref-polo2021bertikal" class="csl-entry" role="listitem">
+POLO, F. M. et al. <strong>LegalNLP – Natural Language Processing methods for the Brazilian Legal Language</strong>., 2021. Disponível em: &lt;<a href="https://arxiv.org/abs/2110.15709">https://arxiv.org/abs/2110.15709</a>&gt;
+</div>
+<div id="ref-Quaresma2010" class="csl-entry" role="listitem">
+QUARESMA, P.; GONÇALVES, T. <a href="https://doi.org/10.1007/978-3-642-12837-0_3">Using Linguistic Information and Machine Learning Techniques to Identify Entities from Juridical Documents</a>. Em: FRANCESCONI, E. et al. (Eds.). <strong>Semantic Processing of Legal Texts: Where the Language of Law Meets the Law of Language</strong>. Berlin, Heidelberg: Springer Berlin Heidelberg, 2010. p. 44–59.
+</div>
+<div id="ref-rodriguez2020UPE" class="csl-entry" role="listitem">
+RODRÍGUEZ, M. M.; BEZERRA, B. L. D. <a href="https://doi.org/10.25286/repa.v5i1.1204">Processamento de linguagem natural para reconhecimento de entidades nomeadas em textos jur<span>ı́</span>dicos de atos administrativos (portarias)</a>. <strong>Revista de Engenharia e Pesquisa Aplicada</strong>, v. 5, n. 1, p. 67–77, 2020.
+</div>
+<div id="ref-samy2021" class="csl-entry" role="listitem">
+SAMY, D. <a href="http://journal.sepln.org/sepln/ojs/ojs/index.php/pln/article/view/6381">Reconocimiento y clasificaci<span>ó</span>n de entidades nombradas en textos legalesen espa<span>ñ</span>ol</a>. <strong>Procesamiento del lenguaje natural</strong>, v. 67, p. 103–114, 2021.
+</div>
+<div id="ref-tjong2003Conll" class="csl-entry" role="listitem">
+SANG, E. F. T. K.; DE MEULDER, F. <strong>Introduction to the <span>C</span>o<span>NLL</span>-2003 Shared Task: Language-Independent Named Entity Recognition</strong>. Proceedings of the Seventh Conference on Natural Language Learning at <span>HLT</span>-<span>NAACL</span> 2003. <strong>Anais</strong>...2003. Disponível em: &lt;<a href="https://aclanthology.org/W03-0419">https://aclanthology.org/W03-0419</a>&gt;
+</div>
+<div id="ref-SANSONE2022" class="csl-entry" role="listitem">
+SANSONE, C.; SPERLÍ, G. <a href="https://doi.org/10.1016/j.is.2021.101967">Legal Information Retrieval systems: State-of-the-art and open issues</a>. <strong>Information Systems</strong>, v. 106, p. 101967, 2022.
+</div>
+<div id="ref-santos2007reconhecimento" class="csl-entry" role="listitem">
+SANTOS, D.; CARDOSO, N. <strong><a href="https://doi.org/10.1007/11751984_8">A golden resource for named entity recognition in portuguese</a></strong>. Proceeding of the 7th International conference on the computational processing of portuguese. <strong>Anais</strong>...Springer, 2007.
+</div>
+<div id="ref-schraagen2017holandes" class="csl-entry" role="listitem">
+SCHRAAGEN, M. et al. <a href="https://clinjournal.org/clinj/article/view/65">Evaluation of Named Entity Recognition in Dutch online criminal complaints</a>. <strong>Computational Linguistics in the Netherlands Journal</strong>, v. 7, p. 3–16, 2017.
+</div>
+<div id="ref-schuster1997bidirectional" class="csl-entry" role="listitem">
+SCHUSTER, M.; PALIWAL, K. K. <a href="https://doi.org/10.1109/78.650093">Bidirectional recurrent neural networks</a>. <strong>IEEE transactions on Signal Processing</strong>, v. 45, n. 11, p. 2673–2681, 1997.
+</div>
+<div id="ref-Shamma2020Arabic" class="csl-entry" role="listitem">
+SHAMMA, S. A. et al. <strong><a href="https://doi.org/10.1109/AICT50176.2020.9368577">Information Extraction from Arabic Law Documents</a></strong>. 2020 IEEE 14th International Conference on Application of Information and Communication Technologies (AICT). <strong>Anais</strong>...2020.
+</div>
+<div id="ref-NadiaBracis2021TopicModels" class="csl-entry" role="listitem">
+SILVA, N. F. F. DA et al. <strong><a href="https://doi.org/10.1007/978-3-030-91699-2_8">Evaluating Topic Models in Portuguese Political Comments About Bills from Brazil’s Chamber of Deputies</a></strong>. (A. Britto, K. Valdivia Delgado, Eds.)Intelligent Systems. <strong>Anais</strong>...Cham: Springer International Publishing, 2021.
+</div>
+<div id="ref-FelipeUlyssesTesemoLRE2024" class="csl-entry" role="listitem">
+SIQUEIRA, F. et al. <a href="https://doi.org/10.1007/s10579-024-09762-8">Ulysses Tesemõ: a new large corpus for Brazilian legal and governmental domain</a>. <strong>Language Resources and Evaluation</strong>, p. 1–20, jul. 2024.
+</div>
+<div id="ref-sleimi2021frances" class="csl-entry" role="listitem">
+SLEIMI, A. et al. <a href="https://doi.org/10.1007/s10664-020-09933-5">An automated framework for the extraction of semantic legal metadata from legal texts</a>. <strong>Empirical Software Engineering</strong>, v. 26, p. 1–50, 2021.
+</div>
+<div id="ref-Smywi2021" class="csl-entry" role="listitem">
+SMYWIŃSKI-POHL, A. et al. <strong><a href="https://doi.org/10.1145/3462757.3466141">Automatic Extraction of Amendments from Polish Statutory Law</a></strong>. Proceedings of the Eighteenth International Conference on Artificial Intelligence and Law. <strong>Anais</strong>...: ICAIL ’21.New York, NY, USA: Association for Computing Machinery, 2021.
+</div>
+<div id="ref-Souza2021JURIX" class="csl-entry" role="listitem">
+SOUZA, E. et al. <a href="https://doi.org/10.3233/FAIA210326">An Information Retrieval Pipeline for Legislative Documents from the Brazilian Chamber of Deputies</a>. Em: <strong>Legal Knowledge and Information Systems</strong>. [s.l.] IOS Press, 2021. p. 119–126.
+</div>
+<div id="ref-Souza2020" class="csl-entry" role="listitem">
+SOUZA, F.; NOGUEIRA, R.; LOTUFO, R. <strong>BERTimbau: pretrained BERT models for Brazilian Portuguese</strong>. (R. Cerri, R. C. Prati, Eds.)Proceedings of the 2020 Brazilian Conference on Intelligent Systems. <strong>Anais</strong>...Springer International Publishing, 2020.
+</div>
+<div id="ref-DBLP:conf/nips/SutskeverVL14" class="csl-entry" role="listitem">
+SUTSKEVER, I.; VINYALS, O.; LE, Q. V. <strong>Sequence to Sequence Learning with Neural Networks</strong>. (Z. Ghahramani et al., Eds.)Advances in Neural Information Processing Systems 27: Annual Conference on Neural Information Processing Systems 2014, December 8-13 2014, Montreal, Quebec, Canada. <strong>Anais</strong>...2014. Disponível em: &lt;<a href="https://proceedings.neurips.cc/paper/2014/hash/a14ac55a4f27472c5d894ec1c3c743d2-Abstract.html">https://proceedings.neurips.cc/paper/2014/hash/a14ac55a4f27472c5d894ec1c3c743d2-Abstract.html</a>&gt;
+</div>
+<div id="ref-gemma2024gemmamodel" class="csl-entry" role="listitem">
+TEAM, G. et al. <strong>Gemma: Open Models Based on Gemini Research and Technology</strong>., 2024. Disponível em: &lt;<a href="https://arxiv.org/abs/2403.08295">https://arxiv.org/abs/2403.08295</a>&gt;
+</div>
+<div id="ref-tolles2016logistic" class="csl-entry" role="listitem">
+TOLLES, J.; MEURER, W. J. <a href="https://doi.org/10.1001/jama.2016.7653">Logistic Regression: Relating Patient Characteristics to Outcomes</a>. <strong>JAMA</strong>, v. 316, n. 5, p. 533–534, ago. 2016.
+</div>
+<div id="ref-DouglasBracis2022UlyssesRFQ" class="csl-entry" role="listitem">
+VITÓRIO, D. et al. <strong><a href="https://doi.org/10.1007/978-3-031-21686-2_6">Ulysses-RFSQ: A Novel Method to Improve Legal Information Retrieval Based on Relevance Feedback</a></strong>. (J. C. Xavier-Junior, R. A. Rios, Eds.)Intelligent Systems. <strong>Anais</strong>...Cham: Springer International Publishing, 2022.
+</div>
+<div id="ref-DouglasUlyssesRF-CorpusLRE2024" class="csl-entry" role="listitem">
+VITÓRIO, D. et al. <a href="https://doi.org/10.1007/s10579-024-09767-3">Building a relevance feedback corpus for legal information retrieval in the real-case scenario of the <span>B</span>razilian <span>C</span>hamber of <span>D</span>eputies</a>. <strong>Language Resources and Evaluation</strong>, 2024.
+</div>
+<div id="ref-wang-etal-2021-want-reduce" class="csl-entry" role="listitem">
+WANG, S. et al. <strong><a href="https://doi.org/10.18653/v1/2021.findings-emnlp.354">Want To Reduce Labeling Cost? <span>GPT</span>-3 Can Help</a></strong>. (M.-F. Moens et al., Eds.)Findings of the Association for Computational Linguistics: EMNLP 2021. <strong>Anais</strong>...Punta Cana, Dominican Republic: Association for Computational Linguistics, nov. 2021.
+</div>
+<div id="ref-wang2023gptner" class="csl-entry" role="listitem">
+WANG, S. et al. <strong>GPT-NER: Named Entity Recognition via Large Language Models</strong>., 2023. Disponível em: &lt;<a href="https://arxiv.org/abs/2304.10428">https://arxiv.org/abs/2304.10428</a>&gt;
+</div>
+<div id="ref-wei2024chatiezeroshotinformationextraction" class="csl-entry" role="listitem">
+WEI, X. et al. <strong>ChatIE: Zero-Shot Information Extraction via Chatting with ChatGPT</strong>., 2024. Disponível em: &lt;<a href="https://arxiv.org/abs/2302.10205">https://arxiv.org/abs/2302.10205</a>&gt;
+</div>
+<div id="ref-Zanuz2022" class="csl-entry" role="listitem">
+ZANUZ, L.; RIGO, S. J. <strong><a href="https://doi.org/10.1007/978-3-030-98305-5_21">Fostering Judiciary Applications with New Fine-Tuned Models for Legal Named Entity Recognition in Portuguese</a></strong>. (V. Pinheiro et al., Eds.)Computational Processing of the Portuguese Language. <strong>Anais</strong>...Cham: Springer International Publishing, 2022.
+</div>
+<div id="ref-Zhong2020NLP" class="csl-entry" role="listitem">
+ZHONG, H. et al. <strong><a href="https://doi.org/10.18653/v1/2020.acl-main.466">How Does <span>NLP</span> Benefit Legal System: A Summary of Legal Artificial Intelligence</a></strong>. Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics. <strong>Anais</strong>...Association for Computational Linguistics, 2020.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p><a href="https://www.cnj.jus.br/programa-justica-4-0-divulga-resultados-de-pesquisa-sobre-ia-no-judiciario-brasileiro/" class="uri">https://www.cnj.jus.br/programa-justica-4-0-divulga-resultados-de-pesquisa-sobre-ia-no-judiciario-brasileiro/</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://portal.stf.jus.br" class="uri">https://portal.stf.jus.br</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://github.com/ulysses-camara" class="uri">https://github.com/ulysses-camara</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>A escolha pelo motor de busca foi baseada na sua praticidade, amplitude (e.g., artigos de eventos, revistas e trabalhos acadêmicos), e facilidade de replicação.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Dado que a maioria dos trabalhos sobre REN são escritos em inglês, foram utilizados os termos neste idioma: “<em>named entity recognition</em>” e (“<em>named entity recognition</em>”+<em>legal</em>), respectivamente.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Pesquisas executadas em 24/07/2024 sem o uso de filtros da ferramenta.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p><a href="https://weka.sourceforge.io/doc.stable-3-8/weka/classifiers/lazy/IBk.html" class="uri">https://weka.sourceforge.io/doc.stable-3-8/weka/classifiers/lazy/IBk.html</a><a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Segundo a pesquisa, o baixo número de pesquisas no ano de 2022 é justificado pelo período de execução do mapeamento, finalizado em junho de 2022.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p><a href="https://github.com/peluz/lener-br" class="uri">https://github.com/peluz/lener-br</a><a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p><a href="https://journals.sagepub.com/doi/10.1177/0010414019858964#supplementary-materials" class="uri">https://journals.sagepub.com/doi/10.1177/0010414019858964#supplementary-materials</a><a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p><a href="https://github.com/marciamrodriguez/AtosAdministrativos_RodriguezMarcia2018" class="uri">https://github.com/marciamrodriguez/AtosAdministrativos_RodriguezMarcia2018</a><a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p><a href="https://avio11.github.io/resources/aposentadoria/aposentadoria.html" class="uri">https://avio11.github.io/resources/aposentadoria/aposentadoria.html</a><a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p><a href="https://github.com/alice7lima/PLN/tree/main/Projeto" class="uri">https://github.com/alice7lima/PLN/tree/main/Projeto</a><a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p><a href="https://github.com/ulysses-camara/ulysses-ner-br" class="uri">https://github.com/ulysses-camara/ulysses-ner-br</a><a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p><a href="https://github.com/mauriciobritojr/CDJUR-BR" class="uri">https://github.com/mauriciobritojr/CDJUR-BR</a><a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p><a href="https://github.com/UnB-KnEDLe/persoseg-corpus" class="uri">https://github.com/UnB-KnEDLe/persoseg-corpus</a><a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p><a href="https://opennlp.apache.org/" class="uri">https://opennlp.apache.org/</a><a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p><a href="http://nido.unb.br" class="uri">http://nido.unb.br</a><a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p><a href="https://www.kaggle.com/datasets/ferraz/acordaos-tcu" class="uri">https://www.kaggle.com/datasets/ferraz/acordaos-tcu</a><a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20"><p><a href="https://openai.com/chatgpt/" class="uri">https://openai.com/chatgpt/</a><a href="#fnref20" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn21"><p><a href="https://huggingface.co/adalbertojunior/distilbert-portuguese-cased" class="uri">https://huggingface.co/adalbertojunior/distilbert-portuguese-cased</a><a href="#fnref21" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn22"><p>Recursos disponíveis publicamente em <a href="https://github.com/ulysses-camara" class="uri">https://github.com/ulysses-camara</a><a href="#fnref22" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html" class="pagination-link" aria-label="PLN no Direito">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" class="pagination-link" aria-label="Geração Automática de Ementas Jurídicas">
+        <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://brasileiraspln.com/">
+<p>Brasileiras em PLN, 2026. Todos os direitos reservados</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Amanda Pontes Rassi">
+<meta name="author" content="Priscilla de Abreu Lopes">
+
+<title>7&nbsp; Correção Automática de Redação – Processamento de Linguagem Natural</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 1em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" rel="next">
+<link href="../../aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8676d8d0f01772f2903466dda9733bcf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sem resultados",
+    "search-matching-documents-text": "Resultados encontrados",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-111J572WMR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-111J572WMR');
+</script>
+
+
+<link rel="stylesheet" href="../../shared/bpln.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../shared/logos/bpln.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Processamento de Linguagem Natural</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../Livro_PLN_BPLN_4ed_vol3.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
+    <div class="dropdown">
+      <a href="" title="Compartilhar" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Compartilhar"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sobre o Volume 3</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Aplicações e Domínios</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Classificação de texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-mt/cap-mt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tradução Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sumarização Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Complexidade Textual e suas Tarefas Relacionadas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Classificação de Áudio aplicada à Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">PLN e Responsabilidade Social</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/referencias/referencias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referências</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Apêndices</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Considerações prévias à sumarização automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice-abstrativa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Exemplo de sumarização abstrativa</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../autores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Sobre as/os autoras/es</strong></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Conteúdo</h2>
+   
+  <ul>
+  <li><a href="#sec-cap-aes-intro" id="toc-sec-cap-aes-intro" class="nav-link active" data-scroll-target="#sec-cap-aes-intro"><span class="header-section-number">7.1</span> Introdução</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-aes-defredacao" id="toc-sec-cap-aes-defredacao" class="nav-link" data-scroll-target="#sec-cap-aes-defredacao"><span class="header-section-number">7.1.1</span> O que é uma redação escolar?</a></li>
+  <li><a href="#sec-cap-aes-criterios" id="toc-sec-cap-aes-criterios" class="nav-link" data-scroll-target="#sec-cap-aes-criterios"><span class="header-section-number">7.1.2</span> O que é avaliado?</a></li>
+  <li><a href="#sec-cap-aes-modelosbr" id="toc-sec-cap-aes-modelosbr" class="nav-link" data-scroll-target="#sec-cap-aes-modelosbr"><span class="header-section-number">7.1.3</span> Alguns modelos brasileiros de correção</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-aes-desvios" id="toc-sec-cap-aes-desvios" class="nav-link" data-scroll-target="#sec-cap-aes-desvios"><span class="header-section-number">7.2</span> Detecção de desvios no texto</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-aes-tiposdesvios" id="toc-sec-cap-aes-tiposdesvios" class="nav-link" data-scroll-target="#sec-cap-aes-tiposdesvios"><span class="header-section-number">7.2.1</span> Tipos de desvios</a></li>
+  <li><a href="#sec-cap-aes-desviosformalismo" id="toc-sec-cap-aes-desviosformalismo" class="nav-link" data-scroll-target="#sec-cap-aes-desviosformalismo"><span class="header-section-number">7.2.2</span> Formalismos de regras</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-aes-nota" id="toc-sec-cap-aes-nota" class="nav-link" data-scroll-target="#sec-cap-aes-nota"><span class="header-section-number">7.3</span> Atribuição de nota</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-aes-notageral" id="toc-sec-cap-aes-notageral" class="nav-link" data-scroll-target="#sec-cap-aes-notageral"><span class="header-section-number">7.3.1</span> Como atribuir nota a redações?</a></li>
+  <li><a href="#sec-cap-aes-notaenem" id="toc-sec-cap-aes-notaenem" class="nav-link" data-scroll-target="#sec-cap-aes-notaenem"><span class="header-section-number">7.3.2</span> Atribuição de nota para redações do Enem</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-aes-feedback" id="toc-sec-cap-aes-feedback" class="nav-link" data-scroll-target="#sec-cap-aes-feedback"><span class="header-section-number">7.4</span> Feedback para o aluno</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-aes-feedbackstats" id="toc-sec-cap-aes-feedbackstats" class="nav-link" data-scroll-target="#sec-cap-aes-feedbackstats"><span class="header-section-number">7.4.1</span> Estatísticas básicas do texto</a></li>
+  <li><a href="#sec-cap-aes-assistentes" id="toc-sec-cap-aes-assistentes" class="nav-link" data-scroll-target="#sec-cap-aes-assistentes"><span class="header-section-number">7.4.2</span> Assistentes de escrita e ferramentas de auxílio à escrita</a></li>
+  <li><a href="#sec-cap-aes-feedbackpositivo" id="toc-sec-cap-aes-feedbackpositivo" class="nav-link" data-scroll-target="#sec-cap-aes-feedbackpositivo"><span class="header-section-number">7.4.3</span> Identificação de pontos fortes e elogiáveis</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-aes-manualxauto" id="toc-sec-cap-aes-manualxauto" class="nav-link" data-scroll-target="#sec-cap-aes-manualxauto"><span class="header-section-number">7.5</span> Correção manual vs(?) correção automática</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-aes-manualxautohist" id="toc-sec-cap-aes-manualxautohist" class="nav-link" data-scroll-target="#sec-cap-aes-manualxautohist"><span class="header-section-number">7.5.1</span> Avanços dos últimos anos</a></li>
+  <li><a href="#sec-cap-aes-vantagemauto" id="toc-sec-cap-aes-vantagemauto" class="nav-link" data-scroll-target="#sec-cap-aes-vantagemauto"><span class="header-section-number">7.5.2</span> Vantagens da correção automática</a></li>
+  <li><a href="#sec-cap-aes-vantagemmanual" id="toc-sec-cap-aes-vantagemmanual" class="nav-link" data-scroll-target="#sec-cap-aes-vantagemmanual"><span class="header-section-number">7.5.3</span> Vantagens da correção manual</a></li>
+  <li><a href="#sec-cap-aes-hibridoingles" id="toc-sec-cap-aes-hibridoingles" class="nav-link" data-scroll-target="#sec-cap-aes-hibridoingles"><span class="header-section-number">7.5.4</span> O exemplo da língua inglesa</a></li>
+  <li><a href="#sec-cap-aes-defendemos" id="toc-sec-cap-aes-defendemos" class="nav-link" data-scroll-target="#sec-cap-aes-defendemos"><span class="header-section-number">7.5.5</span> O que defendemos</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-aes-consideracoesfinais" id="toc-sec-cap-aes-consideracoesfinais" class="nav-link" data-scroll-target="#sec-cap-aes-consideracoesfinais"><span class="header-section-number">7.6</span> Considerações finais</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-cap-aes" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading"></div>
+    <div class="quarto-title-meta-contents">
+             <p>Amanda Pontes Rassi </p>
+             <p>Priscilla de Abreu Lopes </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Publicado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">26/09/2023</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Atualizado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">13/04/2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+
+</div>
+<div>
+<div class="callout-body-container callout-body">
+<p>Este capítulo também está disponível em <a href="cap-aes.pdf">PDF</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" aria-controls="callout-cite" data-bs-target=".callout-cite-contents" data-bs-toggle="collapse" aria-label="Toggle callout" aria-expanded="false">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Como citar
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
+<i class="callout-toggle"></i>
+</div>
+</div>
+<div class="callout-cite-contents callout-collapse collapse" id="callout-cite">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>@InCollection{BPLN_livro_cap-aes:2026,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    author    = {Rassi, Amanda Pontes and Lopes, Priscilla de Abreu},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    title     = {Correção Automática de Redação},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    publisher = {BPLN},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    year      = {2026},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    editor    = {Caseli, H. M. and Nunes, M. G. V.},</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    type      = {Book Chapter},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    chapter   = {7},</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    edition   = {4},</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    volume    = {3},</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    isbn      = {XXXXXXXXXXXXXXXX},</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    url       = {https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html},</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mais recursos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="https://youtu.be/WS2YYzOflI8?si=sr_wrxxgfmN2JTLX">Vídeo</a> (Mesa redonda)</p>
+</div>
+</div>
+<section id="sec-cap-aes-intro" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="sec-cap-aes-intro"><span class="header-section-number">7.1</span> Introdução</h2>
+<p>A Correção Automática de Redação (CAR) é uma das diversas aplicações do Processamento de Linguagem Natural (PLN). De forma geral, ela pode ser definida como “o processo de avaliação e atribuição de nota em textos escritos em prosa, via programas computacionais” <span class="citation" data-cites="Handbook_Shermis2013">(<a href="../../shared/referencias/referencias.html#ref-Handbook_Shermis2013" role="doc-biblioref">Shermis; Burstein, 2013</a>)</span> <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>Embora a correção manual de redações seja uma prática bastante antiga – os primeiros sistemas automáticos para essa finalidade surgiram na década de 60, para a língua inglesa – só mais recentemente foram adaptados para o português.</p>
+<p>Em inglês, as áreas de <em>Automated Essay Scoring</em> (AES) e <em>Automated Essay Evaluation</em> (AEE) surgem como distintas, porém complementares e, às vezes, com alguma intersecção. A AES tem como principal objetivo automatizar a atribuição de nota, enquanto a AEE amplia esse foco, incluindo também a geração de feedbacks para o aluno, contribuindo de forma mais direta com o processo de aprendizagem da escrita.</p>
+<p>A AES costuma ser traduzida para o português como <strong>Avaliação Automática de Redação</strong> (AAR) <span class="citation" data-cites="Lima2023 Bittencourt2020 SilvaJunior2021">(<a href="../../shared/referencias/referencias.html#ref-Bittencourt2020" role="doc-biblioref">Bittencourt Jr., 2020</a>; <a href="../../shared/referencias/referencias.html#ref-SilvaJunior2021" role="doc-biblioref">Da Silva Jr., 2021</a>; <a href="../../shared/referencias/referencias.html#ref-Lima2023" role="doc-biblioref">Lima et al., 2023</a>)</span>, enquanto a AEE está associada ao termo <strong>Correção Automática de Redação</strong> (CAR), apesar de se tratar de um falso cognato. Neste capítulo, adotamos o termo CAR para nos referirmos a uma solução mais abrangente, que contempla tanto a avaliação quanto o feedback, isto é, que reúne as funções de AES e AEE. Para que seja considerada como solução completa de CAR, a aplicação deve contemplar pelo menos três etapas básicas:</p>
+<ol type="i">
+<li>a detecção de desvios no texto;</li>
+<li>a atribuição da nota, seja ela global ou por critério; e</li>
+<li>um feedback para o aluno.</li>
+</ol>
+<p>Cada uma dessas etapas pode ser vista como uma aplicação independente no PLN. Por exemplo, existem várias ferramentas de auxílio à escrita, bem como corretores ortográficos e gramaticais, que executam exclusivamente a tarefa de identificação de desvios no texto; e isso constitui uma aplicação em si. Da mesma forma, o fornecimento de sugestões de melhoria se aproxima de aplicações de geração de linguagem natural (ou <em>Natural Language Generation</em>).</p>
+<p>Ainda que essas funcionalidades possam ser oferecidas de forma independente, consideramos que uma solução pedagógica robusta de CAR deve integrar as três etapas mencionadas, as quais serão exploradas com mais profundidade ao longo deste capítulo.</p>
+<p>Antes de abordar cada uma das etapas, porém, faremos uma breve explicação sobre o objeto de estudo da CAR, que é a redação escolar, definindo e exemplificando os principais gêneros e tipos textuais, os critérios avaliados e alguns modelos brasileiros de correção de redação.</p>
+<section id="sec-cap-aes-defredacao" class="level3" data-number="7.1.1">
+<h3 data-number="7.1.1" class="anchored" data-anchor-id="sec-cap-aes-defredacao"><span class="header-section-number">7.1.1</span> O que é uma redação escolar?</h3>
+<p>A redação escolar é considerada um gênero textual, mas também pode ser distribuída em vários tipos e gêneros textuais. As redações, ou textos<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> de redação escolar, são geralmente utilizadas para avaliar as habilidades de escrita, interpretação, argumentação e criatividade dos alunos, bem como para desenvolver o pensamento crítico e a capacidade de expressão escrita. As redações podem abordar temas diversos, desde assuntos cotidianos até questões mais complexas e abstratas, e são uma forma importante de avaliar o progresso dos alunos ao longo do tempo.</p>
+<p>Para fins didáticos e de correção de redação, é importante salientar a diferença entre tipo textual e gênero textual, já que as redações devem atender a um tipo específico e a algum gênero específico, a depender da proposta de redação. Por exemplo, a redação do Enem<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> é sempre do tipo argumentativo e do gênero dissertação-argumentativa.</p>
+<p>Os <strong>tipos textuais</strong> (ou “modos textuais”, para <span class="citation" data-cites="Marcuschi2008">Marcuschi (<a href="../../shared/referencias/referencias.html#ref-Marcuschi2008" role="doc-biblioref">2008, p. 154</a>)</span>) se referem à forma como o texto é organizado, ou seja, a sequência linguística e os aspectos lexicais, sintáticos, tempos verbais, relações lógicas que são mobilizados para constituir o texto. Existe um conjunto bastante limitado de tipos textuais, o qual abrange: narração, argumentação, descrição, exposição e injunção. Ressaltamos que um texto raramente apresenta apenas características de um mesmo tipo. Deste modo, classificamos um texto como sendo de um determinado tipo quando há predominância de elementos que o caracterizam.</p>
+<p>Já os <strong>gêneros textuais</strong> são formas de comunicação que se desenvolvem em diferentes contextos sociais e culturais e se caracterizam pelo seu propósito ou objetivo comunicativo. Em outras palavras, cada gênero tem uma finalidade específica e é utilizado em determinadas situações comunicativas, dependendo de fatores sociais, culturais, dos falantes, da relação entre eles, do contexto, da finalidade da comunicação, dentre vários outros. Dependendo da situação comunicativa, cada gênero pode exigir um registro ou vocabulário específico, a norma culta ou coloquial, na modalidade escrita ou oral da língua.</p>
+<p>Por esse motivo, os gêneros são mais fluidos, podendo surgir, modificar-se, mesclar com outros, desaparecer e reaparecer com outra roupagem em outro contexto ou época. São exemplos de gêneros textuais: bula de remédio, carta pessoal, diálogo informal, e-mail, edital de concurso, inquérito policial, piada, receita culinária, reportagem, resenha, sermão etc.</p>
+<p>As redações podem apresentar diversos formatos e objetivos, dependendo do nível de ensino e do tema proposto pelo professor ou pela instituição de ensino. Dentre os tipos e gêneros textuais mais comuns associados à redação escolar, convém mencionar:</p>
+<ul>
+<li><strong>Dissertação</strong>, em que o autor apresenta e disserta sobre um determinado tema, apresentando informações e argumentos relacionados ao assunto;</li>
+<li><strong>Narração</strong>, em que o autor conta uma história, relatando fatos e acontecimentos em alguma ordem que pode ser cronológica ou não;</li>
+<li><strong>Carta</strong>, em que o autor se dirige a um destinatário específico, fazendo requisições, solicitações ou expressando suas opiniões e sentimentos;</li>
+<li><strong>Artigo de opinião</strong>, em que o autor defende um ponto de vista sobre um tema específico, utilizando argumentos e evidências para sustentá-lo;</li>
+<li><strong>Resenha</strong>, em que o autor faz uma análise crítica de um texto, obra ou produto.</li>
+</ul>
+<p>Esses são apenas alguns dos tipos e gêneros de redação escolar mais comuns. Os demais incluem a descrição, a exposição, a crônica, o relatório, o conto, a fábula, entre outros.</p>
+</section>
+<section id="sec-cap-aes-criterios" class="level3" data-number="7.1.2">
+<h3 data-number="7.1.2" class="anchored" data-anchor-id="sec-cap-aes-criterios"><span class="header-section-number">7.1.2</span> O que é avaliado?</h3>
+<p>Vários aspectos do texto são avaliados em uma correção de redação, tais como o uso da norma padrão da língua portuguesa, a adequação ao tema e ao gênero, questões relacionadas à coesão, à coerência, à progressão textual etc. Cada modelo de correção organiza e nomeia seus critérios de avaliação de formas distintas, mas, basicamente, todos eles analisam:</p>
+<dl>
+<dt>Língua portuguesa</dt>
+<dd>
+<p>Avalia a linguagem usada para expressar o conteúdo, verificando se há desvios ortográficos e/ou gramaticais, se a norma (culta ou coloquial) está de acordo com o tipo de texto exigido, se há problemas de estrutura sintática nas frases, orações e períodos, se o vocabulário foi usado adequadamente etc. Outros nomes para esse critério incluem “Escrita”, “Modalidade escrita”, “Norma culta”, “Norma padrão”, “Correção gramatical e adequação vocabular” ou “Expressão (modalidade)”.</p>
+</dd>
+<dt>Tema</dt>
+<dd>
+<p>Esse aspecto avalia a adequação da redação em relação à temática proposta, verificando se a abordagem do tema foi completa, se tangenciou ou fugiu do tema proposto, se o abordou de forma superficial ou profunda etc. Também é chamado de “Abordagem temática”, “Desenvolvimento do tema”, “Proposta temática” ou “Progressão temática”.</p>
+</dd>
+<dt>Gênero</dt>
+<dd>
+<p>Esse critério considera a adequação da redação em relação ao tipo textual e ao gênero textual exigidos na proposta. Também pode ser chamado de “Gênero textual”, “Adequação ao tipo textual”, “Organização do texto dissertativo-argumentativo” ou “Estrutura (gênero/tipo de texto)”.</p>
+</dd>
+<dt>Coerência</dt>
+<dd>
+<p>Neste quesito, avalia-se a coerência entre as ideias, a ordem dos argumentos, a profundidade da argumentação, a clareza e autoria das ideias desenvolvidas, assim como verifica-se se há contradições no texto, se as informações são vagas e/ou muito generalistas, se falta informação, dentre outros. Também pode ser chamado de “Progressão textual”, “Defesa do ponto de vista”, “Coerência dos argumentos”, “Estrutura (coerência)”, “Indícios de autoria” e outros termos.</p>
+</dd>
+<dt>Coesão</dt>
+<dd>
+<p>Avalia o uso correto ou incorreto, presença ou ausência, pertinência ou não de operadores coesivos, tais como conjunções, preposições, pronomes e expressões discursivas. O critério é também chamado de “Coesão e articulação”, “Articulação das partes do texto”, “Expressão (coesão)”, “Conexão entre os parágrafos”, “Uso de operadores argumentativos”, “Recursos coesivos”, dentre outros termos.</p>
+</dd>
+</dl>
+<p>Além desses aspectos que são comuns a todos os modelos de correção, alguns professores, instituições de ensino e vestibulares também podem avaliar a “Leitura”, ou seja, o uso e interpretação dos textos motivadores ou da coletânea que embasa a proposta de redação, e também a presença e adequação da “Proposta de intervenção”, que é um critério exclusivo do Enem.</p>
+</section>
+<section id="sec-cap-aes-modelosbr" class="level3" data-number="7.1.3">
+<h3 data-number="7.1.3" class="anchored" data-anchor-id="sec-cap-aes-modelosbr"><span class="header-section-number">7.1.3</span> Alguns modelos brasileiros de correção</h3>
+<p>O principal modelo de correção de redação, no Brasil, é o Enem, responsável pela avaliação anual de milhões de alunos<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Mas também existem outros modelos de correção relacionados a vestibulares e universidades específicas, tais como Fuvest, Unesp, Unicamp, FGV e outros igualmente relevantes. Apesar de haver critérios gerais que são avaliados por todos eles, cada um tem autonomia para definir sua grade específica, os pesos de cada critério e sua própria forma de avaliação.</p>
+<p>O <a href="#def-cap-aes-quadro1" class="quarto-xref">Quadro&nbsp;<span>7.1</span></a> apresenta quatro modelos brasileiros de correção relacionados a vestibulares, indicando o gênero textual exigido, seus critérios de avaliação e faixas de nota possíveis.</p>
+<div id="def-cap-aes-quadro1" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 7.1</strong></span> Modelos de correção de vestibulares.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 24%">
+<col style="width: 35%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Modelo</th>
+<th style="text-align: left;">Tipo/Gênero</th>
+<th style="text-align: left;">Critérios avaliativos</th>
+<th style="text-align: left;">Nota mín. critério</th>
+<th style="text-align: left;">Nota máx. critério</th>
+<th style="text-align: left;">Nota global</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Enem</td>
+<td style="text-align: left;">Dissertação-argumentativa</td>
+<td style="text-align: left;">Língua Portuguesa (Competência 1)</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">200</td>
+<td style="text-align: left;">1000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Abordagem temática e adequação ao tipo textual (Competência 2)</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">200</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Progressão textual e defesa do ponto de vista (Competência 3)</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">200</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Coesão e articulação (Competência 4)</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">200</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Proposta de intervenção (Competência 5)</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">200</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fuvest</td>
+<td style="text-align: left;">Dissertação ou narrativa</td>
+<td style="text-align: left;">Desenvolvimento do tema uso da coletânea e autoria</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Compreensão e atendiemnto da proposta quanto ao gênero e tipo de texto</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Recursos linguísticos (coesão e coerência) e progressão textual</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Convenções da escrita e adequação vocabular</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Unesp</td>
+<td style="text-align: left;">Dissertação-argumentativa</td>
+<td style="text-align: left;">Tema</td>
+<td style="text-align: left;">–</td>
+<td style="text-align: left;">–</td>
+<td style="text-align: left;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Estrutura (gênero/tipo de texto e coerência)</td>
+<td style="text-align: left;">–</td>
+<td style="text-align: left;">–</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Expressão (modalidade e coesão)</td>
+<td style="text-align: left;">–</td>
+<td style="text-align: left;">–</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Unicamp</td>
+<td style="text-align: left;">variados</td>
+<td style="text-align: left;">Proposta temática</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Gênero</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Leitura</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Articulação escrita</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<p></p>
+<p>No modelo de correção do <strong>Enem</strong><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, o aluno é avaliado quanto à produção de um texto do tipo dissertativo-argumentativo para um tema específico, que muda todo ano. A avaliação é dividida em 5 competências (critérios avaliativos), cada uma no intervalo de notas de 0 a 200. A soma direta das notas das competências leva à nota total, que fica no intervalo de 0 a 1000. Considerando os critérios básicos descritos na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-criterios" target="_blank" title="Volume 3">O que é avaliado?</a></span>, vale dizer que o Enem os divide da seguinte forma: (i) Língua Portuguesa, (ii) Tema e Gênero, (iii) Coerência e (iv) Coesão. Além desses, o modelo ainda avalia um quinto critério, que é a presença e adequação da “Proposta de Intervenção”, que consiste na sugestão de ação ou medida interventiva para solucionar ou minimizar o problema associado ao tema proposto.</p>
+<p>O vestibular da <strong>Fuvest</strong><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> também exige um texto do gênero dissertativo-argumentativo para um tema específico que muda todo ano. A partir do vestibular de 2026, o candidato também tem mais uma opção de gênero (narrativo), além da dissertação, ambos sobre o mesmo tema. O modelo de avaliação até 2024 agrupava os critérios básicos em 3 (Tema/Gênero, Coerência/Coesão e Língua Portuguesa). A partir do vestibular 2026, essa grade está dividida em 4 critérios: (i) Desenvolvimento do tema, uso da coletânea e autoria, que vale de 0 a 15 pontos; (ii) Compreensão e atendimento da proposta quanto ao gênero e tipo de texto, que pode somar até 10 pontos; (iii) Recursos linguísticos (coesão e coerência) e progressão textual, também de 0 a 15 pontos; e (iv) Convenções da escrita e adequação vocabular, com pontuação máxima igual a 10. Com a soma de pontos dos 4 critérios, o aluno pode tirar de 0 a 50.</p>
+<p>Já no modelo de correção da <strong>Unesp</strong><a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>, os textos, que devem seguir o gênero dissertação-argumentativa, também são avaliados em três eixos, agrupados da seguinte forma: (i) Tema, (ii) Gênero/Coerência e (iii) Língua Portuguesa/Coesão. A pontuação individual ou peso por critério não é divulgado no material do candidato, mas é definido que a pontuação final fica entre 0 e 28 pontos.</p>
+<p>A redação da <strong>Unicamp</strong><a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>, a cada ano, varia a exigência dos tipos e gêneros textuais<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>, geralmente oferecendo duas alternativas das quais o candidato deve escolher uma para execução. A Unicamp agrupa os critérios básicos da seguinte forma: (i) Tema, (ii) Gênero e (iii) Língua Portuguesa/Coerência/Coesão. Além desses três eixos, também avalia a “Leitura”, que corresponde à leitura e interpretação crítica dos textos fornecidos na proposta, sem contudo copiá-los ou parafraseá-los. Na avaliação, cada critério possui pesos diferentes: Tema varia entre 0 e 2 pontos, Gênero entre 0 e 3, Leitura entre 0 e 3 e Língua Portuguesa/Coerência/Coesão varia entre 1 e 4 pontos. A soma dos pontos de cada critério leva à nota final, cujo valor máximo é de 12 pontos.</p>
+<p>Fora as diferenças já apontadas, convém ressaltar que todos os modelos penalizam o aluno (zerando a redação) no caso de falhas graves. No entanto, cada modelo define um conjunto específico de falhas graves, que podem ser: fuga ao tema, fuga ao gênero, assinatura na prova, desenho ou sinal gráfico, redação em língua estrangeira, caligrafia ilegível, recado para o corretor, parte desconectada, texto insuficiente, dentre outras situações<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>.</p>
+<p>Quanto ao título da redação, o Enem e a Unesp não exigem, mas também não proíbem; simplesmente desconsideram para a avaliação da redação. Já a Fuvest não menciona a exigência de título no Manual do candidato do vestibular Fuvest 2024<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>, mas coloca como instrução no Caderno de prova<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>. Já a Unicamp pode ou não exigir título, a depender do gênero textual proposto.</p>
+<p>Essa grande variedade de modelos de correção é considerada um dos grandes desafios para a CAR, não sendo recomendado treinar um modelo computacional que abarque todos os tipos de correção ou que misture redações dos vários tipos como dados de treinamento para algum modelo. A exigência por modelagens de nota específicas por modelo de correção não impede, no entanto, o reaproveitamento de parte das ferramentas de correção, como a detecção automática de desvios no texto, desde que modelos de correção distintos tenham diretrizes similares para esse tipo de tarefa.</p>
+<p>Todas essas questões serão mais detalhadas ao longo deste capítulo, que está organizado da seguinte forma: a <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-desvios" target="_blank" title="Volume 3">Detecção de desvios no texto</a></span> descreve como fazer a detecção de desvios em textos em português, demonstrando alguns tipos de desvios e os formalismos usados. A <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-nota" target="_blank" title="Volume 3">Atribuição de nota</a></span> apresenta os principais trabalhos da literatura que realizam a atribuição da nota para redações em português. A <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-feedback" target="_blank" title="Volume 3">Feedback para o aluno</a></span> demonstra as possibilidades de geração de um feedback para o aluno. Na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-manualxauto" target="_blank" title="Volume 3">Correção manual vs(?) correção automática</a></span>, discutimos as vantagens e desvantagens da correção manual e da correção automática, a fim de esclarecer ao leitor que ambas possuem potencialidades, mas também limitações. Por fim, nas Considerações finais (<span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-consideracoesfinais" target="_blank" title="Volume 3">Considerações finais</a></span>), retomamos os pontos principais do capítulo.</p>
+</section>
+</section>
+<section id="sec-cap-aes-desvios" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="sec-cap-aes-desvios"><span class="header-section-number">7.2</span> Detecção de desvios no texto</h2>
+<p>Conforme apresentado na Introdução (<span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-intro" target="_blank" title="Volume 3">Introdução</a></span>), consideramos que uma das etapas da Correção Automática de Redação (CAR) é a detecção ou identificação de desvios<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a>. Essa etapa nem sempre é realizada nos trabalhos de Avaliação Automática de Redação, ou, por vezes, os desvios são contabilizados para o cálculo da nota, porém não são apresentados ao aluno.</p>
+<p>A detecção desses desvios costuma ser feita por meio de três abordagens distintas: baseada em regras (<strong>abordagem simbólica</strong>), baseada em modelos estatísticos (<strong>abordagem estatística</strong>) e a baseada em LLMs (<strong>abordagem gerativa</strong>). Os sistemas baseados em regras são mais adequados para identificar desvios gramaticais, o que é mais comum de ser cometido por falantes nativos da própria língua, enquanto os estatísticos capturam melhor os desvios de uso, que são erros mais comuns por não-nativos<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a>. A abordagem gerativa tem se tornado uma opção muito usual desde a popularização dos LLMs (<span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol2/modelos/cap-modelos-linguagem/cap-modelos-linguagem.html#sec-cap-modelos-linguagem-neurais" target="_blank" title="Volume 2">Modelos de Linguagem Neurais Modernos</a></span>) e suas constantes melhorias.</p>
+<p>Embora a abordagem simbólica (baseada em regras) seja considerada obsoleta para tarefas mais complexas, ainda é a mais utilizada atualmente para detectar desvios na área de CAR. Para outros tipos de tarefas, modelos estatísticos e neurais performam melhor e são mais escaláveis do que modelos simbólicos. A abordagem gerativa pode ser interessante como ferramenta de correção do texto, porém, ao apontar desvios, as respostas estão sujeitas a alucinações (situação exemplificada no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol2/modelos/cap-agentes-conversacionais/cap-agentes-conversacionais.html#sec-cap-agentes-conversacionais" target="_blank" title="Volume 2">ChatGPT, MariTalk e outros agentes de conversação</a></span>). Apesar do desempenho de modelos estatísticos e LLMs, a abordagem simbólica permite, com alta precisão, mostrar ao aluno o trecho exato que contém o desvio, explicar por que está errado e ainda fazer sugestões de correção.</p>
+<p>Para o português, existem recursos disponíveis, tais como o CoGroo<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> e o LanguageTool<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a>, que são repositórios contendo regras gramaticais para a língua portuguesa. Esses recursos têm versões livres, gratuitas e de código-aberto, com extensão para navegadores web e também acopláveis a editores de texto.</p>
+<p>Também há plataformas de correção de redação que desenvolveram seu próprio conjunto de recursos linguísticos e regras gramaticais, o que é uma boa opção quando há um padrão muito claro e estruturado que se possa expressar com regras simbólicas ou expressões regulares, que é o caso dos desvios mais comuns em redações.</p>
+<p>Na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-tiposdesvios" target="_blank" title="Volume 3">Tipos de desvios</a></span> caracterizamos alguns dos tipos de desvios mais comuns em redações. Posteriormente, na <span> <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-desviosformalismo" target="_blank" title="Volume 3">Formalismos de regras</a></span>, apresentamos duas alternativas de formalismo para a definição de regras de detecção de desvios.</p>
+<section id="sec-cap-aes-tiposdesvios" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="sec-cap-aes-tiposdesvios"><span class="header-section-number">7.2.1</span> Tipos de desvios</h3>
+<p>Existem diversos tipos de desvios que podem ser marcados em uma redação, como os ortográficos, os gramaticais (ou sintáticos), os de uso de vocabulário ou registro, os desvios no uso de recursos coesivos, dentre outros. Para cada modelo de correção de redação, é possível criar uma taxonomia própria de tipos de desvios que se pretende identificar em um texto.</p>
+<p>Ressaltamos que a criação de recursos para esse tipo de tarefa é um processo difícil, moroso e custoso, que depende de especialistas. Deste modo, é importante estabelecer um planejamento criterioso caso seja necessário criar recursos próprios.</p>
+<p>Nesta seção exploramos alguns tipos de desvios, por serem os mais comuns, mas é importante esclarecer que os tipos de desvios não se limitam aos indicados neste capítulo. Na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-desviosorto" target="_blank" title="Volume 3">Desvios ortográficos</a></span> descrevemos os desvios ortográficos, na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-desviosgramaticais" target="_blank" title="Volume 3">Desvios gramaticais</a></span>, os gramaticais e na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-desviosoutros" target="_blank" title="Volume 3">Outros tipos de desvios</a></span>, outros tipos de desvios mais comuns em redações.</p>
+<section id="sec-cap-aes-desviosorto" class="level4" data-number="7.2.1.1">
+<h4 data-number="7.2.1.1" class="anchored" data-anchor-id="sec-cap-aes-desviosorto"><span class="header-section-number">7.2.1.1</span> Desvios ortográficos</h4>
+<p>A grande maioria dos desvios ortográficos é facilmente detectável e tratável. O simples uso de um bom dicionário de língua portuguesa já indica quais palavras existem e quais não existem na língua. Portanto, identificar palavras com grafia desviante do léxico é uma tarefa relativamente simples.</p>
+<p>O Unitex<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a>, por exemplo, dispõe de três dicionários muito completos para o português: o <strong>Delas</strong> (com cerca de 75.000 formas canônicas simples), o <strong>Delaf</strong> (com cerca de 9.000.000 entradas de palavras flexionadas) e o <strong>Delacf</strong> (com cerca de 4.000 entradas de formas compostas). Esse recurso pode ser usado como uma primeira etapa de identificação de desvios ortográficos, a fim de identificar palavras que existem no léxico do português e palavras desviantes.</p>
+<p>Outros desvios ortográficos se dividem em:</p>
+<ul>
+<li>problemas de falta de sinal gráfico ou uso indevido de acentuação (ex: “prática” x “pratica”);</li>
+<li>problemas de capitalização (uso de maiúscula onde deveria ser minúscula ou uso de minúscula onde deveria ser maiúscula);</li>
+<li>grafia incorreta de palavras homônimas ou parônimas (ex: “mas” x “mais” ou “há” x “a”);</li>
+<li>problemas de segmentação (uso de hífen, palavras juntas que deveriam ser separadas ou palavras separadas que deveriam ser escritas juntas); e</li>
+<li>desvios com relação à nova ortografia.</li>
+</ul>
+<p>Para todos esses casos, a abordagem baseada em regras precisa identificar corretamente o contexto em que a palavra-alvo está inserida. O que torna essa tarefa complexa e nem sempre bem sucedida é que a identificação do contexto linguístico em uma abordagem simbólica muitas vezes depende de um bom <em>parser</em> e um bom <em>tagger</em>. Conforme foi apresentado em capítulos anteriores (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/palavras/cap-caracteres-palavras/cap-caracteres-palavras.html#sec-cap-caracteres-palavras" target="_blank" title="Volume 1">Sequência de caracteres e palavras</a></span> e <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/estrutura/cap-recursos-sintaxe/cap-recursos-sintaxe.html#sec-cap-recursos-sintaxe" target="_blank" title="Volume 1">Ferramentas e recursos para o processamento sintático</a></span>), essas ferramentas nem sempre têm uma ótima performance em português.</p>
+</section>
+<section id="sec-cap-aes-desviosgramaticais" class="level4" data-number="7.2.1.2">
+<h4 data-number="7.2.1.2" class="anchored" data-anchor-id="sec-cap-aes-desviosgramaticais"><span class="header-section-number">7.2.1.2</span> Desvios gramaticais</h4>
+<p>Os desvios gramaticais, também chamados de desvios sintáticos, correspondem aos problemas de estrutura sintática, ou seja, nas relações entre as palavras, que podem estar no escopo de uma sentença, um sintagma, um grupo ou uma <em>string</em>. Por exemplo, na sentença “As menina dançam”, existe um desvio de concordância nominal entre “As” (plural) e “menina” (singular) e/ou um desvio de concordância verbal entre “menina” (singular) e “dançam” (plural).</p>
+<p>Além dos desvios de concordância (que correspondem a cerca de 18,9%), também são comuns em redações escolares: os de vírgula e pontuação (44%), de formas verbais (6,8%), pronomes (5,8%), preposições (5,7%), crase (4,2%), segmentação (4,1%), regência (3,4%), conjunções (2,3%), determinantes (2%) e outros (2,3%)<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a>.</p>
+<p>Apesar de os desvios de pontuação e vírgula serem os mais frequentes, são também os mais difíceis de serem tratados, pois em geral a vírgula separa constituintes sintagmáticos, o que exigiria uma análise sintática por constituência, e esse tipo de <em>parser</em> é raro para o Português<a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a>.</p>
+<p>As regras gramaticais que exigem um contexto linguístico local, por exemplo, para avaliação da crase ou concordância nominal, geralmente funcionam melhor, ao passo que as regras que dependem de um contexto linguístico maior, com macrorrelações de dependência (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/palavras/cap-caracteres-palavras/cap-caracteres-palavras.html#sec-cap-caracteres-palavras" target="_blank" title="Volume 1">Sequência de caracteres e palavras</a></span>), ou quando um <em>token</em> está muito distante do outro, tendem a performar mal.</p>
+</section>
+<section id="sec-cap-aes-desviosoutros" class="level4" data-number="7.2.1.3">
+<h4 data-number="7.2.1.3" class="anchored" data-anchor-id="sec-cap-aes-desviosoutros"><span class="header-section-number">7.2.1.3</span> Outros tipos de desvios</h4>
+<p>Além dos desvios ortográficos e gramaticais, há outros problemas textuais que podem ser marcados automaticamente em redações, como:</p>
+<ul>
+<li>Desvios de vocabulário e registro – quando o texto apresenta escolhas lexicais inadequadas ao gênero ou à situação comunicativa. Por exemplo, em uma dissertação argumentativa, o uso excessivo de marcas de oralidade (“tipo”, “a gente”) ou de pronomes em primeira pessoa (“eu acho”, “na minha opinião”) pode ser considerado um desvio de registro.</li>
+<li>Desvios de coesão – referentes à falta de recursos coesivos ou ao emprego incorreto de conectivos, pronomes ou expressões responsáveis por articular as ideias do texto. Um exemplo recorrente é o uso de “contudo” no sentido de conclusão, ou o uso do pronome “onde” em contextos não locativos (“A época onde…”).</li>
+<li>Desvios de adequação ao gênero – quando o aluno não segue as convenções esperadas para o gênero textual proposto. Quando o aluno conta histórias ou traz longos trechos narrativos em dissertações argumentativas, por exemplo, pode configurar desvio.</li>
+<li>Desvios de progressão temática – quando há repetição excessiva de ideias, incoerências internas, rupturas bruscas na argumentação ou inserção de trechos desconectados do tema central, prejudicando a continuidade do texto.</li>
+</ul>
+<p>Enfim, dependendo do modelo de correção adotado e da parametrização dos critérios de correção de cada banca, definem-se quais tipos de desvios devem ou não ser marcados no texto. A detecção desses desvios pode ser feita por meio de regras baseadas em listas lexicais, padrões sintáticos ou análise do contexto discursivo. Assim como nos casos ortográficos e gramaticais, as abordagens mais eficazes são aquelas que conseguem levar em conta o contexto em que a palavra ou expressão ocorre, reduzindo falsos positivos. Cabe destacar que, além da marcação de desvios, é igualmente relevante identificar e registrar aspectos positivos presentes na redação. A sinalização de usos adequados e escolhas bem-sucedidas contribui não apenas para reforçar práticas corretas, mas também para justificar a atribuição de notas mais altas nos critérios correspondentes.</p>
+</section>
+</section>
+<section id="sec-cap-aes-desviosformalismo" class="level3" data-number="7.2.2">
+<h3 data-number="7.2.2" class="anchored" data-anchor-id="sec-cap-aes-desviosformalismo"><span class="header-section-number">7.2.2</span> Formalismos de regras</h3>
+<p>Há inúmeras maneiras de escrever regras de forma que o computador consiga lê-las e interpretá-las. Cada ferramenta pode criar seu próprio formalismo e mecanismo de inferência, mas também há alguns disponíveis gratuitamente e que podem ser usados para um projeto inicial.</p>
+<p>O LanguageTool<a href="#fn20" class="footnote-ref" id="fnref20" role="doc-noteref"><sup>20</sup></a> implementa um mecanismo de inferência para regras formalizadas em XML (<em>Extensible Markup Language</em>). Para o português, o software disponibiliza cerca de 2.880 regras abrangendo várias categorias linguísticas, tais como: gramática geral, ortografia, pontuação, capitalização, tipografia, estilo, redundância, palavra composta, semântica, repetição, linguagem informal, uso de pronomes, dentre outras. Essas regras podem ser consultadas via repositório Language Tool Community<a href="#fn21" class="footnote-ref" id="fnref21" role="doc-noteref"><sup>21</sup></a>.</p>
+<p>Como exemplo, reproduzimos o formalismo de uma regra para identificar redundância quando se escreve “gelo gelado”, na <a href="#fig-cap-aes-fig1" class="quarto-xref">Figura&nbsp;<span>7.1</span></a><a href="#fn22" class="footnote-ref" id="fnref22" role="doc-noteref"><sup>22</sup></a>.</p>
+<div id="fig-cap-aes-fig1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Código XML para regra de redundância 'gelo gelado', como definida no LanguageTool.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-aes-fig1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;7.1: Exemplo de formalismo de regra do LanguageTool
+</figcaption>
+<div aria-describedby="fig-cap-aes-fig1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/formalismo_regra_xml.png" class="img-fluid figure-img" alt="Código XML para regra de redundância 'gelo gelado', como definida no LanguageTool.">
+</div>
+</figure>
+</div>
+<p>Neste exemplo, consta o id e o nome da regra (linha 1), seguidos do padrão a ser buscado (linhas de 2 a 7), seguido da mensagem a ser mostrada (linhas 8 a 10), e de um exemplo de uso (linhas 11 a 13).</p>
+<p>A complexidade das regras pode variar dependendo da complexidade do problema linguístico ou do padrão a ser buscado. No caso do código na <a href="#fig-cap-aes-fig1" class="quarto-xref">Figura&nbsp;<span>7.1</span></a>, o problema linguístico em questão – a redundância – é muito simples, e isso se reflete na simplicidade da regra, a qual procura basicamente dois <em>tokens</em>: o primeiro é “gelo”, imediatamente seguido do segundo, que é “gelado”. Por outro lado, problemas linguísticos mais complexos também exigem regras mais complexas que podem usar lemas, <em>tokens</em>, etiquetas morfológicas, morfossintáticas, expressões regulares, relações de dependência, entidades nomeadas, dentre outros.</p>
+<p>Ressaltamos que a performance das regras do LanguageTool não é ótima, mas é um recurso útil para quem não quer começar essa tarefa do zero. Considerando que o software possui versão aberta<a href="#fn23" class="footnote-ref" id="fnref23" role="doc-noteref"><sup>23</sup></a>, é possível corrigir e definir novas regras usando o mesmo formalismo e avaliá-las por meio da própria ferramenta.</p>
+<p>Outra ferramenta que podemos indicar para esse tipo de tarefa é o módulo Python spaCy<a href="#fn24" class="footnote-ref" id="fnref24" role="doc-noteref"><sup>24</sup></a>, que implementa três mecanismos para identificação de padrões em textos que podem ser bastante úteis na tarefa de detecção de desvios. Esses mecanismos fazem parte do sub-módulo chamado <em>Rule-based matching</em>, que permite a busca por um <em>token</em> em determinado contexto (chamado <em>Matcher</em>), por uma frase ou sintagma (chamado <em>Phrase matcher</em>), ou ainda por relações de dependências entre elementos da sentença (chamado <em>Dependency matcher</em>). Eles podem ser usados separadamente ou combinados entre si para garantir melhor acurácia na busca por padrões linguísticos.</p>
+<p>Na <a href="#fig-cap-aes-fig2" class="quarto-xref">Figura&nbsp;<span>7.2</span></a>, apresentamos código Python que utiliza a classe <code>Matcher</code> do spaCy para a definição da regra que identifica a redundância “gelo gelado”, que foi reescrita, e executa a busca por padrões em um texto.</p>
+<div id="fig-cap-aes-fig2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Script Python que cadastra a regra de redundância 'gelo gelado' e a aplica a um texto, demonstrando uso da biblioteca spaCy.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-aes-fig2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;7.2: Exemplo de formalismo da regra “gelo gelado” usando a biblioteca spaCy
+</figcaption>
+<div aria-describedby="fig-cap-aes-fig2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/formalismo_regra_py.png" class="img-fluid figure-img" alt="Script Python que cadastra a regra de redundância 'gelo gelado' e a aplica a um texto, demonstrando uso da biblioteca spaCy.">
+</div>
+</figure>
+</div>
+<p>O exemplo inicia importando o módulo <code>spacy</code> e, especificamente, a classe <code>Matcher</code> (linhas 1 e 2). Em seguida um <em>pipeline</em> pré-treinado do spaCy para português é carregado (linha 4) e seu vocabulário é utilizado para inicializar uma instância da classe <code>Matcher</code> (linha 5). Em seguida, são definidos um identificador para a regra (linha 7), o padrão buscado de dois <em>tokens</em> (linhas 9 a 12), cada um representado por um dicionário, e a mensagem que deve ser impressa na tela caso o padrão seja identificado no texto (linha 14). Nas linhas de 16 a 20, a regra é adicionada à instância <code>matcher</code>, incluindo a definição de uma função para a impressão da mensagem na tela quando o padrão é encontrado (<code>on_match</code>). As linhas 22 a 23 definem um texto para teste de busca do padrão e a execução dessa busca.</p>
+<p>O spaCy não conta com um repositório de regras pré-definidas para detecção de desvios. Contudo, por ser uma ferramenta de PLN, disponibiliza uma série de funcionalidades que podem contribuir para essa tarefa de maneira mais simples, i.e.&nbsp;sem a necessidade de alterar a implementação dos mecanismos de busca já disponíveis.</p>
+<p>A detecção de desvios no texto é uma etapa importante em CAR, especialmente por indicar e colaborar para a aprendizagem da escrita. Os desvios encontrados podem, inclusive, ser utilizados na etapa de atribuição de nota à redação. Na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-nota" target="_blank" title="Volume 3">Atribuição de nota</a></span> apresentamos as principais abordagens e tendências nessa área, além de citar os principais trabalhos dedicados a redações em português.</p>
+</section>
+</section>
+<section id="sec-cap-aes-nota" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="sec-cap-aes-nota"><span class="header-section-number">7.3</span> Atribuição de nota</h2>
+<p>A atribuição de nota a uma redação pode ser feita de forma global, ou seja, uma nota única para a redação inteira, ou por meio de notas individuais para cada critério de avaliação. O principal desafio desse processo está na grande diversidade de matrizes de correção existentes (ver <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-modelosbr" target="_blank" title="Volume 3">Alguns modelos brasileiros de correção</a></span>) – que variam quanto ao modelo adotado, à escala e às faixas de pontuação, bem como à quantidade e à distribuição dos critérios avaliativos.</p>
+<p>Até recentemente, as abordagens faziam uso de <em>corpus</em> rotulado, i.e., conjuntos de redações que já foram avaliadas manualmente e possuem indicação de nota e/ou adequação da redação em relação ao critério avaliado. Desse modo, as técnicas utilizadas para atribuição de nota se enquadram na área de aprendizado supervisionado por classificação ou regressão. Hoje, com a popularização dos LLMs, muitas empresas optam por essa abordagem gerativa, por ser mais rápida e barata, apesar de menos controlável.</p>
+<p>O <em>Project Essay Grade</em> (PEG) <span class="citation" data-cites="Ajay1973">(<a href="../../shared/referencias/referencias.html#ref-Ajay1973" role="doc-biblioref">Ajay et al., 1973</a>)</span> foi uma das primeiras ferramentas estáveis para a atribuição de notas em redações com boa performance dentro do contexto aplicado: redações universitárias curtas em inglês. No entanto, a falta de acesso a computadores foi, por algum tempo, impedimento para o desenvolvimento de outras soluções. Na metade da década de 90, dados os avanços tecnológicos de hardware e software, a área de AES viu um reaquecimento e, desde então, surgiram novos trabalhos consistentemente, inclusive apoiados por abordagens que tiveram ascensão a partir da década de 2010, como <em>deep learning</em> e Transformers.</p>
+<p>Como mencionado na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-intro" target="_blank" title="Volume 3">Introdução</a></span>, é importante conhecer o contexto e modelo de correção para realizar a atribuição de nota de forma efetiva. A despeito disso, diferentes estratégias podem ser reaproveitadas e combinadas para a avaliação de redações de modelos de correção distintos. Na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-notageral" target="_blank" title="Volume 3">Como atribuir nota a redações?</a></span> apresentamos uma visão geral de técnicas e estratégias para a atribuição de notas em redações. Dada a relevância do Enem para o contexto de redações em português, a <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-notaenem" target="_blank" title="Volume 3">Atribuição de nota para redações do Enem</a></span> traz trabalhos especificamente voltados para a automatização da avaliação em redações desse modelo de correção.</p>
+<section id="sec-cap-aes-notageral" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="sec-cap-aes-notageral"><span class="header-section-number">7.3.1</span> Como atribuir nota a redações?</h3>
+<p>A abordagem clássica para atribuição de notas envolve a extração de atributos (<em>features</em>) a partir do texto, que são utilizados para descrever redações de um conjunto de treinamento, além da transformação e seleção desses atributos, em um processo nomeado engenharia de atributos. Os dados extraídos servem de entrada para um algoritmo de aprendizado para a geração de modelos capazes de atribuir nota a novas redações a partir dos valores de seus atributos.</p>
+<p>A primeira versão do PEG <span class="citation" data-cites="Ajay1973">(<a href="../../shared/referencias/referencias.html#ref-Ajay1973" role="doc-biblioref">Ajay et al., 1973</a>)</span> utilizava atributos baseados em contagens de diferentes elementos do texto, categorizadas em: (i) <strong>simples</strong> (e.g.&nbsp;número de adjetivos na redação): redações com mais adjetivos são avaliadas com notas maiores por humanos (relação linear); (ii) <strong>enganosamente simples</strong> (e.g.&nbsp;número de palavras na redação): redações muito curtas são penalizadas, porém, conforme o tamanho da redação aumenta, esse atributo perde importância para atribuição de nota (relação logarítmica); e (iii) <strong>sofisticadas</strong> (e.g.&nbsp;número de palavras que podem representar contextos maiores): o número de conectivos, por exemplo, pode indicar a complexidade de uma sentença.</p>
+<p>Considerando a tarefa de atribuição de nota, é possível utilizar atributos que sejam independentes. Ferramentas como Coh-Metrix<a href="#fn25" class="footnote-ref" id="fnref25" role="doc-noteref"><sup>25</sup></a> e Linguistic Inquiry Word Count (LIWC)<a href="#fn26" class="footnote-ref" id="fnref26" role="doc-noteref"><sup>26</sup></a>, são utilizadas em trabalhos como <span class="citation" data-cites="Ferreira2021">Ferreira et al. (<a href="../../shared/referencias/referencias.html#ref-Ferreira2021" role="doc-biblioref">2021</a>)</span> e <span class="citation" data-cites="Ferreira2022">Ferreira Mello et al. (<a href="../../shared/referencias/referencias.html#ref-Ferreira2022" role="doc-biblioref">2022</a>)</span> para a extração de informações linguísticas, como legibilidade e coesão.</p>
+<p>Trabalhos que utilizam métricas independentes de conteúdo são capazes de representar critérios de avaliação como Coerência e Coesão. No entanto, critérios como Tema são melhor avaliados por atributos dependentes de conteúdo, como exemplo as matrizes de termos, descritas no <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/dados/cap-dataset-corpus/cap-dataset-corpus.html#sec-cap-dataset-corpus" target="_blank" title="Volume 1">Conjunto de dados, <em>dataset</em> e <em>corpus</em></a></span>, e métricas calculadas a partir dessas matrizes, como a similaridade de cosseno utilizada entre tema e redação em <span class="citation" data-cites="AmorimVeloso2017">Amorim; Veloso (<a href="../../shared/referencias/referencias.html#ref-AmorimVeloso2017" role="doc-biblioref">2017</a>)</span>. Em <span class="citation" data-cites="Louis2010">Louis; Higgins (<a href="../../shared/referencias/referencias.html#ref-Louis2010" role="doc-biblioref">2010</a>)</span> e <span class="citation" data-cites="Persing2014">Persing; Ng (<a href="../../shared/referencias/referencias.html#ref-Persing2014" role="doc-biblioref">2014</a>)</span>, são propostos cálculos de atributos dependentes de conteúdo com base em recursos linguísticos pré-definidos e associados aos temas relacionados às redações utilizadas nos experimentos.</p>
+<p>Ainda sobre a extração de atributos, vale mencionar o trabalho de <span class="citation" data-cites="Sousa2021">Sousa et al. (<a href="../../shared/referencias/referencias.html#ref-Sousa2021" role="doc-biblioref">2021</a>)</span> que, além de aspectos linguísticos, explora aspectos relacionados à construção da argumentação, por meio de mineração de argumentos. A combinação de diferentes estratégias para extração de atributos é bastante comum, conforme realizado por <span class="citation" data-cites="AmorimVeloso2017">Amorim; Veloso (<a href="../../shared/referencias/referencias.html#ref-AmorimVeloso2017" role="doc-biblioref">2017</a>)</span> que, além de aspectos linguísticos e associados ao tema, incluem métricas associadas ao correto uso da língua, calculadas com base em desvios identificados por ferramentas externas, como as mencionadas na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-desvios" target="_blank" title="Volume 3">Detecção de desvios no texto</a></span>.</p>
+<p>É importante ressaltar que a inclusão de atributos relacionados a critérios de avaliação específicos não é imprescindível para atribuição de nota global. No entanto, a partir do momento em que se propõe atribuir notas por critérios avaliativos, é interessante incluir atributos que representem cada critério, ou poderá haver discrepância significativa no resultado obtido entre critérios, como observado em alguns trabalhos <span class="citation" data-cites="AmorimVeloso2017 Fonseca2018">(<a href="../../shared/referencias/referencias.html#ref-AmorimVeloso2017" role="doc-biblioref">Amorim; Veloso, 2017</a>; <a href="../../shared/referencias/referencias.html#ref-Fonseca2018" role="doc-biblioref">Fonseca et al., 2018</a>)</span>.</p>
+<p>Selecionado um conjunto de atributos e realizada a análise estatística dos dados, podemos seguir à etapa de treinamento de modelos. Não convém aqui sugerirmos esta ou aquela técnica ou algoritmo, uma vez que conjuntos de dados distintos podem apresentar resultados também diferentes para os mesmos algoritmos <span class="citation" data-cites="Fonseca2018 Ferreira2021 Ferreira2022 Marinho2022">(<a href="../../shared/referencias/referencias.html#ref-Ferreira2022" role="doc-biblioref">Ferreira Mello et al., 2022</a>; <a href="../../shared/referencias/referencias.html#ref-Ferreira2021" role="doc-biblioref">Ferreira et al., 2021</a>; <a href="../../shared/referencias/referencias.html#ref-Fonseca2018" role="doc-biblioref">Fonseca et al., 2018</a>; <a href="../../shared/referencias/referencias.html#ref-Marinho2022" role="doc-biblioref">Marinho et al., 2022a</a>)</span>. Ao treinar modelos para atribuição de nota, assim como modelos com outros objetivos, é fundamental definir mais de um algoritmo e configurações para, então, realizar uma comparação estatística entre os resultados obtidos.</p>
+<p>Entre os trabalhos que utilizam a abordagem de extração de atributos, há modelos de classificação e regressão treinados com diversos algoritmos, como: regressão linear <span class="citation" data-cites="Fonseca2018">(<a href="../../shared/referencias/referencias.html#ref-Fonseca2018" role="doc-biblioref">Fonseca et al., 2018</a>)</span>, <em>Suppport Vector Machines</em> (SVM) <span class="citation" data-cites="Haendchen2018 Haendchen2019">(<a href="../../shared/referencias/referencias.html#ref-Haendchen2018" role="doc-biblioref">Haendchen Filho et al., 2018</a>, <a href="../../shared/referencias/referencias.html#ref-Haendchen2019" role="doc-biblioref">2019</a>)</span>, <em>Gradient Boosting</em> <span class="citation" data-cites="Fonseca2018 Marinho2022">(<a href="../../shared/referencias/referencias.html#ref-Fonseca2018" role="doc-biblioref">Fonseca et al., 2018</a>; <a href="../../shared/referencias/referencias.html#ref-Marinho2022" role="doc-biblioref">Marinho et al., 2022a</a>)</span>. A comparação entre os modelos se dá, principalmente, pela avaliação dos valores obtidos para métricas como precisão, revocação, medida-F, RMSE e Kappa de Cohen.</p>
+<p>Embora seja possível obter resultados satisfatórios pela engenharia de atributos e treinamento de modelos por algoritmos clássicos de aprendizado de máquina, é notável o esforço humano necessário para o processo de extração e seleção de atributos, considerando que muitos dos conjuntos de atributos são compostos por algumas centenas de métricas. Com isso em vista, surgem trabalhos que utilizam outras técnicas para a representação de textos e algoritmos de redes neurais profundas para a tarefa de atribuição de nota.</p>
+<p><span class="citation" data-cites="Alikaniotis2016">Alikaniotis et al. (<a href="../../shared/referencias/referencias.html#ref-Alikaniotis2016" role="doc-biblioref">2016</a>)</span> propõem uma técnica de <em>word embeddings</em> treinada com base em notas de redações, que é utilizada com redes neurais LSTM. O trabalho relata melhores resultados obtidos em comparação com outras abordagens.</p>
+<p>Em <span class="citation" data-cites="Fonseca2018">Fonseca et al. (<a href="../../shared/referencias/referencias.html#ref-Fonseca2018" role="doc-biblioref">2018</a>)</span>, as <em>word embeddings</em> GloVe são combinadas com redes LSTM bidirecionais e os resultados são comparados, também, com uma abordagem que utiliza engenharia de atributos. Os autores relatam que, embora a técnica de redes neurais tenha gerado bons resultados, o modelo gerado a partir de atributos se mostrou superior em diferentes aspectos.</p>
+<p><span class="citation" data-cites="Mayfield2020">Mayfield; Black (<a href="../../shared/referencias/referencias.html#ref-Mayfield2020" role="doc-biblioref">2020</a>)</span> realizam <em>fine-tuning</em> de modelos pré-treinados (BERT e variações) para a atribuição automática de notas. Apesar de relatar resultados até 5% melhores do que modelos baseados em n-gramas, os autores discutem sobre o tempo de treinamento deste tipo de modelo, que é cerca de 100 vezes mais demorado do que outras abordagens, e sobre o impacto que isso pode ter em fluxos mais dinâmicos de trabalho.</p>
+<p><span class="citation" data-cites="Bittencourt2020">Bittencourt Jr. (<a href="../../shared/referencias/referencias.html#ref-Bittencourt2020" role="doc-biblioref">2020</a>)</span> define 14 técnicas baseadas em combinações de diferentes representações de palavras e arquiteturas de redes neurais profundas para a execução da tarefa de atribuição de nota a redações. Os experimentos são realizados com um conjunto composto por redações de 18 temas, sendo que cada técnica é utilizada para o treinamento de um modelo por tema (18 modelos por técnica). Também é proposta uma abordagem para treinamento de modelo multi-tema, ou seja, um modelo único para a atribuição de notas para redações de mais de um tema.</p>
+<p>O trabalho de <span class="citation" data-cites="Marinho2022">Marinho et al. (<a href="../../shared/referencias/referencias.html#ref-Marinho2022" role="doc-biblioref">2022a</a>)</span> compara 3 tipos de abordagens: (i) engenharia de atributos com algoritmo de regressão, (ii) <em>doc embeddings</em> com algoritmo de regressão e (iii) <em>word embeddings</em> com LSTM. As abordagens (i) e (iii) apresentaram melhores resultados para critérios de avaliação distintos, sendo a abordagem (iii) eleita pelos autores como a melhor. Os resultados da abordagem (iii) ainda foram comparados com resultados de <span class="citation" data-cites="Amorim2018">Amorim et al. (<a href="../../shared/referencias/referencias.html#ref-Amorim2018" role="doc-biblioref">2018</a>)</span> e <span class="citation" data-cites="Fonseca2018">Fonseca et al. (<a href="../../shared/referencias/referencias.html#ref-Fonseca2018" role="doc-biblioref">2018</a>)</span>, sendo relatado melhor desempenho desta abordagem na atribuição de nota por critério de avaliação. Nos últimos anos, os LLMs também têm sido explorados para a atribuição automática de notas a redações. Esses modelos podem ser aplicados tanto em cenários de <em>fine-tuning</em> supervisionado <span class="citation" data-cites="yang2020enhancing">(<a href="../../shared/referencias/referencias.html#ref-yang2020enhancing" role="doc-biblioref">Yang et al., 2020</a>)</span>, a partir de bases de redações previamente anotadas, quanto em cenários de <em>few-shot</em> ou <em>zero-shot learning</em> <span class="citation" data-cites="shibata2025lceszeroshotautomatedessay">(<a href="../../shared/referencias/referencias.html#ref-shibata2025lceszeroshotautomatedessay" role="doc-biblioref">Shibata; Miyamura, 2025</a>)</span>, em que o próprio modelo, orientado por instruções, realiza a atribuição de notas sem necessidade de treinamento extensivo <span class="citation" data-cites="PackBarrettEscalante2024">(<a href="../../shared/referencias/referencias.html#ref-PackBarrettEscalante2024" role="doc-biblioref">Pack et al., 2024</a>)</span>. Estratégias híbridas também têm sido propostas, como a incorporação de <em>shallow features</em> ou de comparações par-a-par no processo de atribuição de nota, com ganhos de desempenho em relação a métodos tradicionais <span class="citation" data-cites="faseeh2024hybrid shibata2025lceszeroshotautomatedessay">(<a href="../../shared/referencias/referencias.html#ref-faseeh2024hybrid" role="doc-biblioref">Faseeh et al., 2024</a>; <a href="../../shared/referencias/referencias.html#ref-shibata2025lceszeroshotautomatedessay" role="doc-biblioref">Shibata; Miyamura, 2025</a>)</span>. A principal vantagem dessa abordagem é a redução do esforço manual na engenharia de atributos e a possibilidade de maior generalização a diferentes critérios avaliativos, gêneros textuais e modelos de correção. Além disso, <em>frameworks</em> inovadores como o Rank-Then-Score <span class="citation" data-cites="cai2025rankthenscoreenhancinglargelanguage">(<a href="../../shared/referencias/referencias.html#ref-cai2025rankthenscoreenhancinglargelanguage" role="doc-biblioref">Cai et al., 2025</a>)</span> e abordagens colaborativas entre humanos e LLMs <span class="citation" data-cites="XiaoEtAl2025">(<a href="../../shared/referencias/referencias.html#ref-XiaoEtAl2025" role="doc-biblioref">Xiao et al., 2025</a>)</span> têm demonstrado resultados promissores, combinando consistência estatística e explicabilidade. Por outro lado, os LLMs ainda apresentam desafios importantes, como custo computacional elevado, necessidade de dados para ajuste fino, bem como riscos de variação e falta de interpretabilidade. Apesar dessas limitações, os LLMs podem se consolidar como alternativa barata para avaliação automática de redações em larga escala, inclusive em cenários multilíngues ou em línguas com menos recursos computacionais, como é o caso do português.</p>
+</section>
+<section id="sec-cap-aes-notaenem" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="sec-cap-aes-notaenem"><span class="header-section-number">7.3.2</span> Atribuição de nota para redações do Enem</h3>
+<p>Especificamente para o português, a maior parte dos trabalhos relacionados à atribuição de notas (e CAR) utiliza <em>corpora</em> compostos por redações do modelo de correção do Enem como base de treinamento. Dada a importância e dimensão do exame no Brasil, há interesse particular em encontrar soluções para a atribuição de nota exclusivamente para esse modelo de correção.</p>
+<p>Como descrito na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-modelosbr" target="_blank" title="Volume 3">Alguns modelos brasileiros de correção</a></span>, o Enem exige a produção de um texto do gênero dissertativo-argumentativo sobre um tema específico que é avaliado em 5 critérios, também chamados de competências: (1) Língua portuguesa, (2) Abordagem temática e adequação ao tipo textual, (3) Progressão textual e defesa do ponto de vista, (4) Coesão e articulação e (5) Proposta de intervenção. Os trabalhos que treinam modelos de atribuição de nota para o Enem predizem uma nota global, porém alguns tentam também aperfeiçoar por competência.</p>
+<p><span class="citation" data-cites="LimaEtAl2023">Barbosa de Lima et al. (<a href="../../shared/referencias/referencias.html#ref-LimaEtAl2023" role="doc-biblioref">2023</a>)</span> fazem uma revisão sistemática da literatura envolvendo avaliação automática de redações do Enem. Entre as conclusões apresentadas, destacamos o foco dos trabalhos selecionados no uso de atributos extraídos do texto em vez do uso de modelos pré-treinados baseados em Deep Learning, o baixo detalhamento dos feedbacks gerados e a escassez de análise do impacto prático em aplicações no mundo real. Alguns dos trabalhos apontados por <span class="citation" data-cites="LimaEtAl2023">Barbosa de Lima et al. (<a href="../../shared/referencias/referencias.html#ref-LimaEtAl2023" role="doc-biblioref">2023</a>)</span> são detalhados a seguir, por apresentarem relevância teórica ou técnica.</p>
+<p>Em <span class="citation" data-cites="AmorimVeloso2017">Amorim; Veloso (<a href="../../shared/referencias/referencias.html#ref-AmorimVeloso2017" role="doc-biblioref">2017</a>)</span>, <span class="citation" data-cites="Fonseca2018">Fonseca et al. (<a href="../../shared/referencias/referencias.html#ref-Fonseca2018" role="doc-biblioref">2018</a>)</span>, <span class="citation" data-cites="Marinho2022">Marinho et al. (<a href="../../shared/referencias/referencias.html#ref-Marinho2022" role="doc-biblioref">2022a</a>)</span> e <span class="citation" data-cites="Bittencourt2020">Bittencourt Jr. (<a href="../../shared/referencias/referencias.html#ref-Bittencourt2020" role="doc-biblioref">2020</a>)</span>, o foco está na atribuição de notas para cada uma das competências, o que pode ser feito com base em modelos treinados para cada competência ou um modelo único que prediz as notas para cada uma delas. Já em <span class="citation" data-cites="Haendchen2018">Haendchen Filho et al. (<a href="../../shared/referencias/referencias.html#ref-Haendchen2018" role="doc-biblioref">2018</a>)</span>, é explorada a atribuição de notas para a competência 2, especificamente.</p>
+<p>Ao realizar estudo sobre a predição de notas para cada uma das competências do Enem, <span class="citation" data-cites="Haendchen2019">Haendchen Filho et al. (<a href="../../shared/referencias/referencias.html#ref-Haendchen2019" role="doc-biblioref">2019</a>)</span> notaram o significativo desbalanceamento do conjunto de redações e tornaram esse o foco de seu trabalho, a fim de analisar o impacto e tratamento de conjuntos de dados desbalanceados na tarefa de atribuição de nota.</p>
+<p>Alguns trabalhos que utilizam redações em português não têm como foco direto a atribuição de nota, mas a proposta de técnicas mensuráveis relacionadas a critérios cuja avaliação pode ser mais complexa. Como exemplo, citam-se as contribuições de <span class="citation" data-cites="Ferreira2021">Ferreira et al. (<a href="../../shared/referencias/referencias.html#ref-Ferreira2021" role="doc-biblioref">2021</a>)</span>, <span class="citation" data-cites="Sousa2021">Sousa et al. (<a href="../../shared/referencias/referencias.html#ref-Sousa2021" role="doc-biblioref">2021</a>)</span> e <span class="citation" data-cites="Ferreira2022">Ferreira Mello et al. (<a href="../../shared/referencias/referencias.html#ref-Ferreira2022" role="doc-biblioref">2022</a>)</span> para a avaliação das competências 3 e 4.</p>
+<p>É notável que, no momento da escrita deste capítulo, não pudemos encontrar nenhum trabalho em que se dê atenção em particular para a melhoria de atribuição de nota na competência 5 do Enem.</p>
+<p>Vale ressaltar que os conjuntos de dados utilizados pelos referidos trabalhos não são muito representativos, possuindo até alguns milhares de redações de uma baixa diversidade de temas. O maior conjunto relatado possui 56.644 redações, sem indicação de número de temas <span class="citation" data-cites="Fonseca2018">(<a href="../../shared/referencias/referencias.html#ref-Fonseca2018" role="doc-biblioref">Fonseca et al., 2018</a>)</span>. O conjunto de redações com maior número de temas relatado, que também é o segundo em número de redações, conta com 27.184 redações distribuídas entre 18 temas, sendo que o número de redações por tema varia entre 3.070 e 710 <span class="citation" data-cites="Bittencourt2020">(<a href="../../shared/referencias/referencias.html#ref-Bittencourt2020" role="doc-biblioref">Bittencourt Jr., 2020</a>)</span>. Além disso, ambos os maiores conjuntos foram fornecidos por empresas privadas e, portanto, não são públicos.</p>
+<p>O tamanho e distribuição do conjunto de dados são considerados obstáculos para o treinamento de modelos de atribuição de notas, especialmente quando utilizadas técnicas de <em>deep learning</em>. Mesmo com o uso de abordagens híbridas ou baseadas em redes neurais profundas, a comprovação e generalização de resultados é um desafio. No entanto, há uma iniciativa para a criação de um conjunto público de redações do modelo Enem para utilização em trabalhos de CAR: até agosto de 2022 era composto por 6.579 redações pré-processadas e divididas em 151 temas <span class="citation" data-cites="Marinho2022dataset">(<a href="../../shared/referencias/referencias.html#ref-Marinho2022dataset" role="doc-biblioref">Marinho et al., 2022b</a>)</span> <a href="#fn27" class="footnote-ref" id="fnref27" role="doc-noteref"><sup>27</sup></a>.</p>
+<p>Para o português brasileiro e para o contexto da avaliação do ENEM, não foram encontradas abordagens baseadas em LLMs voltadas para a correção ou avaliação de redações. Identificamos apenas o trabalho de <span class="citation" data-cites="LocatelliEtAl2025">Locatelli et al. (<a href="../../shared/referencias/referencias.html#ref-LocatelliEtAl2025" role="doc-biblioref">2025</a>)</span>, que exploraram o comportamento de LLMs (GPT-3.5, GPT-4 e MariTalk) no contexto do ENEM, mas no sentido de comparar redações geradas pelos modelos com aquelas escritas por alunos. Portanto, não tiveram o intuito de avaliar automaticamente os textos.</p>
+<p>Também não encontramos nenhum trabalho de PLN que tenha relatado a atribuição de notas em redações de outros modelos de correção, como Fuvest, Unicamp, FGV ou outros.</p>
+<p>Enfim, acreditamos que ainda há espaço para trabalhos quanto à tarefa de atribuição de notas em redações em português. Contudo, para atingir a meta de soluções completas de correção de redação, apenas a nota é insuficiente do ponto de vista do processo de ensino e aprendizagem. Para suprir essa lacuna, a <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-feedback" target="_blank" title="Volume 3">Feedback para o aluno</a></span> discute a terceira tarefa de CAR, referente ao provimento de feedback relacionado ao texto.</p>
+</section>
+</section>
+<section id="sec-cap-aes-feedback" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="sec-cap-aes-feedback"><span class="header-section-number">7.4</span> Feedback para o aluno</h2>
+<p>Conforme apresentado na Introdução (<span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-intro" target="_blank" title="Volume 3">Introdução</a></span>), a última etapa da Correção Automática de Redação (CAR) é o fornecimento de um feedback para o aluno. Até pouco tempo atrás, a correção automática produzia basicamente uma nota como resultado da avaliação da redação. Mas isso já não era mais suficiente e foi surgindo a necessidade de explicar ou justificar essa nota. De acordo com <span class="citation" data-cites="Handbook_Shermis2013">Shermis; Burstein (<a href="../../shared/referencias/referencias.html#ref-Handbook_Shermis2013" role="doc-biblioref">2013</a>)</span>, os primeiros trabalhos se limitavam a dar feedbacks sobre as características e propriedades linguísticas do texto. Pesquisas mais recentes vêm focando em aspectos mais complexos e profundos da língua, que vão além da superficialidade do texto<a href="#fn28" class="footnote-ref" id="fnref28" role="doc-noteref"><sup>28</sup></a>.</p>
+<p>Em uma <strong>correção manual</strong>, esse feedback é feito pelo próprio corretor da redação, na forma de comentário livre, em linguagem natural, sem seguir nenhum tipo de padronização, podendo tecer críticas, fazer sugestões, elencar pontos fortes e pontos a melhorar, abordar questões gerais ou específicas da redação, enfim, de formas bastante variadas.</p>
+<p>Já em uma <strong>correção automática</strong>, as plataformas que dão algum tipo de feedback sobre a correção o fazem de forma sistematizada. Porém, são raras as empresas que fornecem esse tipo de devolutiva ao aluno. <span class="citation" data-cites="Lima2023">Lima et al. (<a href="../../shared/referencias/referencias.html#ref-Lima2023" role="doc-biblioref">2023</a>)</span> fizeram uma revisão sistemática da literatura sobre CAR e uma das lacunas que identificaram nos trabalhos para o português é o baixo detalhamento nos feedbacks retornados pelos modelos de avaliação.</p>
+<p>Na prática, os corretores automáticos costumam apontar apenas estatísticas básicas do texto, tais como quantidade de conectivos (conjunções), variação lexical (taxa de <em>types</em> por <em>tokens</em>), quantidade de palavras de conteúdo (substantivos, adjetivos, verbos e alguns advérbios), tamanho médio das palavras, frases e parágrafos, dentre outros, o que geralmente não tem utilidade pedagógica para o aluno. A <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-feedbackstats" target="_blank" title="Volume 3">Estatísticas básicas do texto</a></span> apresenta como essas informações são calculadas e exibidas.</p>
+<p>Algumas plataformas de CAR também disponibilizam para o aluno sistemas ou <em>bots</em> baseados em assistentes de escrita ou ferramentas computacionais de auxílio à escrita. Na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-assistentes" target="_blank" title="Volume 3">Assistentes de escrita e ferramentas de auxílio à escrita</a></span> apresentamos como esses recursos e ferramentas são utilizadas em sistemas de CAR.</p>
+<p>Mais recentemente, com o surgimento e popularização de LLMs, algumas empresas também já começaram a fornecer feedbacks gerados automaticamente por esses modelos gerativos. Também é possível gerar automaticamente as devolutivas a partir de elementos encontrados ou não encontrados no texto, instanciando palavras ou trechos do texto da redação. Mas isso só é possível se for usada uma abordagem simbólica. Nesse sentido, o feedback pode conter críticas referenciando os desvios apresentados na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-desvios" target="_blank" title="Volume 3">Detecção de desvios no texto</a></span> e/ou elogios aos pontos fortes, como será apresentado na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-feedbackpositivo" target="_blank" title="Volume 3">Identificação de pontos fortes e elogiáveis</a></span>.</p>
+<section id="sec-cap-aes-feedbackstats" class="level3" data-number="7.4.1">
+<h3 data-number="7.4.1" class="anchored" data-anchor-id="sec-cap-aes-feedbackstats"><span class="header-section-number">7.4.1</span> Estatísticas básicas do texto</h3>
+<p>Algumas plataformas e empresas privadas que oferecem serviço de CAR apresentam para o aluno contagens básicas do texto, tais como a quantidade de palavras, caracteres, sentenças, parágrafos e até a quantidade de palavras por classe gramatical (verbos, substantivos, adjetivos, preposições, conjunções etc.). Outras oferecem um pouco mais de informação baseada em estatísticas simples, como a proporção de palavras únicas (<em>types</em>) em relação à quantidade total de palavras no texto (<em>tokens</em>), alguma medida de similaridade entre as sentenças, desvio padrão dos parágrafos, dentre outras.</p>
+<p>Um dos recursos disponíveis para recuperar essas informações é o NILC-Metrix <span class="citation" data-cites="Leal_NILC_METRIX_2023">(<a href="../../shared/referencias/referencias.html#ref-Leal_NILC_METRIX_2023" role="doc-biblioref">Leal et al., 2023</a>)</span>, uma versão brasileira do Coh-Metrix. O NILC-Metrix<a href="#fn29" class="footnote-ref" id="fnref29" role="doc-noteref"><sup>29</sup></a> é a atualização mais recente do Coh-Metrix-Port <span class="citation" data-cites="ScartonAluisio2010">(<a href="../../shared/referencias/referencias.html#ref-ScartonAluisio2010" role="doc-biblioref">Scarton; Aluísio, 2010</a>)</span>, contendo 200 métricas<a href="#fn30" class="footnote-ref" id="fnref30" role="doc-noteref"><sup>30</sup></a> distribuídas nas 14 categorias apresentadas no <a href="#def-cap-aes-quadro2" class="quarto-xref">Quadro&nbsp;<span>7.2</span></a>, as quais avaliam a coerência, a coesão, a inteligibilidade, a complexidade e outros aspectos:</p>
+<!--`\newpage`{=latex}-->
+<div id="def-cap-aes-quadro2" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 7.2</strong></span> Categorias de métricas disponíveis no NILC-Metrix.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Categoria</th>
+<th>Qtde.</th>
+<th style="text-align: left;">Descrição das métricas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Medidas Descritivas</td>
+<td>10</td>
+<td style="text-align: left;">Quantificam sílabas por palavra, palavras por sentença, sentenças por parágrafo, assim como quantidades absolutas de palavras, sentenças e parágrafos.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Simplicidade Textual</td>
+<td>8</td>
+<td style="text-align: left;">Analisam proporção de palavras fáceis e difíceis em relação ao total de palavras, bem como sentenças longas e curtas.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Coesão Referencial</td>
+<td>9</td>
+<td style="text-align: left;">Avaliam quantidades de palavras de conteúdo, radicais de conteúdo, médias de referentes, de candidatos a referentes e proporção de pronomes anafóricos.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Coesão Semântica</td>
+<td>11</td>
+<td style="text-align: left;">Calculam similaridade, entropia, desvio padrão e taxa de <em>giveness</em>, ou seja, quantidade de informação dada e nova baseada em LSA (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/significado/cap-semantica-distribucional/cap-semantica-distribucional.html#sec-cap-semantica-distribucional" target="_blank" title="Volume 1">Semântica distribucional</a></span>).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Medidas Psicolinguísticas</td>
+<td>24</td>
+<td style="text-align: left;">Verificam 4 critérios: concretude, imageabilidade, familiaridade e idade de aquisição das palavras.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Diversidade Lexical</td>
+<td>15</td>
+<td style="text-align: left;">Calculam proporções e desvio padrão de <em>types</em> e <em>tokens</em>, tanto gerais quanto por PoS e por categorias de palavras lexicais e funcionais.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Conectivos</td>
+<td>12</td>
+<td style="text-align: left;">Verificam a proporção de vários tipos de conectivos (aditivos, causais, lógicos) e operadores lógicos (positivos e negativos) em relação ao total de palavras do texto.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Léxico Temporal</td>
+<td>12</td>
+<td style="text-align: left;">Consideram verbos flexionados nos diferentes tempos e modos verbais, bem como as formas regular e irregular de particípio.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Complexidade Sintática</td>
+<td>27</td>
+<td style="text-align: left;">São bastante diversas, considerando desde a quantidade de orações por sentença, coordenação e subordinação, até aspectos como voz ativa e passiva, aposto, distância na árvore de dependência, fórmulas de Frazier e Yngve, dentre vários outros.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Densidade de Padrões Sintáticos</td>
+<td>4</td>
+<td style="text-align: left;">Calculam proporção de verbos no gerúndio e também tamanhos de sintagmas nominais.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Informações Morfossintáticas de Palavras</td>
+<td>42</td>
+<td style="text-align: left;">Verificam quantidade média, proporção ou desvio padrão das palavras por PoS.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Informações Semânticas de Palavras</td>
+<td>11</td>
+<td style="text-align: left;">Incluem dados sobre substantivos abstratos, palavras polissêmicas, hiperônimos, nomes próprios e polaridade (positiva e negativa) das palavras.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Frequência de Palavras</td>
+<td>10</td>
+<td style="text-align: left;">Calculam frequências de vários tipos de palavra (de conteúdo, e.g.) com base na curva de Zipf e considerando diferentes <em>corpora</em>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Índices de Leiturabilidade</td>
+<td>5</td>
+<td style="text-align: left;">Incluem índices e fórmulas já consolidados em PLN, tais como Fórmula Dale Chall, Índice de Brunet, Flesch, Gunning Fog e Estatística de Honoré.</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+<p></p>
+<p>Os cálculos dessas métricas geralmente resultam em um valor numérico, o qual não se faz útil para o aluno. Porém, há diferentes maneiras de devolver ao aluno um feedback textual com a interpretação de algumas dessas métricas. Por exemplo, se considerarmos os valores de 4 métricas de Simplicidade Textual, referentes a tamanho de sentença (a saber: <em>long_sentence_ratio</em><a href="#fn31" class="footnote-ref" id="fnref31" role="doc-noteref"><sup>31</sup></a>, <em>medium_long_sentence_ratio</em><a href="#fn32" class="footnote-ref" id="fnref32" role="doc-noteref"><sup>32</sup></a>, <em>medium_short_sentence_ratio</em><a href="#fn33" class="footnote-ref" id="fnref33" role="doc-noteref"><sup>33</sup></a>, <em>short_sentence_ratio</em><a href="#fn34" class="footnote-ref" id="fnref34" role="doc-noteref"><sup>34</sup></a>), é possível criar um resultado interpretável para dizer ao aluno que ele constrói sentenças muito longas e isso pode prejudicar a compreensão das ideias do texto.</p>
+<p>Tanto as estatísticas básicas quanto as métricas do NILC-Metrix podem ser utilizadas não apenas para devolver feedbacks aos alunos, mas também como atributos para calcular a nota da redação ou de alguns aspectos da redação, conforme apresentado na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-nota" target="_blank" title="Volume 3">Atribuição de nota</a></span>.</p>
+</section>
+<section id="sec-cap-aes-assistentes" class="level3" data-number="7.4.2">
+<h3 data-number="7.4.2" class="anchored" data-anchor-id="sec-cap-aes-assistentes"><span class="header-section-number">7.4.2</span> Assistentes de escrita e ferramentas de auxílio à escrita</h3>
+<p>Para prover uma devolutiva ao aluno, também é possível recorrer a sistemas prontos de PLN, como os assistentes virtuais, assistentes de escrita ou ferramentas de auxílio à escrita. Essas soluções podem ser entendidas como aplicações finais, mas, na área de CAR, elas são usadas como recursos ou ferramentas intermediárias para subsidiar a solução completa de CAR.</p>
+<p>Essas ferramentas são capazes de gerar, melhorar, reformular e personalizar qualquer tipo de conteúdo textual, incluindo redações. Algumas delas funcionam de forma síncrona <em>real-time</em>, fazendo correções e dando sugestões à medida que o texto está sendo escrito, enquanto outras funcionam a posteriori, ou seja, depois que o aluno submete sua redação à plataforma de correção, ele recebe uma devolutiva com críticas e/ou elogios.</p>
+<p>Para a língua inglesa, há inúmeros assistentes de escrita e muitos deles conhecidos no Brasil porque as pessoas usam o inglês para escrever, por exemplo, artigos científicos. Um dos mais populares é o Grammarly<a href="#fn35" class="footnote-ref" id="fnref35" role="doc-noteref"><sup>35</sup></a>, mas também há outros bastante usados, como Linguix<a href="#fn36" class="footnote-ref" id="fnref36" role="doc-noteref"><sup>36</sup></a>, Ginger<a href="#fn37" class="footnote-ref" id="fnref37" role="doc-noteref"><sup>37</sup></a>, Reverso<a href="#fn38" class="footnote-ref" id="fnref38" role="doc-noteref"><sup>38</sup></a>, Writer<a href="#fn39" class="footnote-ref" id="fnref39" role="doc-noteref"><sup>39</sup></a>, Hemingway App<a href="#fn40" class="footnote-ref" id="fnref40" role="doc-noteref"><sup>40</sup></a> e outros.</p>
+<p>Para o português, também existem vários softwares comerciais, sendo a maioria paga. As ferramentas de auxílio à escrita, ao lado dos simplificadores textuais e dos sumarizadores automáticos, podem contribuir com a área de CAR, pois fornecem:</p>
+<ul>
+<li><strong>Correção ortográfica e gramatical:</strong> Os sistemas podem usar regras ou modelos de linguagem treinados em um grande volume de textos em português para identificar erros ortográficos e gramaticais comuns.</li>
+<li><strong>Análise de contexto:</strong> As ferramentas não apenas verificam palavras isoladas, mas também consideram o contexto da frase em que uma palavra está inserida. Isso ajuda a evitar falsos positivos e permite que o sistema forneça sugestões de correção mais precisas.</li>
+<li><strong>Sugestões de melhoria:</strong> Quando uma palavra é identificada como incorreta ou quando uma construção gramatical suspeita é detectada, o assistente de escrita oferece sugestões para corrigir o problema. Essas sugestões podem incluir substituições de palavras, ajustes na estrutura da frase ou correções de pontuação.</li>
+<li><strong>Detecção de estilo:</strong> Além de corrigir erros básicos, um assistente de escrita também pode oferecer sugestões para melhorar o estilo de escrita. Isso inclui alertas sobre uso excessivo de palavras, repetições, uso inadequado de voz passiva, entre outros aspectos.</li>
+<li><strong>Feedback de clareza:</strong> As ferramentas também podem avaliar a clareza do texto, identificando frases longas e complexas que podem ser difíceis de entender, podendo sugerir dividir essas frases ou reformulá-las para tornar o conteúdo mais acessível.</li>
+<li><strong>Verificação de plágio:</strong> Algumas soluções comerciais oferecem uma funcionalidade adicional para verificar a originalidade do texto, identificando trechos que possam ser semelhantes a outras fontes online. Isso é especialmente útil para evitar acidentalmente usar conteúdo plagiado.</li>
+<li><strong>Aprendizado contínuo:</strong> Assim como outras ferramentas de PLN, os assistentes de escrita também continuam aprendendo e melhorando com o tempo. Eles são atualizados com novos dados e feedbacks dos usuários, o que ajuda a aprimorar seus modelos e a abordagem dos problemas linguísticos.</li>
+<li><strong>Extensões e integrações:</strong> Muitos deles oferecem extensões para navegadores, complementos para processadores de texto e aplicativos móveis, o que permite aos usuários verificar seu conteúdo em tempo real enquanto escrevem em várias plataformas.</li>
+<li><strong>Personalização:</strong> Em alguns desses sistemas, o usuário pode personalizar as configurações com base em suas preferências de estilo e escrita. Isso permite adaptar as sugestões e correções de acordo com o contexto e o público-alvo.</li>
+</ul>
+<p>Conforme dito anteriormente, as melhores ferramentas de auxílio à escrita que existem hoje para o português são soluções comerciais de empresas privadas. Existem também alguns sistemas desenvolvidos a partir de pesquisas acadêmicas e científicas, mas nenhuma focada em redação. Por exemplo, o SciPo<a href="#fn41" class="footnote-ref" id="fnref41" role="doc-noteref"><sup>41</sup></a> <span class="citation" data-cites="Feltrim2003">(<a href="../../shared/referencias/referencias.html#ref-Feltrim2003" role="doc-biblioref">Feltrim et al., 2003</a>)</span>, que é um sistema de auxílio à escrita de resumos acadêmicos em português, especialmente para teses e dissertações da área da Ciência da Computação. Outro exemplo é o WRITEME<a href="#fn42" class="footnote-ref" id="fnref42" role="doc-noteref"><sup>42</sup></a> <span class="citation" data-cites="Leite2020">(<a href="../../shared/referencias/referencias.html#ref-Leite2020" role="doc-biblioref">Leite et al., 2020</a>)</span>, que é ferramenta de auxílio à escrita de READMEs que usa dados abertos dos repositórios mais populares do GitHub para gerar recomendações de seções, mas também não é focada e redação.</p>
+</section>
+<section id="sec-cap-aes-feedbackpositivo" class="level3" data-number="7.4.3">
+<h3 data-number="7.4.3" class="anchored" data-anchor-id="sec-cap-aes-feedbackpositivo"><span class="header-section-number">7.4.3</span> Identificação de pontos fortes e elogiáveis</h3>
+<p>Na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-desvios" target="_blank" title="Volume 3">Detecção de desvios no texto</a></span> falamos da detecção de pontos fracos e desvios no texto. Por outro lado, também é importante detectar pontos fortes e elogiáveis e demonstrá-los ao aluno para que ele continue usando a mesma estratégia nos próximos textos.</p>
+<p>Esses pontos fortes podem ser identificados por meio de regras formais, mas também é possível usar diferentes estratégias para cada aspecto da avaliação.</p>
+<p>Tendo identificado todos ou alguns aspectos (positivos ou negativos) do texto, é possível retornar essas informações ao aluno na forma de feedbacks construtivos para auxiliá-lo a se tornar um escritor mais habilidoso e confiante.</p>
+<dl>
+<dt>Avaliação de coesão</dt>
+<dd>
+<p>Na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-desviosoutros" target="_blank" title="Volume 3">Outros tipos de desvios</a></span>, falamos brevemente de como identificar usos corretos de recursos coesivos usando regras em contextos linguísticos menores, como dentro de uma sentença.</p>
+<p>Também é possível criar regras formais que percorrem todo o texto procurando as ocorrências de conectivos, avaliar a sua distribuição ao longo do texto, calcular a variabilidade e diversificação deles e até procurar conectivos em pontos específicos da redação, como no início da conclusão, por exemplo.</p>
+<p>Com o objetivo de fornecer um feedback baseado na avaliação da coesão do texto, uma solução simples é usar um <em>tagger</em> que identifique palavras etiquetadas como conjunções, preposições e advérbios, ou usando listas e léxicos específicos. A outra solução, que é um pouco mais rebuscada, é recorrer às métricas do NILC-Metrix que incidem sobre a coesão textual.</p>
+</dd>
+<dt>Identificação de repertórios</dt>
+<dd>
+<p>Para avaliar a abordagem temática, referente à competência 2 do Enem, podemos elogiar a presença (ou criticar a ausência) de repertórios socioculturais, que são informações, fatos, citações, definições ou termos de alguma área do conhecimento, ou ainda experiências pessoais que, de alguma forma, contribuem como argumento para defender um ponto de vista.</p>
+<p>Pelo Manual de leitura do Enem<a href="#fn43" class="footnote-ref" id="fnref43" role="doc-noteref"><sup>43</sup></a>, os repertórios socioculturais podem ser legitimados (com citação da fonte) ou não legitimados (sem citação da fonte), ter uso produtivo (pertinente à discussão em mais de um momento do texto) ou não, pertencente ao tema ou não e ainda devem ser penalizados se forem exclusivamente baseados nos textos motivadores. Identificar automaticamente todos esses tipos e usos (corretos ou não) dos repertórios não é uma tarefa simples. Porém isso pode ser feito usando modelos de extração de entidades nomeadas (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ie/cap-ie.html#sec-cap-ie" target="_blank" title="Volume 3">Extração de Informação</a></span>), buscando, por exemplo, as citações de filósofos, sociólogos e outros estudiosos, ou buscando as menções a livros, filmes, séries, dentre outras entidades que funcionem como repertórios legitimados.</p>
+</dd>
+<dt>Avaliação da Progressão textual</dt>
+<dd>
+<p>Para a avaliação da progressão textual, é possível treinar e usar modelos de tópico, a exemplo do <em>Hidden Topic Markov Models</em> (HTMM) <span class="citation" data-cites="Gruber2007">(<a href="../../shared/referencias/referencias.html#ref-Gruber2007" role="doc-biblioref">Gruber et al., 2007</a>)</span>, que classificam as sentenças de um texto por tópicos ou assuntos, o que nos permite avaliar a progressão, a continuidade, a retomada e até a circularidade entre os assuntos, a partir da distribuição dos tópicos em um texto.</p>
+<p><span class="citation" data-cites="BleiMoreno2001">Blei; Moreno (<a href="../../shared/referencias/referencias.html#ref-BleiMoreno2001" role="doc-biblioref">2001</a>)</span> apresentam resultados dessa abordagem de segmentar um texto não estruturado em tópicos, testando em notícias do New York Times. Os autores propuseram uma combinação do tradicional modelo oculto de Markov (<em>Hidden Markov Model</em> – HMM) com o modelo de semântica latente de Hofmann <span class="citation" data-cites="Hofmann1999">(<a href="../../shared/referencias/referencias.html#ref-Hofmann1999" role="doc-biblioref">Hofmann, 1999</a>)</span>, resultando em um novo método probabilístico que segmenta um texto em tópicos. Essa abordagem pode ser muito útil para avaliar o encadeamento das ideias de um texto, principalmente no caso de redação do Enem, pois o gênero dissertativo-argumentativo costuma seguir um padrão bem definido de: (i) apresentação do tema, introdução ao ponto de vista a ser defendido e breve menção aos argumentos a serem utilizados (no primeiro parágrafo); (ii) exposição do primeiro argumento (no segundo parágrafo); (iii) exposição do segundo argumento (no terceiro parágrafo); (iv) proposta de intervenção para solucionar o problema discorrido e retomada da tese na forma de conclusão (no quarto parágrafo).</p>
+</dd>
+<dt>Identificação de proposta de intervenção</dt>
+<dd>
+<p>No Enem, para que uma redação receba nota máxima na Competência 5, o aluno precisa criar uma proposta de intervenção que contenha pelo menos 5 elementos: o agente (quem?), a ação (o quê?), o modo ou meio (como?), a finalidade (para quê?) e o detalhamento de algum dos elementos anteriores.</p>
+<p>Para a correta identificação desses elementos, pode-se usar modelos de extração de informação (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ie/cap-ie.html#sec-cap-ie" target="_blank" title="Volume 3">Extração de Informação</a></span>) ou recorrer a extração de entidades nomeadas ou recursos linguísticos como listas e léxicos específicos.</p>
+<p>O Inep disponibiliza a Cartilha do participante<a href="#fn44" class="footnote-ref" id="fnref44" role="doc-noteref"><sup>44</sup></a> com instruções sobre agentes que devem ser considerados nulos, ações interventivas que devem ser consideradas nulas, propostas de intervenção negativas ou condicionais, dentre outras orientações que podem se transformar em atributos para modelos.</p>
+<p>Não encontramos nenhum trabalho para o português que reporte bons resultados quanto à identificação da proposta de intervenção e que valha ser replicado. É um dos campos de CAR que merece ser mais explorado.</p>
+</dd>
+</dl>
+<p>Ao longo desta <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-feedback" target="_blank" title="Volume 3">Feedback para o aluno</a></span>, discutimos algumas formas possíveis de devolver um feedback ao aluno, que podem ser: indicando números, percentuais e estatísticas básicas do texto, ou acoplando um assistente de escrita ao corretor automático para fazer isso em tempo real, ou ainda instanciando elementos da redação (recursos coesivos, repertórios, sequência de tópicos, elementos da proposta de intervenção) em uma mensagem gerada automaticamente. Mas as possibilidades não se limitam a essas indicadas neste capítulo. Para outras formas de geração de feedbacks em redações escolares, ver <span class="citation" data-cites="Handbook_Gamon2013">Gamon et al. (<a href="../../shared/referencias/referencias.html#ref-Handbook_Gamon2013" role="doc-biblioref">2013</a>)</span>.</p>
+<p>Tendo em vista todo o conteúdo apresentado na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-desvios" target="_blank" title="Volume 3">Detecção de desvios no texto</a></span>, <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-nota" target="_blank" title="Volume 3">Atribuição de nota</a></span> e <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-feedback" target="_blank" title="Volume 3">Feedback para o aluno</a></span>, pode surgir o questionamento sobre o papel (ou até extinção) das correções manuais, dados os avanços em CAR. Para tanto, na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-manualxauto" target="_blank" title="Volume 3">Correção manual vs(?) correção automática</a></span>, propomos uma discussão sobre prós e contras de cada uma das abordagens de correção: a manual e a automática, apresentando alguns casos de sucesso e defendendo uma correção híbrida que se beneficie do potencial de cada abordagem.</p>
+</section>
+</section>
+<section id="sec-cap-aes-manualxauto" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="sec-cap-aes-manualxauto"><span class="header-section-number">7.5</span> Correção manual vs(?) correção automática</h2>
+<p>A correção automática de redações (CAR) divide opiniões entre alunos, escritores, professores de redação, bancas de avaliação em série, especialistas em Linguística Computacional, cientistas de dados e desenvolvedores de sistemas. Ainda existe muito preconceito quando se trata de correção automática de redação, mas já é consensual aceitar as vantagens dos corretores ortográficos e gramaticais quando embutidos em outras soluções, como no pacote Office, no Gdrive, em redes sociais ou nos teclados dos smartphones.</p>
+<p>A discussão principal gira em torno de seus prós e contras, se a correção automática deve substituir ou complementar a correção humana, sobre questões éticas relacionadas à correção automática, sobre a subversão dos valores pedagógicos e educacionais da avaliação manual para uma avaliação automática de textos; enfim, para uma discussão mais filosófica e profunda sobre todos esses aspectos, ver <span class="citation" data-cites="Handbook_Elliot2013">Elliot; Klobucar (<a href="../../shared/referencias/referencias.html#ref-Handbook_Elliot2013" role="doc-biblioref">2013</a>)</span> e <span class="citation" data-cites="Handbook_Hakuta2013">Hakuta (<a href="../../shared/referencias/referencias.html#ref-Handbook_Hakuta2013" role="doc-biblioref">2013</a>)</span>.</p>
+<p>Nesta seção, abordaremos apenas questões práticas relacionadas à correção manual e à correção automática de redações para, ao final, defender uma correção híbrida, que utilize as principais potencialidades de cada tipo, reconhecendo-se também suas limitações.</p>
+<section id="sec-cap-aes-manualxautohist" class="level3" data-number="7.5.1">
+<h3 data-number="7.5.1" class="anchored" data-anchor-id="sec-cap-aes-manualxautohist"><span class="header-section-number">7.5.1</span> Avanços dos últimos anos</h3>
+<p>Até as décadas de 80 e 90, as avaliações de redação no Brasil eram holísticas, ou seja, o avaliador do texto atribuía uma nota global (de 0 a 100, por exemplo) para a redação, sem seguir rigorosamente nenhum critério previamente estabelecido. Por volta dos anos 2000, essas avaliações passaram a ser analíticas, tendo que explicitar todos os critérios e todos os conceitos que deveriam ser avaliados. Ao mesmo tempo, as avaliações passaram a ser em duplas às cegas, ou seja, cada redação deveria ser avaliada por dois corretores independentes, o que exigia maior sistematicidade e coerência entre eles.</p>
+<p>Nessa transição de avaliação holística para analítica, as grades de correção de redações se tornaram mais padronizadas. E sabe-se que tarefas mais padronizadas são melhor executadas por máquinas do que por humanos.</p>
+<p>Mesmo com a tentativa (por vezes, falha) de padronização das grades, ainda se percebe a falta de objetividade na definição de critérios por parte de alguns modelos de correção. Quando a grade de correção é muito aberta ou não apresenta os critérios bem definidos para cada faixa de nota, aumentam as chances de haver divergência entre duas avaliações cegas. Por outro lado, quando os corretores humanos passam por treinamentos rigorosos, tal como é feito no Enem, isso pode reduzir o número de inconsistências nas avaliações, mas ainda assim não elimina as divergências, já que pessoas diferentes podem ter interpretações diferentes sobre a mesma instrução. Prova disso são os índices de redações do Enem que vão para uma terceira correção<a href="#fn45" class="footnote-ref" id="fnref45" role="doc-noteref"><sup>45</sup></a>, nos casos de discrepância de 80 ou mais pontos em uma competência ou de 100 ou mais pontos na nota final.</p>
+<p>Posto isso, a correção automática no Brasil passou a ser considerada como uma alternativa à manual, já que esta última sempre foi passível de subjetividade e viés.</p>
+</section>
+<section id="sec-cap-aes-vantagemauto" class="level3" data-number="7.5.2">
+<h3 data-number="7.5.2" class="anchored" data-anchor-id="sec-cap-aes-vantagemauto"><span class="header-section-number">7.5.2</span> Vantagens da correção automática</h3>
+<p>Correções manuais estão sujeitas a subjetividade e viés, além do cansaço humano, a pressão por produtividade, a cobrança por eficiência, o desinteresse pela tarefa, dentre outros fatores que podem prejudicar a qualidade da avaliação ou comprometer sua validade.</p>
+<p>Para além dessas questões de limitação humana, é necessário mencionar também o tempo e o custo da correção manual. De acordo com uma matéria veiculada no Portal G1<a href="#fn46" class="footnote-ref" id="fnref46" role="doc-noteref"><sup>46</sup></a> em 2016, os corretores humanos conseguem corrigir, em média, 74 redações por dia. Já <span class="citation" data-cites="Bittencourt2020">Bittencourt Jr. (<a href="../../shared/referencias/referencias.html#ref-Bittencourt2020" role="doc-biblioref">2020, p. 19</a>)</span> apresenta uma média de 12 minutos por correção, o que daria 40 redações por dia, considerando-se 8 horas de trabalho. E o custo de cada correção de redação do Enem para o Governo Federal era de R$15,88 em 2015. No mesmo ano foram corrigidas 6.54 milhões de redações, perfazendo um custo aproximado de R$104 milhões para o governo. Esse valor provavelmente está defasado, mas foi o último registro oficial encontrado.</p>
+<p>Automatizar a correção de redações traz como vantagem a redução do custo de correção e elimina os fatores problemáticos relacionados ao trabalho humano.</p>
+<p>Outro aspecto da correção que merece ser comparado é a confiança (ou <em>reliability</em>, em inglês). Os sistemas automáticos têm confiança de 100%, o que não pode ser afirmado para a correção manual. Isso significa que toda vez que a mesma redação passar pelo mesmo sistema de correção automática, receberá a mesma correção e a mesma nota. Isso parece óbvio, mas não é o que acontece na correção humana. Diferentes pessoas que corrigirem a mesma redação poderão naturalmente atribuir diferentes notas e/ou apontar diferentes aspectos a serem melhorados. O que também ocorre é que a mesma redação, quando corrigida pelo mesmo corretor humano em diferentes momentos, também pode receber avaliações muito diferentes, o que abre brecha para reclamações.</p>
+</section>
+<section id="sec-cap-aes-vantagemmanual" class="level3" data-number="7.5.3">
+<h3 data-number="7.5.3" class="anchored" data-anchor-id="sec-cap-aes-vantagemmanual"><span class="header-section-number">7.5.3</span> Vantagens da correção manual</h3>
+<p>Apesar de todos esses aspectos negativos em relação à correção manual, deve-se ressaltar o ponto forte desse tipo de correção, que é a possibilidade que o humano tem de observar todo e qualquer aspecto relacionado ao processo de construção de sentidos em um texto, o que a máquina não é capaz de fazer.</p>
+<p>A produção textual é um processo sócio-cognitivo muito complexo que vai além da capacidade dos sistemas computacionais. A máquina não entende a redação, não interpreta o conteúdo veiculado pelo texto, mas apenas se comporta da forma como ela foi treinada para fazê-lo. Por mais que alguns modelos computacionais possam ser “interpretáveis”, é impossível identificar e definir todos os fatores sociais, psicológicos, cognitivos, emocionais etc. que podem interferir tanto no processo de escrita por parte do aluno quanto no processo de correção por parte do avaliador.</p>
+<p>Nesse sentido, considerando que a correção automática é limitada, é passível de erros e está mais voltada para a avaliação da forma do que do conteúdo, levanta-se o seguinte questionamento: O uso da correção automática não levaria o aluno a focar sua atenção apenas nos aspectos formais da escrita, excluindo os aspectos mais ricos da construção de sentidos no texto? Por trás desse questionamento, existe uma preocupação legítima de que o aluno não construa sua própria autonomia enquanto escritor, mas apenas seja “adestrado” a escrever de uma forma que o algoritmo lhe dê uma nota boa.</p>
+</section>
+<section id="sec-cap-aes-hibridoingles" class="level3" data-number="7.5.4">
+<h3 data-number="7.5.4" class="anchored" data-anchor-id="sec-cap-aes-hibridoingles"><span class="header-section-number">7.5.4</span> O exemplo da língua inglesa</h3>
+<p>Para a língua inglesa, algumas instituições educacionais (e.g.&nbsp;<strong>ETS</strong> – <em>Educational Testing Service</em>) utilizam modelos de AEE para auxiliar (e não substituir) a correção manual. Esses modelos computacionais são usados como uma segunda avaliação, complementar à avaliação humana. Por exemplo, a avaliação do <strong>TOEFL</strong> (<em>Test of English as a Foreign Language Internet-based Test</em>) é dupla, sendo uma feita por humanos e outra feita por sistemas automáticos. A nota final do aluno é dada pela média das duas avaliações. No caso de divergência entre as notas, a redação é enviada a terceiro corretor, semelhante ao que ocorre na avaliação do Enem. Mas, no caso do Brasil, tanto o primeiro quanto o segundo avaliador são humanos. Vale ressaltar que, segundo <span class="citation" data-cites="Handbook_Bridgeman2013">Bridgeman (<a href="../../shared/referencias/referencias.html#ref-Handbook_Bridgeman2013" role="doc-biblioref">2013, p. 227</a>)</span>, “a experiência com o programa TOEFL iBT sugere que, quando há discrepância e a redação é enviada a um avaliador humano adicional, esse avaliador tende a concordar com a máquina mais do que com o outro humano”<a href="#fn47" class="footnote-ref" id="fnref47" role="doc-noteref"><sup>47</sup></a>.</p>
+<p>Um processo semelhante ocorre na avaliação do <strong>GRE</strong> (<em>Graduate Record Examination</em>), mas neste último caso a nota atribuída automaticamente é usada como se fosse uma validação para a avaliação humana. Em outras palavras, a correção automática é usada para monitorar a performance dos corretores humanos, a fim de identificar avaliadores desalinhados ou que precisam passar por novo treinamento.</p>
+<p>A correção automática também pode auxiliar a correção manual no sentido de “nivelar” diferentes níveis de rigor. Sabe-se que diferentes avaliadores humanos podem ser sistematicamente mais rígidos ou mais permissivos em suas correções. Segundo <span class="citation" data-cites="Braun1988">Braun (<a href="../../shared/referencias/referencias.html#ref-Braun1988" role="doc-biblioref">1988, p. 1</a>)</span>, “Quando o grau de leniência/severidade do avaliador pode ser atestado adequadamente, é possível calibrar estatisticamente os avaliadores e ajustar as pontuações corretamente […] Essa calibração estatística parece ser uma abordagem econômica para aumentar a confiabilidade da nota quando comparada ao simples aumento do número de avaliadores por artigo.”<a href="#fn48" class="footnote-ref" id="fnref48" role="doc-noteref"><sup>48</sup></a>.</p>
+<p>Nesse sentido, os modelos de AEE podem auxiliar a calibrar essas diferenças de rigidez, atribuindo um peso maior às correções dos avaliadores mais permissivos e um peso menor às correções dos avaliadores mais rigorosos.</p>
+</section>
+<section id="sec-cap-aes-defendemos" class="level3" data-number="7.5.5">
+<h3 data-number="7.5.5" class="anchored" data-anchor-id="sec-cap-aes-defendemos"><span class="header-section-number">7.5.5</span> O que defendemos</h3>
+<p>Levantamos todos esses questionamentos ao longo da <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-manualxauto" target="_blank" title="Volume 3">Correção manual vs(?) correção automática</a></span> a fim de tornar explícitas as potencialidades da área de CAR, mas, ao mesmo tempo, esclarecer ao leitor sobre suas limitações, da mesma forma que a correção humana também possui vantagens e desvantagens.</p>
+<p>Tendo considerado os vários aspectos das duas abordagens, defendemos neste capítulo uma correção híbrida, semelhante ao que é praticado para a língua inglesa (<span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-hibridoingles" target="_blank" title="Volume 3">O exemplo da língua inglesa</a></span>), que possa se beneficiar dos pontos positivos da correção automática, mas mantendo a correção manual para garantir a responsabilização do humano sobre a avaliação.</p>
+</section>
+</section>
+<section id="sec-cap-aes-consideracoesfinais" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="sec-cap-aes-consideracoesfinais"><span class="header-section-number">7.6</span> Considerações finais</h2>
+<p>Neste capítulo exploramos uma das várias aplicações do Processamento de Linguagem Natural (PLN), a chamada Correção Automática de Redação (CAR), a qual abarca duas áreas de PLN em inglês, representadas pelas siglas AES (<em>Automated Essay Scoring</em>) e AEE (<em>Automated Essay Evaluation</em>).</p>
+<p>Ademais, defendemos uma abordagem holística para a CAR, abrangendo, no mínimo, três fases essenciais: (i) a detecção de desvios no texto, (ii) a atribuição de nota, e (iii) a geração de feedback construtivo para o aluno. Apesar de termos dividido essas etapas para fins didáticos, é crucial reconhecer sua interdependência no decorrer do processo. Por exemplo:</p>
+<ol type="1">
+<li>os desvios gramaticais, ortográficos, de vocabulário etc. podem ser usados como atributos para o cálculo da nota;</li>
+<li>as métricas e estatísticas básicas do texto, além de serem usadas para criar os feedbacks, também podem servir como atributos para o cálculo da nota;</li>
+<li>a nota atribuída pelo modelo pode restringir, limitar ou ajudar a selecionar o feedback mais apropriado a ser exibido para o aluno;</li>
+<li>A caracterização dos desvios (por tipos e quantidades) também pode ser usada para a geração do feedback.</li>
+</ol>
+<p>Assim, ainda que tenhamos delimitado didaticamente essas três etapas, é importante ressaltar que, no contexto das tarefas de CAR, tais fases são intrinsecamente entrelaçadas e interdependentes, colaborando harmoniosamente para aprimorar a avaliação da redação.</p>
+<p>Embora existam numerosos estudos nesses campos para o inglês e outras línguas, a documentação relevante para o português ainda é escassa e a maioria dos trabalhos acadêmicos confiáveis foi conduzida em pequenas amostras de dados. O progresso mais notável para textos em português provém de empresas e plataformas privadas que oferecem serviços de CAR. No entanto, os métodos e resultados dessas empresas nem sempre são divulgados, e, mesmo se o fossem, seria difícil compará-los devido à falta de uniformidade entre as soluções apresentadas.</p>
+<p>Nesse sentido, a área de CAR ainda apresenta um vasto campo de trabalho a ser explorado por novos pesquisadores. Para o português, ainda faltam bons <em>datasets</em> de redações, que contenham, além dos textos, as notas por competência, anotação e apontamentos feitos por humanos; também faltam ferramentas robustas de detecção de desvios e de auxílio à escrita, bem como bons <em>parsers</em> e <em>taggers</em>; e faltam trabalhos que reportem bons resultados, com engenharia de atributos, comparação da performance dos algoritmos utilizados e uma análise aprofundada dos resultados.</p>
+<!--[^cap-aes-27]: Acesso em 02/08/2023.-->
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="1" role="list" style="display: none">
+<div id="ref-Ajay1973" class="csl-entry" role="listitem">
+AJAY, H. B.; TILLET, P.; PAGE, E. B. <strong>Analysis of essays by computer (<span>AEC-II</span>)</strong>. Storrs, CT: Univeristy of Connecticut, 1973.
+</div>
+<div id="ref-Alikaniotis2016" class="csl-entry" role="listitem">
+ALIKANIOTIS, D.; YANNAKOUDAKIS, H.; REI, M. <strong>Automatic Text Scoring Using Neural Networks</strong>. Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics. <strong>Anais</strong>...Association for Computational Linguistics, 2016.
+</div>
+<div id="ref-Amorim2018" class="csl-entry" role="listitem">
+AMORIM, E.; CANÇADO, M.; VELOSO, A. <strong>Automated Essay Scoring in the Presence of Biased Ratings</strong>. Proceedings of the 2018 Conference of the North <span>A</span>merican Chapter of the Association for Computational Linguistics: Human Language Technologies. <strong>Anais</strong>...Association for Computational Linguistics, 2018.
+</div>
+<div id="ref-AmorimVeloso2017" class="csl-entry" role="listitem">
+AMORIM, E.; VELOSO, A. <strong>A Multi-aspect Analysis of Automatic Essay Scoring for <span>B</span>razilian <span>P</span>ortuguese</strong>. Proceedings of the Student Research Workshop at the 15th Conference of the <span>E</span>uropean Chapter of the Association for Computational Linguistics. <strong>Anais</strong>...Valencia, Spain: Association for Computational Linguistics, abr. 2017.
+</div>
+<div id="ref-LimaEtAl2023" class="csl-entry" role="listitem">
+BARBOSA DE LIMA, T. et al. <a href="https://doi.org/10.5753/rbie.2023.2869">Avaliação Automática de Redação: Uma revisão sistemática</a>. <strong>Revista Brasileira de Informática na Educação</strong>, v. 31, p. 205–221, 2023.
+</div>
+<div id="ref-bick2000" class="csl-entry" role="listitem">
+BICK, E. <strong><a href="https://edu.visl.dk/~eckhard/pdf/PLP20-amilo.ps.pdf">The Parsing System "Palavras": Automatic Grammatical Analysis of Portuguese in a Constraint Grammar Framework</a></strong>. tese de doutorado—[s.l.] Aarhus University Press, Denmark; University of Arhus, 2000.
+</div>
+<div id="ref-Bittencourt2020" class="csl-entry" role="listitem">
+BITTENCOURT JR., J. A. S. <strong>Avalia<span>ç</span><span>ã</span>o autom<span>á</span>tica de reda<span>ç</span><span>ã</span>o em língua portuguesa empregando redes neurais profundas</strong>. mathesis—[s.l.] Universidade Federal de Goi<span>á</span>s, 2020.
+</div>
+<div id="ref-BleiMoreno2001" class="csl-entry" role="listitem">
+BLEI, D. M.; MORENO, P. J. <strong>Topic Segmentation with an Aspect Hidden Markov Model</strong>. Proceedings of the 24th Annual International <span>ACM</span> <span>SIGIR</span> Conference on Research and Development in Information Retrieval. <strong>Anais</strong>...New York, NY, USA: Association for Computing Machinery, 2001.
+</div>
+<div id="ref-Braun1988" class="csl-entry" role="listitem">
+BRAUN, H. I. Understanding Scoring Reliability: Experiments in Calibrating Essay Readers. <strong>Journal of Educational Statistics</strong>, v. 13, n. 1, p. 1–18, 1988.
+</div>
+<div id="ref-Handbook_Bridgeman2013" class="csl-entry" role="listitem">
+BRIDGEMAN, B. Handbook of automated essay evaluation: Current applications and new directions. Em: SHERMIS, M. D.; BURSTEIN, J. (Eds.). [s.l.] Routledge/Taylor &amp; Francis Group, 2013. p. 221–232.
+</div>
+<div id="ref-cai2025rankthenscoreenhancinglargelanguage" class="csl-entry" role="listitem">
+CAI, Y. et al. <strong>Rank-Then-Score: Enhancing Large Language Models for Automated Essay Scoring</strong>., 2025. Disponível em: &lt;<a href="https://arxiv.org/abs/2504.05736">https://arxiv.org/abs/2504.05736</a>&gt;
+</div>
+<div id="ref-SilvaJunior2021" class="csl-entry" role="listitem">
+DA SILVA JR., J. A. <strong>Um avaliador autom<span>á</span>tico de reda<span>ç</span><span>õ</span>es</strong>. mathesis—[s.l.] Universidade Federal do Esp<span>í</span>rito Santo, 2021.
+</div>
+<div id="ref-Handbook_Elliot2013" class="csl-entry" role="listitem">
+ELLIOT, N.; KLOBUCAR, A. Handbook of automated essay evaluation: Current applications and new directions. Em: SHERMIS, M. D.; BURSTEIN, J. (Eds.). [s.l.] Routledge/Taylor &amp; Francis Group, 2013. p. 16–35.
+</div>
+<div id="ref-faseeh2024hybrid" class="csl-entry" role="listitem">
+FASEEH, M. et al. Hybrid approach to automated essay scoring: Integrating deep learning embeddings with handcrafted linguistic features for improved accuracy. <strong>Mathematics</strong>, v. 12, n. 21, p. 3416, 2024.
+</div>
+<div id="ref-Feltrim2003" class="csl-entry" role="listitem">
+FELTRIM, V. D. et al. <strong>A Construção de uma Ferramenta de Auxílio à Escrita de Resumos Acadêmicos em Português</strong>. Anais do Encontro Nacional de Inteligência Artificial (<span>ENIA</span>’2003). <strong>Anais</strong>...SBC, 2003.
+</div>
+<div id="ref-Ferreira2022" class="csl-entry" role="listitem">
+FERREIRA MELLO, R. et al. <strong>Towards automated content analysis of rhetorical structure of written essays using sequential content-independent features in Portuguese</strong>. (A. F. Wise, R. Martinez-Maldonado, I. Hilliger, Eds.)<span>LAK</span>22 Conference Proceedings. <strong>Anais</strong>...United States of America: Association for Computing Machinery (ACM), 2022.
+</div>
+<div id="ref-Ferreira2021" class="csl-entry" role="listitem">
+FERREIRA, R. et al. Towards Automatic Content Analysis of Rhetorical Structure in <span>B</span>razilian College Entrance Essays. Em: [s.l: s.n.]. p. 162–167.
+</div>
+<div id="ref-Fonseca2018" class="csl-entry" role="listitem">
+FONSECA, E. R. et al. <strong>Automatically Grading Brazilian Student Essays</strong>. (A. Villavicencio et al., Eds.)Computational Processing of the Portuguese Language. <strong>Anais</strong>...Springer International Publishing, 2018.
+</div>
+<div id="ref-Handbook_Gamon2013" class="csl-entry" role="listitem">
+GAMON, M. et al. Handbook of automated essay evaluation: Current applications and new directions. Em: SHERMIS, M. D.; BURSTEIN, J. (Eds.). [s.l.] Routledge/Taylor &amp; Francis Group, 2013. p. 251–266.
+</div>
+<div id="ref-Gruber2007" class="csl-entry" role="listitem">
+GRUBER, A.; WEISS, Y.; ROSEN-ZVI, M. <strong>Hidden Topic Markov Models</strong>. Proceedings of the Eleventh International Conference on Artificial Intelligence and Statistics. <strong>Anais</strong>...: Proceedings of Machine Learning Research.San Juan, Puerto Rico: PMLR, mar. 2007.
+</div>
+<div id="ref-Haendchen2018" class="csl-entry" role="listitem">
+HAENDCHEN FILHO, A. et al. <strong>An approach to evaluate adherence to the theme and the argumentative structure of essays</strong>. International Conference on Knowledge-Based Intelligent Information &amp; Engineering Systems. <strong>Anais</strong>...2018.
+</div>
+<div id="ref-Haendchen2019" class="csl-entry" role="listitem">
+HAENDCHEN FILHO, A. et al. Imbalanced Learning Techniques for Improving the Performance of Statistical Models in Automated Essay Scoring. <strong>Procedia Computer Science</strong>, v. 159, p. 764–773, jan. 2019.
+</div>
+<div id="ref-Handbook_Hakuta2013" class="csl-entry" role="listitem">
+HAKUTA, K. Handbook of Automated Essay Evaluation: Current Applications and New Directions. Em: SHERMIS, M. D.; BURSTEIN, J. (Eds.). [s.l.] Routledge/Taylor &amp; Francis Group, 2013. p. 347–353.
+</div>
+<div id="ref-Hofmann1999" class="csl-entry" role="listitem">
+HOFMANN, T. <strong>Probabilistic Latent Semantic Indexing</strong>. Proceedings of the 22nd Annual International <span>ACM</span> <span>SIGIR</span> Conference on Research and Development in Information Retrieval (<span>SIGIR</span> ’99). <strong>Anais</strong>...New York, NY, USA: Association for Computing Machinery, 1999.
+</div>
+<div id="ref-Leacock2010" class="csl-entry" role="listitem">
+LEACOCK, C. et al. <strong>Automated Grammatical Error Detection for Language Learners</strong>. [s.l.] Morgan; Claypool Publishers, 2010.
+</div>
+<div id="ref-Leal_NILC_METRIX_2023" class="csl-entry" role="listitem">
+LEAL, S. E. et al. <a href="https://doi.org/10.1007/s10579-023-09693-w">NILC-Metrix: assessing the complexity of written and spoken language in Brazilian Portuguese</a>. <strong>Language Resources and Evaluation</strong>, 2023.
+</div>
+<div id="ref-Leite2020" class="csl-entry" role="listitem">
+LEITE, H. et al. <strong><span>WRITEME</span>: uma Ferramenta de Auxílio à Escrita de <span>README</span>s Baseada em Dados Abertos</strong>. Anais do XVII Congresso Latino-Americano de Software Livre e Tecnologias Abertas. <strong>Anais</strong>...Porto Alegre, RS, Brasil: SBC, 2020.
+</div>
+<div id="ref-Lima2023" class="csl-entry" role="listitem">
+LIMA, T. B. DE et al. Avaliação Autom<span>á</span>tica de Reda<span>ç</span><span>ã</span>o: Uma revis<span>á</span>o sistem<span>á</span>tica. <strong>Revista Brasileira de Inform<span>á</span>tica na Educa<span>ç</span><span>ã</span>o</strong>, v. 31, p. 205--221, maio 2023.
+</div>
+<div id="ref-LocatelliEtAl2025" class="csl-entry" role="listitem">
+LOCATELLI, M. S. et al. <strong>Examining the Behavior of LLM Architectures within the Framework of Standardized National Exams in Brazil</strong>. Proceedings of the 2024 AAAI/ACM Conference on AI, Ethics, and Society. <strong>Anais</strong>...AAAI Press, 2025.
+</div>
+<div id="ref-Louis2010" class="csl-entry" role="listitem">
+LOUIS, A.; HIGGINS, D. <strong>Off-topic essay detection using short prompt texts</strong>. Proceedings of the <span>NAACL</span> <span>HLT</span> 2010 Fifth Workshop on Innovative Use of <span>NLP</span> for Building Educational Applications. <strong>Anais</strong>...Los Angeles, California: Association for Computational Linguistics, jun. 2010.
+</div>
+<div id="ref-Marcuschi2008" class="csl-entry" role="listitem">
+MARCUSCHI, L. A. <strong>Produ<span>ç</span><span>ã</span>o textual, an<span>á</span>lise de g<span>ê</span>neros e compreens<span>ã</span>o</strong>. [s.l.] Par<span>á</span>bola Ed., 2008.
+</div>
+<div id="ref-Marinho2022" class="csl-entry" role="listitem">
+MARINHO, J. et al. <strong>Automated Essay Scoring: An approach based on ENEM competencies</strong>. Anais do XIX Encontro Nacional de Inteligência Artificial e Computacional. <strong>Anais</strong>...SBC, a2022.
+</div>
+<div id="ref-Marinho2022dataset" class="csl-entry" role="listitem">
+MARINHO, J.; ANCHIÊTA, R.; MOURA, R. Essay-BR: a Brazilian Corpus to Automatic Essay Scoring Task. <strong>Journal of Information and Data Management</strong>, v. 13, n. 1, p. 65–76, b2022.
+</div>
+<div id="ref-Mayfield2020" class="csl-entry" role="listitem">
+MAYFIELD, E.; BLACK, A. W. <strong>Should You Fine-Tune <span>BERT</span> for Automated Essay Scoring?</strong> Proceedings of the Fifteenth Workshop on Innovative Use of <span>NLP</span> for Building Educational Applications. <strong>Anais</strong>...Association for Computational Linguistics, jul. 2020.
+</div>
+<div id="ref-PackBarrettEscalante2024" class="csl-entry" role="listitem">
+PACK, A.; BARRETT, A.; ESCALANTE, J. <a href="https://doi.org/10.1016/j.caeai.2024.100234">Large language models and automated essay scoring of English language learner writing: Insights into validity and reliability</a>. <strong>Computers and Education: Artificial Intelligence</strong>, v. 6, p. 100234, 2024.
+</div>
+<div id="ref-Persing2014" class="csl-entry" role="listitem">
+PERSING, I.; NG, V. <strong>Modeling Prompt Adherence in Student Essays</strong>. Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics. <strong>Anais</strong>...Baltimore, Maryland: Association for Computational Linguistics, jun. 2014.
+</div>
+<div id="ref-Ramisch2020" class="csl-entry" role="listitem">
+RAMISCH, R. <strong>Caracteriza<span>ç</span><span>ã</span>o de desvios sint<span>á</span>ticos em reda<span>ç</span><span>õ</span>es de estudantes do ensino m<span>é</span>dio: subs<span>í</span>dios para o processamento autom<span>á</span>tico das l<span>í</span>nguas naturais</strong>. mathesis—[s.l.] Universidade Federal de S<span>ã</span>o Carlos, 2020.
+</div>
+<div id="ref-ScartonAluisio2010" class="csl-entry" role="listitem">
+SCARTON, C. E.; ALUÍSIO, S. M. <a href="https://linguamatica.com/index.php/linguamatica/article/view/44">An<span>á</span>lise da Inteligibilidade de textos via ferramentas de <span>P</span>rocessamento de <span>L</span><span>í</span>ngua <span>N</span>atural: adaptando as m<span>é</span>tricas do <span>C</span>oh-<span>M</span>etrix para o <span>P</span>ortugu<span>ê</span>s</a>. <strong>Linguam<span>á</span>tica</strong>, v. 2, n. 1, p. 45–61, 2010.
+</div>
+<div id="ref-Handbook_Shermis2013" class="csl-entry" role="listitem">
+SHERMIS, M. D.; BURSTEIN, J. <strong>Handbook of Automated Essay Evaluation: Current Applications and New Directions</strong>. [s.l.] Routledge/Taylor &amp; Francis Group, 2013.
+</div>
+<div id="ref-shibata2025lceszeroshotautomatedessay" class="csl-entry" role="listitem">
+SHIBATA, T.; MIYAMURA, Y. <strong>LCES: Zero-shot Automated Essay Scoring via Pairwise Comparisons Using Large Language Models</strong>., 2025. Disponível em: &lt;<a href="https://arxiv.org/abs/2505.08498">https://arxiv.org/abs/2505.08498</a>&gt;
+</div>
+<div id="ref-Sousa2021" class="csl-entry" role="listitem">
+SOUSA, A. et al. <strong>Cross-Lingual Annotation Projection for Argument Mining in Portuguese</strong>. (G. Marreiros et al., Eds.)Progress in Artificial Intelligence. <strong>Anais</strong>...Springer International Publishing, 2021.
+</div>
+<div id="ref-XiaoEtAl2025" class="csl-entry" role="listitem">
+XIAO, C. et al. <strong><a href="https://doi.org/10.1145/3706468.3706507">Human-AI Collaborative Essay Scoring: A Dual-Process Framework with LLMs</a></strong>. Proceedings of the 15th International Learning Analytics and Knowledge Conference. <strong>Anais</strong>...: LAK ’25.New York, NY, USA: Association for Computing Machinery, 2025.
+</div>
+<div id="ref-yang2020enhancing" class="csl-entry" role="listitem">
+YANG, R. et al. <strong>Enhancing automated essay scoring performance via fine-tuning pre-trained language models with combination of regression and ranking</strong>. Association for Computational Linguistics (ACL), 2020.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Tradução nossa. Do original: “<em>the process of evaluating and scoring written prose via computer programs</em>”.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Existe uma longa discussão conceitual e técnica sobre a definição do termo “texto” em Linguística Textual. Para o propósito deste capítulo, adotaremos como conceito de “texto” um conjunto de palavras e frases organizadas de forma coerente e coesa, com o objetivo de transmitir uma mensagem ou ideia. Em outras palavras, o texto é uma unidade de linguagem que tem um sentido completo e pode ser compreendido em um contexto específico.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>O Exame Nacional do Ensino Médio (Enem) é uma prova do Governo Federal que avalia o desempenho escolar dos alunos ao término do Ensino Médio. Essa prova avalia várias áreas do conhecimento e também a produção de uma redação.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>No último Enem 2025, foram mais de 4,8 milhões de inscrições confirmadas: <a href="https://www.gov.br/mec/pt-br/assuntos/noticias/2025/julho/enem-2025-mais-de-4-8-milhoes-de-inscritos-confirmados" class="uri">https://www.gov.br/mec/pt-br/assuntos/noticias/2025/julho/enem-2025-mais-de-4-8-milhoes-de-inscritos-confirmados</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Cartilha do participante do Enem 2022: <a href="https://download.inep.gov.br/download/enem/cartilha_do_participante_enem_2022.pdf" class="uri">https://download.inep.gov.br/download/enem/cartilha_do_participante_enem_2022.pdf</a>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Manual do candidato do vestibular Fuvest 2023: <a href="https://www.fuvest.br/wp-content/uploads/fuvest2023_manual_candidato_retificado_29112022.pdf" class="uri">https://www.fuvest.br/wp-content/uploads/fuvest2023_manual_candidato_retificado_29112022.pdf</a>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Manual do candidato do vestibular Unesp 2023: <a href="https://documento.vunesp.com.br/documento/stream/MzQxOTk5NA%3d%3d" class="uri">https://documento.vunesp.com.br/documento/stream/MzQxOTk5NA%3d%3d</a>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Manual do ingresso (<a href="https://www.comvest.unicamp.br/wp-content/uploads/2023/02/Manual_do_Ingresso_2023_Atualizado.pdf" class="uri">https://www.comvest.unicamp.br/wp-content/uploads/2023/02/Manual_do_Ingresso_2023_Atualizado.pdf</a>) e grade de redação (<a href="https://www.comvest.unicamp.br/vestibular-2023/grade-da-redacao/" class="uri">https://www.comvest.unicamp.br/vestibular-2023/grade-da-redacao/</a>) do vestibular 2023 da Unicamp.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>Além da dissertação, outros gêneros textuais já exigidos pela Unicamp são: síntese e carta-convite (2015), resenha e texto de divulgação científica (2016), carta argumentativa e texto de apresentação (2017), palestra e artigo de opinião (2018), abaixo-assinado e postagem em fórum (2019), roteiro de podcast e crônica (2020), discurso político e diário (2021), postagem para redes sociais e manifesto coletivo (2022), depoimento sigiloso e convocação (2023) e carta denúncia e discurso (2024).<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>Para uma descrição completa e exemplos de todos os casos que zeram a redação em cada modelo de correção, sugere-se consultar os respectivos manuais do candidato ou cartilhas do participante.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p><a href="https://www.fuvest.br/wp-content/uploads/fuvest2024_manual_candidato.pdf" class="uri">https://www.fuvest.br/wp-content/uploads/fuvest2024_manual_candidato.pdf</a><a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p><a href="https://acervo.fuvest.br/fuvest/2020/fuv2020_2fase_dia_1.pdf" class="uri">https://acervo.fuvest.br/fuvest/2020/fuv2020_2fase_dia_1.pdf</a><a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p>Adotaremos o conceito de “desvio” como sinônimo de “erro”, mas evitaremos esse segundo termo para mitigar a carga negativa, os preconceitos e os julgamentos contidos na palavra “erro”.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p>Para uma explicação detalhada dos vários sistemas que usam cada uma das abordagens simbólica e estatística para detecção de desvios, ver <span class="citation" data-cites="Leacock2010">Leacock et al. (<a href="../../shared/referencias/referencias.html#ref-Leacock2010" role="doc-biblioref">2010</a>)</span> e <span class="citation" data-cites="Handbook_Gamon2013">Gamon et al. (<a href="../../shared/referencias/referencias.html#ref-Handbook_Gamon2013" role="doc-biblioref">2013</a>)</span>.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p><a href="https://cogroo.sourceforge.net/" class="uri">https://cogroo.sourceforge.net/</a><a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p><a href="https://languagetool.org/pt-BR/" class="uri">https://languagetool.org/pt-BR/</a><a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p><a href="http://www.nilc.icmc.usp.br/nilc/projects/unitex-pb/web/index.html" class="uri">http://www.nilc.icmc.usp.br/nilc/projects/unitex-pb/web/index.html</a><a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p>Esses percentuais foram calculados a partir dos números absolutos da Tabela 8 de <span class="citation" data-cites="Ramisch2020">Ramisch (<a href="../../shared/referencias/referencias.html#ref-Ramisch2020" role="doc-biblioref">2020, p. 76</a>)</span>, que anotou os desvios sintáticos em uma amostra de 1.045 redações.<a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p>O <em>parser</em> PALAVRAS <span class="citation" data-cites="bick2000">(<a href="../../shared/referencias/referencias.html#ref-bick2000" role="doc-biblioref">Bick, 2000</a>)</span> dispõe de um módulo de análise sintática por constituintes.<a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20"><p><a href="https://languagetool.org/pt-BR/" class="uri">https://languagetool.org/pt-BR/</a><a href="#fnref20" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn21"><p><a href="https://community.languagetool.org/rule/list?lang=pt" class="uri">https://community.languagetool.org/rule/list?lang=pt</a><a href="#fnref21" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn22"><p>Fonte: regras para português no repositório languagetool (Github) (<a href="https://github.com/languagetool-org/languagetool/blob/50c9a5eb145f6289762fc64a2b8773629ca085e1/languagetool-language-modules/pt/src/main/resources/org/languagetool/rules/pt/pt-BR/style.xml#L142-L150" class="uri">https://github.com/languagetool-org/languagetool/blob/50c9a5eb145f6289762fc64a2b8773629ca085e1/languagetool-language-modules/pt/src/main/resources/org/languagetool/rules/pt/pt-BR/style.xml#L142-L150</a>).<a href="#fnref22" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn23"><p><a href="https://github.com/languagetool-org/languagetool" class="uri">https://github.com/languagetool-org/languagetool</a><a href="#fnref23" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn24"><p><a href="https://spacy.io/" class="uri">https://spacy.io/</a><a href="#fnref24" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn25"><p>Coh-Metrix é uma ferramenta computacional que calcula métricas e índices para aspectos linguísticos e discursivos em um texto e que será melhor explorada neste capítulo na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-aes/cap-aes.html#sec-cap-aes-feedbackstats" target="_blank" title="Volume 3">Estatísticas básicas do texto</a></span>. Disponível em: <a href="http://cohmetrix.memphis.edu/cohmetrixhome" class="uri">http://cohmetrix.memphis.edu/cohmetrixhome</a>.<a href="#fnref25" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn26"><p>LIWC é uma ferramenta computacional, que realiza análise de textos baseada em métricas. Disponível em: <a href="https://www.liwc.app/" class="uri">https://www.liwc.app/</a>.<a href="#fnref26" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn27"><p><a href="https://github.com/lplnufpi/essay-br" class="uri">https://github.com/lplnufpi/essay-br</a><a href="#fnref27" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn28"><p>Vale ressaltar que os feedbacks baseados em características e propriedades linguísticas do texto ainda são os mais praticados hoje pelas plataformas brasileiras ou que processam o português, então focaremos nessa abordagem ao longo desta seção.<a href="#fnref28" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn29"><p><a href="http://fw.nilc.icmc.usp.br:23380/metrixdoc" class="uri">http://fw.nilc.icmc.usp.br:23380/metrixdoc</a><a href="#fnref29" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn30"><p>Definição, explicação e exemplos das métricas podem ser conferidos na Documentação do NILC-Metrix (<a href="http://fw.nilc.icmc.usp.br:23380/metrixdoc" class="uri">http://fw.nilc.icmc.usp.br:23380/metrixdoc</a>).<a href="#fnref30" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn31"><p>Proporção de sentenças muito longas em relação a todas as sentenças do texto.<a href="#fnref31" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn32"><p>Proporção de sentenças longas em relação a todas as sentenças do texto.<a href="#fnref32" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn33"><p>Proporção de sentenças médias em relação a todas as sentenças do texto.<a href="#fnref33" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn34"><p>Proporção de sentenças curtas em relação a todas as sentenças do texto.<a href="#fnref34" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn35"><p><a href="https://www.grammarly.com/" class="uri">https://www.grammarly.com/</a><a href="#fnref35" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn36"><p><a href="https://linguix.com/" class="uri">https://linguix.com/</a><a href="#fnref36" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn37"><p><a href="https://www.gingersoftware.com/" class="uri">https://www.gingersoftware.com/</a><a href="#fnref37" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn38"><p><a href="https://www.reverso.net/tradu%C3%A7%C3%A3o-texto" class="uri">https://www.reverso.net/tradu%C3%A7%C3%A3o-texto</a><a href="#fnref38" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn39"><p><a href="https://writer.com/grammar-checker/" class="uri">https://writer.com/grammar-checker/</a><a href="#fnref39" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn40"><p><a href="https://hemingwayapp.com/" class="uri">https://hemingwayapp.com/</a><a href="#fnref40" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn41"><p><a href="https://escritacientifica.sc.usp.br/scipo/" class="uri">https://escritacientifica.sc.usp.br/scipo/</a><a href="#fnref41" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn42"><p><a href="https://repositorio.ufpe.br/handle/123456789/50043" class="uri">https://repositorio.ufpe.br/handle/123456789/50043</a><a href="#fnref42" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn43"><p><a href="https://download.inep.gov.br/educacao_basica/enem/downloads/2020/Competencia_2.pdf" class="uri">https://download.inep.gov.br/educacao_basica/enem/downloads/2020/Competencia_2.pdf</a><a href="#fnref43" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn44"><p><a href="https://download.inep.gov.br/download/enem/cartilha_do_participante_enem_2022.pdf" class="uri">https://download.inep.gov.br/download/enem/cartilha_do_participante_enem_2022.pdf</a><a href="#fnref44" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn45"><p>Os índices de terceira correção variam a cada ano, pois dependem de vários aspectos, inclusive a mudança dos critérios do Inep para a terceira correção. A título de exemplificação, podemos citar o índice de 20,10% em 2012 disponível no Portal do MEC (<a href="http://portal.mec.gov.br/component/tags/tag/correcao" class="uri">http://portal.mec.gov.br/component/tags/tag/correcao</a>). Também se pode inferir o índice de 43,52% em 2014, a partir DE “Ao todo, foram corrigidos 6.193.565 textos. [...] foram encaminhadas 2.695.949 redações para um terceiro corretor.” disponível no Portal do MEC (<a href="http://portal.mec.gov.br/component/tags/tag/espelho-da-redacao" class="uri">http://portal.mec.gov.br/component/tags/tag/espelho-da-redacao</a>). Ou uma estimativa de 29% em 2017 “O Inep estima que das 4,1 milhões de redações corrigidas, cerca de 1,2 milhão receberão a terceira correção.” disponível no Portal do MEC (<a href="http://portal.mec.gov.br/component/tags/tag/correcao" class="uri">http://portal.mec.gov.br/component/tags/tag/correcao</a>).<a href="#fnref45" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn46"><p><a href="https://g1.globo.com/educacao/enem/2016/noticia/corretores-de-redacao-do-enem-avaliam-em-media-74-redacoes-por-dia.ghtml" class="uri">https://g1.globo.com/educacao/enem/2016/noticia/corretores-de-redacao-do-enem-avaliam-em-media-74-redacoes-por-dia.ghtml</a><a href="#fnref46" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn47"><p>Tradução nossa. Do inglês: “<em>In fact, experience with the TOEFL iBT program suggests that when flagged discrepant scores are sent to an additional human rater, that rater tends to agree with the machine more often than she or he agrees with the other human score.</em>”<a href="#fnref47" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn48"><p>Tradução nossa. Do inglês: “<em>When rater leniency/severity can be adequately documented, it is possible to statistically calibrate raters and adjust scores accordingly […] This statistical calibration appears to be a cost-effective approach to enhancing scoring reliability when compared to simply increasing the number of readings per paper.</em>”<a href="#fnref48" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html" class="pagination-link" aria-label="Complexidade Textual e suas Tarefas Relacionadas">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Complexidade Textual e suas Tarefas Relacionadas</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" class="pagination-link" aria-label="Detecção Automática de Notícias Falsas">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://brasileiraspln.com/">
+<p>Brasileiras em PLN, 2026. Todos os direitos reservados</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

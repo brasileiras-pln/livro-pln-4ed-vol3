@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Renato Moraes Silva">
+<meta name="author" content="Roney Lira de Sales Santos">
+<meta name="author" content="Thiago Alexandre Salgueiro Pardo">
+
+<title>8&nbsp; Detecção Automática de Notícias Falsas – Processamento de Linguagem Natural</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 1em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" rel="next">
+<link href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8676d8d0f01772f2903466dda9733bcf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sem resultados",
+    "search-matching-documents-text": "Resultados encontrados",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-111J572WMR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-111J572WMR');
+</script>
+
+
+<link rel="stylesheet" href="../../shared/bpln.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../shared/logos/bpln.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Processamento de Linguagem Natural</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../Livro_PLN_BPLN_4ed_vol3.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
+    <div class="dropdown">
+      <a href="" title="Compartilhar" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Compartilhar"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sobre o Volume 3</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Aplicações e Domínios</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Classificação de texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-mt/cap-mt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tradução Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sumarização Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Complexidade Textual e suas Tarefas Relacionadas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Classificação de Áudio aplicada à Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">PLN e Responsabilidade Social</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/referencias/referencias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referências</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Apêndices</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Considerações prévias à sumarização automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice-abstrativa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Exemplo de sumarização abstrativa</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../autores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Sobre as/os autoras/es</strong></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Conteúdo</h2>
+   
+  <ul>
+  <li><a href="#sec-cap-fake-news-intro" id="toc-sec-cap-fake-news-intro" class="nav-link active" data-scroll-target="#sec-cap-fake-news-intro"><span class="header-section-number">8.1</span> Introdução</a>
+  <ul class="collapse">
+  <li><a href="#conteúdo-enganoso-definições" id="toc-conteúdo-enganoso-definições" class="nav-link" data-scroll-target="#conteúdo-enganoso-definições"><span class="header-section-number">8.1.1</span> Conteúdo enganoso: definições</a></li>
+  <li><a href="#notícias-falsas-no-tempo-e-no-espaço" id="toc-notícias-falsas-no-tempo-e-no-espaço" class="nav-link" data-scroll-target="#notícias-falsas-no-tempo-e-no-espaço"><span class="header-section-number">8.1.2</span> Notícias falsas no tempo e no espaço</a></li>
+  <li><a href="#combate-ao-conteúdo-enganoso" id="toc-combate-ao-conteúdo-enganoso" class="nav-link" data-scroll-target="#combate-ao-conteúdo-enganoso"><span class="header-section-number">8.1.3</span> Combate ao conteúdo enganoso</a></li>
+  </ul></li>
+  <li><a href="#corpora" id="toc-corpora" class="nav-link" data-scroll-target="#corpora"><span class="header-section-number">8.2</span> <em>Corpora</em></a></li>
+  <li><a href="#métodos-de-detecção-automática" id="toc-métodos-de-detecção-automática" class="nav-link" data-scroll-target="#métodos-de-detecção-automática"><span class="header-section-number">8.3</span> Métodos de detecção automática</a>
+  <ul class="collapse">
+  <li><a href="#aprendizado-de-máquina-com-atributos-linguísticos" id="toc-aprendizado-de-máquina-com-atributos-linguísticos" class="nav-link" data-scroll-target="#aprendizado-de-máquina-com-atributos-linguísticos"><span class="header-section-number">8.3.1</span> Aprendizado de máquina com atributos linguísticos</a></li>
+  <li><a href="#modelos-de-linguagem" id="toc-modelos-de-linguagem" class="nav-link" data-scroll-target="#modelos-de-linguagem"><span class="header-section-number">8.3.2</span> Modelos de linguagem</a></li>
+  <li><a href="#checagem-de-conteúdo" id="toc-checagem-de-conteúdo" class="nav-link" data-scroll-target="#checagem-de-conteúdo"><span class="header-section-number">8.3.3</span> Checagem de conteúdo</a></li>
+  <li><a href="#recuperação-de-informação" id="toc-recuperação-de-informação" class="nav-link" data-scroll-target="#recuperação-de-informação"><span class="header-section-number">8.3.4</span> Recuperação de informação</a></li>
+  <li><a href="#análise-de-credibilidade" id="toc-análise-de-credibilidade" class="nav-link" data-scroll-target="#análise-de-credibilidade"><span class="header-section-number">8.3.5</span> Análise de credibilidade</a></li>
+  <li><a href="#outras-iniciativas-relacionadas" id="toc-outras-iniciativas-relacionadas" class="nav-link" data-scroll-target="#outras-iniciativas-relacionadas"><span class="header-section-number">8.3.6</span> Outras iniciativas relacionadas</a></li>
+  </ul></li>
+  <li><a href="#impactos-para-a-sociedade" id="toc-impactos-para-a-sociedade" class="nav-link" data-scroll-target="#impactos-para-a-sociedade"><span class="header-section-number">8.4</span> Impactos para a sociedade</a></li>
+  <li><a href="#considerações-finais" id="toc-considerações-finais" class="nav-link" data-scroll-target="#considerações-finais"><span class="header-section-number">8.5</span> Considerações finais</a></li>
+  <li><a href="#exercícios-de-fixação" id="toc-exercícios-de-fixação" class="nav-link" data-scroll-target="#exercícios-de-fixação"><span class="header-section-number">8.6</span> Exercícios de fixação</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-cap-fake-news" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading"></div>
+    <div class="quarto-title-meta-contents">
+             <p>Renato Moraes Silva </p>
+             <p>Roney Lira de Sales Santos </p>
+             <p>Thiago Alexandre Salgueiro Pardo </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Publicado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">20/11/2024</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Atualizado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">13/04/2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+
+</div>
+<div>
+<div class="callout-body-container callout-body">
+<p>Este capítulo também está disponível em <a href="cap-fake-news.pdf">PDF</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-target=".callout-cite-contents" aria-controls="callout-cite" aria-label="Toggle callout" data-bs-toggle="collapse" aria-expanded="false">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Como citar
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
+<i class="callout-toggle"></i>
+</div>
+</div>
+<div id="callout-cite" class="callout-cite-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>@InCollection{BPLN_livro_cap-fake-news:2026,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    author    = {Silva, Renato Moraes and Santos, Roney Lira de Sales and Pardo, Thiago Alexandre Salgueiro},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    title     = {Detecção Automática de Notícias Falsas},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    publisher = {BPLN},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    year      = {2026},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    editor    = {Caseli, H. M. and Nunes, M. G. V.},</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    type      = {Book Chapter},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    chapter   = {8},</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    edition   = {4},</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    volume    = {3},</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    isbn      = {XXXXXXXXXXXXXXXX},</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    url       = {https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html},</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mais recursos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="https://youtu.be/qntYq5rLCIc?si=pkIiK-glAaQO-U0F">Vídeo</a> e <a href="2o_Ciclo_PLN_BPLN-FakeNews_06022025.pdf">Slides</a></p>
+</div>
+</div>
+<section id="sec-cap-fake-news-intro" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="sec-cap-fake-news-intro"><span class="header-section-number">8.1</span> Introdução</h2>
+<p>Notícias falsas podem matar, podem destruir vidas e podem interferir nos rumos de povos e nações. Apesar das maravilhas que a tecnologia traz, a própria tecnologia (que inclui dispositivos e serviços, como smartphones, redes sociais e mensageiros instantâneos) tem permitido que notícias falsas se espalhem rapidamente, alcançando milhares de pessoas em pouco tempo, causando danos de todo tipo, afetando desde decisões políticas até a saúde física e mental da população. Grandes eventos e acontecimentos recentes, como eleições presidenciais e a pandemia de COVID-19, trazem muitas evidências do impacto dessas informações enganosas. Mais do que isso, a Inteligência Artificial, apesar dos avanços impressionantes, tem produzido sistemas que, como efeito colateral, podem criar desinformação. Assim, o problema das notícias falsas, embora antigo, ganhou uma nova dimensão com a tecnologia, tornando-se uma ameaça significativa para a sociedade.</p>
+<p>Nesse contexto, a tarefa de detecção automática de notícias falsas tem grande apelo junto à sociedade (quer seja em nível individual, quer seja em nível governamental e de gestão), com potencial de trazer contribuições reais, com soluções aplicadas no dia a dia, podendo salvar vidas. Do ponto de vista científico, é também uma tarefa de grande interesse e com desafios instigantes, que incluem caracterizar o estilo de escrita de notícias falsas (e, complementarmente, das verdadeiras), explicar e mapear a distribuição dessas notícias e como elas afetam as várias camadas da sociedade, e como desenvolver sistemas computacionais que as identifiquem automaticamente.</p>
+<p>Neste capítulo, apresenta-se o problema e relatam-se os esforços da área de Processamento de Linguagem Natural (PLN) para lidar com a questão, com foco especial na língua portuguesa do Brasil. Inicialmente, o problema é contextualizado e são apresentadas as bases teóricas para a compreensão do fenômeno das notícias falsas. Em seguida, são introduzidos os principais <em>corpora</em> existentes para o português, sobre os quais sistemas computacionais são desenvolvidos e avaliados. São então discutidos métodos e abordagens aplicados à identificação automática de notícias falsas. Finaliza-se com uma discussão sobre consequências sociais e considerações finais sobre este tópico tão relevante.</p>
+<section id="conteúdo-enganoso-definições" class="level3" data-number="8.1.1">
+<h3 data-number="8.1.1" class="anchored" data-anchor-id="conteúdo-enganoso-definições"><span class="header-section-number">8.1.1</span> Conteúdo enganoso: definições</h3>
+<p>Conteúdo enganoso, desilusão, fraude e mentira são traduções aceitas para a expressão “<em>deception</em>”, comum na língua inglesa para se referir a uma informação transmitida para criar uma falsa impressão ou conclusão. As notícias falsas, também popularmente chamadas pelo termo em inglês, <em>fake news</em>, são provavelmente o tipo mais citado de conteúdo enganoso. Elas são propositalmente divulgadas para enganar, sendo prejudiciais, incluindo os casos de quando o conteúdo é desconectado de sua origem e contexto <span class="citation" data-cites="rubin:14 lazer:18">(<a href="../../shared/referencias/referencias.html#ref-lazer:18" role="doc-biblioref">Lazer et al., 2018</a>; <a href="../../shared/referencias/referencias.html#ref-rubin:14" role="doc-biblioref">Rubin, 2014</a>)</span>.</p>
+<p>Além das notícias falsas, <span class="citation" data-cites="rubin:15">Rubin et al. (<a href="../../shared/referencias/referencias.html#ref-rubin:15" role="doc-biblioref">2015</a>)</span> incluem os trotes/embustes (<em>hoaxes</em>, em inglês) e o conteúdo humorístico (que inclui ironia, sarcasmo e sátira, projetados para serem percebidos pelo leitor/ouvinte) como tipos de conteúdo enganoso. <span class="citation" data-cites="2022_santos_tese">Santos (<a href="../../shared/referencias/referencias.html#ref-2022_santos_tese" role="doc-biblioref">2022</a>)</span> e <span class="citation" data-cites="2015_chen_clickbait">Chen et al. (<a href="../../shared/referencias/referencias.html#ref-2015_chen_clickbait" role="doc-biblioref">2015</a>)</span> também citam os casos das revisões falsas de produtos (em sites de comércio eletrônico, por exemplo, para promover ou prejudicar produtos ou empresas) e os <em>clickbaits</em> (conteúdos que chamam a atenção, visando que o usuário clique em algum link).</p>
+<p>Outra classificação interessante refere-se aos termos <em>misinformation</em>, <em>disinformation</em> e <em>malinformation</em> <span class="citation" data-cites="2017_wardle_infoDisorder">(<a href="../../shared/referencias/referencias.html#ref-2017_wardle_infoDisorder" role="doc-biblioref">Wardle; Derakhshan, 2017</a>)</span>:</p>
+<ul>
+<li><p><em>Misinformation</em>: as informações são falsas, mas não são criadas com a intenção de causar dano ao leitor. Esta definição abrange os erros não intencionais, tais como legendas de fotos erradas, datas, estatísticas, erros de tradução e até situações em que ironias e sátiras são levadas a sério.</p></li>
+<li><p><em>Disinformation</em>: as informações são falsas e são criadas deliberadamente de forma a prejudicar uma pessoa, grupo social, organização ou país. Aqui são incluídos conteúdos de áudio ou visual (vídeos) fabricados. As notícias falsas fazem parte desse grupo, normalmente traduzido como “desinformação”.</p></li>
+<li><p><em>Malinformation</em>: informações baseadas na realidade, usadas para infligir danos a uma pessoa, organização ou país. Publicações de informações privadas (vazamentos), mudança deliberada de contexto, data ou tempo, assédio e discurso de ódio são exemplos desta definição.</p></li>
+</ul>
+<p>Também se pode falar em meias verdades, quando fatos verdadeiros e falsos se misturam nas notícias em diferentes graus. Em geral, os fatos verdadeiros são utilizados de tal forma que os falsos sejam amparados, aumentando suas chances de serem percebidos como legítimos <span class="citation" data-cites="2017_clem_postTruth">(<a href="../../shared/referencias/referencias.html#ref-2017_clem_postTruth" role="doc-biblioref">Clem, 2017</a>)</span>. Mais recentemente, entraram em cena as pós-verdades, quando os fatos objetivos em si são menos importantes do que o apelo às emoções que trazem e às crenças que evocam. Assim, os chamados “fatos alternativos” ganham relevância frente a “fatos reais” e sentimentos têm mais peso do que evidências <span class="citation" data-cites="2019_saquete_postTruth_review">(<a href="../../shared/referencias/referencias.html#ref-2019_saquete_postTruth_review" role="doc-biblioref">Saquete et al., 2019</a>)</span>. O termo surgiu no âmbito político, mas logo foi popularizado em outros domínios.</p>
+<p>Especialmente com os avanços da Inteligência Artificial generativa, outras modalidades de conteúdo enganoso ganharam força, envolvendo a produção de vídeos, imagens e áudios falsos ou manipulados digitalmente, contribuindo para a proliferação das chamadas <em>deepfakes</em>. Esse nome surgiu da junção dos termos <em>deep learning</em> e <em>fake</em>, sendo citado originalmente em 2017 por um usuário anônimo na rede social Reddit para se referir à substituição do rosto de uma pessoa por outra em um vídeo pornográfico <span class="citation" data-cites="2022_rana_deepfake">(<a href="../../shared/referencias/referencias.html#ref-2022_rana_deepfake" role="doc-biblioref">Rana et al., 2022</a>)</span>. Mais recentemente, tem-se falado em <em>deepfakes</em> textuais <span class="citation" data-cites="2024_li_mage">(<a href="../../shared/referencias/referencias.html#ref-2024_li_mage" role="doc-biblioref">Li et al., 2024</a>)</span> especificamente para se referir ao conteúdo escrito produzido por grandes modelos de língua (em inglês, <em>Large Language Models</em> ou LLMs).</p>
+<p>Como se pode perceber, há todo um ecossistema em que as notícias falsas residem, sendo um ambiente em evolução, que muda conforme a sociedade, sua cultura e a tecnologia avançam. Conforme <span class="citation" data-cites="2019_saquete_postTruth_review">Saquete et al. (<a href="../../shared/referencias/referencias.html#ref-2019_saquete_postTruth_review" role="doc-biblioref">2019</a>)</span> discutem, esse ecossistema visa principalmente manipular a opinião pública, influenciar o comportamento das pessoas e, em última instância, trazer poder e ganhos financeiros aos envolvidos.</p>
+<p>Esse capítulo foca especificamente nas notícias falsas em sua modalidade escrita, que têm sido o alvo de pesquisa da maior parte dos esforços atuais em PLN.</p>
+</section>
+<section id="notícias-falsas-no-tempo-e-no-espaço" class="level3" data-number="8.1.2">
+<h3 data-number="8.1.2" class="anchored" data-anchor-id="notícias-falsas-no-tempo-e-no-espaço"><span class="header-section-number">8.1.2</span> Notícias falsas no tempo e no espaço</h3>
+<p>Engana-se quem pensa que notícias falsas são um mal recente ou que se restringem a países com situações socioeconômicas mais frágeis.</p>
+<p>A fabricação e a propagação de conteúdo enganoso são um fenômeno de longa data. Antigamente, as informações eram repassadas por meio de fofocas, no “boca a boca” e também nos tabloides (a chamada “imprensa marrom”), tanto para falar sobre outras pessoas de modo “inocente” como para, intencionalmente, prejudicar a reputação de outras pessoas ou empresas rivais. Até mesmo jornais e mídias televisivas podem, inadvertidamente, divulgar conteúdo enganoso, o que pode gerar severas consequências no mundo real. Por exemplo, em 1924, um documento forjado foi publicado por um jornal britânico renomado apenas quatro dias antes das eleições gerais, com o objetivo de desestabilizar o processo eleitoral<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Outro exemplo ocorreu depois de um acidente na Inglaterra, em 1989, quando muitas pessoas morreram devido à superlotação e falta de segurança em um estádio. Os jornais da época relataram que, entre as pessoas que morreram, algumas estavam alcoolizadas e brigaram com policiais que estavam tentando resgatar os feridos. Anos depois, provou-se que essas afirmações eram falsas<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>Hoje as redes sociais e os aplicativos de mensagens instantâneas permitem que tais conteúdos enganosos alcancem uma audiência nunca imaginada antes da era da web, não discriminando países. Há casos famosos de eventos afetados por notícias falsas em todo o mundo, como a eleição americana de 2016, a saída do Reino Unido da União Europeia (que ficou conhecida pelo termo “<em>Brexit</em>”) em 2020, a pandemia de COVID-19 entre 2020 e 2023, ou a recomendação de tratamento médico para a epidemia recorrente de dengue no Brasil. O <a href="#def-cap-fake-news-quadro-exemplo" class="quarto-xref">Quadro&nbsp;<span>8.1</span></a> mostra um exemplo típico desse último caso, que transcreve uma fala divulgada por vídeo sobre tratamento para dengue, amplamente desmentida por diversas agências de checagem de fatos<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<div id="def-cap-fake-news-quadro-exemplo" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 8.1</strong></span> Exemplo de notícia falsa sobre tratamento para dengue.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<p>Esprema 200 ml do limão taiti. Dá mais ou menos um copo de limão. Beba todo o copo de uma vez só. Basta apenas uma dose. A carga viral vai acabar, bem como todos os sintomas, nas próximas horas. Nos casos de dengue, em que as plaquetas começam a baixar, o que pode levar à dengue hemorrágica, é preciso tomar os 200 ml de limão para erradicar a carga viral primeiro e logo depois fazer o seguinte procedimento: tomar de hora em hora 50 ml de caldo de cana. Pode tomar esse volume de caldo de cana por umas seis horas consecutivas. Esses dois procedimentos vão eliminar a carga viral e aumentar muito rapidamente as plaquetas no sangue.</p>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+<p>Atualmente, tais desafios têm ganhado proporções ainda maiores. Há contas forjadas e robôs nas redes sociais que replicam grandes volumes desse tipo de conteúdo (para fins diversos). O advento da Inteligência Artificial generativa, apesar de sua utilidade, também traz preocupações, pois há muita desinformação produzida (dadas as limitações ainda existentes nas técnicas empregadas e seu possível mal uso), trazendo ao cenário não apenas notícias falsas produzidas por humanos, mas também conteúdo enganoso gerado por máquinas <span class="citation" data-cites="2024_su_fakeDetection_LLM">(<a href="../../shared/referencias/referencias.html#ref-2024_su_fakeDetection_LLM" role="doc-biblioref">Su et al., 2024</a>)</span>.</p>
+<p>Soma-se a esse cenário a dificuldade humana de detectar conteúdo enganoso em geral. Pesquisas já mostraram que humanos não conseguem separar satisfatoriamente notícias verdadeiras de notícias falsas <span class="citation" data-cites="bond:06 2006_george_deception">(<a href="../../shared/referencias/referencias.html#ref-bond:06" role="doc-biblioref">Bond Jr.; DePaulo, 2006</a>; <a href="../../shared/referencias/referencias.html#ref-2006_george_deception" role="doc-biblioref">George; Keane, 2006</a>)</span>, alcançando entre 50% e 63% de sucesso, dependendo do que seja considerado enganoso <span class="citation" data-cites="rubin:11">(<a href="../../shared/referencias/referencias.html#ref-rubin:11" role="doc-biblioref">Rubin; Conroy, 2011</a>)</span>. Algumas explicações para isso são:</p>
+<ul>
+<li><p>a falta de conhecimento prévio das pessoas sobre determinados assuntos, fato este relacionado a questões de formação e educação formal, muitas vezes;</p></li>
+<li><p>a percepção humana da veracidade da notícia pode ser afetada pelo fato de as informações veiculadas estarem alinhadas com suas crenças e opiniões pré-existentes, o que tem sido chamado de “viés da confirmação” <span class="citation" data-cites="2024_thakar_fake_trends">(<a href="../../shared/referencias/referencias.html#ref-2024_thakar_fake_trends" role="doc-biblioref">Thakar; Bhatt, 2024</a>)</span>;</p></li>
+<li><p>algumas pessoas recebem informações de fontes socialmente próximas, o que as leva a considerar legítimas as informações compartilhadas, além do fato de os usuários raramente verificarem as informações que compartilham <span class="citation" data-cites="2018_tandoc_definingFake">(<a href="../../shared/referencias/referencias.html#ref-2018_tandoc_definingFake" role="doc-biblioref">Tandoc Jr. et al., 2018</a>)</span>;</p></li>
+<li><p>a dificuldade, a falta de interesse ou a falta de disponibilidade do usuário para seguir dicas que são amplamente divulgadas por sites de notícias e redes sociais, como o Facebook, cujas orientações são mostradas no <a href="#def-cap-fake-news-quadro-diretrizes" class="quarto-xref">Quadro&nbsp;<span>8.2</span></a>, conforme reproduzidas por <span class="citation" data-cites="2022_santos_tese">Santos (<a href="../../shared/referencias/referencias.html#ref-2022_santos_tese" role="doc-biblioref">2022</a>)</span>.</p></li>
+</ul>
+<div id="def-cap-fake-news-quadro-diretrizes" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 8.2</strong></span> Diretrizes do Facebook para identificação de notícias falsas <span class="citation" data-cites="2022_santos_tese">(<a href="../../shared/referencias/referencias.html#ref-2022_santos_tese" role="doc-biblioref">Santos, 2022</a>)</span>.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<ol type="1">
+<li><p><strong>Seja cético com as manchetes</strong>. Notícias falsas frequentemente trazem manchetes apelativas em letras maiúsculas e com pontos de exclamação. Se alegações chocantes na manchete parecerem inacreditáveis, desconfie.</p></li>
+<li><p><strong>Olhe atentamente para a URL</strong>. Uma URL semelhante à de outro site ou um telefone podem ser um sinal de alerta para notícias falsas. Muitos sites de notícias falsas imitam veículos de imprensa autênticos fazendo pequenas mudanças na URL. Você pode ir até o site para verificar e comparar a URL com a de veículos de imprensa estabelecidos.</p></li>
+<li><p><strong>Investigue a fonte.</strong> Certifique-se de que a reportagem tenha sido escrita por uma fonte confiável e de boa reputação. Se a história for contada por uma organização não conhecida, verifique a seção “Sobre” do site para saber mais sobre ela.</p></li>
+<li><p><strong>Fique atento a formatações incomuns.</strong> Muitos sites de notícias falsas contêm erros ortográficos ou apresentam layouts estranhos. Redobre a atenção na leitura se perceber esses sinais.</p></li>
+<li><p><strong>Considere as fotos.</strong> Notícias falsas frequentemente contêm imagens ou vídeos manipulados. Algumas vezes, a foto pode ser autêntica, mas ter sido retirada do contexto. Você pode procurar a foto ou imagem para verificar de onde ela veio.</p></li>
+<li><p><strong>Confira as datas.</strong> Notícias falsas podem conter datas que não fazem sentido ou até mesmo datas que tenham sido alteradas.</p></li>
+<li><p><strong>Verifique as evidências.</strong> Verifique as fontes do autor da reportagem para confirmar que são confiáveis. Falta de evidências sobre os fatos ou menção a especialistas desconhecidos pode ser uma indicação de notícias falsas.</p></li>
+<li><p><strong>Busque outras reportagens.</strong> Se nenhum outro veículo na imprensa tiver publicado uma reportagem sobre o mesmo assunto, isso pode ser um indicativo de que a história é falsa. Se a história for publicada por vários veículos confiáveis na imprensa, é mais provável que seja verdadeira.</p></li>
+<li><p><strong>A história é uma farsa ou uma brincadeira?</strong> Algumas vezes, as notícias falsas podem ser difíceis de distinguir de um conteúdo de humor ou sátira. Verifique se a fonte é conhecida por paródias e se os detalhes da história e o tom sugerem que pode ser apenas uma brincadeira.</p></li>
+<li><p><strong>Algumas histórias são intencionalmente falsas.</strong> Pense de forma crítica sobre as histórias lidas e compartilhe apenas as notícias que você sabe que são verossímeis.</p></li>
+</ol>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="combate-ao-conteúdo-enganoso" class="level3" data-number="8.1.3">
+<h3 data-number="8.1.3" class="anchored" data-anchor-id="combate-ao-conteúdo-enganoso"><span class="header-section-number">8.1.3</span> Combate ao conteúdo enganoso</h3>
+<p>Como a propagação de conteúdo enganoso alcançou um ponto crítico, a partir das evidências de que as redes sociais têm uma parcela grande de responsabilidade pela proliferação desse tipo de conteúdo, somada à dificuldade humana de detectar tais conteúdos, surgiram iniciativas de combate a essa prática.</p>
+<p>Agências de comunicação têm dado apoio a sites de checagem manual de fatos e a companhias de grande apelo digital. No Brasil, a checagem de fatos é em grande parte feita por jornalistas, em sites e agências como o Boatos.org, Fato ou Fake<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, E-Farsas<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, Aos Fatos<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> e Agência Lupa<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>, entre outros. Eles costumam seguir uma metodologia de checagem de acordo com as diretrizes da Rede Internacional de Checagem de Fatos (em inglês, <em>International Fact-Checking Network</em> ou IFCN), que promove iniciativas de verificação de fatos<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>.</p>
+<p>Estudos sobre a produção e a disseminação de notícias falsas têm sido realizados buscando-se mapear o fenômeno e seu comportamento. <span class="citation" data-cites="vosoughi:2018_spreadTrueFalseNews">Vosoughi et al. (<a href="../../shared/referencias/referencias.html#ref-vosoughi:2018_spreadTrueFalseNews" role="doc-biblioref">2018</a>)</span> relatam que, em seus estudos, cerca de 1% das notícias falsas mais populares foram difundidas de 1.000 a 100.000 pessoas, enquanto as notícias verdadeiras raramente chegam a 1.000 pessoas, o que pode ser explicado pelo apelo emotivo e pelo grau de novidade das notícias falsas.</p>
+<p>No âmbito das pesquisas de PLN, há esforços para estudar as características do conteúdo enganoso e como detectá-lo automaticamente. Considerando toda a história da área, as tentativas são relativamente recentes, tanto do ponto de vista teórico quanto do prático, sendo majoritariamente focadas no processamento do conteúdo escrito. Segundo <span class="citation" data-cites="hauch:12">Hauch et al. (<a href="../../shared/referencias/referencias.html#ref-hauch:12" role="doc-biblioref">2012</a>)</span>, a automatização do processo de detecção de conteúdo enganoso é atraente por no mínimo dois motivos: (i) esses sistemas podem ser mais objetivos do que os humanos, que são propensos a erros e vieses; e (ii) julgamentos online de várias pistas a partir de vídeos ou áudios podem sobrecarregar o humano e levar a atrasos e erros.</p>
+<p>Em PLN, o uso de aprendizado de máquina, tanto da linha mais clássica quanto da linha profunda, incluindo os LLMs, são atualmente abordagens bastante comuns para a identificação de notícias falsas. Essas abordagens visam aprender automaticamente as características textuais (simples ou complexas) que podem se correlacionar com a veracidade/falsidade da informação, usando-as para identificar a classe de notícias novas. Há também outras abordagens, por exemplo, aquelas que buscam identificar fatos e checá-los automaticamente, assim como usar técnicas baseadas em recuperação e extração de informação.</p>
+<p>Normalmente, essas abordagens baseiam-se em dados encontrados em <em>corpora</em> que contêm notícias falsas e verdadeiras, assim como metadados, que servem de base para o desenvolvimento/treino e avaliação/teste dos métodos de detecção de notícias falsas (para mais detalhes sobre <em>corpora</em>, ver <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/dados/cap-dataset-corpus/cap-dataset-corpus.html#sec-cap-dataset-corpus" target="_blank" title="Volume 1">Conjunto de dados, <em>dataset</em> e <em>corpus</em></a></span>). A seguir, os principais <em>corpora</em> existentes para a tarefa de detecção de notícias falsas para a língua portuguesa são brevemente apresentados.</p>
+</section>
+</section>
+<section id="corpora" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="corpora"><span class="header-section-number">8.2</span> <em>Corpora</em></h2>
+<p>A análise de notícias falsas tem se beneficiado da disponibilidade de variados <em>corpora</em>. Para o inglês, existem vários <em>corpora</em> em diferentes domínios, como política <span class="citation" data-cites="2014_vlachos_factChecking wang:2017-liarDataset gruppi:2020_nelagt2019 gruppi:2021_nelagt2020">(<a href="../../shared/referencias/referencias.html#ref-gruppi:2020_nelagt2019" role="doc-biblioref">Gruppi et al., 2020</a>, <a href="../../shared/referencias/referencias.html#ref-gruppi:2021_nelagt2020" role="doc-biblioref">2021</a>; <a href="../../shared/referencias/referencias.html#ref-2014_vlachos_factChecking" role="doc-biblioref">Vlachos; Riedel, 2014</a>; <a href="../../shared/referencias/referencias.html#ref-wang:2017-liarDataset" role="doc-biblioref">Wang, 2017</a>)</span>, medicina <span class="citation" data-cites="2020_dai_datasetFakeHealth_ginger">(<a href="../../shared/referencias/referencias.html#ref-2020_dai_datasetFakeHealth_ginger" role="doc-biblioref">Dai et al., 2020</a>)</span>, opiniões sobre produtos ou hotéis <span class="citation" data-cites="2011_ott_opinionSpam 2013_fornaciari_deception_italianCourt 2022_salminen_fakeReviewsDataset">(<a href="../../shared/referencias/referencias.html#ref-2013_fornaciari_deception_italianCourt" role="doc-biblioref">Fornaciari; Poesio, 2013</a>; <a href="../../shared/referencias/referencias.html#ref-2011_ott_opinionSpam" role="doc-biblioref">Ott et al., 2011</a>; <a href="../../shared/referencias/referencias.html#ref-2022_salminen_fakeReviewsDataset" role="doc-biblioref">Salminen et al., 2022</a>)</span> e tópicos sociais, como aborto <span class="citation" data-cites="perez:14">(<a href="../../shared/referencias/referencias.html#ref-perez:14" role="doc-biblioref">Pérez-Rosas; Mihalcea, 2014</a>)</span>. Apesar de existir uma quantidade significativamente menor de <em>corpora</em> em português, nos últimos anos esse problema tem diminuído com o surgimento de <em>corpora</em> específicos para o português do Brasil, com características distintas que influenciam diretamente a eficácia dos modelos de detecção de notícias falsas.</p>
+<p>A <a href="#tbl-cap-fake-news-corpora" class="quarto-xref">Tabela&nbsp;<span>8.1</span></a> lista os principais <em>corpora</em> de notícias falsas para o português do Brasil de que se tem ciência (na data da escrita desse capítulo), organizados cronologicamente conforme seu surgimento.</p>
+<p></p>
+<div id="tbl-cap-fake-news-corpora" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cap-fake-news-corpora-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;8.1: <em>Corpora</em> de notícias falsas em português do Brasil.
+</figcaption>
+<div aria-describedby="tbl-cap-fake-news-corpora-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 20%">
+<col style="width: 19%">
+<col style="width: 17%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><em>Corpus</em></th>
+<th style="text-align: center;">Quantidade de notícias</th>
+<th style="text-align: left;">Categorias envolvidas</th>
+<th style="text-align: center;">Período do conteúdo</th>
+<th>Tipo de material</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Fake.br <span class="citation" data-cites="Monteiro2018 renatosilva-eswa:2020_fakenews">(<a href="../../shared/referencias/referencias.html#ref-Monteiro2018" role="doc-biblioref">Monteiro et al., 2018</a>; <a href="../../shared/referencias/referencias.html#ref-renatosilva-eswa:2020_fakenews" role="doc-biblioref">Silva et al., 2020</a>)</span></td>
+<td style="text-align: center;">7.200</td>
+<td style="text-align: left;">falsa, verdadeira</td>
+<td style="text-align: center;">2016 a 2018</td>
+<td>Notícias</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FACTCK.BR <span class="citation" data-cites="2019:moreno_FACTCK.BR">(<a href="../../shared/referencias/referencias.html#ref-2019:moreno_FACTCK.BR" role="doc-biblioref">Moreno; Bressan, 2019</a>)</span></td>
+<td style="text-align: center;">1.309</td>
+<td style="text-align: left;">falsa, meia-verdade, verdadeira</td>
+<td style="text-align: center;">2016 a 2019</td>
+<td>Notícias</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bracis2019FakeNews – Twitter <span class="citation" data-cites="faustini:2019_whatsAppBR">(<a href="../../shared/referencias/referencias.html#ref-faustini:2019_whatsAppBR" role="doc-biblioref">Faustini; Covões, 2019</a>)</span></td>
+<td style="text-align: center;">8.981</td>
+<td style="text-align: left;">falsa, verdadeira</td>
+<td style="text-align: center;">—</td>
+<td>Postagens do X (Twitter)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bracis2019FakeNews – WhatsApp <span class="citation" data-cites="faustini:2019_whatsAppBR">(<a href="../../shared/referencias/referencias.html#ref-faustini:2019_whatsAppBR" role="doc-biblioref">Faustini; Covões, 2019</a>)</span></td>
+<td style="text-align: center;">177</td>
+<td style="text-align: left;">falsa, verdadeira</td>
+<td style="text-align: center;">—</td>
+<td>Mensagens do WhatsApp</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FakeTweet.Br <span class="citation" data-cites="Cordeiro2019">(<a href="../../shared/referencias/referencias.html#ref-Cordeiro2019" role="doc-biblioref">Cordeiro; Pinheiro, 2019</a>)</span></td>
+<td style="text-align: center;">299</td>
+<td style="text-align: left;">falsa, verdadeira</td>
+<td style="text-align: center;">—</td>
+<td>Postagens do X (Twitter)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FakeWhastApp.BR <span class="citation" data-cites="2021_cabral_fakewhastappDataset">(<a href="../../shared/referencias/referencias.html#ref-2021_cabral_fakewhastappDataset" role="doc-biblioref">Cabral et al., 2021</a>)</span></td>
+<td style="text-align: center;">5.284</td>
+<td style="text-align: left;">falsa, verdadeira</td>
+<td style="text-align: center;">—</td>
+<td>Mensagens do WhatsApp</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FakeRecogna <span class="citation" data-cites="2022:garcia_fakerecogna">(<a href="../../shared/referencias/referencias.html#ref-2022:garcia_fakerecogna" role="doc-biblioref">Garcia et al., 2022</a>)</span></td>
+<td style="text-align: center;">11.902</td>
+<td style="text-align: left;">falsa, verdadeira</td>
+<td style="text-align: center;">2018 a 2021</td>
+<td>Notícias</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FakePedia <span class="citation" data-cites="2022:charles_fakepedia_fakenews">(<a href="../../shared/referencias/referencias.html#ref-2022:charles_fakepedia_fakenews" role="doc-biblioref">Charles et al., 2022</a>)</span></td>
+<td style="text-align: center;">12.398</td>
+<td style="text-align: left;">falsa, verdadeira</td>
+<td style="text-align: center;">2013 a 2021</td>
+<td>Notícias</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FakeTrueBR <span class="citation" data-cites="2023_chavarro_fakeTrueBR">(<a href="../../shared/referencias/referencias.html#ref-2023_chavarro_fakeTrueBR" role="doc-biblioref">Chavarro et al., 2023</a>)</span></td>
+<td style="text-align: center;">3.582</td>
+<td style="text-align: left;">falsa, verdadeira</td>
+<td style="text-align: center;">—</td>
+<td>Notícias</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fake tweets Covid-19 <span class="citation" data-cites="2024_geurgas2024_faketweetsCovid19">(<a href="../../shared/referencias/referencias.html#ref-2024_geurgas2024_faketweetsCovid19" role="doc-biblioref">Geurgas; Tessler, 2024</a>)</span></td>
+<td style="text-align: center;">14.000</td>
+<td style="text-align: left;">falsa, verdadeira</td>
+<td style="text-align: center;">—</td>
+<td>Postagens do X (Twitter)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FakeRecogna 2.0 <span class="citation" data-cites="2024:garcia_textSummarization_fakerecogna2">(<a href="../../shared/referencias/referencias.html#ref-2024:garcia_textSummarization_fakerecogna2" role="doc-biblioref">Garcia et al., 2024</a>)</span></td>
+<td style="text-align: center;">52.800</td>
+<td style="text-align: left;">falsa, verdadeira</td>
+<td style="text-align: center;">2002 a 2023</td>
+<td>Notícias</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p></p>
+<p>O primeiro <em>corpus</em> para o português de que se tem conhecimento é o Fake.br <span class="citation" data-cites="Monteiro2018 renatosilva-eswa:2020_fakenews">(<a href="../../shared/referencias/referencias.html#ref-Monteiro2018" role="doc-biblioref">Monteiro et al., 2018</a>; <a href="../../shared/referencias/referencias.html#ref-renatosilva-eswa:2020_fakenews" role="doc-biblioref">Silva et al., 2020</a>)</span>, com notícias verdadeiras e falsas alinhadas, ou seja, cada notícia falsa tem uma notícia verdadeira relacionada. O <a href="#def-cap-fake-news-quadro-exemplo-fake.br" class="quarto-xref">Quadro&nbsp;<span>8.3</span></a> ilustra um caso de notícias alinhadas do <em>corpus</em>.</p>
+<div id="def-cap-fake-news-quadro-exemplo-fake.br" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 8.3</strong></span> Exemplo de notícia falsa e sua contraparte verdadeira no <em>corpus</em> Fake.br.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Notícia falsa</strong></th>
+<th style="text-align: left;"><strong>Notícia verdadeira</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Polos magnéticos da Terra podem se inverter e causar colapso mundial: A Terra ficaria inabitável. Ao menos 100 mil pessoas morreriam por ano pela alta nos níveis de radiação espacial. Se o campo magnético continuar a diminuir e os polos magnéticos se inverterem, a Terra pode acabar como Marte – um local seco, árido e incapaz de preservar a vida.</td>
+<td style="text-align: left;">Inversão dos polos magnéticos da Terra pode ocorrer mais rápido do que o previsto. Segundo afirmações, essas ocorrências são, a princípio, indistinguíveis das verdadeiras mudanças nos polos. Apesar dessas reversões não representarem qualquer ameaça à humanidade, os especialistas alertam que poderão gerar falhas nos satélites que orbitam a Terra.</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+<p>Como se pode ver na <a href="#tbl-cap-fake-news-corpora" class="quarto-xref">Tabela&nbsp;<span>8.1</span></a>, o maior <em>corpus</em> conhecido é o FakeRecogna 2.0 <span class="citation" data-cites="2024:garcia_textSummarization_fakerecogna2">(<a href="../../shared/referencias/referencias.html#ref-2024:garcia_textSummarization_fakerecogna2" role="doc-biblioref">Garcia et al., 2024</a>)</span>, com mais de 50.000 notícias.</p>
+<p>Os <em>corpora</em> possuem características variadas. Por exemplo, alguns deles fornecem informações temporais, enquanto outros não. Informações temporais são importantes porque já se percebeu na área que os sistemas computacionais de detecção de notícias falsas podem ser fortemente ancorados nos tópicos de determinado período. Na coluna “Período do conteúdo” da <a href="#tbl-cap-fake-news-corpora" class="quarto-xref">Tabela&nbsp;<span>8.1</span></a>, é apresentado o período abrangido pelos dados apenas quando essa informação está disponível. Além disso, a informação é baseada nos metadados encontrados no <em>corpus</em>, o que pode ser diferente da descrição do artigo principal do <em>corpus</em>. Por exemplo, <span class="citation" data-cites="2024:garcia_textSummarization_fakerecogna2">Garcia et al. (<a href="../../shared/referencias/referencias.html#ref-2024:garcia_textSummarization_fakerecogna2" role="doc-biblioref">2024</a>)</span> citam que as notícias do <em>corpus</em> FakeRecogna 2.0 foram coletadas entre 2019 e 2023, mas, na análise dos metadados, foram encontradas notícias publicadas em 2002.</p>
+<p>Os dados também variam em termos de aplicação. Existem <em>corpora</em> que incluem notícias em seu sentido mais estrito (o jornalístico), como o FakeRecogna, FakeRecogna 2.0 e o Fake.br. Outros usam dados relativos a postagens em redes sociais, como o FakeTweet.Br. Além disso, há <em>corpora</em> voltados para dados de aplicativos de mensagens instantâneas, como o WhatsApp, incluindo o Bracis2019FakeNews e o FakeWhastApp.BR.</p>
+<p>Outro ponto de variação entre os <em>corpora</em> são as classes de veracidade avaliadas. A maioria trabalha com uma classificação binária, distinguindo entre notícias falsas e verdadeiras. Porém, o <em>corpus</em> FACTCK.BR contém três classes: falsa, meia-verdade e verdadeira.</p>
+<p>Por fim, algumas bases de dados, como a Fake.br, fornecem, além dos textos, metadados e atributos linguísticos. Esses recursos adicionais enriquecem as possibilidades de análise, fornecendo aos pesquisadores informações estruturadas que podem ser diretamente utilizadas nos modelos de classificação. Embora seja possível extrair alguns desses atributos diretamente dos textos, sua inclusão prévia no <em>corpus</em> facilita o processo de pesquisa e gera maior consistência nos resultados.</p>
+<p>Na próxima seção, são discutidos alguns métodos de detecção automática de notícias falsas, focando-se nos trabalhos existentes para a língua portuguesa, muitos dos quais se baseiam nos <em>corpora</em> aqui apresentados.</p>
+</section>
+<section id="métodos-de-detecção-automática" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="métodos-de-detecção-automática"><span class="header-section-number">8.3</span> Métodos de detecção automática</h2>
+<p>Na busca por identificar notícias falsas de forma automática, diversos estudos na literatura exploram uma ampla gama de abordagens. Muitos desses estudos podem ser categorizados de acordo com a taxonomia do comportamento enganoso proposta por <span class="citation" data-cites="2005_zhou_deceptionInstantMessaging">Zhou (<a href="../../shared/referencias/referencias.html#ref-2005_zhou_deceptionInstantMessaging" role="doc-biblioref">2005</a>)</span>, reproduzida na <a href="#fig-cap-fake-news-taxonomia" class="quarto-xref">Figura&nbsp;<span>8.1</span></a>. Essa taxonomia ajuda a organizar o comportamento enganoso, auxiliando (i) na sistematização de sinais e atributos que podem indicar se uma informação é falsa e (ii) na criação de métodos computacionais.</p>
+<div id="fig-cap-fake-news-taxonomia" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-fake-news-taxonomia-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;8.1: Taxonomia do comportamento enganoso.
+</figcaption>
+<div aria-describedby="fig-cap-fake-news-taxonomia-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 5.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 90.0%;justify-content: center;">
+<p><img src="media/image1.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 5.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
+<p> Fonte: Adaptada de <span class="citation" data-cites="2005_zhou_deceptionInstantMessaging">(<a href="../../shared/referencias/referencias.html#ref-2005_zhou_deceptionInstantMessaging" role="doc-biblioref">Zhou, 2005</a>)</span></p>
+</div>
+</div>
+</div>
+</figure>
+</div>
+<p>A taxonomia se divide em Linguagem Verbal e Não Verbal. Os indicadores não verbais focam nas características exibidas enquanto uma pessoa produz conteúdo enganoso, enquanto que os verbais estão ligados ao conteúdo escrito e falado da língua.</p>
+<p>A paralinguística, um dos subgrupos da linguagem não verbal, foca em propriedades do discurso que não estão diretamente relacionadas ao conteúdo falado. Isso inclui propriedades relacionadas à voz, como o tom de voz e pausas na fala, relacionados ao teclado (velocidade de digitação, quantidade de vezes que apagou a mensagem, erros de digitação por proximidade de teclas), participatório (demora entre as respostas, mudança de assunto) e sequencial (de quem veio a iniciação de conversas). O segundo subgrupo da linguagem não verbal se refere ao comportamento proxêmico-cinésico do enganador. Ele envolve movimentos e posturas corporais, como gestos com as mãos e braços, expressões faciais e movimentos oculares, entre outros.</p>
+<p>Apesar da linguagem não verbal ser importante, as pesquisas de PLN costumam atuar mais diretamente no grupo de Linguagem Verbal. Esse grupo é dividido em comportamento baseado em <strong>conteúdo</strong> e na <strong>linguística</strong>. Nas abordagens baseadas em linguística, são usadas pistas provenientes do texto para fazer a diferenciação entre conteúdo falso ou verdadeiro. Assume-se que os produtores de conteúdo enganoso podem inconscientemente deixar rastros linguísticos que sinalizam a falsidade. Por outro lado, a abordagem baseada em conteúdo busca simular a metodologia de checagem de fatos, avaliando cada informação apresentada, muitas vezes remetendo a abordagens baseadas em grafos de conhecimento.</p>
+<p>A seguir, descrevem-se alguns métodos de detecção de notícias falsas, principalmente os aplicados para o português e que se alinham ao grupo da Linguagem Verbal. Para fins didáticos, os métodos são organizados em abordagens computacionais mais claramente discerníveis (na época da escrita deste capítulo), sendo que se busca apresentar pelo menos um exemplo típico pertencente a cada abordagem.</p>
+<section id="aprendizado-de-máquina-com-atributos-linguísticos" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="aprendizado-de-máquina-com-atributos-linguísticos"><span class="header-section-number">8.3.1</span> Aprendizado de máquina com atributos linguísticos</h3>
+<p>De acordo com <span class="citation" data-cites="2016_conroy_deception">Conroy et al. (<a href="../../shared/referencias/referencias.html#ref-2016_conroy_deception" role="doc-biblioref">2015</a>)</span>, a maioria dos enganadores usa a linguagem estrategicamente para evitar que sejam descobertos. Nesse caso, o objetivo da abordagem linguística é procurar por exemplos de vazamentos – ou os chamados “sinais de engano preditivo” – presentes no conteúdo de uma mensagem. Isso demanda uma análise mais profunda do texto na busca de padrões que possam indicar se uma informação é enganosa ou não.</p>
+<p>Para identificar esses padrões, a análise pode utilizar atributos linguísticos que possam diferenciar o conteúdo verdadeiro do falso, extraídos de elementos como classes gramaticais, semântica, erros ortográficos, expressividade e diversidade de conteúdo para representar as amostras textuais, a frequência de uso de certas palavras e o padrão de capitalização do texto.</p>
+<p><span class="citation" data-cites="Monteiro2018">Monteiro et al. (<a href="../../shared/referencias/referencias.html#ref-Monteiro2018" role="doc-biblioref">2018</a>)</span> e <span class="citation" data-cites="renatosilva-eswa:2020_fakenews">Silva et al. (<a href="../../shared/referencias/referencias.html#ref-renatosilva-eswa:2020_fakenews" role="doc-biblioref">2020</a>)</span> apresentaram a primeira abordagem linguística para a detecção de notícias falsas em português, seguindo o que talvez possa ser definida como uma das abordagens mais clássicas para o problema. Usando o <em>corpus</em> Fake.br, o processo de detecção de notícias falsas foi modelado como uma tarefa de aprendizado de máquina, em que as notícias são as instâncias, a classificação é binária (notícia falsa ou verdadeira) e os atributos das notícias utilizados para a classificação incluem informações sobre os <em>tokens</em> presentes nas notícias e atributos linguísticos derivados.</p>
+<p>Para representar os <em>tokens</em> de cada notícia, foram utilizadas a representação de <em>bag of words</em> (com ponderação via <em>Term Frequency-Inverse Document Frequency</em> ou TF-IDF) e a média das representações vetoriais dos <em>tokens</em> (com 300 dimensões) produzidas pelos métodos Word2Vec (versão skip-gram) <span class="citation" data-cites="mikolov2013word2vec">(<a href="../../shared/referencias/referencias.html#ref-mikolov2013word2vec" role="doc-biblioref">Mikolov et al., 2013</a>)</span> e FastText <span class="citation" data-cites="fasttext_a">(<a href="../../shared/referencias/referencias.html#ref-fasttext_a" role="doc-biblioref">Bojanowski et al., 2017</a>)</span> treinados para o português <span class="citation" data-cites="2017_hartmann_PTEmbeddings">(<a href="../../shared/referencias/referencias.html#ref-2017_hartmann_PTEmbeddings" role="doc-biblioref">Hartmann et al., 2017</a>)</span> (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/significado/cap-semantica-distribucional/cap-semantica-distribucional.html#sec-cap-semantica-distribucional" target="_blank" title="Volume 1">Semântica distribucional</a></span>). Em relação aos atributos linguísticos, foram utilizados (i) atributos sugeridos por <span class="citation" data-cites="2004_zhou_detection_CMC">Zhou et al. (<a href="../../shared/referencias/referencias.html#ref-2004_zhou_detection_CMC" role="doc-biblioref">2004</a>)</span>, que são pausalidade, emotividade, incerteza e não imediatismo, e (ii) atributos mais gerais como diversidade, tamanho médio das sentenças, tamanho médio das palavras e número de erros ortográficos na notícia. A pausalidade indica a ocorrência de pausas no texto, que é computada como o número de sinais de pontuação sobre o número de sentenças. A emotividade mede a expressividade da linguagem, calculada como a soma do número de adjetivos e advérbios dividida pela soma do número de substantivos e verbos. A incerteza é baseada nas ocorrências de verbos modais e no uso da voz passiva. O recurso de não imediatismo é baseado na frequência de uso dos pronomes de 1a e 2a pessoa. A diversidade é calculada como o número total de <em>tokens</em> de conteúdo diferentes sobre o número total de <em>tokens</em> de conteúdo (ou seja, é uma versão mais refinada da conhecida taxa <em>type-token</em>).</p>
+<p>Os autores avaliaram diferentes abordagens de pré-processamento dos dados e técnicas de Aprendizado de Máquina, incluindo, por exemplo, regressão logística, árvores de decisão, floresta aleatória e máquinas de vetores de suporte, além de testarem métodos de <em>ensemble</em> e <em>stacking</em>. Um ponto a destacar é que, como as notícias verdadeiras do <em>corpus</em> utilizado costumam ser maiores do que as falsas, os autores truncaram os maiores textos para equalizar os tamanhos e evitar vieses na classificação automática. De forma geral, os autores concluem que os melhores resultados foram produzidos pela técnica de <em>ensemble</em>, aproximando-se de 97% de acurácia na classificação.</p>
+<p>Há várias outras iniciativas para o português que seguiram uma abordagem similar, com alguma variação no conjunto de atributos linguísticos utilizados. Veja, por exemplo, os trabalhos de <span class="citation" data-cites="faustini:2019_whatsAppBR">Faustini; Covões (<a href="../../shared/referencias/referencias.html#ref-faustini:2019_whatsAppBR" role="doc-biblioref">2019</a>)</span> e <span class="citation" data-cites="2019-okano-ruiz">Okano; Ruiz (<a href="../../shared/referencias/referencias.html#ref-2019-okano-ruiz" role="doc-biblioref">2019</a>)</span>. Há também trabalhos que buscaram avaliar técnicas independentes de língua, incluindo o português entre seus experimentos, como os trabalhos de <span class="citation" data-cites="abonizio-etal-2020">Abonizio et al. (<a href="../../shared/referencias/referencias.html#ref-abonizio-etal-2020" role="doc-biblioref">2020</a>)</span> e <span class="citation" data-cites="faustini-2020">Faustini; Covões (<a href="../../shared/referencias/referencias.html#ref-faustini-2020" role="doc-biblioref">2020</a>)</span>.</p>
+</section>
+<section id="modelos-de-linguagem" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="modelos-de-linguagem"><span class="header-section-number">8.3.2</span> Modelos de linguagem</h3>
+<p>Modelos de aprendizado profundo têm sido utilizados em várias pesquisas que tratam do problema das notícias falsas. Em particular, modelos de linguagem, como o BERT e T5 (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol2/modelos/cap-modelos-linguagem/cap-modelos-linguagem.html#sec-cap-modelos-linguagem" target="_blank" title="Volume 2">Modelos de linguagem</a></span>), podem ser empregados tanto para gerar representações vetoriais dos textos, que servem como entrada para métodos de classificação, quanto para atuar diretamente como classificadores.</p>
+<p>Nesse contexto, um estudo que ilustra bem essa abordagem é o de <span class="citation" data-cites="2024_vieira_fakeNewPortugues_comparaRepresentacoes">Vieira et al. (<a href="../../shared/referencias/referencias.html#ref-2024_vieira_fakeNewPortugues_comparaRepresentacoes" role="doc-biblioref">2025</a>)</span>, que avaliou vários modelos de geração de representação vetorial, comparando modelos tradicionais de classificação que incluíram floresta aleatória, máquinas de vetores de suporte e rede neural perceptron multicamadas. Para a geração das representações vetoriais, eles aplicaram os seguintes modelos especializados para o português: BERTimbau, TeenyTinyLlama e Tucano. Também aplicaram modelos voltados para o inglês, como BERT, RoBERTa e BART. Por fim, aplicaram modelos multilíngues: mBERT, XLM-RoBERTa e mBART. Todos os métodos com os diferentes modelos de representação foram testados na base de dados Fake.Br. De acordo com os autores, a melhor combinação em termos de desempenho foi o mBART com o método de máquinas de vetores de suporte, atingindo uma acurácia de 97,43%. Entretanto, ao considerar o tempo de processamento, a combinação BERTimbau com o mesmo método apresentou uma acurácia de 97,22% e um tempo de processamento significativamente menor (aproximadamente 86% inferior), oferecendo assim um bom equilíbrio entre precisão e eficiência.</p>
+<p>Na mesma linha, <span class="citation" data-cites="2024:garcia_textSummarization_fakerecogna2">Garcia et al. (<a href="../../shared/referencias/referencias.html#ref-2024:garcia_textSummarization_fakerecogna2" role="doc-biblioref">2024</a>)</span> avaliaram o desempenho de modelos tradicionais e de aprendizado profundo sobre o <em>corpus</em> FakeRecogna 2.0. Entre os modelos tradicionais, testaram regressão logística, perceptron multicamadas, <em>naive</em> Bayes, <em>optimum-path forest</em> <span class="citation" data-cites="2009_papa_OPF">(<a href="../../shared/referencias/referencias.html#ref-2009_papa_OPF" role="doc-biblioref">Papa et al., 2009</a>)</span>, floresta aleatória e máquinas de vetores de suporte. No que diz respeito aos modelos de aprendizado profundo, testaram LSTM, GRU, CNN e BERT. Para gerar a representação vetorial dos textos nos experimentos com métodos tradicionais, utilizaram a frequência dos termos, a representação TF-IDF e o FastText. Nos experimentos com modelos de aprendizado profundo, utilizaram o FastText para LSTM, GRU e CNN, o BERTimbau <span class="citation" data-cites="Souza2020">(<a href="../../shared/referencias/referencias.html#ref-Souza2020" role="doc-biblioref">Souza et al., 2020</a>)</span> como a versão do BERT para o português, e o modelo PTT-5 (Portuguese, Tagalog, Turkish, Tamil e Telugu) <span class="citation" data-cites="DBLP:journals/corr/abs-2008-09144">(<a href="../../shared/referencias/referencias.html#ref-DBLP:journals/corr/abs-2008-09144" role="doc-biblioref">Carmo et al., 2020</a>)</span> para o T5.</p>
+<p>É interessante destacar que a abordagem proposta pelos autores se diferencia de outras metodologias ao implementar uma etapa de sumarização das notícias verdadeiras antes de treinar os modelos de classificação (em vez de truncar os maiores textos, como comentado anteriormente neste capítulo). Dessa forma, a diferença de tamanho entre notícias verdadeiras e falsas é resolvida. Os autores adotaram tanto a sumarização extrativa quanto a abstrativa. <span class="citation" data-cites="2024:garcia_textSummarization_fakerecogna2">Garcia et al. (<a href="../../shared/referencias/referencias.html#ref-2024:garcia_textSummarization_fakerecogna2" role="doc-biblioref">2024</a>)</span> afirmam que a sumarização extrativa é vantajosa, pois tende a ser imune a inconsistências e “alucinações”, já que o resumo final é composto pelas sentenças mais relevantes sem a geração de novas palavras ou expressões. Por outro lado, a sumarização abstrativa permite a produção de sentenças inéditas que podem diferir do texto original em termos de semântica e estrutura das sentenças, mas possui como vantagem ser mais semelhante à escrita humana.</p>
+<p>Os melhores resultados obtidos pelos autores foram alcançados com o BERT, que apresentou acurácia aproximada de 98%. O modelo T5 apresentou resultados ligeiramente inferiores.</p>
+<p>Além dos métodos de aprendizado profundo aplicados por <span class="citation" data-cites="2024:garcia_textSummarization_fakerecogna2">Garcia et al. (<a href="../../shared/referencias/referencias.html#ref-2024:garcia_textSummarization_fakerecogna2" role="doc-biblioref">2024</a>)</span>, outros estudos têm utilizado abordagens alternativas, como redes neurais de atenção hierárquica <span class="citation" data-cites="2020_okano_hierarchicalAttentionNet">(<a href="../../shared/referencias/referencias.html#ref-2020_okano_hierarchicalAttentionNet" role="doc-biblioref">Okano et al., 2020</a>)</span> e redes neurais de grafos <span class="citation" data-cites="2024_deSouza_keywordAttention">(<a href="../../shared/referencias/referencias.html#ref-2024_deSouza_keywordAttention" role="doc-biblioref">De Souza et al., 2024</a>)</span>. No primeiro trabalho, a rede neural de atenção hierárquica alcançou uma acurácia de 90% (com textos truncados). No segundo trabalho, os autores propuseram um método que incorpora um mecanismo de atenção na abordagem de aprendizado não rotulado por propagação de rótulos utilizando uma rede neural baseada em grafo. O método foi avaliado em seis <em>corpora</em> de notícias falsas, representando diferentes cenários quanto à linguagem, fonte, tópicos e balanceamento. Nos testes realizados com o <em>corpus</em> Fake.br, o método alcançou acurácia de cerca de 78%.</p>
+<p>Outros métodos já utilizados para a detecção de notícias falsas que empregaram textos em português do Brasil incluem variantes e aprimoramentos do BERT, como o modelo de linguagem DistilBERT. Um exemplo é o trabalho de <span class="citation" data-cites="2023:golo_oneClass_fakenews">Gôlo et al. (<a href="../../shared/referencias/referencias.html#ref-2023:golo_oneClass_fakenews" role="doc-biblioref">2023</a>)</span>, que apresenta o MVAE-FakeNews (codificadores variacionais multimodais para detecção de notícias falsas). Este método multimodal representa os textos na detecção de notícias falsas por meio de aprendizado baseado em uma única classe, aprendendo uma nova representação a partir da combinação de modalidades promissoras para dados de notícias, combinando informações de linguagem, características linguísticas e tópicos, sendo que a modalidade de linguagem é derivada das informações do modelo DistilBERT. Neste trabalho, os autores utilizam o algoritmo de máquinas de vetores de suporte com uma classe para fazer a classificação. Os resultados indicam que o MVAE-FakeNews alcançou valores de acurácia melhores do que diversos outros métodos, demonstrando que abordagens multimodais podem ser melhores do que abordagens unimodais que concatenam os dados de entrada. Nos experimentos com o <em>corpus</em> Fake.br, o melhor valor de acurácia obtido foi de 65% (utilizando 10% de notícias falsas rotuladas), com os métodos baseados em DistilBERT apresentando os melhores desempenhos.</p>
+<p>O trabalho de <span class="citation" data-cites="2024_pires_ENIAC_portugueseFakeNews_BERTModels">Pires; Silva (<a href="../../shared/referencias/referencias.html#ref-2024_pires_ENIAC_portugueseFakeNews_BERTModels" role="doc-biblioref">2024</a>)</span> também avaliou variantes do modelo BERT, mais especificamente o BERTimbau e o mBERT, comparando seus resultados com o BERT. Eles testaram esses métodos nas seguintes bases de dados: Fake.Br, FakeTrueBR, FakeRecogna e Fakepedia. De acordo com os autores, os resultados obtidos indicam uma superioridade do BERTimbau sobre o BERT e sobre o mBERT na referida tarefa, com uma melhora média da medida F1 de 2,37% e 1,07%, respectivamente.</p>
+<p>Outro trabalho que avaliou o mBERT é <span class="citation" data-cites="2024_fischer_fakeNews_Brazilian">Fischer et al. (<a href="../../shared/referencias/referencias.html#ref-2024_fischer_fakeNews_Brazilian" role="doc-biblioref">2022</a>)</span> comparando-o com outros modelos de classificação, como regressão logística, árvores de decisão, floresta aleatória, k-vizinhos mais próximos, SVM, naive Bayes, XGBoost, CNN, GRU e LSTM. O mBERT obteve uma medida F1 de 0,98 superando os outros métodos avaliados.</p>
+<p>Em paralelo a essas abordagens, a aplicação de LLMs (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol2/modelos/cap-modelos-linguagem/cap-modelos-linguagem.html#sec-cap-modelos-linguagem" target="_blank" title="Volume 2">Modelos de linguagem</a></span>) na detecção de notícias falsas tem ganhado atenção, especialmente em trabalhos em inglês, como os de <span class="citation" data-cites="lucas-etal-2023-fighting">Lucas et al. (<a href="../../shared/referencias/referencias.html#ref-lucas-etal-2023-fighting" role="doc-biblioref">2023</a>)</span> e <span class="citation" data-cites="2024_su_fakeDetection_LLM">Su et al. (<a href="../../shared/referencias/referencias.html#ref-2024_su_fakeDetection_LLM" role="doc-biblioref">2024</a>)</span>, que discutem não apenas a detecção de notícias falsas com LLMs, mas também a geração desse conteúdo.</p>
+<p>O uso de LLMs para detectar notícias falsas não é trivial, pois o treinamento desses modelos é custoso, resultando em atualizações pouco frequentes, o que muitas vezes os impede de fornecer informações atualizadas sobre determinados assuntos. No entanto, uma solução para isso é a técnica de <em>Retrieval-Augmented Generation</em> (RAG), que permite fornecer informações atualizadas aos LLMs. Essa técnica utiliza conceitos de recuperação de informação para buscar, em uma base de dados complementar, os conteúdos mais relevantes para uma pergunta (especificada na forma de um <em>prompt</em>) e, em seguida, passar essas informações ao LLM como contexto. Assim, o LLM gera respostas que, em vez de se basearem apenas em seu conhecimento prévio, são fundamentadas nos dados adicionais fornecidos.</p>
+<p>Um exemplo relevante no contexto de notícias falsas é apresentado por <span class="citation" data-cites="2024_yue_RARG">Yue et al. (<a href="../../shared/referencias/referencias.html#ref-2024_yue_RARG" role="doc-biblioref">2024</a>)</span>, que propõe o framework RARG (<em>Retrieval Augmented Response Generation</em>) para combater a desinformação online, especialmente no contexto da COVID-19. O RARG gera respostas baseadas em evidências científicas para refutar informações falsas, funcionando em duas etapas: (1) recuperação de evidências, onde documentos relevantes são coletados e reclassificados a partir de uma base com mais de um milhão de artigos acadêmicos; e (2) geração de respostas, em que um LLM é treinado para produzir respostas polidas e factuais com base nas evidências obtidas. Além disso, o modelo é otimizado com aprendizado por reforço com feedback humano (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol2/modelos/cap-modelos-linguagem/cap-modelos-linguagem.html#sec-cap-modelos-linguagem" target="_blank" title="Volume 2">Modelos de linguagem</a></span>), garantindo o uso eficaz das evidências sem comprometer a qualidade das respostas.</p>
+<p><span class="citation" data-cites="2024_yue_RARG">Yue et al. (<a href="../../shared/referencias/referencias.html#ref-2024_yue_RARG" role="doc-biblioref">2024</a>)</span> fizeram experimentos com o RARG usando dados tanto de dentro quanto de fora do domínio da COVID-19 para a língua inglesa. Eles realizaram uma avaliação comparativa, de formas qualitativa e quantitativa, para analisar as respostas geradas por diferentes modelos. As métricas quantitativas utilizadas incluíram critérios de refutação, factualidade, polidez, e relevância da resposta em relação à alegação de entrada e à evidência. Foram avaliados modelos baseados em geração de texto, como BART, DialoGPT e GODEL, além de métodos de aprendizado por reforço, como PARTNER e MisinfoCorrect, e LLMs como Llama 2 e GPT-3.5. As análises revelaram que o modelo RARG obteve o melhor desempenho geral.</p>
+<p>Para o português do Brasil, já existem algumas contribuições relevantes que indicam o potencial crescente dessa linha de pesquisa. Por exemplo, o estudo de <span class="citation" data-cites="2024_golo_LLM_brazilianFakeNews">Gôlo et al. (<a href="../../shared/referencias/referencias.html#ref-2024_golo_LLM_brazilianFakeNews" role="doc-biblioref">2024</a>)</span> explora modelos de código aberto, pouco aplicados ao contexto de notícias falsas. Os pesquisadores criaram um novo conjunto de dados de notícias políticas brasileiras e realizaram uma avaliação empírica de LLMs de código aberto e da OpenAI. O Gemma 2 do Google superou outros seis LLMs (Llama 3, Phi 3, Qwen 1, Qwen 2, Gpt 3.5 turbo e GPT 4), mostrando-se o mais promissor para essa tarefa, atingindo valores de F1 de 0,90. Além do desempenho de classificação, o estudo avaliou a capacidade dos LLMs de gerar explicações alinhadas ao raciocínio humano (com destaque para os modelos de melhor desempenho) e constatou que os modelos Gemma e Qwen produziram os melhores embeddings, separando com clareza notícias falsas e verdadeiras em visualizações via t-SNE.</p>
+<p>Em outro estudo relacionado, <span class="citation" data-cites="2025_silva_fakeNews_LLM_JCBSJournal">Silva et al. (<a href="../../shared/referencias/referencias.html#ref-2025_silva_fakeNews_LLM_JCBSJournal" role="doc-biblioref">2025</a>)</span> avaliam o impacto de notícias falsas geradas por LLMs no desempenho de métodos de aprendizado de máquina na classificação. A pesquisa utilizou diversos modelos para classificar notícias falsas, incluindo algoritmos de aprendizado de máquina tradicionais (árvore de decisão, regressão logística, floresta aleatória, máquinas de vetores de suporte e gradiente descendente estocástico), um modelo BERTimbau ajustado, um LLM puro e dois LLMs combinados com RAG. Os experimentos foram realizados usando os corpora Fake.Br e FakeTrueBR pelo fato deles serem alinhados, isto é, cada notícia falsa possui sua contraparte verdadeira. Os pesquisadores avaliaram o desempenho desses modelos com notícias falsas sintéticas, criadas com o modelo de LLM Sabiá-3. Os resultados revelaram uma degradação significativa no desempenho dos modelos de aprendizado de máquina quando avaliados em condições de incompatibilidade, ou seja, quando treinados com conteúdo gerado por humanos e testados com notícias falsas geradas por LLMs, ou vice-versa. Por exemplo, a medida F1 do BERTimbau foi de 0,99 no experimento onde o conjunto de treino e teste eram compostos por notícias escritas por humanos, mas caiu para 0,69 quando o conjunto de treino era composto por notícias geradas por humanos e o conjunto de teste era formado por notícias geradas por LLMs. Observou-se ainda que classificadores baseados em LLM foram mais robustos sob condições de incompatibilidade, enquanto que o BERTimbau e os modelos tradicionais de aprendizado de máquina apresentaram melhor desempenho quando não havia essa diferença. Os autores afirmam que os resultados obtidos ressaltam a necessidade de abordagens mais resilientes e adaptativas diante da crescente sofisticação do conteúdo gerado por LLMs.</p>
+</section>
+<section id="checagem-de-conteúdo" class="level3" data-number="8.3.3">
+<h3 data-number="8.3.3" class="anchored" data-anchor-id="checagem-de-conteúdo"><span class="header-section-number">8.3.3</span> Checagem de conteúdo</h3>
+<p>Para abordagens de checagem automática de conteúdo, em que os fatos em si devem ser verificados (o que vai além de avaliar estilo de escrita e atributos linguísticos), <span class="citation" data-cites="thorne:18">Thorne; Vlachos (<a href="../../shared/referencias/referencias.html#ref-thorne:18" role="doc-biblioref">2018</a>)</span> sugerem que se extraiam triplas de informação dos documentos verdadeiros (por algum processo de extração de informação – ver <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ie/cap-ie.html#sec-cap-ie" target="_blank" title="Volume 3">Extração de Informação</a></span>), normalmente formadas por &lt;sujeito, verbo, objeto&gt;, que constituem os fatos básicos mencionados. Nem sempre é trivial fazer isso, pois pode haver sentenças com número variável de argumentos (ausência de objeto ou mais de um objeto, por exemplo) ou com estruturas sintáticas mais complexas ou não usuais. Com base nessas triplas, pode-se construir um grafo de conhecimento, em que sujeitos e objetos dão origem a vértices do grafo e os verbos definem arestas entre eles. O grafo é, dessa forma, uma representação estruturada do conteúdo verídico, podendo ser utilizado para avaliação da veracidade de novas informações, o que pode ser feito de diferentes formas.</p>
+<p><span class="citation" data-cites="2020_santos_fastCheckingPT_KnowledgeGraph">Santos; Pardo (<a href="../../shared/referencias/referencias.html#ref-2020_santos_fastCheckingPT_KnowledgeGraph" role="doc-biblioref">2020</a>)</span> adaptam para o português a abordagem de <span class="citation" data-cites="ciampaglia:15">Ciampaglia et al. (<a href="../../shared/referencias/referencias.html#ref-ciampaglia:15" role="doc-biblioref">2015</a>)</span>. Nessa abordagem, o grafo de conhecimento é constituído de triplas extraídas da Wikipédia, considerada como uma fonte de informações verídicas sobre o mundo. Apresentada uma nova informação a ser checada, as triplas dessa informação são extraídas e analisadas com o apoio do grafo de conhecimento: caminhos distintos entre sujeitos e objetos, com diferentes distâncias, fornecem suportes factuais diferentes para as afirmações. São consideradas verdadeiras as afirmações cujos sujeitos e objetos apresentam conexões diretas entre si ou caminhos de distância relativamente curta. A proximidade entre os conceitos envolvidos no grafo reflete, portanto, a veracidade da informação.</p>
+<p>Os autores testam a abordagem com afirmações históricas e geográficas, em especial, capitais de estados e países e cônjuges de presidentes brasileiros. Em média, os resultados atingem valores de acurácia de 74%. Essa abordagem, apesar de exigir análise linguística mais refinada para produção do grafo de conhecimento e de produzir resultados inferiores em relação às outras abordagens, é interessante por permitir rastrear a veracidade de cada fato e explicar os resultados. Como amplamente discutido atualmente na Inteligência Artificial, a explicabilidade dos métodos é uma característica muito relevante (ver, por exemplo, o <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/desafios-e-perspectivas/cap-etica/cap-etica.html#sec-cap-etica" target="_blank" title="Volume 1">Questões éticas em IA e PLN</a></span>).</p>
+<p>Há várias outras estratégias de uso de grafos que não necessariamente buscam os fatos explicitamente. <span class="citation" data-cites="2021_santos_Characterization_graph">Santos; Pardo (<a href="../../shared/referencias/referencias.html#ref-2021_santos_Characterization_graph" role="doc-biblioref">2021</a>)</span>, por exemplo, testam outras formas de construção e percurso em grafos (tanto para notícias verdadeiras como falsas) e o uso de medidas de redes complexas para caracterização estrutural de notícias falsas e verdadeiras, que se mostram promissoras (e às vezes de mais simples aplicação), mas com resultados inferiores aos obtidos anteriormente.</p>
+</section>
+<section id="recuperação-de-informação" class="level3" data-number="8.3.4">
+<h3 data-number="8.3.4" class="anchored" data-anchor-id="recuperação-de-informação"><span class="header-section-number">8.3.4</span> Recuperação de informação</h3>
+<p><span class="citation" data-cites="2020_santos_fastCheckingPT_KnowledgeGraph">Santos; Pardo (<a href="../../shared/referencias/referencias.html#ref-2020_santos_fastCheckingPT_KnowledgeGraph" role="doc-biblioref">2020</a>)</span> exploram uma estratégia baseada no comportamento humano de checagem de informação: usa-se um sistema de recuperação de informação (no caso, o Google – ver <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir" target="_blank" title="Volume 3">Recuperação de Informação</a></span>) para buscar pelo título da notícia de interesse, analisando-se os resultados retornados na busca. Caso haja indício de falsidade da notícia correspondente, ela é classificada dessa forma.</p>
+<p>Os autores analisam apenas os links e os <em>snippets</em><a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> retornados na 1a página de resultados. Se houver link de algum site de verificação de notícias (como os citados no início desse capítulo, por exemplo, Boatos.org, Aos Fatos e Agência Lupa) ou houver algum termo indicativo de falsidade nos <em>snippets</em>, a notícia é classificada como falsa. Os termos indicativos considerados pelos autores são “fake”, “falso”, “mentira”, “calúnia”, “inverídico”, “enganoso”, “farsa”, “ilusório”, “ilegítimo”, “boato” e “rumor”, além de suas variações possíveis de gênero e número.</p>
+<p>Os autores avaliam essa estratégia com o <em>corpus</em> Fake.br, indicando resultados de classificação com acurácia de 68%. Apesar do resultado limitado, a simplicidade desse método torna-o interessante, pois faz uso de serviços de web já disponíveis. Além disso, essa estratégia evidencia a necessidade de modelagens mais sofisticadas para o devido tratamento do fenômeno das notícias falsas.</p>
+</section>
+<section id="análise-de-credibilidade" class="level3" data-number="8.3.5">
+<h3 data-number="8.3.5" class="anchored" data-anchor-id="análise-de-credibilidade"><span class="header-section-number">8.3.5</span> Análise de credibilidade</h3>
+<p>Uma outra linha de pesquisa relacionada à detecção de notícias falsas é a análise de credibilidade. <span class="citation" data-cites="2017_newell_VerifiabilityAttributions">Newell et al. (<a href="../../shared/referencias/referencias.html#ref-2017_newell_VerifiabilityAttributions" role="doc-biblioref">2017</a>)</span> afirmam que a credibilidade das atribuições feitas na notícia é fundamental para garantir a confiança nos meios de comunicação. Nesse sentido, <span class="citation" data-cites="1988_burriss_radioNews">Burriss (<a href="../../shared/referencias/referencias.html#ref-1988_burriss_radioNews" role="doc-biblioref">1988</a>)</span> comenta que o jornalismo deve lidar com fatos verificáveis, sendo princípio básico a seguir, pois o público que recebe as notícias depende (i) da reputação da organização noticiosa, (ii) da reputação do repórter e (iii) da informação dentro da própria história, a fim de determinar a exatidão de uma notícia. Por isso, é necessário buscar padrões linguísticos no texto e metadados que possam medir a credibilidade de uma notícia.</p>
+<p>Um exemplo de trabalho que segue essa linha é de <span class="citation" data-cites="2024_couto_lowCredibility_websites">Couto et al. (<a href="../../shared/referencias/referencias.html#ref-2024_couto_lowCredibility_websites" role="doc-biblioref">2024</a>)</span>, que analisou padrões de rede de fontes de notícias brasileiras de alta e baixa credibilidade, focando em redes de desinformação. Esses padrões emergem de diversas fontes, como registros de domínios, certificados TLS, infraestrutura de hospedagem e geolocalização. Para conduzir essa análise, os autores criaram um conjunto de sites de baixa credibilidade, identificando aqueles que publicaram ao menos uma notícia cuja veracidade foi contestada por uma agência de checagem de fatos signatária da <em>International Fact-Checking Network</em> (IFCN). A partir dessa base, 31 atributos foram computados.</p>
+<p>Segundo os autores, os resultados revelaram que apenas 12,2% dos sites de baixa credibilidade estão registrados e hospedados no Brasil, em contraste com 47% dos sites de alta credibilidade. Além disso, sites de alta credibilidade tendem a ter uma vida útil mais longa, domínios registrados por períodos maiores e certificados TLS (em inglês, <em>Transport Layer Security</em>) com validade estendida. Foi também identificado que sites de baixa credibilidade são mais propensos a utilizar TLDs (em inglês, <em>Top Level Domain</em>) alternativos. Os autores visualizaram a separação entre sites de alta e baixa credibilidade em duas dimensões utilizando a técnica t-SNE, e treinaram um modelo de floresta aleatória que previu a credibilidade dos sites com bom desempenho, atingindo uma acurácia de aproximadamente 83%.</p>
+<p>Além de analisar as fontes de notícias, também é possível analisar a credibilidade de usuários, usando abordagens que buscam identificar sinais de qualidade do conteúdo <span class="citation" data-cites="souza-freire-2021">(<a href="../../shared/referencias/referencias.html#ref-souza-freire-2021" role="doc-biblioref">Souza Freire et al., 2021</a>)</span> e os disseminadores de conteúdo enganoso, sejam robôs ou usuários comuns <span class="citation" data-cites="2016_chakraborty_clickbaits 2017_varol_humanBot 2018_speicher_onlineAdvertising 2020_yang_botDetection">(<a href="../../shared/referencias/referencias.html#ref-2016_chakraborty_clickbaits" role="doc-biblioref">Chakraborty et al., 2016</a>; <a href="../../shared/referencias/referencias.html#ref-2018_speicher_onlineAdvertising" role="doc-biblioref">Speicher et al., 2018</a>; <a href="../../shared/referencias/referencias.html#ref-2017_varol_humanBot" role="doc-biblioref">Varol et al., 2017</a>; <a href="../../shared/referencias/referencias.html#ref-2020_yang_botDetection" role="doc-biblioref">Yang et al., 2020</a>)</span>. Esse tipo de abordagem se baseia em informações sobre os usuários para prever seu comportamento e as chances de que as notícias que compartilham sejam falsas, incluindo análises demográficas, como idade e localização. Essa linha de investigação é bastante usada em postagens de redes sociais, onde pode ser analisado o número de postagens, o perfil do usuário, sua rede de contatos e os dados das postagens em si. Esse nível de meta-análise pode ser combinado com os demais tipos de métodos para a identificação de conteúdo enganoso.</p>
+</section>
+<section id="outras-iniciativas-relacionadas" class="level3" data-number="8.3.6">
+<h3 data-number="8.3.6" class="anchored" data-anchor-id="outras-iniciativas-relacionadas"><span class="header-section-number">8.3.6</span> Outras iniciativas relacionadas</h3>
+<p>Sendo um campo de pesquisa vasto, como pode ser percebido pelos diversos tipos de conteúdo enganoso e abordagens computacionais existentes para detecção de notícias falsas, há algumas outras iniciativas que são importantes de serem citadas.</p>
+<p>Há trabalhos que focam suas análises em atributos de inteligibilidade das notícias (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html#sec-cap-complexidade-textual" target="_blank" title="Volume 3">Complexidade Textual e suas Tarefas Relacionadas</a></span>), buscando identificar padrões de escrita que possam sinalizar conteúdo falso. <span class="citation" data-cites="santos-etal-2020-measuring">Santos et al. (<a href="../../shared/referencias/referencias.html#ref-santos-etal-2020-measuring" role="doc-biblioref">2020</a>)</span>, por exemplo, avaliam dezenas de medidas de inteligibilidade textual, como índices de legibilidade, coesão, diversidade lexical, complexidade sintática, organização discursiva e informações psicolinguísticas, entre outros. Em experimentos com o <em>corpus</em> Fake.br, os autores verificaram que essas medidas contribuem para a discriminação entre notícias falsas e verdadeiras.</p>
+<p>Alguns trabalhos analisam o impacto da análise de sentimentos (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html#sec-cap-redes-sociais" target="_blank" title="Volume 3">PLN em Redes Sociais</a></span>) para a determinação da veracidade do conteúdo. <span class="citation" data-cites="alonso-etal-2021">Alonso et al. (<a href="../../shared/referencias/referencias.html#ref-alonso-etal-2021" role="doc-biblioref">2021</a>)</span> apresentam uma discussão ampla sobre o assunto. Em um caso aplicado ao português, <span class="citation" data-cites="jeronimo-etal-2020">Jeronimo et al. (<a href="../../shared/referencias/referencias.html#ref-jeronimo-etal-2020" role="doc-biblioref">2020</a>)</span> evidenciam que a classificação de subjetividade pode auxiliar na tarefa de detecção de notícias falsas, argumentando que notícias verídicas que visam compartilhar informações factuais e imparciais tendem a usar uma linguagem mais objetiva que depende menos de pressupostos ou expressão sentimental.</p>
+<p>Em uma vertente que utiliza análise linguística mais profunda, há trabalhos que buscam considerar padrões de organização do conteúdo textual que possam sinalizar a veracidade desse conteúdo, fazendo uso, por exemplo, de modelos discursivos, como a famosa <em>Rhetorical Structure Theory</em> (RST) <span class="citation" data-cites="mann-thompson-1988">(<a href="../../shared/referencias/referencias.html#ref-mann-thompson-1988" role="doc-biblioref">Mann; Thompson, 1988</a>)</span> (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/discurso/cap-modelos-discursivos/cap-modelos-discursivos.html#sec-cap-modelos-discursivos" target="_blank" title="Volume 1">Modelos discursivos</a></span>). Buscam-se padrões de relações discursivas utilizadas e de distribuição de elementos mais e menos importantes (os “núcleos” e “satélites”, que são os termos utilizados pelo modelo RST) para caracterizar o conteúdo enganoso. <span class="citation" data-cites="vargas-etal-2022-rhetorical">Vargas et al. (<a href="../../shared/referencias/referencias.html#ref-vargas-etal-2022-rhetorical" role="doc-biblioref">2022</a>)</span> apresentam uma revisão desses trabalhos.</p>
+<p>Alguns trabalhos combinam diversas das linhas apresentadas neste capítulo. Por exemplo, o trabalho de <span class="citation" data-cites="2024_vargas-etal-improving">Vargas et al. (<a href="../../shared/referencias/referencias.html#ref-2024_vargas-etal-improving" role="doc-biblioref">2024</a>)</span> envolve diversas etapas para realizar raciocínio factual em nível sentencial, incluindo a identificação de conteúdo relevante para analisar, a busca de evidências que suportem as informações e a geração de explicação para os resultados obtidos, combinando métodos e recursos variados de PLN.</p>
+<p>Por fim, para o leitor mais interessado, <span class="citation" data-cites="2025_vargas_ctd">Vargas et al. (<a href="../../shared/referencias/referencias.html#ref-2025_vargas_ctd" role="doc-biblioref">2025</a>)</span>, <span class="citation" data-cites="2024_thakar_fake_trends">Thakar; Bhatt (<a href="../../shared/referencias/referencias.html#ref-2024_thakar_fake_trends" role="doc-biblioref">2024</a>)</span> e <span class="citation" data-cites="farhangian-etal-2024">Farhangian et al. (<a href="../../shared/referencias/referencias.html#ref-farhangian-etal-2024" role="doc-biblioref">2024</a>)</span> apresentam olhares complementares aos tópicos abordados neste capítulo, incluindo visão geral de métodos, comparações e discussões de desafios e tendências na tarefa de detecção automática de notícias falsas, podendo ser referências adicionais importantes.</p>
+</section>
+</section>
+<section id="impactos-para-a-sociedade" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="impactos-para-a-sociedade"><span class="header-section-number">8.4</span> Impactos para a sociedade</h2>
+<p>São muitos os impactos que a incidência de conteúdo enganoso traz para as sociedades em suas diversas camadas, em todos os domínios da vida. O Brasil não é exceção, infelizmente.</p>
+<p>Algumas áreas, como a saúde, são extremamente sensíveis a isso. Um exemplo pode ser visto no estudo empírico conduzido por <span class="citation" data-cites="2020_galhardi_fakenewsCovid2019">Galhardi et al. (<a href="../../shared/referencias/referencias.html#ref-2020_galhardi_fakenewsCovid2019" role="doc-biblioref">2020</a>)</span> sobre a pandemia de COVID-19. Os autores analisaram os relatos de usuários enviados ao aplicativo brasileiro “Eu Fiscalizo” durante o período de março a abril de 2020. Foi observado que 65% dos relatos propagavam orientações caseiras e incorretas para evitar a disseminação do vírus. Eles também notaram que 20% continham métodos para curar a doença. Esse problema não foi exclusividade no Brasil. Por isso, o termo “infodemia” passou a ser usado em vários veículos de comunicação e até mesmo pelo Organização Mundial de Saúde, significando que o mundo estava enfrentando, além de uma pandemia do coronavírus, uma pandemia de desinformação <span class="citation" data-cites="zarocostas:2020_infodemic salvi:2021:socioCognitiveFakenews">(<a href="../../shared/referencias/referencias.html#ref-salvi:2021:socioCognitiveFakenews" role="doc-biblioref">Salvi et al., 2021</a>; <a href="../../shared/referencias/referencias.html#ref-zarocostas:2020_infodemic" role="doc-biblioref">Zarocostas, 2020</a>)</span>.</p>
+<p>A desinformação também pode causar prejuízos econômicos. Um caso foi a disseminação de uma informação falsa em 2020 sobre um investimento significativo em uma empresa brasileira. Essa notícia enganosa levou muitos investidores a aplicarem recursos na empresa, resultando em grandes prejuízos quando a fraude foi descoberta, o que provocou uma queda acentuada nos preços das suas ações<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>.</p>
+<p>As notícias falsas podem gerar problemas ainda mais graves, chegando até a resultar em mortes. Existem vários casos que mostram esse perigo. Um caso impactante ocorreu em 2014, quando uma pessoa foi espancada até a morte após supostamente ser alvo de uma notícia falsa que a acusava de sequestrar crianças para rituais de magia negra<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>. Em um caso mais recente, em 2024, outra pessoa foi morta após a disseminação de uma notícia supostamente falsa que afirmava que ela matava cães<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>.</p>
+<p>Notícias falsas também podem aumentar a polarização ao interferir no processo de troca de opiniões e evitar a formação de consenso dentro de uma sociedade. Isso pode ser evidenciado pelo estudo promovido por <span class="citation" data-cites="2023_azzimonti_fakeNews_polarization">Azzimonti; Fernandes (<a href="../../shared/referencias/referencias.html#ref-2023_azzimonti_fakeNews_polarization" role="doc-biblioref">2023</a>)</span>, que simularam uma rede social sintética, baseada no Twitter (renomeada para X), para analisar a disseminação de desinformação. Os autores observaram que robôs, programados para promover visões tendenciosas, podem influenciar uma pequena parte dos usuários ao disseminarem notícias falsas. Essas notícias são propagadas por esses usuários, contaminando outros que confiam em suas opiniões. Isso dificulta a difusão de informações corretas e amplia a divisão e polarização no debate público.</p>
+<p>Conclusões similares às obtidas no trabalho acima foram apresentadas por <span class="citation" data-cites="2023_oliveira_mentiraContadaMilVezes">Oliveira (<a href="../../shared/referencias/referencias.html#ref-2023_oliveira_mentiraContadaMilVezes" role="doc-biblioref">2023</a>)</span> no contexto brasileiro. A autora analisou a disseminação de informações falsas a partir da compreensão de cultura como uma teia de significados, que se constrói continuamente na interação discursiva das pessoas. O estudo explora as dinâmicas discursivas e comunicacionais durante as eleições brasileiras de 2022, apontando a relação entre a circulação de desinformação e a polarização crescente no Brasil. Segundo a autora, informações falsas produzem “verdades socialmente compartilhadas”, que nem sempre se confirmam na realidade factual, mas que moldam o comportamento das pessoas, gerando intolerância e dissonância cognitiva, fatores que contribuem para a polarização social. O estudo reforça que a disseminação de desinformação nas redes sociais facilita a criação de realidades paralelas, exacerbando os conflitos e fomentando divisões sociais. <span class="citation" data-cites="2023_oliveira_mentiraContadaMilVezes">Oliveira (<a href="../../shared/referencias/referencias.html#ref-2023_oliveira_mentiraContadaMilVezes" role="doc-biblioref">2023</a>)</span> argumenta que essas “verdades compartilhadas”, baseadas em conteúdos falsos, interferem na capacidade de diálogo e na coesão social, contribuindo para o adoecimento psicológico e o afastamento entre grupos, refletindo diretamente na polarização da sociedade.</p>
+<p>Os diversos impactos sociais discutidos nesta seção, que vão desde a saúde pública até a qualidade dos debates públicos, as repercussões econômicas e a violência, evidenciam a relevância do desenvolvimento de técnicas para a detecção automática de notícias falsas. O contínuo avanço da Inteligência Artificial, juntamente com o surgimento de métodos que facilitam a criação de conteúdos enganosos cada vez mais sofisticados, aumentam a necessidade de estudos que busquem aprimorar os mecanismos automáticos capazes de identificar e mitigar esses problemas. A implementação eficaz dessas técnicas é essencial para auxiliar na proteção da sociedade dos efeitos prejudiciais da desinformação.</p>
+<p>Visando transferir conhecimento e tecnologia para a sociedade, alguns estudos científicos resultam na produção de softwares disponibilizados para o público em geral. A pesquisa relatada por <span class="citation" data-cites="Monteiro2018">Monteiro et al. (<a href="../../shared/referencias/referencias.html#ref-Monteiro2018" role="doc-biblioref">2018</a>)</span>, por exemplo, resultou no sistema FakeCheck<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a> (treinado com o <em>corpus</em> Fake.br), disponível online e podendo ser utilizado em qualquer navegador da web. Sua interface pode ser vista na <a href="#fig-cap-fake-news-fakecheck" class="quarto-xref">Figura&nbsp;<span>8.2</span></a>.</p>
+<!--
+![FakeCheck - um sistema para detecção automática de notícias falsas [@Monteiro2018]](./media/image2.png){#fig-cap-fake-news-fakecheck width=90%}
+-5,90,-5
+-->
+<div id="fig-cap-fake-news-fakecheck" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-fake-news-fakecheck-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;8.2: FakeCheck – um sistema para detecção automática de notícias falsas.
+</figcaption>
+<div aria-describedby="fig-cap-fake-news-fakecheck-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img src="media/image2.png" class="img-fluid figure-img"></p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
+<p> Fonte: <span class="citation" data-cites="Monteiro2018">(<a href="../../shared/referencias/referencias.html#ref-Monteiro2018" role="doc-biblioref">Monteiro et al., 2018</a>)</span></p>
+</div>
+</div>
+</div>
+</figure>
+</div>
+<p></p>
+</section>
+<section id="considerações-finais" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="considerações-finais"><span class="header-section-number">8.5</span> Considerações finais</h2>
+<p>Este capítulo abordou os principais aspectos relacionados às notícias falsas, incluindo os diferentes tipos de desinformação, os métodos mais utilizados na detecção, algumas bases de dados relevantes na língua portuguesa e os impactos significativos das notícias falsas na sociedade. Embora essa seja uma área de estudo altamente relevante, há ainda muitos desafios e aspectos que não foram explorados.</p>
+<p>O capítulo se concentrou principalmente no problema sob a perspectiva do PLN, mas é importante reconhecer que o problema pode ser multimodal, ou seja, pode envolver não apenas texto, mas também imagens, vídeos e áudio. Dessa forma, a detecção eficaz de alguns tipos de notícias requer a integração de áreas como visão computacional, reconhecimento de voz e análise de redes sociais. A colaboração multidisciplinar é essencial para enfrentar a complexidade crescente do problema.</p>
+<p>Outro desafio refere-se à disponibilidade de dados em quantidade e com a qualidade necessárias, dada a dificuldade de coleta do tipo de dado desejado, o que pode comprometer a modelagem linguístico-computacional dos fenômenos de interesse e o treinamento eficaz de sistemas. Nesse momento, é relevante explorar em mais detalhes alguns pontos relacionados à construção dos <em>corpora</em>, como a existência de possíveis vieses de classificação <span class="citation" data-cites="2025_vargas_ctd">(<a href="../../shared/referencias/referencias.html#ref-2025_vargas_ctd" role="doc-biblioref">Vargas et al., 2025</a>)</span>, o aspecto temporal e os fenômenos que se pretende abordar.</p>
+<p>A cobertura temporal das notícias dos <em>corpora</em> é uma questão de grande importância, sendo que se tem observado na área que muitos sistemas acabam não conseguindo lidar bem com tópicos novos que não existiam ou que não estavam em voga quando os dados de treinamento foram coletados. Por exemplo, no <em>corpus</em> Fake.br, não há notícias sobre a COVID-19 (uma vez que as notícias desse <em>corpus</em> foram coletadas antes da pandemia relacionada), e, como consequência, os sistemas com ele treinados podem não ser capazes de identificar com boa acurácia as notícias falsas e verdadeiras sobre o assunto. O tempo também pode afetar os trabalhos da área de maneiras inesperadas. Usando o mesmo <em>corpus</em> como exemplo, há uma notícia sobre a prisão de um político que era falsa na época em que a notícia foi veiculada; entretanto, depois de algum tempo, o político citado de fato foi preso. Sistemas que não modelem apropriadamente a questão temporal podem classificar incorretamente notícias assim. Sistemas baseados em LLMs com RAG, por exemplo, podem facilmente incidir em algum erro assim se restrições temporais não forem especificadas.</p>
+<p>A importância do fator temporal foi enfatizada em um estudo recente de <span class="citation" data-cites="2025_guedes_conceptDrift_fakeNews_STIL">Wanderley et al. (<a href="../../shared/referencias/referencias.html#ref-2025_guedes_conceptDrift_fakeNews_STIL" role="doc-biblioref">2025</a>)</span>, que aplicou métodos de detecção de desvio de conceito no corpus FakeRecogna 2.0 e mostrou que o fenômeno de desvio de conceito está presente em notícias brasileiras, especialmente nas notícias falsas. Os autores afirmam que pesquisas que ignoram a natureza temporal das notícias falsas provavelmente apresentam métricas de desempenho infladas. Segundo eles, isso expõe uma falha metodológica crítica nas práticas de pesquisa atuais e sublinha o perigo de implementar modelos que não conseguem se adaptar à evolução das narrativas de desinformação.</p>
+<p>Também é importante destacar a limitação de que a maioria dos <em>corpora</em> existentes abrangem notícias inteiramente falsas ou verdadeiras, mas não cobrem outros tipos de fenômenos, como meias verdades e pós-verdades. Por um lado, é mais difícil identificar e coletar notícias desses tipos; por outro, pode ser bastante desafiador desenvolver sistemas de detecção desses fenômenos, que (ainda) acabam sendo relativamente pouco privilegiados na área. Outros desafios são pontuados no estudo qualitativo dos <em>corpora</em> em português apresentado por <span class="citation" data-cites="2025_baracho_analiseQualitativa_basesPT">Baracho et al. (<a href="../../shared/referencias/referencias.html#ref-2025_baracho_analiseQualitativa_basesPT" role="doc-biblioref">2025</a>)</span>, que afirmam que comparado aos <em>corpora</em> da língua inglesa, há problemas em termos de volume desses corpora em português, de diversidade temática, de multimodalidade e, em alguns casos, de balanceamento de classes.</p>
+<p>Em relação ao desempenho dos sistemas computacionais, um ponto que necessita de mais discussão é o impacto dos erros na detecção de notícias falsas. Muitas vezes, em pesquisas na área, busca-se uma alta acurácia, maximizando os valores de verdadeiros positivos e verdadeiros negativos (usuais em avaliações de aprendizado de máquina) e, consequentemente, melhorando a precisão e a cobertura dos sistemas (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/avaliacao/cap-avaliacao/cap-avaliacao.html#sec-cap-avaliacao" target="_blank" title="Volume 1">Avaliação de tecnologias de linguagem</a></span>). Os erros cometidos são, frequentemente, discutidos de forma agnóstica nas pesquisas. Entretanto, se um sistema de detecção de notícias falsas é adotado no dia a dia, os tipos de erros podem ter importâncias diferentes. O que seria menos danoso para a sociedade: classificar erroneamente uma notícia verdadeira como falsa ou uma notícia falsa como verdadeira? Levados ao extremo, o primeiro caso pode ser classificado como uma tentativa de desqualificação do produtor do conteúdo ou de censura do próprio conteúdo, enquanto o segundo caso pode legitimar mentiras e trazer consequências desastrosas (como as citadas na seção anterior). Com os avanços da Inteligência Artificial, esse tipo de discussão é cada vez mais importante na área (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol1/desafios-e-perspectivas/cap-etica/cap-etica.html#sec-cap-etica" target="_blank" title="Volume 1">Questões éticas em IA e PLN</a></span>), não se devendo esquecer de considerar fatores humanos, como a resistência do público em confiar em sistemas automatizados ou a tendência a politizar o uso dessas ferramentas.</p>
+<p>Por fim, é importante salientar que a tecnologia é apenas um dos pilares para o combate às notícias falsas. A educação e a legislação são outros pilares: na frente educacional, é necessário preparar as novas gerações para lidar com a tecnologia, com os meios digitais e com a Inteligência Artificial, para que conheçam suas potencialidades e os riscos inerentes; em termos de legislação, é preciso avançar nas leis que permitam a responsabilização dos envolvidos na produção e na disseminação de notícias falsas, sendo este um tópico muito desafiador por envolver questões que podem perpassar interesses variados (por exemplo, interesses comerciais e políticos) e por caminhar em uma separação às vezes sutil entre liberdade de expressão, censura e ações possivelmente criminosas.</p>
+</section>
+<section id="exercícios-de-fixação" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="exercícios-de-fixação"><span class="header-section-number">8.6</span> Exercícios de fixação</h2>
+<ol type="1">
+<li><p>O capítulo apresenta diversas definições de conteúdo enganoso. Explique o que são notícias falsas e qual sua relação com os termos <em>misinformation</em> e <em>disinformation</em>, fornecendo um exemplo para cada uma das últimas duas categorias.</p></li>
+<li><p>Pesquisas mostram que os humanos têm dificuldade em separar notícias verdadeiras de falsas. Enumere e explique três razões principais que justificam essa dificuldade humana.</p></li>
+<li><p>Na abordagem de aprendizado de máquina com atributos linguísticos para detecção de notícias falsas, os pesquisadores buscam por “sinais de engano preditivo” no conteúdo de uma mensagem. Explique o conceito de “emotividade” e “pausalidade” como atributos linguísticos usando um exemplo de notícia. Depois explique como um sistema baseado predominantemente em atributos linguísticos poderia erroneamente classificar notícias verdadeiras como falsas.</p></li>
+<li><p>O capítulo apresenta métodos de detecção de notícias falsas que se concentram na análise do conteúdo da notícia (atributos linguísticos, checagem de fatos) e outros que analisam a credibilidade da fonte (reputação do site, padrões de rede, características do usuário). Discuta a conexão entre essas duas abordagens. Em quais cenários a análise da fonte seria mais eficaz que a análise do conteúdo, e vice-versa? Como a combinação de ambas poderia resultar em um sistema de detecção mais robusto e confiável?</p></li>
+<li><p>O capítulo descreve diferentes métodos de detecção automática de notícias falsas. Compare brevemente a abordagem de “checagem de conteúdo” com a abordagem de “recuperação de informação”. Qual delas é mais facilmente explicável em seus resultados e por quê?</p></li>
+<li><p>Um desafio importante na detecção automática é a questão temporal. Explique por que a temporalidade é um desafio para os sistemas de detecção e como a técnica de RAG, em conjunto com LLMs, pode oferecer uma solução para mitigar esse problema.</p></li>
+<li><p>Com suas próprias palavras, crie uma notícia falsa sobre um assunto de seu interesse e teste alguns LLMs para checar se eles são capazes de identificar as notícias como falsas. Faça ajustes na escrita da notícia falsa e também no prompt utilizado, de forma a verificar a consistência dos modelos. Que lições você consegue tirar disso? Há diferenças entre os modelos? É possível enganar os LLMs, levando-os a validar notícias falsas? É possível ter plena confiança na avaliação dos LLMs?</p></li>
+<li><p>Sistemas de detecção automática podem cometer dois tipos de erro: classificar uma notícia verdadeira como falsa (falso negativo) ou uma notícia falsa como verdadeira (falso positivo). Discuta sobre as implicações sociais e éticas de cada tipo de erro, considerando o impacto na liberdade de expressão, na confiança do público em fontes de informação e na segurança. Use exemplos de situações em que cada tipo de erro pode causar impacto negativo.</p></li>
+<li><p>O capítulo foca no texto, mas ressalta que o problema da desinformação é multimodal, envolvendo imagens, vídeos e áudio. Se você fosse projetar uma plataforma de detecção automática de notícias falsas abrangente, que integrasse a análise de texto, imagem e áudio, quais seriam os principais desafios técnicos e de dados para essa integração, e quais disciplinas da Inteligência Artificial, além do PLN, seriam indispensáveis?</p></li>
+<li><p>Algumas vertentes de conteúdo enganoso são muito desafiadoras para detecção automática. As pós-verdades são um desses casos. Explique o que são pós-verdades e como um método computacional poderia detectá-las.</p></li>
+</ol>
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="1" role="list" style="display: none">
+<div id="ref-abonizio-etal-2020" class="csl-entry" role="listitem">
+ABONIZIO, H. Q. et al. <a href="https://doi.org/10.3390/fi12050087">Language-Independent Fake News Detection: English, Portuguese, and Spanish Mutual Features</a>. <strong>Future Internet</strong>, v. 12, n. 5, 2020.
+</div>
+<div id="ref-alonso-etal-2021" class="csl-entry" role="listitem">
+ALONSO, M. A. et al. <a href="https://doi.org/10.3390/electronics10111348">Sentiment Analysis for Fake News Detection</a>. <strong>Electronics</strong>, v. 10, n. 11, 2021.
+</div>
+<div id="ref-2023_azzimonti_fakeNews_polarization" class="csl-entry" role="listitem">
+AZZIMONTI, M.; FERNANDES, M. <a href="https://doi.org/10.1016/j.ejpoleco.2022.102256">Social media networks, fake news, and polarization</a>. <strong>European Journal of Political Economy</strong>, v. 76, p. 102256, 2023.
+</div>
+<div id="ref-2025_baracho_analiseQualitativa_basesPT" class="csl-entry" role="listitem">
+BARACHO, J.; LISBOA, L.; LOPES, R. <strong>Levantamento e Análise Qualitativa de Bases de Dados de Fake News em Português</strong>. Anais do VI Workshop sobre as Implicações da Computação na Sociedade. <strong>Anais</strong>...Porto Alegre, RS, Brasil: SBC, 2025. Disponível em: &lt;<a href="https://sol.sbc.org.br/index.php/wics/article/view/35944">https://sol.sbc.org.br/index.php/wics/article/view/35944</a>&gt;
+</div>
+<div id="ref-fasttext_a" class="csl-entry" role="listitem">
+BOJANOWSKI, P. et al. Enriching Word Vectors with Subword Information. <strong>Transactions of the Association for Computational Linguistics</strong>, v. 5, p. 135–146, 2017.
+</div>
+<div id="ref-bond:06" class="csl-entry" role="listitem">
+BOND JR., C. F.; DEPAULO, B. M. Accuracy of Deception Judgments. <strong>Personality and Social Psychology Review</strong>, v. 10, n. 3, p. 214–234, 2006.
+</div>
+<div id="ref-1988_burriss_radioNews" class="csl-entry" role="listitem">
+BURRISS, L. L. Attribution in network radio news: A cross-network analysis. <strong>Journalism Quarterly</strong>, v. 65, n. 3, p. 690–694, 1988.
+</div>
+<div id="ref-2021_cabral_fakewhastappDataset" class="csl-entry" role="listitem">
+CABRAL, L. et al. <strong><a href="https://doi.org/10.5220/0010446800630074"><span>FakeWhastApp.BR</span>: <span>NLP</span> and Machine Learning Techniques for Misinformation Detection in Brazilian Portuguese WhatsApp Messages</a></strong>. Proceedings of the 23rd International Conference on Enterprise Information Systems (ICEIS 2021) - Volume 1. <strong>Anais</strong>...2021.
+</div>
+<div id="ref-DBLP:journals/corr/abs-2008-09144" class="csl-entry" role="listitem">
+CARMO, D. et al. <a href="https://arxiv.org/abs/2008.09144"><span>PTT5:</span> Pretraining and validating the <span>T5</span> model on Brazilian Portuguese data</a>. <strong>CoRR</strong>, v. abs/2008.09144, 2020.
+</div>
+<div id="ref-2016_chakraborty_clickbaits" class="csl-entry" role="listitem">
+CHAKRABORTY, A. et al. <strong>Stop Clickbait: Detecting and preventing clickbaits in online news media</strong>. 2016 IEEE/ACM International Conference on Advances in Social Networks Analysis and Mining (ASONAM). <strong>Anais</strong>...2016.
+</div>
+<div id="ref-2022:charles_fakepedia_fakenews" class="csl-entry" role="listitem">
+CHARLES, A. C.; RUBACK, L.; OLIVEIRA, J. <strong>Fakepedia Corpus: A Flexible Fake News Corpus in Portuguese</strong>. Computational Processing of the Portuguese Language: 15th International Conference, PROPOR 2022, Fortaleza, Brazil, March 21–23, 2022, Proceedings. <strong>Anais</strong>...Berlin, Heidelberg: Springer-Verlag, 2022. Disponível em: &lt;<a href="https://doi.org/10.1007/978-3-030-98305-5_4">https://doi.org/10.1007/978-3-030-98305-5_4</a>&gt;
+</div>
+<div id="ref-2023_chavarro_fakeTrueBR" class="csl-entry" role="listitem">
+CHAVARRO, J. et al. <strong><span>FakeTrueBR</span>: Um corpus brasileiro de notícias falsas</strong>. Anais da XVIII Escola Regional de Banco de Dados. <strong>Anais</strong>...Porto Alegre, RS, Brasil: SBC, 2023. Disponível em: &lt;<a href="https://sol.sbc.org.br/index.php/erbd/article/view/24352">https://sol.sbc.org.br/index.php/erbd/article/view/24352</a>&gt;
+</div>
+<div id="ref-2015_chen_clickbait" class="csl-entry" role="listitem">
+CHEN, Y.; CONROY, N. J.; RUBIN, V. L. <strong>Misleading Online Content: Recognizing Clickbait as "False News"</strong>. Proceedings of the 2015 ACM on Workshop on Multimodal Deception Detection. <strong>Anais</strong>...: WMDD ’15.New York, NY, USA: Association for Computing Machinery, 2015. Disponível em: &lt;<a href="https://doi.org/10.1145/2823465.2823467">https://doi.org/10.1145/2823465.2823467</a>&gt;
+</div>
+<div id="ref-ciampaglia:15" class="csl-entry" role="listitem">
+CIAMPAGLIA, G. L. et al. Computational fact checking from knowledge networks. <strong>PloS one</strong>, v. 10, n. 6, p. e0128193, 2015.
+</div>
+<div id="ref-2017_clem_postTruth" class="csl-entry" role="listitem">
+CLEM, S. Post-Truth and Vices Opposed to Truth. v. 37, n. 2, p. 97–116, 2017.
+</div>
+<div id="ref-2016_conroy_deception" class="csl-entry" role="listitem">
+CONROY, N. K.; RUBIN, V. L.; CHEN, Y. <a href="https://doi.org/10.1002/pra2.2015.145052010082">Automatic deception detection: Methods for finding fake news</a>. <strong>Proceedings of the Association for Information Science and Technology</strong>, v. 52, n. 1, p. 1–4, 2015.
+</div>
+<div id="ref-Cordeiro2019" class="csl-entry" role="listitem">
+CORDEIRO, P. R.; PINHEIRO, V. <strong>Um corpus de not<span>ı</span>cias falsas do twitter e verifica<span>ç</span>ao autom<span>á</span>tica de rumores em l<span>ı</span>ngua portuguesa</strong>. Proceedings of the Symposium in Information and Human Language Technology. <strong>Anais</strong>...2019.
+</div>
+<div id="ref-2024_couto_lowCredibility_websites" class="csl-entry" role="listitem">
+COUTO, J. M. M.; REIS, J. C. S.; BENEVENUTO, F. <a href="https://doi.org/10.1007/s13278-024-01330-w">Can computer network attributes be useful for identifying low-credibility websites? A case study in Brazil</a>. <strong>Social Network Analysis and Mining</strong>, v. 14, n. 1, p. 153, 2024.
+</div>
+<div id="ref-2020_dai_datasetFakeHealth_ginger" class="csl-entry" role="listitem">
+DAI, E.; SUN, Y.; WANG, S. <strong>Ginger cannot cure cancer: Battling fake health news with a comprehensive data repository</strong>. Proceedings of the International AAAI Conference on Web and Social Media. <strong>Anais</strong>...Atlanta, USA: 2020.
+</div>
+<div id="ref-2024_deSouza_keywordAttention" class="csl-entry" role="listitem">
+DE SOUZA, M. C. et al. <a href="https://doi.org/10.1016/j.ins.2024.120300">Keywords attention for fake news detection using few positive labels</a>. <strong>Information Sciences</strong>, v. 663, p. 120300, 2024.
+</div>
+<div id="ref-farhangian-etal-2024" class="csl-entry" role="listitem">
+FARHANGIAN, F.; CRUZ, R. M. O.; CAVALCANTI, G. D. C. <a href="https://doi.org/10.1016/j.inffus.2023.102140">Fake news detection: Taxonomy and comparative study</a>. <strong>Information Fusion</strong>, v. 103, p. 102140, 2024.
+</div>
+<div id="ref-faustini-2020" class="csl-entry" role="listitem">
+FAUSTINI, P. H. A.; COVÕES, T. F. <a href="https://doi.org/10.1016/j.eswa.2020.113503">Fake news detection in multiple platforms and languages</a>. <strong>Expert Systems with Applications</strong>, v. 158, p. 113503, 2020.
+</div>
+<div id="ref-faustini:2019_whatsAppBR" class="csl-entry" role="listitem">
+FAUSTINI, P.; COVÕES, T. F. <strong><a href="https://doi.org/10.1109/BRACIS.2019.00109">Fake News Detection Using One-Class Classification</a></strong>. Proceedings of the 8th Brazilian Conference on Intelligent Systems (BRACIS’19). <strong>Anais</strong>...Salvador, BA, Brazil: IEEE, out. 2019.
+</div>
+<div id="ref-2024_fischer_fakeNews_Brazilian" class="csl-entry" role="listitem">
+FISCHER, M. et al. <strong>Identifying Fake News in Brazilian Portuguese</strong>. Natural Language Processing and Information Systems: 27th International Conference on Applications of Natural Language to Information Systems, NLDB 2022, Valencia, Spain, June 15–17, 2022, Proceedings. <strong>Anais</strong>...Berlin, Heidelberg: Springer-Verlag, 2022. Disponível em: &lt;<a href="https://doi.org/10.1007/978-3-031-08473-7_10">https://doi.org/10.1007/978-3-031-08473-7_10</a>&gt;
+</div>
+<div id="ref-2013_fornaciari_deception_italianCourt" class="csl-entry" role="listitem">
+FORNACIARI, T.; POESIO, M. <a href="https://doi.org/10.1007/s10506-013-9140-4">Automatic deception detection in Italian court cases</a>. <strong>Artif. Intell. Law</strong>, v. 21, n. 3, p. 303–340, set. 2013.
+</div>
+<div id="ref-2020_galhardi_fakenewsCovid2019" class="csl-entry" role="listitem">
+GALHARDI, C. P. et al. <a href="https://doi.org/10.1590/1413-812320202510.2.28922020">Fato ou Fake? Uma an<span>á</span>lise da desinforma<span>ç</span><span>ã</span>o frente <span>à</span> pandemia da <span>COVID-19</span> no <span>B</span>rasil</a>. <strong>Ci<span>ê</span>ncia &amp; Sa<span>ú</span>de Coletiva</strong>, v. 25, p. 4201–4210, out. 2020.
+</div>
+<div id="ref-2024:garcia_textSummarization_fakerecogna2" class="csl-entry" role="listitem">
+GARCIA, G. L. et al. <strong>Text Summarization and Temporal Learning Models Applied to <span>P</span>ortuguese Fake News Detection in a Novel <span>B</span>razilian Corpus Dataset</strong>. (P. Gamallo et al., Eds.)Proceedings of the 16th International Conference on Computational Processing of Portuguese - Vol. 1. <strong>Anais</strong>...Santiago de Compostela, Galicia/Spain: Association for Computational Lingustics, mar. 2024. Disponível em: &lt;<a href="https://aclanthology.org/2024.propor-1.9">https://aclanthology.org/2024.propor-1.9</a>&gt;
+</div>
+<div id="ref-2022:garcia_fakerecogna" class="csl-entry" role="listitem">
+GARCIA, G. L.; AFONSO, L. C.; PAPA, J. P. <strong>FakeRecogna: a new brazilian corpus for fake news detection</strong>. International Conference on Computational Processing of the Portuguese Language. <strong>Anais</strong>...Springer, 2022.
+</div>
+<div id="ref-2006_george_deception" class="csl-entry" role="listitem">
+GEORGE, J. F.; KEANE, B. T. <strong>Deception Detection by Disinterested Third-Party Observers</strong>. Proceedings of the Credibility Assessment and Information Quality in Government and Business Symposium, 39th Hawaii International Conference on System Sciences (HICSS). <strong>Anais</strong>...Kauai, HI: 2006.
+</div>
+<div id="ref-2024_geurgas2024_faketweetsCovid19" class="csl-entry" role="listitem">
+GEURGAS, R.; TESSLER, L. R. <a href="https://doi.org/10.1007/s13278-024-01216-x">Automatic detection of fake tweets about the COVID-19 Vaccine in Portuguese</a>. <strong>Social Network Analysis and Mining</strong>, v. 14, n. 1, p. 55, 8 mar. 2024.
+</div>
+<div id="ref-2023:golo_oneClass_fakenews" class="csl-entry" role="listitem">
+GÔLO, M. P. S. et al. <a href="https://doi.org/10.1016/j.engappai.2023.106088">One-class learning for fake news detection through multimodal variational autoencoders</a>. <strong>Engineering Applications of Artificial Intelligence</strong>, v. 122, p. 106088, 2023.
+</div>
+<div id="ref-2024_golo_LLM_brazilianFakeNews" class="csl-entry" role="listitem">
+GÔLO, M. P. S. et al. <strong>On the use of Large Language Models to Detect Brazilian Politics Fake News</strong>. Proceedings of the 21st National Meeting on Artificial and Computational Intelligence (ENIAC’2024). <strong>Anais</strong>...Belém, PA, Brazil: Brazilian Computer Society, nov. 2024.
+</div>
+<div id="ref-gruppi:2020_nelagt2019" class="csl-entry" role="listitem">
+GRUPPI, M.; HORNE, B. D.; ADALI, S. <a href="https://arxiv.org/abs/2003.08444"><span>NELA-GT-2019:</span> <span>A</span> Large Multi-Labelled News Dataset for The Study of Misinformation in News Articles</a>. <strong>CoRR</strong>, v. abs/2003.08444, p. 1–5, 2020.
+</div>
+<div id="ref-gruppi:2021_nelagt2020" class="csl-entry" role="listitem">
+GRUPPI, M.; HORNE, B. D.; ADALI, S. <a href="https://arxiv.org/abs/2102.04567"><span>NELA-GT-2020:</span> <span>A</span> Large Multi-Labelled News Dataset for The Study of Misinformation in News Articles</a>. <strong>CoRR</strong>, v. abs/2102.04567, p. 1–6, 2021.
+</div>
+<div id="ref-2017_hartmann_PTEmbeddings" class="csl-entry" role="listitem">
+HARTMANN, N. S. et al. <strong>Portuguese word embeddings: Evaluating on word analogies and natural language tasks</strong>. Proceedings of Symposium in Information and Human Language Technology. <strong>Anais</strong>...[S.l.: s.n.]: 2017.
+</div>
+<div id="ref-hauch:12" class="csl-entry" role="listitem">
+HAUCH, V. et al. <strong>Linguistic Cues to Deception Assessed by Computer Programs: A Meta-analysis</strong>. Proceedings of the Workshop on Computational Approaches to Deception Detection. <strong>Anais</strong>...2012.
+</div>
+<div id="ref-jeronimo-etal-2020" class="csl-entry" role="listitem">
+JERONIMO, C. et al. <a href="https://doi.org/10.26421/JDI1.4-2">Characterization of Fake News Based on Subjectivity Lexicons</a>. <strong>Journal of Data Intelligence</strong>, v. 1, p. 419–441, dez. 2020.
+</div>
+<div id="ref-lazer:18" class="csl-entry" role="listitem">
+LAZER, D. M. J. et al. The science of fake news. <strong>Science</strong>, v. 359, n. 6380, p. 1094–1096, 2018.
+</div>
+<div id="ref-2024_li_mage" class="csl-entry" role="listitem">
+LI, Y. et al. <strong><a href="https://doi.org/10.18653/v1/2024.acl-long.3"><span>MAGE</span>: Machine-generated Text Detection in the Wild</a></strong>. (L.-W. Ku, A. Martins, V. Srikumar, Eds.)Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers). <strong>Anais</strong>...Bangkok, Thailand: Association for Computational Linguistics, ago. 2024.
+</div>
+<div id="ref-lucas-etal-2023-fighting" class="csl-entry" role="listitem">
+LUCAS, J. et al. <strong>Fighting Fire with Fire: The Dual Role of <span>LLM</span>s in Crafting and Detecting Elusive Disinformation</strong>. (H. Bouamor, J. Pino, K. Bali, Eds.)Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing. <strong>Anais</strong>...Singapore: Association for Computational Linguistics, dez. 2023. Disponível em: &lt;<a href="https://aclanthology.org/2023.emnlp-main.883">https://aclanthology.org/2023.emnlp-main.883</a>&gt;
+</div>
+<div id="ref-mann-thompson-1988" class="csl-entry" role="listitem">
+MANN, W.; THOMPSON, S. <a href="https://doi.org/10.1515/text.1.1988.8.3.243">Rethorical Structure Theory: Toward a functional theory of text organization</a>. <strong>Text</strong>, v. 8, p. 243–281, jan. 1988.
+</div>
+<div id="ref-mikolov2013word2vec" class="csl-entry" role="listitem">
+MIKOLOV, T. et al. <strong>Distributed Representations of Words and Phrases and their Compositionality</strong>. (C. J. Burges et al., Eds.)Advances in Neural Information Processing Systems. <strong>Anais</strong>...Curran Associates, Inc., 2013. Disponível em: &lt;<a href="https://proceedings.neurips.cc/paper_files/paper/2013/file/9aa42b31882ec039965f3c4923ce901b-Paper.pdf">https://proceedings.neurips.cc/paper_files/paper/2013/file/9aa42b31882ec039965f3c4923ce901b-Paper.pdf</a>&gt;
+</div>
+<div id="ref-Monteiro2018" class="csl-entry" role="listitem">
+MONTEIRO, R. A. et al. <strong>Contributions to the Study of Fake News in Portuguese: New Corpus and Automatic Detection Results</strong>. Proceedings of the 13th international conference on computational processing of the Portuguese Language. <strong>Anais</strong>...Canela, Rio Grande do Sul, Brazil: Springer International Publishing, set. 2018.
+</div>
+<div id="ref-2019:moreno_FACTCK.BR" class="csl-entry" role="listitem">
+MORENO, J.; BRESSAN, G. <strong><span>FACTCK.BR</span>: a new dataset to study fake news</strong>. : WebMedia ’19.New York, NY, USA: Association for Computing Machinery, 2019. Disponível em: &lt;<a href="https://doi.org/10.1145/3323503.3361698">https://doi.org/10.1145/3323503.3361698</a>&gt;
+</div>
+<div id="ref-2017_newell_VerifiabilityAttributions" class="csl-entry" role="listitem">
+NEWELL, E. et al. <strong>Assessing the Verifiability of Attributions in News Text</strong>. (G. Kondrak, T. Watanabe, Eds.)Proceedings of the Eighth International Joint Conference on Natural Language Processing (Volume 1: Long Papers). <strong>Anais</strong>...Taipei, Taiwan: Asian Federation of Natural Language Processing, nov. 2017. Disponível em: &lt;<a href="https://aclanthology.org/I17-1076">https://aclanthology.org/I17-1076</a>&gt;
+</div>
+<div id="ref-2020_okano_hierarchicalAttentionNet" class="csl-entry" role="listitem">
+OKANO, E. Y. et al. <strong>Fake News Detection on Fake.Br Using Hierarchical Attention Networks</strong>. (P. Quaresma et al., Eds.)Computational Processing of the Portuguese Language. <strong>Anais</strong>...Cham: Springer International Publishing, 2020.
+</div>
+<div id="ref-2019-okano-ruiz" class="csl-entry" role="listitem">
+OKANO, E. Y.; RUIZ, E. E. S. <strong>Using linguistic cues to detect fake news on the brazilian portuguese parallel corpus Fake.br</strong>. Proceedings of the Symposium in Information and Human Language Technology. <strong>Anais</strong>...Brazilian Computer Society, 2019.
+</div>
+<div id="ref-2023_oliveira_mentiraContadaMilVezes" class="csl-entry" role="listitem">
+OLIVEIRA, I. L. <a href="https://portal.stf.jus.br/noticias/verNoticiaDetalhe.asp?idConteudo=514092&amp;ori=1">Uma mentira repetida mil vezes se transforma em verdade? Reflexões sobre as dinâmicas discursivas e seus efeitos na saúde</a>. Em: <strong>Desinformação o mal do século: Distorções, inverdades, fake news: a democracia ameaçada</strong>. [s.l: s.n.]. p. 299–315.
+</div>
+<div id="ref-2011_ott_opinionSpam" class="csl-entry" role="listitem">
+OTT, M. et al. <strong>Finding Deceptive Opinion Spam by Any Stretch of the Imagination</strong>. (D. Lin, Y. Matsumoto, R. Mihalcea, Eds.)Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics: Human Language Technologies. <strong>Anais</strong>...Portland, Oregon, USA: Association for Computational Linguistics, jun. 2011. Disponível em: &lt;<a href="https://aclanthology.org/P11-1032">https://aclanthology.org/P11-1032</a>&gt;
+</div>
+<div id="ref-2009_papa_OPF" class="csl-entry" role="listitem">
+PAPA, J. P.; FALCÃO, A. X.; SUZUKI, C. T. N. <a href="https://doi.org/10.1002/ima.20188">Supervised pattern classification based on optimum-path forest</a>. <strong>International Journal of Imaging Systems and Technology</strong>, v. 19, n. 2, p. 120–131, 2009.
+</div>
+<div id="ref-perez:14" class="csl-entry" role="listitem">
+PÉREZ-ROSAS, V.; MIHALCEA, R. <strong>Cross-cultural Deception Detection</strong>. Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics. <strong>Anais</strong>...Baltimore, MD, USA: Association for Computational Linguistics, 2014.
+</div>
+<div id="ref-2024_pires_ENIAC_portugueseFakeNews_BERTModels" class="csl-entry" role="listitem">
+PIRES, V.; SILVA, D. G. E. <strong>Portuguese Fake News Classification with BERT models</strong>. Anais do XXI Encontro Nacional de Inteligência Artificial e Computacional. <strong>Anais</strong>...Porto Alegre, RS, Brasil: SBC, 2024. Disponível em: &lt;<a href="https://sol.sbc.org.br/index.php/eniac/article/view/33848">https://sol.sbc.org.br/index.php/eniac/article/view/33848</a>&gt;
+</div>
+<div id="ref-2022_rana_deepfake" class="csl-entry" role="listitem">
+RANA, M. S. et al. <a href="https://doi.org/10.1109/ACCESS.2022.3154404">Deepfake Detection: A Systematic Literature Review</a>. <strong>IEEE Access</strong>, v. 10, p. 25494–25513, 2022.
+</div>
+<div id="ref-rubin:14" class="csl-entry" role="listitem">
+RUBIN, V. L. TALIP Perspectives, Guest Editorial Commentary: Pragmatic and Cultural Considerations for Deception Detection in Asian Languages. v. 13, n. 2, p. 10:1–10:8, 2014.
+</div>
+<div id="ref-rubin:15" class="csl-entry" role="listitem">
+RUBIN, V. L.; CHEN, Y.; CONROY, N. J. Deception detection for news: Three types of fakes. <strong>Proceedings of the Association for Information Science and Technology</strong>, v. 52, n. 1, p. 1–4, 2015.
+</div>
+<div id="ref-rubin:11" class="csl-entry" role="listitem">
+RUBIN, V. L.; CONROY, N. J. Challenges in automated deception detection in computer-mediated communication. <strong>Proceedings of the American Society for Information Science and Technology</strong>, v. 48, n. 1, p. 1–4, 2011.
+</div>
+<div id="ref-2022_salminen_fakeReviewsDataset" class="csl-entry" role="listitem">
+SALMINEN, J. et al. <a href="https://doi.org/10.1016/j.jretconser.2021.102771">Creating and detecting fake reviews of online products</a>. <strong>Journal of Retailing and Consumer Services</strong>, v. 64, p. 102771, 2022.
+</div>
+<div id="ref-salvi:2021:socioCognitiveFakenews" class="csl-entry" role="listitem">
+SALVI, C. et al. <a href="https://doi.org/10.3389/fcomm.2020.562588">Going Viral: How Fear, Socio-Cognitive Polarization and Problem-Solving Influence Fake News Detection and Proliferation During COVID-19 Pandemic</a>. <strong>Frontiers in Communication</strong>, v. 5, p. 127, 2021.
+</div>
+<div id="ref-santos-etal-2020-measuring" class="csl-entry" role="listitem">
+SANTOS, R. et al. <strong>Measuring the Impact of Readability Features in Fake News Detection</strong>. (N. Calzolari et al., Eds.)Proceedings of the Twelfth Language Resources and Evaluation Conference. <strong>Anais</strong>...Marseille, France: European Language Resources Association, 2020. Disponível em: &lt;<a href="https://aclanthology.org/2020.lrec-1.176">https://aclanthology.org/2020.lrec-1.176</a>&gt;
+</div>
+<div id="ref-2022_santos_tese" class="csl-entry" role="listitem">
+SANTOS, R. L. DE S. <strong><a href="https://doi.org/10.11606/T.55.2022.tde-14072022-165613">Detecção Automática de Notícias Falsas em Português</a></strong>. Ph.D. Thesis—São Carlos, Brazil: Instituto de Ciências Matemáticas e de Computação, Universidade de São Paulo, 2022.
+</div>
+<div id="ref-2020_santos_fastCheckingPT_KnowledgeGraph" class="csl-entry" role="listitem">
+SANTOS, R. L. DE S.; PARDO, T. A. S. <strong>Fact-Checking for Portuguese: Knowledge Graph and Google Search-Based Methods</strong>. Proceedings of the 14th International Conference on the Computational Processing of Portuguese (PROPOR). <strong>Anais</strong>...: Lecture Notes em Artificial Intelligence (LNAI).Évora, Portugal: Springer, 2020.
+</div>
+<div id="ref-2021_santos_Characterization_graph" class="csl-entry" role="listitem">
+SANTOS, R. L. DE S.; PARDO, T. A. S. <strong>Structural Characterization and Graph-based Detection of Fake News in Portuguese</strong>. Proceedings of the XIV Symposium in Information and Human Language (STIL). <strong>Anais</strong>...2021.
+</div>
+<div id="ref-2019_saquete_postTruth_review" class="csl-entry" role="listitem">
+SAQUETE, E. et al. <a href="https://doi.org/10.1016/j.eswa.2019.112943">Fighting Post-truth using Natural Language Processing: A Review and Open Challenges</a>. <strong>Expert Systems with Applications</strong>, v. 141, p. 112943, 2019.
+</div>
+<div id="ref-renatosilva-eswa:2020_fakenews" class="csl-entry" role="listitem">
+SILVA, R. M. et al. <a href="https://doi.org/10.1016/j.eswa.2020.113199">Towards Automatically Filtering Fake News in Portuguese</a>. <strong>Expert Systems with Applications</strong>, v. 146, p. 1–48, 2020.
+</div>
+<div id="ref-2025_silva_fakeNews_LLM_JCBSJournal" class="csl-entry" role="listitem">
+SILVA, R. M. et al. Fake News Detection in Portuguese Under Large Language Model-Generated Content. <strong>Journal of the Brazilian Computer Society</strong>, p. 1–18, 2025.
+</div>
+<div id="ref-Souza2020" class="csl-entry" role="listitem">
+SOUZA, F.; NOGUEIRA, R.; LOTUFO, R. <strong>BERTimbau: pretrained BERT models for Brazilian Portuguese</strong>. (R. Cerri, R. C. Prati, Eds.)Proceedings of the 2020 Brazilian Conference on Intelligent Systems. <strong>Anais</strong>...Springer International Publishing, 2020.
+</div>
+<div id="ref-souza-freire-2021" class="csl-entry" role="listitem">
+SOUZA FREIRE, P. M.; MATIAS DA SILVA, F. R.; GOLDSCHMIDT, R. R. <a href="https://doi.org/10.1016/j.eswa.2021.115414">Fake news detection based on explicit and implicit signals of a hybrid crowd: An approach inspired in meta-learning</a>. <strong>Expert Systems with Applications</strong>, v. 183, p. 115414, 2021.
+</div>
+<div id="ref-2018_speicher_onlineAdvertising" class="csl-entry" role="listitem">
+SPEICHER, T. et al. <strong>Potential for discrimination in online targeted advertising</strong>. Proceedings of the Conference on Fairness, Accountability and Transparency. <strong>Anais</strong>...ACM, 2018.
+</div>
+<div id="ref-2024_su_fakeDetection_LLM" class="csl-entry" role="listitem">
+SU, J.; CARDIE, C.; NAKOV, P. <strong><a href="https://doi.org/10.18653/v1/2024.findings-naacl.95">Adapting Fake News Detection to the Era of Large Language Models</a></strong>. Proceedings of the Findings of the Association for Computational Linguistics: NAACL 2024. <strong>Anais</strong>...2024.
+</div>
+<div id="ref-2018_tandoc_definingFake" class="csl-entry" role="listitem">
+TANDOC JR., E. C.; LIM, Z. W.; LING, R. <a href="https://doi.org/10.1080/21670811.2017.1360143">Defining <span>“Fake News”</span></a>. <strong>Digital Journalism</strong>, v. 6, n. 2, p. 137–153, 2018.
+</div>
+<div id="ref-2024_thakar_fake_trends" class="csl-entry" role="listitem">
+THAKAR, H.; BHATT, B. <a href="https://doi.org/10.1007/s13278-024-01344-4">Fake News Detection: Recent Trends and Challenges</a>. <strong>Social Network Analysis and Mining</strong>, v. 14, 2024.
+</div>
+<div id="ref-thorne:18" class="csl-entry" role="listitem">
+THORNE, J.; VLACHOS, A. <strong>Automated Fact Checking: Task Formulations, Methods and Future Directions</strong>. (E. M. Bender, L. Derczynski, P. Isabelle, Eds.)Proceedings of the 27th International Conference on Computational Linguistics. <strong>Anais</strong>...Santa Fe, New Mexico, USA: Association for Computational Linguistics, ago. 2018.
+</div>
+<div id="ref-vargas-etal-2022-rhetorical" class="csl-entry" role="listitem">
+VARGAS, F. et al. <strong>Rhetorical Structure Approach for Online Deception Detection: A Survey</strong>. (N. Calzolari et al., Eds.)Proceedings of the Thirteenth Language Resources and Evaluation Conference. <strong>Anais</strong>...Marseille, France: European Language Resources Association, jun. 2022. Disponível em: &lt;<a href="https://aclanthology.org/2022.lrec-1.635">https://aclanthology.org/2022.lrec-1.635</a>&gt;
+</div>
+<div id="ref-2024_vargas-etal-improving" class="csl-entry" role="listitem">
+VARGAS, F. et al. <strong>Improving Explainable Fact-Checking via Sentence-Level Factual Reasoning</strong>. (M. Schlichtkrull et al., Eds.)Proceedings of the Seventh Fact Extraction and VERification Workshop (FEVER). <strong>Anais</strong>...Miami, Florida, USA: Association for Computational Linguistics, nov. 2024. Disponível em: &lt;<a href="https://aclanthology.org/2024.fever-1.23/">https://aclanthology.org/2024.fever-1.23/</a>&gt;
+</div>
+<div id="ref-2025_vargas_ctd" class="csl-entry" role="listitem">
+VARGAS, F.; PARDO, T.; BENEVENUTO, F. <strong>Socially Responsible and Explainable Automated Fact-Checking and Hate Speech Detection</strong>. Anais do XXXVIII Concurso de Teses e Dissertações. <strong>Anais</strong>...Porto Alegre, RS, Brasil: SBC, 2025. Disponível em: &lt;<a href="https://sol.sbc.org.br/index.php/ctd/article/view/36355">https://sol.sbc.org.br/index.php/ctd/article/view/36355</a>&gt;
+</div>
+<div id="ref-2017_varol_humanBot" class="csl-entry" role="listitem">
+VAROL, O. et al. <strong>Online human-bot interactions: Detection, estimation, and characterization</strong>. Proceedings of the International AAAI Conference on Web and Social Media. <strong>Anais</strong>...AAAI Press, 2017.
+</div>
+<div id="ref-2024_vieira_fakeNewPortugues_comparaRepresentacoes" class="csl-entry" role="listitem">
+VIEIRA, C.; SOUZA, J.; CAVALCANTI, G. <strong>Detecção de Fake News em Português: Análise Comparativa entre Métodos de Representação em Português, Inglês e Multilíngues</strong>. Anais do XIV Brazilian Workshop on Social Network Analysis and Mining. <strong>Anais</strong>...Porto Alegre, RS, Brasil: SBC, 2025. Disponível em: &lt;<a href="https://sol.sbc.org.br/index.php/brasnam/article/view/36378">https://sol.sbc.org.br/index.php/brasnam/article/view/36378</a>&gt;
+</div>
+<div id="ref-2014_vlachos_factChecking" class="csl-entry" role="listitem">
+VLACHOS, A.; RIEDEL, S. <strong>Fact checking: Task definition and dataset construction</strong>. Proceedings of the ACL 2014 Workshop on Language Technologies and Computational Social Science. <strong>Anais</strong>...Association for Computational Linguistics, 2014.
+</div>
+<div id="ref-vosoughi:2018_spreadTrueFalseNews" class="csl-entry" role="listitem">
+VOSOUGHI, S.; ROY, D.; ARAL, S. <a href="https://doi.org/10.1126/science.aap9559">The spread of true and false news online</a>. <strong>Science</strong>, v. 359, n. 6380, p. 1146–1151, 2018.
+</div>
+<div id="ref-2025_guedes_conceptDrift_fakeNews_STIL" class="csl-entry" role="listitem">
+WANDERLEY, M. G. et al. <strong>A Moving Target: Detecting Concept Drift in Brazilian Portuguese Fake News</strong>. Proceedings of the 16th Symposium in Information and Human Language Technology (STIL’2025). <strong>Anais</strong>...Fortaleza, CE, Brazil: SBC, out. 2025.
+</div>
+<div id="ref-wang:2017-liarDataset" class="csl-entry" role="listitem">
+WANG, W. Y. <strong><a href="https://doi.org/10.18653/v1/P17-2067"><span>“</span>Liar, Liar Pants on Fire<span>”</span>: A New Benchmark Dataset for Fake News Detection</a></strong>. Proceedings of the 55th Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers). <strong>Anais</strong>...Vancouver, Canada: Association for Computational Linguistics, jul. 2017.
+</div>
+<div id="ref-2017_wardle_infoDisorder" class="csl-entry" role="listitem">
+WARDLE, C.; DERAKHSHAN, H. <strong>Information Disorder: Toward an Interdisciplinary Framework for Research and Policy Making</strong>. [s.l.] Council of Europe, 2017. Disponível em: &lt;<a href="https://rm.coe.int/information-disorder-toward-an-interdisciplinary-framework-for-researc/168076277c">https://rm.coe.int/information-disorder-toward-an-interdisciplinary-framework-for-researc/168076277c</a>&gt;.
+</div>
+<div id="ref-2020_yang_botDetection" class="csl-entry" role="listitem">
+YANG, K.-C. et al. Scalable and generalizable social bot detection through data selection. <strong>Proceedings of the AAAI Conference on Artificial Intelligence</strong>, v. 34, n. 01, p. 1096–1103, 2020.
+</div>
+<div id="ref-2024_yue_RARG" class="csl-entry" role="listitem">
+YUE, Z. et al. <strong>Evidence-Driven Retrieval Augmented Response Generation for Online Misinformation</strong>. (K. Duh, H. Gomez, S. Bethard, Eds.)Proceedings of the 2024 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers). <strong>Anais</strong>...Mexico City, Mexico: Association for Computational Linguistics, jun. 2024. Disponível em: &lt;<a href="https://aclanthology.org/2024.naacl-long.313">https://aclanthology.org/2024.naacl-long.313</a>&gt;
+</div>
+<div id="ref-zarocostas:2020_infodemic" class="csl-entry" role="listitem">
+ZAROCOSTAS, J. How to fight an infodemic. <strong>The lancet</strong>, v. 395, n. 10225, p. 676, 2020.
+</div>
+<div id="ref-2004_zhou_detection_CMC" class="csl-entry" role="listitem">
+ZHOU, L. et al. A comparison of classification methods for predicting deception in computer-mediated communication. <strong>Journal of Management Information Systems</strong>, v. 20, n. 4, p. 139–165, 2004.
+</div>
+<div id="ref-2005_zhou_deceptionInstantMessaging" class="csl-entry" role="listitem">
+ZHOU, L. An empirical investigation of deception behavior in instant messaging. <strong>IEEE Transactions on Professional Communication</strong>, v. 48, n. 2, p. 147–160, 2005.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p><a href="https://www.theguardian.com/politics/1999/feb/04/uk.politicalnews6" class="uri">https://www.theguardian.com/politics/1999/feb/04/uk.politicalnews6</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://www.theguardian.com/football/2016/apr/26/hillsborough-disaster-deadly-mistakes-and-lies-that-lasted-decades" class="uri">https://www.theguardian.com/football/2016/apr/26/hillsborough-disaster-deadly-mistakes-and-lies-that-lasted-decades</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Veja, por exemplo, <a href="https://g1.globo.com/fato-ou-fake/noticia/2024/02/14/e-fake-que-suco-de-limao-e-caldo-de-cana-curam-dengue.ghtml" class="uri">https://g1.globo.com/fato-ou-fake/noticia/2024/02/14/e-fake-que-suco-de-limao-e-caldo-de-cana-curam-dengue.ghtml</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="https://g1.globo.com/fato-ou-fake" class="uri">https://g1.globo.com/fato-ou-fake</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a href="http://www.e-farsas.com" class="uri">http://www.e-farsas.com</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p><a href="https://aosfatos.org" class="uri">https://aosfatos.org</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p><a href="https://lupa.uol.com.br" class="uri">https://lupa.uol.com.br</a><a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p><a href="https://ifcncodeofprinciples.poynter.org" class="uri">https://ifcncodeofprinciples.poynter.org</a><a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>Os <em>snippets</em> são os trechos de texto retornados junto a cada link na página de resposta do buscador web.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p><a href="https://www1.folha.uol.com.br/mercado/2021/11/cvm-abre-processo-contra-ex-executivos-do-irb-por-manipulacao-de-mercado.shtml" class="uri">https://www1.folha.uol.com.br/mercado/2021/11/cvm-abre-processo-contra-ex-executivos-do-irb-por-manipulacao-de-mercado.shtml</a><a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p><a href="https://g1.globo.com/sp/santos-regiao/noticia/2014/05/mulher-espancada-apos-boatos-em-rede-social-morre-em-guaruja-sp.html" class="uri">https://g1.globo.com/sp/santos-regiao/noticia/2014/05/mulher-espancada-apos-boatos-em-rede-social-morre-em-guaruja-sp.html</a><a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p><a href="https://g1.globo.com/sp/mogi-das-cruzes-suzano/noticia/2024/02/24/Como-fake-news-sobre-assassinato-de-cachorros-causou-a-morte-de-um-jovem-e-a-prisao-de-7-pessoas-veja-o-que-se-sabe.ghtml" class="uri">https://g1.globo.com/sp/mogi-das-cruzes-suzano/noticia/2024/02/24/Como-fake-news-sobre-assassinato-de-cachorros-causou-a-morte-de-um-jovem-e-a-prisao-de-7-pessoas-veja-o-que-se-sabe.ghtml</a><a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p><a href="https://nilc-fakenews.herokuapp.com/" class="uri">https://nilc-fakenews.herokuapp.com/</a><a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html" class="pagination-link" aria-label="Correção Automática de Redação">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" class="pagination-link" aria-label="PLN na Saúde">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://brasileiraspln.com/">
+<p>Brasileiras em PLN, 2026. Todos os direitos reservados</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

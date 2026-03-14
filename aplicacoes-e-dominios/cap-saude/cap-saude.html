@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Adriana Pagano">
+<meta name="author" content="Claudia Moro">
+<meta name="author" content="Elisa Terumi Rubel Schneider">
+<meta name="author" content="Lilian Mie Mukai Cintho">
+<meta name="author" content="Yohan Gumiel">
+
+<title>9&nbsp; PLN na Saúde – Processamento de Linguagem Natural</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 1em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html" rel="next">
+<link href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8676d8d0f01772f2903466dda9733bcf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sem resultados",
+    "search-matching-documents-text": "Resultados encontrados",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-111J572WMR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-111J572WMR');
+</script>
+
+
+<link rel="stylesheet" href="../../shared/bpln.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../shared/logos/bpln.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Processamento de Linguagem Natural</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../Livro_PLN_BPLN_4ed_vol3.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
+    <div class="dropdown">
+      <a href="" title="Compartilhar" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Compartilhar"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sobre o Volume 3</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Aplicações e Domínios</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Classificação de texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-mt/cap-mt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tradução Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sumarização Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Complexidade Textual e suas Tarefas Relacionadas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Classificação de Áudio aplicada à Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">PLN e Responsabilidade Social</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/referencias/referencias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referências</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Apêndices</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Considerações prévias à sumarização automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice-abstrativa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Exemplo de sumarização abstrativa</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../autores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Sobre as/os autoras/es</strong></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Conteúdo</h2>
+   
+  <ul>
+  <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução"><span class="header-section-number">9.1</span> Introdução</a></li>
+  <li><a href="#o-texto-livre-em-narrativas-clínicas" id="toc-o-texto-livre-em-narrativas-clínicas" class="nav-link" data-scroll-target="#o-texto-livre-em-narrativas-clínicas"><span class="header-section-number">9.2</span> O texto livre em narrativas clínicas</a></li>
+  <li><a href="#aplicações-de-pln-na-saúde" id="toc-aplicações-de-pln-na-saúde" class="nav-link" data-scroll-target="#aplicações-de-pln-na-saúde"><span class="header-section-number">9.3</span> Aplicações de PLN na Saúde</a>
+  <ul class="collapse">
+  <li><a href="#predição" id="toc-predição" class="nav-link" data-scroll-target="#predição"><span class="header-section-number">9.3.1</span> Predição</a></li>
+  <li><a href="#desidentificação" id="toc-desidentificação" class="nav-link" data-scroll-target="#desidentificação"><span class="header-section-number">9.3.2</span> Desidentificação</a></li>
+  <li><a href="#extração-de-conceitos-clínicos" id="toc-extração-de-conceitos-clínicos" class="nav-link" data-scroll-target="#extração-de-conceitos-clínicos"><span class="header-section-number">9.3.3</span> Extração de conceitos clínicos</a></li>
+  <li><a href="#relações-temporais" id="toc-relações-temporais" class="nav-link" data-scroll-target="#relações-temporais"><span class="header-section-number">9.3.4</span> Relações temporais</a></li>
+  <li><a href="#sumarização" id="toc-sumarização" class="nav-link" data-scroll-target="#sumarização"><span class="header-section-number">9.3.5</span> Sumarização</a></li>
+  </ul></li>
+  <li><a href="#recursos-de-pln-na-área-clínica" id="toc-recursos-de-pln-na-área-clínica" class="nav-link" data-scroll-target="#recursos-de-pln-na-área-clínica"><span class="header-section-number">9.4</span> Recursos de PLN na área clínica</a>
+  <ul class="collapse">
+  <li><a href="#corpora" id="toc-corpora" class="nav-link" data-scroll-target="#corpora"><span class="header-section-number">9.4.1</span> <em>Corpora</em></a></li>
+  <li><a href="#modelos" id="toc-modelos" class="nav-link" data-scroll-target="#modelos"><span class="header-section-number">9.4.2</span> Modelos</a></li>
+  </ul></li>
+  <li><a href="#para-onde-estamos-caminhando" id="toc-para-onde-estamos-caminhando" class="nav-link" data-scroll-target="#para-onde-estamos-caminhando"><span class="header-section-number">9.5</span> Para onde estamos caminhando?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-cap-saude" class="quarto-section-identifier"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading"></div>
+    <div class="quarto-title-meta-contents">
+             <p>Adriana Pagano </p>
+             <p>Claudia Moro </p>
+             <p>Elisa Terumi Rubel Schneider </p>
+             <p>Lilian Mie Mukai Cintho </p>
+             <p>Yohan Gumiel </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Publicado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">26/09/2023</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Atualizado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">13/04/2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+
+</div>
+<div>
+<div class="callout-body-container callout-body">
+<p>Este capítulo também está disponível em <a href="cap-saude.pdf">PDF</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" aria-controls="callout-cite" aria-label="Toggle callout" aria-expanded="false" data-bs-target=".callout-cite-contents">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Como citar
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
+<i class="callout-toggle"></i>
+</div>
+</div>
+<div class="callout-cite-contents callout-collapse collapse" id="callout-cite">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>@InCollection{BPLN_livro_cap-saude:2026,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    author    = {Pagano, Adriana and Moro, Claudia and Schneider, Elisa Terumi Rubel and Cintho, Lilian Mie Mukai and Gumiel, Yohan},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    title     = {PLN na Saúde},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    publisher = {BPLN},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    year      = {2026},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    editor    = {Caseli, H. M. and Nunes, M. G. V.},</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    type      = {Book Chapter},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    chapter   = {9},</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    edition   = {4},</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    volume    = {3},</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    isbn      = {XXXXXXXXXXXXXXXX},</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    url       = {https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-saude/cap-saude.html},</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mais recursos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="https://youtu.be/W4WM9PQA9z0?si=T18Qmu6KJz1BZj8L">Vídeo</a> e <a href="1o_Ciclo_PLN_BPLN-PLNSaude_24102024.pdf">Slides</a></p>
+</div>
+</div>
+<section id="introdução" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="introdução"><span class="header-section-number">9.1</span> Introdução</h2>
+<p>A área da saúde é uma das mais importantes em nossas vidas e, nos últimos anos, tem se beneficiado do uso da tecnologia para melhorar o diagnóstico, o tratamento e a gestão de pacientes. A aplicação de Processamento de Linguagem Natural (PLN) tem sido fundamental para avançar nessa área, pois permite a análise de grandes volumes de dados não estruturados gerados em ambientes clínicos <span class="citation" data-cites="Turchioe2022">(<a href="../../shared/referencias/referencias.html#ref-Turchioe2022" role="doc-biblioref">Turchioe et al., 2022</a>)</span>.</p>
+<p>O domínio da medicina abrange diversos tipos de texto, utilizados para distintas atividades produtoras de significado, que desenvolvemos em nosso convívio social. Chamamos essas atividades de socio-semióticas. Estudos da linguagem baseados em pesquisas antropológicas modelam essas atividades socio-semióticas em oito tipos <span class="citation" data-cites="Matthiessen-Multilingual-studies Matthiessen-systemic-functional">(<a href="../../shared/referencias/referencias.html#ref-Matthiessen-Multilingual-studies" role="doc-biblioref">Matthiessen et al., 2008</a>; <a href="../../shared/referencias/referencias.html#ref-Matthiessen-systemic-functional" role="doc-biblioref">Matthiessen, 2013</a>)</span>.</p>
+<p>A <a href="#fig-cap-saude-textoMedicina" class="quarto-xref">Figura&nbsp;<span>9.1</span></a> mostra os oito tipos de atividades socio-semióticas e os tipos de texto mais representativos de cada um deles no domínio da medicina. Essas atividades são desenvolvidas por meio de textos escritos e falados, com funções específicas na nossa sociedade. Atividades nas quais a linguagem verbal tem um papel ancilar ou complementar são, por exemplo, a execução de procedimentos cirúrgicos, durante a qual ações podem ser verbalizadas ou não.</p>
+<div id="fig-cap-saude-textoMedicina" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-saude-textoMedicina-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;9.1: Tipos de texto no domínio da medicina
+</figcaption>
+<div aria-describedby="fig-cap-saude-textoMedicina-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/21_1.png" class="img-fluid figure-img">
+</div>
+</figure>
+</div>
+<p>Mas, na grande parte das atividades humanas, a linguagem tem um papel constitutivo. Temos desde atividades que envolvem um uso especializado da linguagem para organizar a produção de conhecimento em tratados de medicina, livros didáticos e artigos acadêmicos, até atividades que envolvem um uso menos especializado, como o compartilhamento de experiências no âmbito privado, nas interações entre pacientes e familiares ou entre participantes de fóruns online sobre cuidados em saúde. Para a atividade de instruir e regular o comportamento, temos textos como bulas de medicamentos, cartilhas, normativas, manuais de instrução de equipamentos. Mesmo no domínio da medicina, há também textos pelos quais é construída uma realidade ficcional, como é o caso de séries e filmes que recriam interações em contextos médicos.</p>
+<p>Uma atividade socio-semiótica muito relevante no domínio da medicina é documentar fatos e experiências, por meio de questionários aplicados ao paciente, registros de exames clínicos e relatos de profissionais da saúde, nos quais são documentadas percepções sobre a saúde do paciente. Esses textos são conhecidos em PLN como <strong>narrativas clínicas</strong> e abrangem notas de evolução de enfermagem, sumários de alta, boletins médicos, e notas em texto livre em campos próprios do prontuário eletrônico do paciente. Cada um desses tipos de texto pode oferecer informações valiosas a serem obtidas por meio do PLN mais adequado às características do texto. Artigos acadêmicos, por exemplo, podem ser usados para a extração de ontologias, que são estruturas semânticas que permitem uma representação formal de conceitos, suas propriedades e relações. Essas ontologias podem ser usadas para facilitar a compreensão de termos técnicos e complexos em diferentes áreas da saúde, permitindo que as informações sejam compartilhadas de forma mais clara e precisa <span class="citation" data-cites="jiang2020">(<a href="../../shared/referencias/referencias.html#ref-jiang2020" role="doc-biblioref">Jiang et al., 2020</a>)</span>. Também podemos identificar padrões e relacionamentos entre os dados e a construção de modelos preditivos <span class="citation" data-cites="Lee2019">(<a href="../../shared/referencias/referencias.html#ref-Lee2019" role="doc-biblioref">Lee et al., 2019</a>)</span>.</p>
+<p>Narrativas clínicas, por outro lado, são textos não estruturados que oferecem informações valiosas sobre a história do paciente, incluindo seus sintomas, histórico médico, estilo de vida e outras informações relevantes. A mineração desses dados pode ser usada para identificar padrões e relacionamentos entre os dados, permitindo uma melhor compreensão da condição do paciente e a construção de modelos preditivos para prever possíveis complicações ou doenças <span class="citation" data-cites="Wu2018">(<a href="../../shared/referencias/referencias.html#ref-Wu2018" role="doc-biblioref">Wu et al., 2018</a>)</span>.</p>
+<p>Assim como nas narrativas clínicas, áudios produzidos por pacientes podem dar pistas de condições de saúde que afetam voz e fala, especialmente as que afetam o sistema respiratório. No <span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html#sec-cap-fala-respiratorios" target="_blank" title="Volume 3">Classificação de Áudio aplicada à Saúde</a></span>, o leitor encontra modelos e técnicas de classificação de áudio para a voz e fala de pacientes com problemas respiratórios.</p>
+<p></p>
+</section>
+<section id="o-texto-livre-em-narrativas-clínicas" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="o-texto-livre-em-narrativas-clínicas"><span class="header-section-number">9.2</span> O texto livre em narrativas clínicas</h2>
+<p>Com o advento do Registro Eletrônico de Saúde (RES)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, como é denominado no Brasil, ou em inglês, o <em>Electronic Health Record</em> (EHR), a quantidade de dados gerados relativos à atenção aos pacientes aumentou significativamente. Os prontuários eletrônicos podem conter dados estruturados, semiestruturados ou não estruturados, todos eles oferecendo uma grande quantidade de informações sobre o paciente. A mineração desses dados pode ajudar a identificar tendências e padrões em relação a diagnósticos, tratamentos e resultados, permitindo uma melhor gestão do cuidado do paciente e um melhor planejamento da assistência <span class="citation" data-cites="Shickel2017">(<a href="../../shared/referencias/referencias.html#ref-Shickel2017" role="doc-biblioref">Shickel et al., 2017</a>)</span>.</p>
+<p>Os dados clínicos presentes nas narrativas clínicas em texto livre (dados não estruturados) apresentam características únicas que dificultam sua análise e interpretação. Esses dados são frequentemente apresentados em linguagem médica especializada, repleta de termos técnicos, jargões e abreviaturas que podem variar entre os distintos profissionais de saúde. Esses textos também podem conter erros de digitação, ortografia ou gramática, tornando a interpretação ainda mais complexa <span class="citation" data-cites="Dalianis2018">(<a href="../../shared/referencias/referencias.html#ref-Dalianis2018" role="doc-biblioref">Dalianis, 2018</a>)</span>. A <a href="#fig-cap-saude-texto" class="quarto-xref">Figura&nbsp;<span>9.2</span></a> apresenta um exemplo de narrativa clínica adaptada para fins de ilustração. Nela podemos observar que as informações podem ser estruturadas de acordo com categorias destacadas com cores e rotuladas na legenda da figura.</p>
+<div id="fig-cap-saude-texto" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-saude-texto-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;9.2: Exemplo de narrativa clínica elaborada para fins de ilustração. Na legenda, as categorias de informações que podem ser encontradas neste tipo de texto.
+</figcaption>
+<div aria-describedby="fig-cap-saude-texto-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/Imagem1.png" class="img-fluid figure-img">
+</div>
+</figure>
+</div>
+<p>No escopo do que chamamos narrativas clínicas, há diferentes tipos de texto, os quais apresentam desafios específicos em termos do tipo de linguagem e também da relevância das informações registradas. Por exemplo, as notas de evolução de enfermagem podem ser mais descritivas e detalhadas do que outros tipos de texto, enquanto os sumários de alta podem fornecer informações importantes sobre a condição atual do paciente e seu histórico de tratamento. Já as notas de ambulatório podem ser mais informais e fragmentadas, o que dificulta sua análise por modelos treinados com outros tipos de texto em outros domínios. Isso demanda a anotação manual de narrativas clínicas de forma contarmos com modelos mais refinados.</p>
+<p>Como todo processo manual, a anotação de narrativas clínicas requer tempo e recursos, o que dificulta a construção de grandes <em>datasets</em> para treinamento de modelos de PLN. Como resultado, a aplicação de técnicas de aprendizado de máquina em dados clínicos sofre limitações pela disponibilidade de dados anotados manualmente <span class="citation" data-cites="Koleck2019-hn">(<a href="../../shared/referencias/referencias.html#ref-Koleck2019-hn" role="doc-biblioref">Koleck et al., 2019</a>)</span>. Uma saída é utilizar modelos genéricos para pré-processamento, sendo a saída avaliada manualmente. Um exemplo deste tipo de trabalho é a anotação do <em>corpus</em> Depclin-Br, que vem sendo desenvolvida por uma equipe de cientistas da computação da PUCPR e de linguistas da Faculdade de Letras da UFMG. Trata-se de um conjunto de narrativas clínicas já anotadas em termos de entidades no domínio clínico e constituindo o <em>corpus</em> SemClinBr <span class="citation" data-cites="Oliveira2022">(<a href="../../shared/referencias/referencias.html#ref-Oliveira2022" role="doc-biblioref">Oliveira et al., 2022a</a>)</span>. Uma parte desse <em>corpus</em> foi anotada morfossintaticamente com base num modelo genérico de português e a anotação revisada manualmente <span class="citation" data-cites="depclinbr">(<a href="../../shared/referencias/referencias.html#ref-depclinbr" role="doc-biblioref">Oliveira et al., 2022b</a>)</span>. Essa primeira parte foi utilizada para refinamento do modelo genérico e anotação automática de um segunda parte do <em>corpus</em>. Uma vez concluída a anotação, dados do <em>corpus</em> DepClinBr, anotado com relações de dependência, podem ser minerados e utilizados para caracterizar as entidades nomeadas previamente anotadas no SemClinBr. A <a href="#fig-cap-saude-treebank" class="quarto-xref">Figura&nbsp;<span>9.3</span></a> ilustra a correlação de anotações morfossintáticas e entidades.</p>
+<div id="fig-cap-saude-treebank" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-saude-treebank-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;9.3: Correlação de anotações morfossintáticas e entidades.
+</figcaption>
+<div aria-describedby="fig-cap-saude-treebank-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/imagem-treebank-clinical.jpg" class="img-fluid figure-img">
+</div>
+</figure>
+</div>
+<p>A construção de <em>corpora</em> de narrativas clínicas (dados não estruturados) está sujeita a restrições técnicas e regulatórias, que dizem respeito à privacidade de dados. Essa especificidade limita a capacidade de construção de grandes <em>datasets</em> para treinamento de modelos de PLN <span class="citation" data-cites="Chen2022-dr">(<a href="../../shared/referencias/referencias.html#ref-Chen2022-dr" role="doc-biblioref">Chen; Chen, 2022</a>)</span>. Como foi apontado, para contornar essa limitação, são utilizados modelos genéricos da língua, os quais precisam ser refinados com dados específicos do domínio em um processo de <em>fine-tuning</em>, para melhorar ainda mais sua precisão e relevância <span class="citation" data-cites="Lee2019">(<a href="../../shared/referencias/referencias.html#ref-Lee2019" role="doc-biblioref">Lee et al., 2019</a>)</span>.</p>
+<p>A seguir, veremos alguns exemplos de aplicações da PLN em dados clínicos.</p>
+</section>
+<section id="aplicações-de-pln-na-saúde" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="aplicações-de-pln-na-saúde"><span class="header-section-number">9.3</span> Aplicações de PLN na Saúde</h2>
+<section id="predição" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="predição"><span class="header-section-number">9.3.1</span> Predição</h3>
+<p>Uma das principais tarefas de PLN na área médica é a predição, que pode ser aplicada em diversas demandas do cuidado em saúde, como diagnóstico, tratamento, evolução, alta médica hospitalar, detecção de quedas, detecção de depressão e outras. Essas demandas envolvem a classificação de dados clínicos, como narrativas de pacientes, prontuários eletrônicos, relatórios médicos e outros dados de saúde, para ajudar os médicos e outros profissionais de saúde a tomar decisões mais precisas. A predição de diagnóstico, por exemplo, pode ajudar a identificar doenças em estágios iniciais, permitindo tratamentos mais eficazes e prevenindo complicações. A predição de tratamento pode ajudar a personalizar o tratamento para cada paciente, maximizando sua eficácia e minimizando efeitos colaterais. A detecção de quedas e depressão pode ajudar a prevenir acidentes e melhorar a qualidade de vida dos pacientes. Em resumo, a tarefa de predição é essencial para a aplicação bem-sucedida de PLN na área de saúde <span class="citation" data-cites="Yan2022-rg">(<a href="../../shared/referencias/referencias.html#ref-Yan2022-rg" role="doc-biblioref">Yan et al., 2022</a>)</span>.</p>
+<p>Alguns exemplos de trabalhos envolvendo predição e classificação em textos clínicos em português são <span class="citation" data-cites="silva2023risco Yang2022 Santos2021 Goncalves2023">(<a href="../../shared/referencias/referencias.html#ref-Goncalves2023" role="doc-biblioref">Gonçalves et al., 2023</a>; <a href="../../shared/referencias/referencias.html#ref-Santos2021" role="doc-biblioref">Santos et al., 2021a</a>; <a href="../../shared/referencias/referencias.html#ref-silva2023risco" role="doc-biblioref">Silva et al., 2023</a>; <a href="../../shared/referencias/referencias.html#ref-Yang2022" role="doc-biblioref">Yang et al., 2022</a>)</span>.</p>
+</section>
+<section id="desidentificação" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="desidentificação"><span class="header-section-number">9.3.2</span> Desidentificação</h3>
+<p>Um aspecto crucial na aplicação de PLN na área médica é a desidentificação dos dados dos pacientes, associada a processos de anonimização ou pseudonimização. Esta envolve a remoção de informações que possam identificar o paciente, como nome, endereço, número de telefone e outras informações pessoais. A anonimização é necessária para garantir a privacidade dos pacientes e cumprir as regulamentações de proteção de dados, como a Lei Geral de Proteção de Dados (LGPD) no Brasil<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> e a General Data Protection Regulation (GDPR) na União Europeia<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<p>A anonimização de dados clínicos é um processo desafiador, uma vez que esses dados contêm informações altamente sensíveis e complexas, como histórico médico, sintomas, exames, tratamentos e outros detalhes que podem identificar um paciente. Portanto, é necessário utilizar técnicas avançadas de PLN, como o uso de modelos de linguagem, para remover as informações sensíveis e garantir a privacidade dos pacientes <span class="citation" data-cites="Jones2020-gu">(<a href="../../shared/referencias/referencias.html#ref-Jones2020-gu" role="doc-biblioref">Jones et al., 2020</a>)</span>.</p>
+<p>Existem diversas técnicas que podem ser utilizadas na desidentificação dos dados clínicos, dependendo do tipo de informação que deve ser removida e do nível de anonimização desejado, por exemplo:</p>
+<ul>
+<li>Substituição de nomes próprios e outros identificadores pessoais por símbolos ou pseudônimos aleatórios;</li>
+<li>Remoção de informações geográficas específicas, como endereço e CEP;</li>
+<li>Substituição de datas de nascimento e outras informações temporais por intervalos ou idades aproximadas;</li>
+<li>Remoção de informações de contato, como números de telefone e endereços de e-mail;</li>
+<li>Remoção de informações de identificação de instituições, como o nome de hospitais e clínicas.</li>
+</ul>
+<p>Além dessas técnicas, também é possível utilizar métodos mais avançados de PLN, como a detecção e remoção de termos médicos específicos ou o uso de técnicas de de-identificação baseadas em modelos de linguagem, que tentam preservar a integridade semântica dos dados, mesmo após a remoção ou substituição das informações pessoais.</p>
+<p>A desidentificação dos pacientes permite que os dados clínicos sejam utilizados para fins de pesquisa e análise, sem comprometer a privacidade dos pacientes. Isso é fundamental no avanço da medicina, permitindo a análise de grandes volumes de dados na descoberta de padrões e tendências em doenças, tratamentos e outros aspectos da saúde <span class="citation" data-cites="Liu2017-qj">(<a href="../../shared/referencias/referencias.html#ref-Liu2017-qj" role="doc-biblioref">Liu et al., 2017</a>)</span>. Em <span class="citation" data-cites="santos2021identification">(<a href="../../shared/referencias/referencias.html#ref-santos2021identification" role="doc-biblioref">Santos et al., 2021b</a>)</span> temos um exemplo de trabalho para o português nessa tarefa.</p>
+</section>
+<section id="extração-de-conceitos-clínicos" class="level3" data-number="9.3.3">
+<h3 data-number="9.3.3" class="anchored" data-anchor-id="extração-de-conceitos-clínicos"><span class="header-section-number">9.3.3</span> Extração de conceitos clínicos</h3>
+<p>A busca e extração de conceitos clínicos relevantes é uma tarefa essencial na aplicação de PLN na área médica. Essa tarefa envolve a identificação de entidades relevantes nos dados clínicos, como sintomas, diagnósticos, tratamentos, medicamentos e outros termos específicos da área da saúde. Essa identificação geralmente é feita por meio de técnicas de NER (do inglês, <em>Named Entity Recognition</em>) (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ie/cap-ie.html#sec-cap-ie" target="_blank" title="Volume 3">Extração de Informação</a></span>), que permitem a identificação e classificação automática de entidades em textos não estruturados. A <a href="#fig-cap-saude-ner" class="quarto-xref">Figura&nbsp;<span>9.4</span></a> ilustra um exemplo de entidades do tipo <em>Problema</em> reconhecidas em uma narrativa clínica elaborada para fins de ilustração.</p>
+<div id="fig-cap-saude-ner" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-saude-ner-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;9.4: Exemplo de entidades do tipo Problema (em azul) encontradas em narrativa clínica.
+</figcaption>
+<div aria-describedby="fig-cap-saude-ner-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/ner.png" class="img-fluid figure-img">
+</div>
+</figure>
+</div>
+<p>Além da identificação de entidades, outras técnicas de PLN também podem ser utilizadas para a busca e extração de conceitos clínicos relevantes, como a detecção de negação e a resolução de ambiguidades. A detecção de negação, por exemplo, é útil para identificar quando um sintoma é negado pelo paciente ou um diagnóstico dado pelo médico nega alguma condição. A precisão na detecção de negação é fundamental para a interpretação dos dados clínicos <span class="citation" data-cites="nath2022">(<a href="../../shared/referencias/referencias.html#ref-nath2022" role="doc-biblioref">Nath et al., 2022</a>)</span>.</p>
+<p>Outra técnica importante na busca e extração de conceitos clínicos é o mapeamento de terminologia, que consiste na associação dos termos clínicos encontrados nos textos com um conjunto de termos padronizados, como a Classificação Internacional de Doenças (CID) ou o <em>Systemized Nomenclature of Medicine</em> (SNOMED CT). Isso permite uma melhor organização e interpretação dos dados clínicos, facilitando a análise e a tomada de decisão médica <span class="citation" data-cites="Fennelly2021-es">(<a href="../../shared/referencias/referencias.html#ref-Fennelly2021-es" role="doc-biblioref">Fennelly et al., 2021</a>)</span>.</p>
+<p>A busca e extração de conceitos clínicos relevantes é fundamental para a análise de dados clínicos em larga escala, permitindo a identificação de padrões e tendências em doenças, tratamentos e outros aspectos da saúde. Além disso, essas técnicas de PLN também podem ser utilizadas para a construção de sistemas de suporte à decisão médica, que auxiliam os profissionais de saúde na escolha de tratamentos mais adequados para cada paciente <span class="citation" data-cites="Demner-Fushman2009-im">(<a href="../../shared/referencias/referencias.html#ref-Demner-Fushman2009-im" role="doc-biblioref">Demner-Fushman et al., 2009</a>)</span>.</p>
+</section>
+<section id="relações-temporais" class="level3" data-number="9.3.4">
+<h3 data-number="9.3.4" class="anchored" data-anchor-id="relações-temporais"><span class="header-section-number">9.3.4</span> Relações temporais</h3>
+<p>Uma linha do tempo do paciente é uma representação gráfica que organiza as informações clínicas de um paciente de maneira cronológica. O interesse pela pesquisa em extração de relações temporais provém da característica longitudinal dos dados presentes nos RES. Esses registros contêm múltiplos textos clínicos referentes ao mesmo paciente, escritos em diferentes momentos <span class="citation" data-cites="gumiel2021">(<a href="../../shared/referencias/referencias.html#ref-gumiel2021" role="doc-biblioref">Gumiel et al., 2021</a>)</span>.</p>
+<p>A extração de relações temporais concentra-se na organização sequencial de menções em um texto, sendo essas menções eventos médicos ou expressões temporais.</p>
+<p>No contexto clínico, eventos médicos são circunstâncias clínicas de relevância, cujo escopo é delimitado pelo contexto da aplicação. Por exemplo, para a extração de informações significativas para o diagnóstico, pode ser apropriado delimitar eventos como menções a tratamentos passados, sinais, sintomas, medicamentos em uso e exames realizados pelo paciente com os respectivos resultados. Já as expressões temporais envolvem menções de tempo, como a duração de um sintoma ou indicações de quando o paciente realizou determinada cirurgia. É notável que as expressões temporais só têm significado quando associadas a algum evento, enquanto os eventos podem fazer sentido quando relacionados entre si.</p>
+<p>A fim de extrair essas menções do texto, são empregadas técnicas de Processamento de Linguagem Natural (PLN), como a Reconhecimento de Entidades Nomeadas. A tarefa de NER consiste em identificar e classificar automaticamente eventos e expressões temporais.</p>
+<p>Com eventos e expressões temporais devidamente identificados, aplica-se a extração de relações temporais, uma técnica de PLN que se concentra na conexão de eventos entre si ou com expressões temporais. Desse modo, cada entidade acaba sendo relacionada a um período de tempo específico.</p>
+<p>Ao considerar relações temporais no contexto clínico, diversas áreas de pesquisa emergem. Doenças crônicas, por exemplo, apresentam uma natureza longitudinal que torna a temporalidade extremamente relevante, pois existem fluxos de dados do paciente contínuos e extensos, nos quais podem ser extraídos padrões significativos <span class="citation" data-cites="Sheikhalishahi2019-ut">(<a href="../../shared/referencias/referencias.html#ref-Sheikhalishahi2019-ut" role="doc-biblioref">Sheikhalishahi et al., 2019</a>)</span>. A progressão de uma doença e os eventos a ela associados são registrados cronologicamente, onde certos eventos são relevantes apenas em momentos específicos, como problemas médicos identificados durante um exame físico em uma consulta ambulatorial ou sintomas relatados <span class="citation" data-cites="Sheikhalishahi2019-ut">(<a href="../../shared/referencias/referencias.html#ref-Sheikhalishahi2019-ut" role="doc-biblioref">Sheikhalishahi et al., 2019</a>)</span>. No caso de tratamento ineficaz de hipertensão com monoterapia, por exemplo, busca-se terapias com medicamentos combinados. Portanto, algumas informações sobre a progressão de doenças podem ser mais facilmente discernidas por meio da extração de relações temporais <span class="citation" data-cites="gumiel2021">(<a href="../../shared/referencias/referencias.html#ref-gumiel2021" role="doc-biblioref">Gumiel et al., 2021</a>)</span>.</p>
+<p>A aplicação prática de uma linha do tempo na área da saúde pode ser utilizada para analisar a evolução do quadro clínico do paciente ao longo do tempo, identificar possíveis tendências e realizar previsões. Além disso, a linha do tempo do paciente pode ser integrada a sistemas de suporte à decisão médica, contribuindo para a seleção de tratamentos mais adequados para cada paciente.</p>
+</section>
+<section id="sumarização" class="level3" data-number="9.3.5">
+<h3 data-number="9.3.5" class="anchored" data-anchor-id="sumarização"><span class="header-section-number">9.3.5</span> Sumarização</h3>
+<p>A sumarização de evoluções clínicas é uma tarefa de PLN que tem como objetivo extrair as informações mais relevantes de um conjunto de dados clínicos, de forma a produzir uma versão resumida e legível dessas informações. A <a href="#fig-cap-saude-sumarizacao" class="quarto-xref">Figura&nbsp;<span>9.5</span></a> exibe um exemplo fictício de uma narrativa clínica sumarizada.</p>
+<div id="fig-cap-saude-sumarizacao" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-saude-sumarizacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;9.5: Exemplo fictício de uma narrativa clínica sumarizada, na qual as informações mais importantes foram mantidas.
+</figcaption>
+<div aria-describedby="fig-cap-saude-sumarizacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/imgsumarizacao.png" class="img-fluid figure-img">
+</div>
+</figure>
+</div>
+<p>Para realizar a sumarização de evoluções clínicas, são utilizadas técnicas de sumarização automática de texto (<span>Capítulo <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-as/cap-as.html#sec-cap-as" target="_blank" title="Volume 3">Sumarização Automática</a></span>), que podem ser baseadas em abordagens extrativas ou abstrativas<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Na abordagem extrativa, as frases mais importantes do texto original são selecionadas e combinadas para formar um resumo. Já na abordagem abstrativa, o resumo é gerado a partir da síntese das informações do texto original, gerando uma nova versão que não necessariamente contém as mesmas palavras e frases do texto original.</p>
+<p>Para realizar a sumarização de evoluções clínicas, são utilizadas técnicas de processamento de linguagem natural, incluindo NER para identificar as entidades relevantes, PoS (<em>Part-of-Speech</em>) para identificar as partes do discurso e gramática do texto e também técnicas de análise sintática e semântica.</p>
+<p>Essa tarefa de PLN é muito útil para os profissionais da área da saúde, pois permite que eles analisem brevemente as informações mais importantes dos pacientes, como histórico de doenças, exames realizados, tratamentos prescritos, entre outras informações clínicas <span class="citation" data-cites="GULDEN2019114">(<a href="../../shared/referencias/referencias.html#ref-GULDEN2019114" role="doc-biblioref">Gulden et al., 2019</a>)</span>.</p>
+</section>
+</section>
+<section id="recursos-de-pln-na-área-clínica" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="recursos-de-pln-na-área-clínica"><span class="header-section-number">9.4</span> Recursos de PLN na área clínica</h2>
+<p>Como vimos, a aplicação de PLN na área clínica tem revolucionado a maneira como os dados médicos são processados e analisados. Com a crescente complexidade das informações clínicas e o volume crescente de dados gerados, a utilização de técnicas avançadas de PLN se torna essencial para extrair <em>insights</em> valiosos e melhorar a qualidade dos cuidados de saúde.</p>
+<p>Nesta seção, vamos explorar alguns recursos de PLN em português utilizados no contexto clínico, com ênfase nos <em>corpora</em> e modelos.</p>
+<section id="corpora" class="level3" data-number="9.4.1">
+<h3 data-number="9.4.1" class="anchored" data-anchor-id="corpora"><span class="header-section-number">9.4.1</span> <em>Corpora</em></h3>
+<section id="semclinbr-corpus" class="level4" data-number="9.4.1.1">
+<h4 data-number="9.4.1.1" class="anchored" data-anchor-id="semclinbr-corpus"><span class="header-section-number">9.4.1.1</span> Semclinbr-corpus</h4>
+<p>SemClinBr <span class="citation" data-cites="Oliveira2022">(<a href="../../shared/referencias/referencias.html#ref-Oliveira2022" role="doc-biblioref">Oliveira et al., 2022a</a>)</span> é um <em>corpus</em> semanticamente anotado que contém um conjunto de dados clínicos em português brasileiro, com anotações detalhadas.</p>
+<p>O <em>corpus</em> é composto por 1.000 notas clínicas provenientes de diversas especialidades médicas, tipos de documentos e instituições. Estas notas foram cuidadosamente anotadas para incluir informações valiosas sobre entidades e relações dentro dos textos clínicos.</p>
+<p>SemClinBr inclui 65.117 entidades e 11.263 relações anotadas. As anotações cobrem uma variedade de aspectos clínicos, como condições médicas, medicamentos e procedimentos, além de incluir dicionários de negação e abreviações médicas.</p>
+<p>A qualidade das anotações foi avaliada de forma intrínseca e extrínseca. A avaliação mostrou um alto nível de concordância entre anotadores, com índices variando de 0,71 a 0,92, e os resultados obtidos ao aplicar o corpus em tarefas de PLN demonstraram a utilidade e a confiabilidade das anotações.</p>
+<p>SemClinBr fornece um recurso valioso para a pesquisa em PLN clínico, ajudando a desenvolver e avaliar novos algoritmos e técnicas.</p>
+<p>Sendo um dos primeiros <em>corpus</em> clínico disponível em português brasileiro, o SemClinBr preenche uma lacuna significativa no campo e promove avanços na pesquisa biomédica e no desenvolvimento de tecnologias de PLN para o idioma.</p>
+<p>O <em>corpus</em> está disponível para pesquisa acadêmica e pode ser solicitado neste endereço: <a href="https://github.com/HAILab-PUCPR/SemClinBr" class="uri">https://github.com/HAILab-PUCPR/SemClinBr</a>.</p>
+</section>
+<section id="detecção-de-quedas" class="level4" data-number="9.4.1.2">
+<h4 data-number="9.4.1.2" class="anchored" data-anchor-id="detecção-de-quedas"><span class="header-section-number">9.4.1.2</span> Detecção de Quedas</h4>
+<p>O <em>corpus</em> Detecção de Quedas <span class="citation" data-cites="deteccao-quedas">(<a href="../../shared/referencias/referencias.html#ref-deteccao-quedas" role="doc-biblioref">Santos et al., 2019</a>)</span> é projetado para auxiliar na detecção de incidentes de quedas, que são uma das maiores categorias de relatórios de eventos adversos em hospitais.</p>
+<p>A detecção eficiente desses eventos é crucial para melhorar a compreensão dos incidentes e, consequentemente, a qualidade do cuidado ao paciente.</p>
+<p>O <em>corpus</em> contém 1.078 notas de progresso desidentificadas, que são registros clínicos detalhados sobre os pacientes durante sua estadia no hospital.</p>
+<p>As notas foram anotadas para identificar incidentes de quedas, permitindo a avaliação de modelos de linguagem na tarefa de detectar tais eventos.</p>
+<p>A avaliação do <em>corpus</em> foi realizada com vários modelos de linguagem, incluindo redes neurais recorrentes (RNNs) de última geração. Os experimentos mostraram que a abordagem de aprendizado profundo superou os trabalhos anteriores na detecção de eventos de queda.</p>
+<p>O <em>corpus</em> anotado está disponível para fins de replicação em <a href="https://github.com/nlp-pucrs/fall-detection" class="uri">https://github.com/nlp-pucrs/fall-detection</a>, permitindo que outros pesquisadores reproduzam os experimentos e utilizem os dados para melhorar os sistemas de detecção de eventos adversos.</p>
+</section>
+<section id="casos-clínicos---neurologia" class="level4" data-number="9.4.1.3">
+<h4 data-number="9.4.1.3" class="anchored" data-anchor-id="casos-clínicos---neurologia"><span class="header-section-number">9.4.1.3</span> Casos Clínicos - Neurologia</h4>
+<p>O <em>corpus</em> de Casos Clínicos - Neurologia <span class="citation" data-cites="lopes-etal-2019-contributions">(<a href="../../shared/referencias/referencias.html#ref-lopes-etal-2019-contributions" role="doc-biblioref">Lopes et al., 2019</a>)</span> é formado por 281 textos de casos clínicos coletados dos números 1 e 2 do volume 17 da revista clínica Sinapse, publicada pela Sociedade Portuguesa de Neurologia.</p>
+<p>Os textos foram pré-processados com ferramentas do NLPPort, um kit de ferramentas de PLN para o português, baseado no OpenNLP.</p>
+<p>Cada texto foi tokenizado com TokPort, etiquetado com TagPort e lemas para cada par token-PoS foram obtidos com LemPort. Após o pré-processamento, foi realizada a anotação manual de entidades nomeadas clínicas.</p>
+<p>O <em>corpus</em> está disponível para pesquisa acadêmica e pode ser solicitado neste endereço: <a href="https://github.com/fabioacl/PortugueseClinicalNER" class="uri">https://github.com/fabioacl/PortugueseClinicalNER</a>.</p>
+</section>
+</section>
+<section id="modelos" class="level3" data-number="9.4.2">
+<h3 data-number="9.4.2" class="anchored" data-anchor-id="modelos"><span class="header-section-number">9.4.2</span> Modelos</h3>
+<section id="biobertpt" class="level4" data-number="9.4.2.1">
+<h4 data-number="9.4.2.1" class="anchored" data-anchor-id="biobertpt"><span class="header-section-number">9.4.2.1</span> BioBERTpt</h4>
+<p>Os modelos da família BioBERTpt <span class="citation" data-cites="biobertpt">(<a href="../../shared/referencias/referencias.html#ref-biobertpt" role="doc-biblioref">Schneider et al., 2020</a>)</span> são modelos adaptados do modelo BERT multilíngue para o português brasileiro, com foco em tarefas de PLN nas áreas clínica e biomédica.</p>
+<p>Essas versões foram ajustadas utilizando um <em>corpus</em> de narrativas clínicas e artigos científicos biomédicos em português.</p>
+<p>Os modelos foram avaliados em duas coleções anotadas de textos clínicos para reconhecer entidades nomeadas. Comparado com modelos BERT existentes, o BioBERTpt apresentou uma melhoria de 2,72% no F1-score, superando o modelo base em 11 de 13 entidades avaliadas.</p>
+<p>O desenvolvimento de BioBERTpt é um passo importante na área, ao melhorar o desempenho de tarefas de PLN em idiomas com menos recursos e pesquisa, como o português brasileiro, que frequentemente é sub-representado em modelos de PLN avançados.</p>
+<p>Os modelos estão disponíveis em: <a href="https://huggingface.co/pucpr" class="uri">https://huggingface.co/pucpr</a>.</p>
+</section>
+<section id="biobertptrt" class="level4" data-number="9.4.2.2">
+<h4 data-number="9.4.2.2" class="anchored" data-anchor-id="biobertptrt"><span class="header-section-number">9.4.2.2</span> BioBERTptRT</h4>
+<p>O BioBERTptRT <span class="citation" data-cites="BioBERTptRT">(<a href="../../shared/referencias/referencias.html#ref-BioBERTptRT" role="doc-biblioref">De Oliveira et al., 2024</a>)</span> é uma versão do BioBERTpt projetado para a classificação de sentenças de notas clínicas, categorizando sentenças de acordo com o padrão SOAP (Subjetivo, Objetivo, Avaliação e Plano), o que ajuda a estruturar e organizar as notas clínicas de maneira mais eficaz.</p>
+<p>O modelo foi treinado e ajustado usando uma base de dados privada de 10.000 registros de saúde anonimizados contendo 234.673 notas clínicas, divididas em 1.183.345 sentenças únicas. Além disso, 100.021 sentenças foram rotuladas manualmente para uso no ajuste fino dos modelos.</p>
+<p>Esse treinamento especializado ajudou o modelo a entender melhor o contexto e a terminologia médica em português.</p>
+<p>O modelo BioBERTptRT demonstrou um desempenho superior em comparação com outros modelos BERT em português, alcançando resultados superiores em precisão, acurácia, revocação e F1-score na tarefa de classificação de sentenças.</p>
+</section>
+<section id="gpt2-bio-pt" class="level4" data-number="9.4.2.3">
+<h4 data-number="9.4.2.3" class="anchored" data-anchor-id="gpt2-bio-pt"><span class="header-section-number">9.4.2.3</span> GPT2-Bio-Pt</h4>
+<p>GPT2-Bio-Pt <span class="citation" data-cites="gpt2biopt">(<a href="../../shared/referencias/referencias.html#ref-gpt2biopt" role="doc-biblioref">Schneider et al., 2021</a>)</span> é um modelo baseado em GPT-2 (<em>Generative Pre-trained Transformer 2</em>) especializado para o idioma português, desenvolvido para apoiar tarefas de PLN na área clínica e biomédica.</p>
+<p>Um GPT-2 genérico em português foi ajustado para o domínio biomédico com a técnica de transferência de aprendizado, utilizando textos biomédicos escritos em português.</p>
+<p>O modelo GPT-2 ajustado para o domínio biomédico foi testado em um conjunto de dados público, manualmente anotado para a tarefa de detecção de quedas de pacientes. O modelo especializado demonstrou um desempenho superior ao modelo GPT-2 genérico em português, com um aumento de 3,43 pontos em <em>F1-score</em>.</p>
+<p>O modelo está disponível para pesquisa acadêmica e pode ser acessado neste endereço: <a href="https://huggingface.co/pucpr/gpt2-bio-pt" class="uri">https://huggingface.co/pucpr/gpt2-bio-pt</a>.</p>
+</section>
+<section id="bert-para-classificação-icd-10" class="level4" data-number="9.4.2.4">
+<h4 data-number="9.4.2.4" class="anchored" data-anchor-id="bert-para-classificação-icd-10"><span class="header-section-number">9.4.2.4</span> BERT para Classificação ICD-10</h4>
+<p><span class="citation" data-cites="bert-icd">(<a href="../../shared/referencias/referencias.html#ref-bert-icd" role="doc-biblioref">Coutinho; Martins, 2022</a>)</span> desenvolveram um modelo BERT especializado para a atribuição de códigos ICD-10 (Classificação Internacional de Doenças) para causas de morte, usando descrições em texto livre.</p>
+<p>O modelo foi projetado para atribuir códigos ICD-10 a causas de morte com base em descrições de texto livre encontradas em certificados de óbito, relatórios de autópsia e boletins clínicos fornecidos pelo Ministério da Saúde de Portugal.</p>
+<p>A abordagem inclui um procedimento de pré-treinamento que incorpora conhecimento específico do domínio clínico, permitindo a adaptação do BERT para a tarefa de codificação ICD-10.</p>
+<p>O modelo também adotou uma estratégia de ajuste fino para lidar com o problema de desequilíbrio de classes, que é comum em tarefas de classificação quando algumas categorias são muito mais frequentes do que outras.</p>
+</section>
+<section id="cardiobertpt" class="level4" data-number="9.4.2.5">
+<h4 data-number="9.4.2.5" class="anchored" data-anchor-id="cardiobertpt"><span class="header-section-number">9.4.2.5</span> CardioBERTpt</h4>
+<p>CardioBERTpt <span class="citation" data-cites="cardiobertpt">(<a href="../../shared/referencias/referencias.html#ref-cardiobertpt" role="doc-biblioref">Schneider et al., 2023</a>)</span> é um modelo baseado em BERT adaptado especificamente para tarefas de PLN na área da cardiologia em português.</p>
+<p>O modelo CardioBERTpt aproveita a transferência de aprendizado a partir de registros eletrônicos de saúde de um hospital terciário brasileiro especializado em doenças cardiológicas. Esta abordagem permite que o modelo capture nuances e terminologias específicas do domínio cardiológico.</p>
+<p>Esse modelo demonstrou que a representatividade dos dados e um volume alto de dados de treinamento podem melhorar significativamente os resultados para tarefas clínicas.</p>
+<p>O modelo está disponível para pesquisa acadêmica e pode ser acessado neste endereço: <a href="https://huggingface.co/pucpr-br/cardiobertpt" class="uri">https://huggingface.co/pucpr-br/cardiobertpt</a>.</p>
+</section>
+</section>
+</section>
+<section id="para-onde-estamos-caminhando" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="para-onde-estamos-caminhando"><span class="header-section-number">9.5</span> Para onde estamos caminhando?</h2>
+<p>Embora a tecnologia de PLN na área clínica tenha avançado significativamente nos últimos anos, ainda existem vários desafios a serem superados. Alguns desses desafios incluem:</p>
+<ul>
+<li>Garantir a qualidade dos dados clínicos utilizados para treinar e testar os modelos de PLN, incluindo a devida anonimização e a padronização dos termos utilizados, assegurando a ética e a privacidade dos dados clínicos;</li>
+<li>Desenvolver modelos de PLN capazes de lidar com textos clínicos mais complexos e heterogêneos, como notas de enfermagem, laudos médicos e textos escritos por pacientes;</li>
+<li>Integrar os modelos de PLN em sistemas de informação em saúde existentes, garantindo a interoperabilidade e a segurança dos dados;</li>
+<li>Garantir a aceitação e a adoção dos modelos de PLN pelos profissionais de saúde, demonstrando sua utilidade e eficácia na prática clínica.</li>
+</ul>
+<p>É importante destacar que, embora o PLN possa ser útil na análise e interpretação de dados clínicos, ele não pode substituir a experiência e o conhecimento clínico de um médico ou de outros profissionais de saúde. A tecnologia pode ser uma ferramenta valiosa para auxiliar na tomada de decisões clínicas, mas não pode substituir o julgamento clínico humano. Ressalta-se que o desenvolvimento de tecnologias de PLN na área clínica seja visto como uma forma de complementar e melhorar o cuidado ao paciente, e não como uma substituição aos profissionais de saúde.</p>
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="1" role="list" style="display: none">
+<div id="ref-Chen2022-dr" class="csl-entry" role="listitem">
+CHEN, A.; CHEN, D. O. Simulation of a machine learning enabled learning health system for risk prediction using synthetic patient data. <strong>Scientific Reports</strong>, v. 12, n. 1, p. 17917, out. 2022.
+</div>
+<div id="ref-bert-icd" class="csl-entry" role="listitem">
+COUTINHO, I.; MARTINS, B. <a href="https://doi.org/10.1016/j.jbi.2022.104232">Transformer-based models for ICD-10 coding of death certificates with Portuguese text</a>. <strong>Journal of Biomedical Informatics</strong>, v. 136, p. 104232, 2022.
+</div>
+<div id="ref-Dalianis2018" class="csl-entry" role="listitem">
+DALIANIS, H. <a href="https://doi.org/10.1007/978-3-319-78503-5_4">Characteristics of Patient Records and Clinical Corpora</a>. Em: <strong>Clinical Text Mining: Secondary Use of Electronic Patient Records</strong>. Cham: Springer International Publishing, 2018. p. 21–34.
+</div>
+<div id="ref-BioBERTptRT" class="csl-entry" role="listitem">
+DE OLIVEIRA, J. M.; ANTUNES, R. S.; DA COSTA, C. A. <a href="https://doi.org/10.1016/j.eswa.2023.123046">SOAP classifier for free-text clinical notes with domain-specific pre-trained language models</a>. <strong>Expert Systems with Applications</strong>, v. 245, p. 123046, 2024.
+</div>
+<div id="ref-Demner-Fushman2009-im" class="csl-entry" role="listitem">
+DEMNER-FUSHMAN, D.; CHAPMAN, W. W.; MCDONALD, C. J. What can natural language processing do for clinical decision support? <strong>J Biomed Inform</strong>, v. 42, n. 5, p. 760–772, ago. 2009.
+</div>
+<div id="ref-Fennelly2021-es" class="csl-entry" role="listitem">
+FENNELLY, O. et al. Use of standardized terminologies in clinical practice: A scoping review. <strong>Int J Med Inform</strong>, v. 149, p. 104431, fev. 2021.
+</div>
+<div id="ref-Goncalves2023" class="csl-entry" role="listitem">
+GONÇALVES, T. et al. Clinical Screening Prediction in the Portuguese National Health Service: Data Analysis, Machine Learning Models, Explainability and Meta-Evaluation. <strong>Future Internet</strong>, v. 15, n. 1, p. 26, 2023.
+</div>
+<div id="ref-GULDEN2019114" class="csl-entry" role="listitem">
+GULDEN, C. et al. <a href="https://doi.org/10.1016/j.ijmedinf.2019.05.019">Extractive summarization of clinical trial descriptions</a>. <strong>International Journal of Medical Informatics</strong>, v. 129, p. 114–121, 2019.
+</div>
+<div id="ref-gumiel2021" class="csl-entry" role="listitem">
+GUMIEL, Y. B. et al. <a href="https://doi.org/10.1145/3462475">Temporal Relation Extraction in Clinical Texts: A Systematic Review</a>. v. 54, n. 7, set. 2021.
+</div>
+<div id="ref-jiang2020" class="csl-entry" role="listitem">
+JIANG, S. et al. <a href="https://doi.org/10.1016/j.jbi.2020.103581">Multi-Ontology Refined Embeddings (MORE): A hybrid multi-ontology and corpus-based semantic representation model for biomedical concepts</a>. <strong>Journal of Biomedical Informatics</strong>, v. 111, p. 103581, 2020.
+</div>
+<div id="ref-Jones2020-gu" class="csl-entry" role="listitem">
+JONES, K. H. et al. Toward the Development of Data Governance Standards for Using Clinical <span>Free-Text</span> Data in Health Research: Position Paper. <strong>J Med Internet Res</strong>, v. 22, n. 6, p. e16760, jun. 2020.
+</div>
+<div id="ref-Koleck2019-hn" class="csl-entry" role="listitem">
+KOLECK, T. A. et al. Natural language processing of symptoms documented in free-text narratives of electronic health records: a systematic review. <strong>J Am Med Inform Assoc</strong>, v. 26, n. 4, p. 364–379, abr. 2019.
+</div>
+<div id="ref-Lee2019" class="csl-entry" role="listitem">
+LEE, J. et al. <a href="https://doi.org/10.1093/bioinformatics/btz682"><span>BioBERT: a pre-trained biomedical language representation model for biomedical text mining</span></a>. <strong>Bioinformatics</strong>, v. 36, n. 4, p. 1234–1240, set. 2019.
+</div>
+<div id="ref-Liu2017-qj" class="csl-entry" role="listitem">
+LIU, Z. et al. De-identification of clinical notes via recurrent neural network and conditional random field. <strong>J Biomed Inform</strong>, v. 75S, p. S34–S42, jun. 2017.
+</div>
+<div id="ref-lopes-etal-2019-contributions" class="csl-entry" role="listitem">
+LOPES, F.; TEIXEIRA, C.; GONÇALO OLIVEIRA, H. <strong>Contributions to Clinical Named Entity Recognition in <span>P</span>ortuguese</strong>. Proceedings of the 18th BioNLP Workshop and Shared Task. <strong>Anais</strong>...Florence, Italy: Association for Computational Linguistics, ago. 2019. Disponível em: &lt;<a href="https://www.aclweb.org/anthology/W19-5024">https://www.aclweb.org/anthology/W19-5024</a>&gt;
+</div>
+<div id="ref-Matthiessen-systemic-functional" class="csl-entry" role="listitem">
+MATTHIESSEN, M. C. M. I. <a href="https://doi.org/10.1515/text-2013-0021">Applying systemic functional linguistics in healthcare contexts</a>. <strong>Text and Talk</strong>, v. 33, n. 4-5, p. 437–447, 19 ago. 2013.
+</div>
+<div id="ref-Matthiessen-Multilingual-studies" class="csl-entry" role="listitem">
+MATTHIESSEN, M. C. M. I.; TERUYA, K.; WU, C. Multilingual studies as a multi-dimensional space of interconnected language studies. Em: <strong>Meaning in context : strategies for implementing intelligent applications of language studies</strong>. [s.l.] Continuum, 2008. p. 146–221.
+</div>
+<div id="ref-nath2022" class="csl-entry" role="listitem">
+NATH, N.; LEE, S.-H.; LEE, I. <a href="https://doi.org/10.1016/j.jbi.2022.104092">NEAR: Named Entity and Attribute Recognition of Clinical Concepts</a>. <strong>J. of Biomedical Informatics</strong>, v. 130, n. C, jun. 2022.
+</div>
+<div id="ref-Oliveira2022" class="csl-entry" role="listitem">
+OLIVEIRA, L. E. S. et al. <a href="https://doi.org/10.1186/s13326-022-00269-1"><span>SemClinBr</span> - a multi-institutional and multi-specialty semantically annotated corpus for Portuguese clinical <span>NLP</span> tasks</a>. <strong>Journal of Biomedical Semantics</strong>, v. 13, n. 1, a2022.
+</div>
+<div id="ref-depclinbr" class="csl-entry" role="listitem">
+OLIVEIRA, L. F. A. DE et al. <strong>Challenges In Annotating A Treebank Of Clinical Narratives In Brazilian Portuguese</strong>. Computational Processing of the Portuguese Language: 15th International Conference, PROPOR 2022, Fortaleza, Brazil, March 21–23, 2022, Proceedings. <strong>Anais</strong>...Berlin, Heidelberg: Springer-Verlag, b2022. Disponível em: &lt;<a href="https://doi.org/10.1007/978-3-030-98305-5_9">https://doi.org/10.1007/978-3-030-98305-5_9</a>&gt;
+</div>
+<div id="ref-deteccao-quedas" class="csl-entry" role="listitem">
+SANTOS, H. D. P. DOS et al. <strong><a href="https://doi.org/10.1109/BIBE.2019.00054">Fall Detection in EHR using Word Embeddings and Deep Learning</a></strong>. 2019 IEEE 19th International Conference on Bioinformatics and Bioengineering (BIBE). <strong>Anais</strong>...2019.
+</div>
+<div id="ref-Santos2021" class="csl-entry" role="listitem">
+SANTOS, H. D. P. D.; ULBRICH, A. H. D. P. S.; VIEIRA, R. <strong>Evaluation of a Prescription Outlier Detection System in Hospital’s Pharmacy Services</strong>. 2021 IEEE International Conference on Bioinformatics and Biomedicine (BIBM). <strong>Anais</strong>...IEEE, a2021.
+</div>
+<div id="ref-santos2021identification" class="csl-entry" role="listitem">
+SANTOS, J. et al. <strong>De-identification of clinical notes using contextualized language models and a token classifier</strong>. Brazilian Conference on Intelligent Systems. <strong>Anais</strong>...Springer, b2021.
+</div>
+<div id="ref-biobertpt" class="csl-entry" role="listitem">
+SCHNEIDER, E. T. R. et al. <strong><span>B</span>io<span>BERT</span>pt - A <span>P</span>ortuguese Neural Language Model for Clinical Named Entity Recognition</strong>. (A. Rumshisky et al., Eds.)Proceedings of the 3rd Clinical Natural Language Processing Workshop. <strong>Anais</strong>...Online: Association for Computational Linguistics, nov. 2020. Disponível em: &lt;<a href="https://aclanthology.org/2020.clinicalnlp-1.7">https://aclanthology.org/2020.clinicalnlp-1.7</a>&gt;
+</div>
+<div id="ref-gpt2biopt" class="csl-entry" role="listitem">
+SCHNEIDER, E. T. R. et al. <strong><a href="https://doi.org/10.1109/CBMS52027.2021.00056">A GPT-2 Language Model for Biomedical Texts in Portuguese</a></strong>. 2021 IEEE 34th International Symposium on Computer-Based Medical Systems (CBMS). <strong>Anais</strong>...2021.
+</div>
+<div id="ref-cardiobertpt" class="csl-entry" role="listitem">
+SCHNEIDER, E. T. R. et al. <strong><a href="https://doi.org/10.1109/CBMS58004.2023.00247">CardioBERTpt: Transformer-based Models for Cardiology Language Representation in Portuguese</a></strong>. 2023 IEEE 36th International Symposium on Computer-Based Medical Systems (CBMS). <strong>Anais</strong>...2023.
+</div>
+<div id="ref-Sheikhalishahi2019-ut" class="csl-entry" role="listitem">
+SHEIKHALISHAHI, S. et al. Natural Language Processing of Clinical Notes on Chronic Diseases: Systematic Review. <strong>JMIR Med Inform</strong>, v. 7, n. 2, p. e12239, abr. 2019.
+</div>
+<div id="ref-Shickel2017" class="csl-entry" role="listitem">
+SHICKEL, B. et al. Deep <span>EHR</span>: A Survey of Recent Advances in Deep Learning Techniques for Electronic Health Record (<span>EHR</span>) Analysis. <strong>IEEE J Biomed Health Inform</strong>, v. 22, n. 5, p. 1589–1604, out. 2017.
+</div>
+<div id="ref-silva2023risco" class="csl-entry" role="listitem">
+SILVA, A. P. DA et al. Risco de queda relacionado a medicamentos em hospitais: abordagem de aprendizado de m<span>á</span>quina. <strong>Acta Paulista de Enfermagem</strong>, v. 36, 2023.
+</div>
+<div id="ref-Turchioe2022" class="csl-entry" role="listitem">
+TURCHIOE, M. R. et al. <a href="https://doi.org/10.1136/heartjnl-2021-319769">Systematic review of current natural language processing methods and applications in cardiology</a>. <strong>Heart</strong>, v. 108, n. 12, p. 909–916, 2022.
+</div>
+<div id="ref-Wu2018" class="csl-entry" role="listitem">
+WU, H. et al. <span>SemEHR</span>: A general-purpose semantic search system to surface semantic data from clinical notes for tailored care, trial recruitment, and clinical research. <strong>J Am Med Inform Assoc</strong>, v. 25, n. 5, p. 530–537, 2018.
+</div>
+<div id="ref-Yan2022-rg" class="csl-entry" role="listitem">
+YAN, M. Y.; GUSTAD, L. T.; NYTRØ, Ø. Sepsis prediction, early detection, and identification using clinical text for machine learning: a systematic review. <strong>J Am Med Inform Assoc</strong>, v. 29, n. 3, p. 559–575, jan. 2022.
+</div>
+<div id="ref-Yang2022" class="csl-entry" role="listitem">
+YANG, H. et al. Clinical Trial Classification of SNS24 Calls with Neural Networks. <strong>Future Internet</strong>, v. 14, n. 5, p. 130, 2022.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>No Sistema Único de Saúde (SUS), as informações dos usuários são coletadas e armazenadas por meio do Prontuário Eletrônico do Cidadão (PEC). Nele, há campos pré-determinados que podem ser preenchidos com texto livre.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Lei Geral de Proteção de Dados Pessoais (LGPD), Lei nº 13.709/2018. Disponível em: <a href="https://www.gov.br" class="uri">https://www.gov.br</a> › pt-br › acesso-a-informacao › lgpd<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><em>Data protection in the EU</em>. Disponível em: <a href="https://commission.europa.eu/law/law-topic/data-protection/data-protection-eu_en" class="uri">https://commission.europa.eu/law/law-topic/data-protection/data-protection-eu_en</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Para projetos de sumarizadores em português, visite: <a href="https://sites.icmc.usp.br/taspardo/sucinto/" class="uri">https://sites.icmc.usp.br/taspardo/sucinto/</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" class="pagination-link" aria-label="Detecção Automática de Notícias Falsas">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html" class="pagination-link" aria-label="Detecção de Transtornos de Saúde Mental a partir de Texto">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://brasileiraspln.com/">
+<p>Brasileiras em PLN, 2026. Todos os direitos reservados</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

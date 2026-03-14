@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ivandré Paraboni">
+<meta name="author" content="Helena de Medeiros Caseli">
+
+<title>10&nbsp; Detecção de Transtornos de Saúde Mental a partir de Texto – Processamento de Linguagem Natural</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 1em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" rel="next">
+<link href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8676d8d0f01772f2903466dda9733bcf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sem resultados",
+    "search-matching-documents-text": "Resultados encontrados",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-111J572WMR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-111J572WMR');
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../shared/bpln.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../shared/logos/bpln.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Processamento de Linguagem Natural</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../Livro_PLN_BPLN_4ed_vol3.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
+    <div class="dropdown">
+      <a href="" title="Compartilhar" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Compartilhar"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sobre o Volume 3</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Aplicações e Domínios</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Classificação de texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ir/cap-ir.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Recuperação de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-ie/cap-ie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Extração de Informação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-mt/cap-mt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tradução Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sumarização Automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-complexidade-textual/cap-complexidade-textual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Complexidade Textual e suas Tarefas Relacionadas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-aes/cap-aes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Correção Automática de Redação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fake-news/cap-fake-news.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Detecção Automática de Notícias Falsas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Classificação de Áudio aplicada à Saúde</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito/cap-direito.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">PLN no Direito</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ren/cap-direito-ren.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Reconhecimento de Entidades Nomeadas no Domínio Legal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-direito-ementas/cap-direito-ementas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Geração Automática de Ementas Jurídicas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-humanidades-digitais/cap-humanidades-digitais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">PLN e Humanidades Digitais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-sociais/cap-redes-sociais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">PLN em Redes Sociais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-framenetbr/cap-framenetbr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">PLN e Responsabilidade Social</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-redes-complexas/cap-redes-complexas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Redes complexas no processamento de língua natural do português</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/referencias/referencias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referências</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Apêndices</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Considerações prévias à sumarização automática</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../aplicacoes-e-dominios/cap-as/cap-as-apendice-abstrativa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Exemplo de sumarização abstrativa</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../autores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Sobre as/os autoras/es</strong></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Conteúdo</h2>
+   
+  <ul>
+  <li><a href="#sec-cap-saude-intro" id="toc-sec-cap-saude-intro" class="nav-link active" data-scroll-target="#sec-cap-saude-intro"><span class="header-section-number">10.1</span> Introdução</a>
+  <ul class="collapse">
+  <li><a href="#definição-do-problema" id="toc-definição-do-problema" class="nav-link" data-scroll-target="#definição-do-problema"><span class="header-section-number">10.1.1</span> Definição do problema</a></li>
+  </ul></li>
+  <li><a href="#conjuntos-de-dados-para-detecção-de-depressãoansiedade" id="toc-conjuntos-de-dados-para-detecção-de-depressãoansiedade" class="nav-link" data-scroll-target="#conjuntos-de-dados-para-detecção-de-depressãoansiedade"><span class="header-section-number">10.2</span> Conjuntos de dados para detecção de depressão/ansiedade</a></li>
+  <li><a href="#sec-cap-saude-mental-modelos" id="toc-sec-cap-saude-mental-modelos" class="nav-link" data-scroll-target="#sec-cap-saude-mental-modelos"><span class="header-section-number">10.3</span> Modelos computacionais de detecção de depressão/ansiedade</a></li>
+  <li><a href="#sec-cap-saude-mental-setbr" id="toc-sec-cap-saude-mental-setbr" class="nav-link" data-scroll-target="#sec-cap-saude-mental-setbr"><span class="header-section-number">10.4</span> SetembroBR: detecção de depressão/ansiedade em português</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-saude-mental-corpusset" id="toc-sec-cap-saude-mental-corpusset" class="nav-link" data-scroll-target="#sec-cap-saude-mental-corpusset"><span class="header-section-number">10.4.1</span> <em>Corpus</em> SetembroBR</a></li>
+  <li><a href="#sec-cap-saude-mental-modelosset" id="toc-sec-cap-saude-mental-modelosset" class="nav-link" data-scroll-target="#sec-cap-saude-mental-modelosset"><span class="header-section-number">10.4.2</span> Modelos desenvolvidos no projeto SetembroBR</a></li>
+  </ul></li>
+  <li><a href="#sec-cap-saude-mental-amive" id="toc-sec-cap-saude-mental-amive" class="nav-link" data-scroll-target="#sec-cap-saude-mental-amive"><span class="header-section-number">10.5</span> Amive: detecção de sintomas de depressão em português</a>
+  <ul class="collapse">
+  <li><a href="#sec-cap-saude-mental-amive-sinais" id="toc-sec-cap-saude-mental-amive-sinais" class="nav-link" data-scroll-target="#sec-cap-saude-mental-amive-sinais"><span class="header-section-number">10.5.1</span> Sinais associados à depressão</a></li>
+  <li><a href="#sec-cap-saude-mental-amive-corpus" id="toc-sec-cap-saude-mental-amive-corpus" class="nav-link" data-scroll-target="#sec-cap-saude-mental-amive-corpus"><span class="header-section-number">10.5.2</span> <em>Corpus</em> do projeto Amive e anotação manual</a></li>
+  <li><a href="#sec-cap-saude-mental-amive-automatico" id="toc-sec-cap-saude-mental-amive-automatico" class="nav-link" data-scroll-target="#sec-cap-saude-mental-amive-automatico"><span class="header-section-number">10.5.3</span> Identificação automática de sinais de depressão</a></li>
+  </ul></li>
+  <li><a href="#considerações-finais" id="toc-considerações-finais" class="nav-link" data-scroll-target="#considerações-finais"><span class="header-section-number">10.6</span> Considerações finais</a></li>
+  <li><a href="#agradecimentos" id="toc-agradecimentos" class="nav-link" data-scroll-target="#agradecimentos">Agradecimentos</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-classificacao/cap-classificacao.html"><strong>Aplicações e Domínios</strong></a></li><li class="breadcrumb-item"><a href="../../aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-cap-saude-mental" class="quarto-section-identifier"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Detecção de Transtornos de Saúde Mental a partir de Texto</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading"></div>
+    <div class="quarto-title-meta-contents">
+             <p>Ivandré Paraboni </p>
+             <p>Helena de Medeiros Caseli </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Publicado em:</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">20/11/2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+
+</div>
+<div>
+<div class="callout-body-container callout-body">
+<p>Este capítulo também está disponível em <a href="cap-saude-mental.pdf">PDF</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" aria-expanded="false" data-bs-target=".callout-cite-contents" aria-label="Toggle callout" aria-controls="callout-cite" data-bs-toggle="collapse">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Como citar
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
+<i class="callout-toggle"></i>
+</div>
+</div>
+<div class="callout-cite-contents callout-collapse collapse" id="callout-cite">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>@InCollection{BPLN_livro_cap-saude-mental:2026,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    author    = {Paraboni, Ivandré and Caseli, Helena de Medeiros},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    title     = {Detecção de Transtornos de Saúde Mental a partir de Texto},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    publisher = {BPLN},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    year      = {2026},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    editor    = {Caseli, H. M. and Nunes, M. G. V.},</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    type      = {Book Chapter},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    chapter   = {10},</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    edition   = {4},</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    volume    = {3},</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    isbn      = {XXXXXXXXXXXXXXXX},</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    url       = {https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html},</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<section id="sec-cap-saude-intro" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="sec-cap-saude-intro"><span class="header-section-number">10.1</span> Introdução</h2>
+<p>Transtornos de saúde mental como depressão e ansiedade são problemas bem conhecidos e uma crescente fonte de preocupação na sociedade moderna. Segundo dados do Global Burden of Disease Study de 2019<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, a depressão é o segundo fator que mais impacta na queda da expectativa de vida da população global. Aliado à gravidade do quadro, a Organização Mundial da Saúde (OMS) alerta que apenas um quarto dos indivíduos que sofrem algum transtorno de saúde mental recebem o atendimento adequado <span class="citation" data-cites="world2021comprehensive">(<a href="../../shared/referencias/referencias.html#ref-world2021comprehensive" role="doc-biblioref">WHO, 2021</a>)</span>. <!--No caso específico do Brasil, de acordo com a OMS, a população brasileira apresentava, já em 2017, a maior proporção de casos de depressão (5,8%, ou 12,2 milhões de indivíduos) e ansiedade (9,3%, ou 19,6 milhões de indivíduos) da América Latina [@who2017].--> No caso específico do Brasil, de acordo com <span class="citation" data-cites="lopes-etal-2022-depression">Lopes et al. (<a href="../../shared/referencias/referencias.html#ref-lopes-etal-2022-depression" role="doc-biblioref">2022</a>)</span>, a prevalência da depressão no país cresceu 36,7% de 2013 a 2019, indo de 7,9% em 2013 para 10,8% em 2019. Durante a pandemia de Covid-19, outra pesquisa <span class="citation" data-cites="zhang-etal-2021-depression">(<a href="../../shared/referencias/referencias.html#ref-zhang-etal-2021-depression" role="doc-biblioref">Zhang et al., 2021</a>)</span> realizada em maio de 2020 com 483 adultos constatou que 70,3% tinha sintomas de depressão e 67,2% tinham sintomas de ansiedade.</p>
+<p>Ao mesmo tempo, diversos estudos demonstram que indivíduos com transtornos de saúde mental são usuários regulares de redes sociais em proporção similar à população em geral, que é estimada em cerca de 70% entre indivíduos de meia idade e até 97% entre indivíduos mais jovens <span class="citation" data-cites="s4-socialmedia mobile socialmedia smartphone">(<a href="../../shared/referencias/referencias.html#ref-s4-socialmedia" role="doc-biblioref">Aschbrenner, 2020</a>; <a href="../../shared/referencias/referencias.html#ref-mobile" role="doc-biblioref">Aschbrenner et al., 2018</a>; <a href="../../shared/referencias/referencias.html#ref-socialmedia" role="doc-biblioref">Birnbaum et al., 2017</a>; <a href="../../shared/referencias/referencias.html#ref-smartphone" role="doc-biblioref">Brunette et al., 2019</a>)</span>, e que indivíduos com estes transtornos frequentemente recorrem às redes sociais em busca do suporte de outros usuários com problemas semelhantes <span class="citation" data-cites="bucci">(<a href="../../shared/referencias/referencias.html#ref-bucci" role="doc-biblioref">Bucci et al., 2019</a>)</span>.</p>
+<p>Este cenário, e a observação de que transtornos de saúde mental frequentemente se refletem na linguagem empregada pelos indivíduos que sofrem dessas condições, levaram a um número expressivo de estudos no PLN e áreas relacionadas, tendo como foco a detecção de transtornos como depressão, ansiedade, bipolaridade, anorexia, ideação suicida e automutilação em redes sociais <span class="citation" data-cites="yates2017 yazdavar2017 shen2017 anx-shen smhd erisk2018-best sensemood see-read">(<a href="../../shared/referencias/referencias.html#ref-smhd" role="doc-biblioref">Cohan et al., 2018</a>; <a href="../../shared/referencias/referencias.html#ref-sensemood" role="doc-biblioref">Lin et al., 2020</a>; <a href="../../shared/referencias/referencias.html#ref-see-read" role="doc-biblioref">Mann et al., 2020</a>; <a href="../../shared/referencias/referencias.html#ref-shen2017" role="doc-biblioref">Shen et al., 2017</a>; <a href="../../shared/referencias/referencias.html#ref-anx-shen" role="doc-biblioref">Shen; Rudzicz, 2017</a>; <a href="../../shared/referencias/referencias.html#ref-erisk2018-best" role="doc-biblioref">Trotzek et al., 2018</a>; <a href="../../shared/referencias/referencias.html#ref-yates2017" role="doc-biblioref">Yates et al., 2017</a>; <a href="../../shared/referencias/referencias.html#ref-yazdavar2017" role="doc-biblioref">Yazdavar et al., 2017</a>)</span>. Este capítulo visa apresentar um levantamento geral de estudos deste tipo, que procuram identificar casos de maior gravidade e eventualmente sinalizar a necessidade de um indivíduo buscar ajuda por meio da detecção computacional de transtornos de depressão e ansiedade a partir de textos em português, em geral provenientes de redes sociais.</p>
+<section id="definição-do-problema" class="level3" data-number="10.1.1">
+<h3 data-number="10.1.1" class="anchored" data-anchor-id="definição-do-problema"><span class="header-section-number">10.1.1</span> Definição do problema</h3>
+<p>A detecção computacional de indivíduos com transtornos de saúde mental a partir de textos provenientes de redes sociais e outras fontes é uma tarefa complexa e não totalmente resolvida na pesquisa em PLN, sendo tipicamente modelada como um problema de aprendizado de máquina (AM) supervisionado. Em abordagens deste tipo, um <em>corpus</em> de publicações (e.g., puramente textuais ou multimodais) rotulado com algum tipo de informação relativa à saúde mental (e.g., depressivo ou não depressivo) é utilizado para treinamento e teste de modelos de classificação do fenômeno de interesse.</p>
+<p>Com base em um <em>corpus</em> textual rotulado com informações de saúde mental, há diversas formulações possíveis para o problema computacional a ser resolvido. Dentre estas, as mais comuns são a detecção de transtornos de saúde mental (e.g., decidir se um indivíduo é depressivo ou não, como em <span class="citation" data-cites="yates2017">(<a href="../../shared/referencias/referencias.html#ref-yates2017" role="doc-biblioref">Yates et al., 2017</a>)</span>), e a detecção de sintomas (e.g., decidir se um texto expressa um sintoma tradicional de depressão, como em <span class="citation" data-cites="yadav-symptoms">(<a href="../../shared/referencias/referencias.html#ref-yadav-symptoms" role="doc-biblioref">Yadav et al., 2020</a>)</span>). Outras formulações menos frequentes para o problema incluem o objetivo de determinar o grau de severidade de um determinado transtorno <span class="citation" data-cites="see-read">(<a href="../../shared/referencias/referencias.html#ref-see-read" role="doc-biblioref">Mann et al., 2020</a>)</span>, ou diferenciar o discurso de indivíduos depressivos de outros meramente interessados em saúde mental <span class="citation" data-cites="depress-lrec">(<a href="../../shared/referencias/referencias.html#ref-depress-lrec" role="doc-biblioref">Santos et al., 2020</a>)</span>, ou identificar uma granularidade maior de sintomas e fatores protetivos e de risco para a depressão <span class="citation" data-cites="mendes_caseli_lrec2024">(<a href="../../shared/referencias/referencias.html#ref-mendes_caseli_lrec2024" role="doc-biblioref">Mendes; Caseli, 2024</a>)</span>. Há, ainda, outra formulação popularizada pela série de desafios computacionais eRisk <span class="citation" data-cites="erisk-corpus">(<a href="../../shared/referencias/referencias.html#ref-erisk-corpus" role="doc-biblioref">Losada; Crestani, 2016</a>)</span> que é a tarefa de detecção precoce de risco de depressão e outros transtornos, em que o objetivo consiste em prever o estado de saúde mental de um indivíduo com base no menor volume possível de publicações em ordem cronológica, ou seja, o mais cedo possível.</p>
+<p>Outro aspecto importante da formulação do problema é o objeto da classificação. Parte dos estudos da área é dedicada à classificação de estados de saúde mental de indivíduos (e.g., usuários de rede social). Este tipo de abordagem, aqui denominada de <strong>nível autoral</strong>, toma por base uma coleção de publicações de um indivíduo (e.g., uma sequência de postagens em rede social, ou <em>timeline</em>) que pode ou não conter informações relevantes para a tarefa. Abordagens orientadas ao indivíduo são empregadas quando o objetivo é estabelecer o estado de saúde mental (e.g., depressivo <em>versus</em> não depressivo) de uma pessoa. Por outro lado, abordagens aqui denominadas de <strong>nível textual</strong> modelam o problema de classificação de textos individuais (e.g., postagens de rede social) independentemente da sua autoria. Estas abordagens tendem a ser mais utilizadas quando o objetivo é filtrar ou selecionar textos de maior relevância para uma aplicação da área de saúde mental, como a detecção de sintomas de depressão em redes sociais. A <a href="#fig-cap-saude-mental-problema" class="quarto-xref">Figura&nbsp;<span>10.1</span></a> ilustra estas possibilidades considerando o exemplo da detecção de depressão, e estas abordagens são discutidas em mais detalhes nas seções a seguir.</p>
+<div id="fig-cap-saude-mental-problema" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-saude-mental-problema-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;10.1: Formulações do problema de classificação de depressão em nível textual e autoral.
+</figcaption>
+<div aria-describedby="fig-cap-saude-mental-problema-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/Figura_Cap_Depress.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+</figure>
+</div>
+<section id="classificação-de-nível-autoral" class="level4" data-number="10.1.1.1">
+<h4 data-number="10.1.1.1" class="anchored" data-anchor-id="classificação-de-nível-autoral"><span class="header-section-number">10.1.1.1</span> Classificação de nível autoral</h4>
+<p>A classificação de nível autoral recebe como entrada uma coleção de textos e outros dados produzidos por (ou relativos a) uma determinada pessoa (e.g., uma coleção de postagens em redes sociais, meta-dados etc.), e objetiva determinar o estado de saúde mental (e.g., depressivo ou não depressivo) desta pessoa. A base de dados de treino e teste nestes casos contempla indivíduos com um transtorno de saúde mental conhecido (ou pertencentes à classe positiva, na terminologia de AM), que podem ser selecionados por meio de validação externa (e.g., por meio de avaliação médica especializada ou uso de questionários, como em <span class="citation" data-cites="see-read">(<a href="../../shared/referencias/referencias.html#ref-see-read" role="doc-biblioref">Mann et al., 2020</a>)</span>), obtendo-se, por exemplo, um <em>corpus</em> de textos de indivíduo com e sem depressão. Este método de aquisição de dados, apesar de confiável, tende a ser de alto custo, o que na prática pode limitar o número de casos (ou instâncias) obtidos.</p>
+<p>Como alternativa à validação externa, estudos da área de PLN têm explorado a ocorrência de <strong>autorrelatos</strong> em redes sociais, como em “Fui ao psicólogo hoje e ele me diagnosticou com esquizofrenia” para identificar rapidamente grandes volumes de indivíduos da classe positiva com custo mínimo. Autorrelatos deste tipo – que servem apenas para a seleção de usuários, mas que não são incluídos nos dados do <em>corpus</em> propriamente dito – são comuns em redes sociais, e embora sejam naturalmente mais sujeitos a imprecisões ou falsidade (o que de resto pode ser problemático também no caso da validação externa), é geralmente aceito que estas dificuldades tendem a ser compensadas pelo maior volume de dados obtido por este método <span class="citation" data-cites="CLPsych2015">(<a href="../../shared/referencias/referencias.html#ref-CLPsych2015" role="doc-biblioref">Coppersmith et al., 2015</a>)</span>.</p>
+<p>Dado entretanto que autorrelatos fornecem evidência apenas da possível <strong>presença</strong> de um transtorno, mas não da sua <strong>ausência</strong> – e que portanto não podem ser tomados por base para seleção de indivíduos que deveriam compor a classe negativa do aprendizado – faz-se necessário utilizar neste caso uma formulação distinta para o problema. Mais especificamente, ao invés de utilizar um conjunto de usuários (por exemplo) sem depressão, utiliza-se um grupo de usuários de controle selecionados aleatoriamente (e que portanto também inclui um certo número de indivíduos com depressão não detectáveis) de proporção várias vezes superior ao da classe positiva (normalmente proporcional à incidência do transtorno na população em geral). Assim, o problema computacional a ser resolvido não consiste em distinguir indivíduos com e sem depressão (e na verdade a informação sobre ausência de depressão é inexistente nos dados), e sim em <strong>identificar indivíduos com probabilidade acima da média da população geral de virem a receber um futuro diagnóstico</strong>. Esta probabilidade, que entre indivíduos da classe positiva será próxima de 100%, é necessariamente muito mais baixa em um grupo de controle aleatório, e pode assim ser capturada com métodos computacionais variados como o aprendizado profundo.</p>
+<p>Em virtude destas características, o uso de autorrelatos para identificar indivíduos (provavelmente) diagnosticados com um transtorno de saúde mental configura um problema de AM fortemente desbalanceado. Mesmo com estas dificuldades, entretanto, a seleção de indivíduos com transtorno de saúde mental por meio de seus próprios autorrelatos é possivelmente o método de coleta de dados mais popular na pesquisa na área de PLN <span class="citation" data-cites="yates2017 smhd erisk2019 setembrobr">(<a href="../../shared/referencias/referencias.html#ref-smhd" role="doc-biblioref">Cohan et al., 2018</a>; <a href="../../shared/referencias/referencias.html#ref-erisk2019" role="doc-biblioref">Losada et al., 2019</a>; <a href="../../shared/referencias/referencias.html#ref-setembrobr" role="doc-biblioref">Santos et al., 2024</a>; <a href="../../shared/referencias/referencias.html#ref-yates2017" role="doc-biblioref">Yates et al., 2017</a>)</span>.</p>
+</section>
+<section id="classificação-em-nível-textual" class="level4" data-number="10.1.1.2">
+<h4 data-number="10.1.1.2" class="anchored" data-anchor-id="classificação-em-nível-textual"><span class="header-section-number">10.1.1.2</span> Classificação em nível textual</h4>
+<p>A classificação de nível textual recebe como entrada um texto individual (e.g., uma postagem em rede social) e objetiva verificar se este texto expressa algum tipo de informação relacionada à saúde mental (e.g., se é de caráter depressivo ou não) sem levar em conta a identidade do seu autor. Modelos deste tipo são comumente empregados para detectar sintomas de depressão <span class="citation" data-cites="yadav-symptoms">(<a href="../../shared/referencias/referencias.html#ref-yadav-symptoms" role="doc-biblioref">Yadav et al., 2020</a>)</span>, verificar a pertinência do texto para detecção de um transtorno <span class="citation" data-cites="set-prompt">(<a href="../../shared/referencias/referencias.html#ref-set-prompt" role="doc-biblioref">Santos; Paraboni, 2024</a>)</span>, entre outras aplicações. A classificação em nível textual pode também ser tratada como um pré-requisito para a classificação de nível autoral, procurando filtrar textos de maior interesse para a tarefa em meio a uma grande massa de dados ruidosos (e.g., provenientes de redes sociais). Uma estratégia possível de combinação destes dois níveis de processamento é, por exemplo, o uso de aprendizado baseado em múltiplas instâncias <span class="citation" data-cites="mann2022">(<a href="../../shared/referencias/referencias.html#ref-mann2022" role="doc-biblioref">Mann et al., 2022</a>)</span>.</p>
+<p>Ao contrário da classificação em nível autoral, em que atribui-se um rótulo a uma coleção de textos (e.g., uma <em>timeline</em> de rede social) com base em um relato feito pelo próprio autor (ou usuário), a classificação em nível textual pressupõe a disponibilidade de textos rotulados individualmente com o tipo de informação a ser aprendida. Isso demanda um esforço adicional de anotação de <em>corpus</em>, ou algum método de rotulação automática implementado com uso de grandes modelos de linguagem (-cap-modelos-linguagem) e engenharia de <em>prompts</em> <span class="citation" data-cites="set-chatgpt set-prompt">(<a href="../../shared/referencias/referencias.html#ref-set-chatgpt" role="doc-biblioref">Santos; Paraboni, 2023</a>; <a href="../../shared/referencias/referencias.html#ref-set-prompt" role="doc-biblioref">Santos; Paraboni, 2024</a>)</span>.</p>
+<p>Um exemplo de projeto que trabalhou na classificação em nível textual foi o Amive<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> (<span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html#sec-cap-saude-mental-amive" target="_blank" title="Volume 3">Amive: detecção de sintomas de depressão em português</a></span>). Nesse projeto, postagens anônimas de páginas de segredos universitários foram coletadas por meio da busca por palavras-chave associadas à depressão e ideação suicida. Essas postagens foram, então, rotuladas com 21 sinais relacionados a depressão (sintomas, fatores de risco e protetivos) por estudantes e profissionais das áreas de psicologia, medicina e terapia ocupacional. Contudo, a anotação em uma granularidade maior, em dados de conteúdo sensível, por especialistas humanos é um trabalho bastante oneroso que demanda tempo e deve ser feito com cuidado para não afetar também a saúde mental dos anotadores.</p>
+</section>
+</section>
+</section>
+<section id="conjuntos-de-dados-para-detecção-de-depressãoansiedade" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="conjuntos-de-dados-para-detecção-de-depressãoansiedade"><span class="header-section-number">10.2</span> Conjuntos de dados para detecção de depressão/ansiedade</h2>
+<p>A detecção de depressão e ansiedade a partir de textos faz o uso de <em>corpus</em> especialmente coletados e rotulados para este propósito. Recursos linguístico-computacionais deste tipo já foram desenvolvidos em quantidade expressiva para o idioma inglês, em alguns casos como subproduto de eventos do tipo <em>shared task</em> como o desafio CLPsych-2015 <span class="citation" data-cites="CLPsych2015">(<a href="../../shared/referencias/referencias.html#ref-CLPsych2015" role="doc-biblioref">Coppersmith et al., 2015</a>)</span> e a série eRisk <span class="citation" data-cites="erisk2019">(<a href="../../shared/referencias/referencias.html#ref-erisk2019" role="doc-biblioref">Losada et al., 2019</a>)</span>. Iniciativas para o português incluem o estudo em <span class="citation" data-cites="see-read">(<a href="../../shared/referencias/referencias.html#ref-see-read" role="doc-biblioref">Mann et al., 2020</a>)</span> e o <em>corpus</em> SetembroBR <span class="citation" data-cites="setembrobr">(<a href="../../shared/referencias/referencias.html#ref-setembrobr" role="doc-biblioref">Santos et al., 2024</a>)</span>. Nesta seção apresentamos um levantamento de alguns recursos linguísticos-computacionais existentes na área. Para cada um dos estudos selecionados, a <a href="#tbl-cap-saude-mental-corpora" class="quarto-xref">Tabela&nbsp;<span>10.1</span></a> apresenta o domínio, idioma e modalidade de dados, o número de instâncias de depressão/ansiedade, a relação entre usuários de controle (C) e diagnosticados (D) e o método de pareamento das classes. Detalhes adicionais são discutidos a seguir.</p>
+<p></p>
+<div id="tbl-cap-saude-mental-corpora" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cap-saude-mental-corpora-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;10.1: Exemplos de <em>corpora</em> para detecção de depressão/ansiedade
+</figcaption>
+<div aria-describedby="tbl-cap-saude-mental-corpora-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;"><em>Corpus</em></th>
+<th style="text-align: left;">Domínio</th>
+<th style="text-align: center;">Idioma</th>
+<th style="text-align: left;">Modalidade</th>
+<th style="text-align: center;">Dep.</th>
+<th style="text-align: center;">Ans.</th>
+<th style="text-align: center;">C/D</th>
+<th style="text-align: left;">Pareamento</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">CLPsych-2015</td>
+<td style="text-align: left;">Twitter/X</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">texto</td>
+<td style="text-align: center;">477</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">idade, gênero</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RSDD</td>
+<td style="text-align: left;">Reddit</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">texto</td>
+<td style="text-align: center;">9210</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">11,6</td>
+<td style="text-align: left;">comportamento</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Shen et al.</td>
+<td style="text-align: left;">Twitter/X</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">texto</td>
+<td style="text-align: center;">1402</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">na</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">eRisk-2017</td>
+<td style="text-align: left;">Reddit</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">texto</td>
+<td style="text-align: center;">135</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">5,6</td>
+<td style="text-align: left;">na</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">eRisk-2018</td>
+<td style="text-align: left;">Reddit</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">texto</td>
+<td style="text-align: center;">214</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: left;">na</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SMHD</td>
+<td style="text-align: left;">Reddit</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">texto</td>
+<td style="text-align: center;">14139</td>
+<td style="text-align: center;">8783</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: left;">comportamento</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mann et al.</td>
+<td style="text-align: left;">Instagram</td>
+<td style="text-align: center;">Pt</td>
+<td style="text-align: left;">texto, imagens</td>
+<td style="text-align: center;">82</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">1,7</td>
+<td style="text-align: left;">na</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SetembroBR</td>
+<td style="text-align: left;">Twitter/X</td>
+<td style="text-align: center;">Pt</td>
+<td style="text-align: left;">texto, rede soc.</td>
+<td style="text-align: center;">1283</td>
+<td style="text-align: center;">1767</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: left;">gênero, data, tamanho</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Amive</td>
+<td style="text-align: left;">Facebook</td>
+<td style="text-align: center;">Pt</td>
+<td style="text-align: left;">texto</td>
+<td style="text-align: center;">780</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: left;">na</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p></p>
+<p>Com base neste levantamento, observa-se que os <em>corpora</em> existentes tendem a ser baseados principalmente nos domínios Reddit e Twitter/X, e que a maioria dos recursos listados são do tipo textual e dedicados ao idioma inglês. Para o português temos o já citado estudo em <span class="citation" data-cites="see-read">(<a href="../../shared/referencias/referencias.html#ref-see-read" role="doc-biblioref">Mann et al., 2020</a>)</span>, que se destaca por ser o único a considerar o domínio Instagram e baseado no idioma português, e também por incluir dados de imagens; o <em>corpus</em> SetembroBR <span class="citation" data-cites="setembrobr">(<a href="../../shared/referencias/referencias.html#ref-setembrobr" role="doc-biblioref">Santos et al., 2024</a>)</span> a ser discutido em mais detalhes na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html#sec-cap-saude-mental-setbr" target="_blank" title="Volume 3">SetembroBR: detecção de depressão/ansiedade em português</a></span> e único do gênero a incluir informações relativas à rede social dos usuários representados na base de dados; e o <em>corpus</em> do projeto Amive, apresentado em detalhes na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html#sec-cap-saude-mental-amive" target="_blank" title="Volume 3">Amive: detecção de sintomas de depressão em português</a></span>. Além disso, observa-se que os <em>corpora</em> SetembroBR e SMHD são os únicos que contemplam explicitamente casos de transtorno de ansiedade<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. É importante observar, entretanto, que diversos métodos de detecção de transtornos de saúde mental discutidos na próxima seção fazem uso de dados multimodais (e.g., imagens e características da rede social etc.) mas que este tipo de informação, via de regra, não é parte integrante de um <em>corpus</em> publicamente disponibilizado para pesquisa.</p>
+<p>No que diz respeito ao volume de dados, observa-se que os <em>corpora</em> considerados apresentam grande variação de tamanho (aqui medida em quantidade de indivíduos diagnosticados), e que recursos baseados em dados da rede social Reddit tendem a ser maiores. Isso é explicável pela organização dos dados em grupos de discussão (e.g., sobre depressão) nessa plataforma e, consequentemente, pela maior facilidade de identificação de indivíduos diagnosticados. Dados no domínio Twitter/X, por outro lado, são consideravelmente menos estruturados, o que torna mais complexa a tarefa de seleção de indivíduos com transtorno de saúde mental. No caso do <em>corpus</em> do projeto Amive, a quantidade apresentada na tabela indica o total de <em>posts</em> do Facebook coletados para serem anotados pelos especialistas em saúde mental a partir de busca por palavras-chave relacionadas à depressão e ideação suicida. Neste sentido, esse <em>corpus</em> difere dos demais uma vez que as instâncias não se referem a indivíduos diagnosticados, mas sim a postagens que podem ter sinais relacionados à depressão. Pela mesma especificidade desse <em>corpus</em>, não faz sentido indicar a proporção C/D nesse caso.</p>
+<p>Observa-se de modo geral uma grande variação também na proporção entre indivíduos de controle e diagnosticados, indicada na coluna C/D da tabela, e que é um aspecto crucial da modelagem do problema de classificação a ser resolvido. Dentre os estudos selecionados, o <em>corpus</em> CLPsych-2015 é o único, dentre os mais amplamente utilizados na área, que se limita a um balanceamento artificialmente ideal, criado com o objetivo de simplificar o uso de métodos de AM no contexto da competição (ou <em>shared task</em>) de mesmo nome, enquanto que em todos os demais procurou-se considerar de alguma forma a necessidade de modelar um cenário mais realista. Dentre as estratégias adotadas, observa-se a modelagem de um grupo de controle de dimensão bastante superior ao do grupo de diagnosticados <span class="citation" data-cites="yates2017 smhd erisk2017 erisk2018 setembrobr">(<a href="../../shared/referencias/referencias.html#ref-smhd" role="doc-biblioref">Cohan et al., 2018</a>; <a href="../../shared/referencias/referencias.html#ref-erisk2017" role="doc-biblioref">Losada et al., 2017</a>, <a href="../../shared/referencias/referencias.html#ref-erisk2018" role="doc-biblioref">2018</a>; <a href="../../shared/referencias/referencias.html#ref-setembrobr" role="doc-biblioref">Santos et al., 2024</a>; <a href="../../shared/referencias/referencias.html#ref-yates2017" role="doc-biblioref">Yates et al., 2017</a>)</span>, o uso de múltiplas seleções de indivíduos aleatórios a partir de uma grande massa de dados <span class="citation" data-cites="shen2017">(<a href="../../shared/referencias/referencias.html#ref-shen2017" role="doc-biblioref">Shen et al., 2017</a>)</span>, ou simplesmente o uso de inventários clínicos <span class="citation" data-cites="see-read">(<a href="../../shared/referencias/referencias.html#ref-see-read" role="doc-biblioref">Mann et al., 2020</a>)</span> como forma de selecionar indivíduos livres de depressão (a um custo possivelmente elevado, refletido no menor volume de indivíduos obtidos, porém dispensando o uso de um grupo de controle aleatorizado).</p>
+<p>Outra questão fundamental na construção de um <em>corpus</em> deste tipo é o pareamento entre indivíduos diagnosticados e suas contrapartidas no grupo de controle, já que diferenças indesejáveis entre os dois conjuntos podem levar ao aprendizado de padrões espúrios. Por exemplo, caso indivíduos diagnosticados e de controle sejam extraídos de populações diferentes (e.g., com publicações feitas em períodos muito distintos), é possível que diferenças de vocabulário, decorrentes da evolução natural da língua, sejam tratadas como características relevantes para distinção entre as duas classes. Assim, como forma de assegurar que os dois grupos sejam minimamente comparáveis, o <em>corpus</em> CLPsych-2015 se destaca como o único a garantir pareamento de gênero e faixa etária entre indivíduos de ambas as classes, o que minimiza possíveis diferenças de vocabulário entre os dois grupos. O pareamento entre classes também é uma preocupação do <em>corpus</em> RSDD e sua extensão SMHD, em que indivíduos diagnosticados e de controle são selecionados com base no seu comportamento na rede social (e.g., grupos de discussão dos quais participam, frequência de postagens etc.). Este tipo de pareamento é um quesito importante no caso da plataforma Reddit, mas não possui contrapartida direta no domínio Twitter/X. No <em>corpus</em> SetembroBR, baseado na plataforma Twitter/X, foi realizado o pareamento por datas aproximadas de publicação, volume de postagens e gênero dos usuários. No caso do <em>corpus</em> do projeto Amive, uma vez que as postagens são anônimas, o pareamento com base em informações como gênero e idade não seria possível. Nesse caso, como o foco era o público alvo de estudantes universitários, buscou-se minimizar o impacto de algum viés variando-se as páginas de Segredos Universitários a partir das quais as postagens foram coletadas.</p>
+<p>Com exceção do <em>corpus</em> SetembroBR a ser discutido em mais detalhes na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html#sec-cap-saude-mental-setbr" target="_blank" title="Volume 3">SetembroBR: detecção de depressão/ansiedade em português</a></span>, os recursos aqui discutidos não levam em conta a noção de detecção <strong>precoce</strong> de transtornos, ou seja, anterior ao momento em que o indivíduo é oficialmente diagnosticado por um profissional da área de saúde. Em todos os casos discutidos, os dados constantes do <em>corpus</em> contemplam publicações feitas antes e depois do diagnóstico ou tratamento do indivíduo, e podem assim incluir um número potencialmente grande de indicadores a esse respeito. Por exemplo, uma vez que um indivíduo é diagnosticado ou começa a fazer tratamento para depressão, pode ser natural que ele passe a falar (ou falar mais) sobre este assunto, ou que relate as conversas que tem com o psicólogo, os efeitos da medicação etc. Todos estes indicadores, que em maior ou menor grau estão presentes em todos os <em>corpora</em> aqui discutidos, podem não só reduzir o grau de realismo do desafio computacional, como talvez reduzir a própria utilidade prática do método desenvolvido. Além disso, cabe observar que esta limitação está presente até mesmo nos <em>corpora</em> disponibilizados na série de desafios e-Risk <span class="citation" data-cites="erisk2017 erisk2018 erisk2019">(<a href="../../shared/referencias/referencias.html#ref-erisk2017" role="doc-biblioref">Losada et al., 2017</a>, <a href="../../shared/referencias/referencias.html#ref-erisk2018" role="doc-biblioref">2018</a>, <a href="../../shared/referencias/referencias.html#ref-erisk2019" role="doc-biblioref">2019</a>)</span>, que mesmo possuindo o propósito explícito de detecção de primeiros sinais de transtornos de saúde mental como depressão, não fazem nenhuma distinção efetiva entre dados publicados antes ou depois do seu diagnóstico oficial, limitando-se apenas ao desafio computacional de classificar estes indivíduos com base no menor volume de dados possível seguindo a ordem cronológica das publicações.</p>
+<p>Finalmente, é importante destacar que <em>corpora</em> textuais rotulados com informações sobre saúde mental geralmente não são recursos computacionais totalmente acessíveis, como seriam <em>corpora</em> voltados a outros tipos de aplicação de PLN. Além da natureza sensível do problema e das considerações éticas associadas, algumas redes sociais como a plataforma Twitter/X proíbem a reprodução e divulgação de conteúdo gerado por seus usuários como forma de proteger a privacidade e o direito de arrependimento destes. Assim, <em>corpora</em> de tweets como SetembroBR, quando disponibilizados, são apenas coleções de identificadores numéricos a partir dos quais as postagens integrais podem ser recuperadas diretamente a partir da API da plataforma, caso ainda sejam disponibilizadas pelos seus autores. Este acesso, via de regra, acarreta algum esforço de programação e, no caso da plataforma Twitter/X, deixou de ser gratuito em fevereiro de 2023.</p>
+</section>
+<section id="sec-cap-saude-mental-modelos" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="sec-cap-saude-mental-modelos"><span class="header-section-number">10.3</span> Modelos computacionais de detecção de depressão/ansiedade</h2>
+<p>A detecção de transtornos de saúde mental apresenta os desafios comuns à boa parte das aplicações de PLN. Em especial, observa-se que a distinção entre indivíduos diagnosticados e aqueles que pertencem ao grupo de controle com base em características linguísticas é naturalmente dificultada pelo fato de que ambos os grupos podem discutir qualquer tipo de assunto, incluindo questões relacionadas à saúde mental (deles próprios, de terceiros etc.), em uma variedade de contextos reais e imaginários, fazendo uso de humor, sarcasmo, metáforas, conjecturas e muitas outras formas de expressão. Além disso, no caso do aprendizado a partir de textos provenientes de redes sociais, observa-se que os dados de entrada são normalmente esparsos, isso é, com grande incidência de ruído na forma de postagens sem relação com o problema a ser tratado. É comum, por exemplo, deparar-se com <em>timelines</em> de usuários do Twitter/X que, apesar de sabidamente diagnosticados com depressão, não fazem qualquer referência a questões de saúde mental.</p>
+<p>O que possui um texto para que seja classificado como relacionado a um determinado transtorno de saúde mental? De um lado, são conhecidos diversos indicadores linguísticos estabelecidos na literatura médica <span class="citation" data-cites="dep-indicators">(<a href="../../shared/referencias/referencias.html#ref-dep-indicators" role="doc-biblioref">Trifu et al., 2017</a>)</span>. Indicadores deste tipo incluem o uso frequente de pronomes de primeira pessoa, tempo passado em verbos de ação, inversão da ordem de palavras em tópicos, ênfases, presença de sentenças curtas, impessoais, truncadas ou ríspidas, elipses, tautologias, repetições e ausência de comparação. O uso de termos absolutistas (e.g., todo, sempre etc.) também é mais fortemente associado a indivíduos com depressão <span class="citation" data-cites="absolute">(<a href="../../shared/referencias/referencias.html#ref-absolute" role="doc-biblioref">Johnstone, 2018</a>)</span>, assim como o uso de expressões de conotação negativa em certas redes sociais <span class="citation" data-cites="negativity">(<a href="../../shared/referencias/referencias.html#ref-negativity" role="doc-biblioref">Rickard, 2018</a>)</span>. Finalmente, alguns estudos exploram também o uso de informações não textuais como conexões da rede social, frequência e horário de publicações e outros <span class="citation" data-cites="dechoudhury2013 shrestha">(<a href="../../shared/referencias/referencias.html#ref-dechoudhury2013" role="doc-biblioref">Choudhury et al., 2013</a>; <a href="../../shared/referencias/referencias.html#ref-shrestha" role="doc-biblioref">Shrestha; Spezzano, 2019</a>)</span>.</p>
+<p>Indicadores linguísticos de transtornos de saúde mental são normalmente modelados como sequências de <em>tokens</em> ou outras representações textuais tradicionais do PLN. Embora de valor indiscutível (por exemplo, para capturar o uso de referências pronominais etc.), a eficácia destes indicadores depende em grande parte da disponibilidade de um conjunto de treino suficientemente grande, onde todos os exemplos possíveis tenham ocorrido em número significativo para aprendizado automático. Assim, por exemplo, um modelo de AM reconhece a correlação entre sequências de <em>tokens</em> como “eu me sinto péssimo”, ou “psicóloga disse que eu tenho que me cuidar melhor” e saúde mental. Por outro lado, exemplos mais raros, mesmo que altamente significativos, tendem a ser ignorados. Este é o caso por exemplo do uso de linguagem figurativa como em “acho que vou pular da ponte” como uma expressão de ideação suicida.</p>
+<p>Uma possível forma de compensar a insuficiência de exemplos (que é em certa medida inerente a qualquer abordagem supervisionada) seria o uso de grandes modelos de linguagem como base de conhecimento auxiliar. Neste sentido, estudos como <span class="citation" data-cites="set-prompt">(<a href="../../shared/referencias/referencias.html#ref-set-prompt" role="doc-biblioref">Santos; Paraboni, 2024</a>)</span> demonstram que modelos como GPT <span class="citation" data-cites="gpt3">(<a href="../../shared/referencias/referencias.html#ref-gpt3" role="doc-biblioref">Brown et al., 2020</a>)</span> podem capturar com facilidade noções complexas como a do exemplo anterior, e que este conhecimento pode ser combinado com abordagens tradicionais (e.g., supervisionadas) para detecção de transtornos de saúde mental em dois níveis, ou seja, considerando tanto indicadores linguísticos de baixo nível como sequências de <em>tokens</em> e conceitos de alto nível como sintomas. Detalhes desta estratégia são discutidos na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html#sec-cap-saude-mental-setbr" target="_blank" title="Volume 3">SetembroBR: detecção de depressão/ansiedade em português</a></span>.</p>
+<p>O <a href="#def-cap-saude-mental-quadro-related" class="quarto-xref">Quadro&nbsp;<span>10.1</span></a> categoriza uma série de exemplos de estudos da área de acordo com o tipo de problema considerado (d=depressão, a=ansiedade, s=sintomas de depressão, v=grau de severidade da depressão, *=outros), tarefa (det=detecção, e.d = detecção precoce, exp=explicação), domínio (Reddit, Twitter/X etc.), idioma (En=inglês, Ch=chinês, Pt=português), características de aprendizado (e=<em>embeddings</em>, t=tópicos, n=informações de rede, u=informações referentes ao usuário, l=atributos psicolinguísticos LIWC, p=<em>part-of-speech</em>, d=dicionário de domínio, s=sentimentos/emoções, i=imagens, b=<em>bag of words</em>, m=metadados, t=informação temporal, ou texto simples), e métodos de aprendizado (e.g., CNN=redes neurais convolucionais, LSTM=<em>long short-term neural networks</em>, MLP=<em>multilayer perceptron</em>, NN=outras arquiteturas neurais, LR&nbsp;= regressão logística, RF=Random Forest, DT=árvore de decisão, NB=Naive Bayes, XG=XGBoost etc.). Detalhes adicionais são discutidos a seguir.</p>
+<div id="def-cap-saude-mental-quadro-related" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 10.1</strong></span> Exemplos de modelos computacionais de detecção de depressão e ansiedade</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Estudo</th>
+<th style="text-align: center;">Alvo</th>
+<th style="text-align: center;">Tarefa</th>
+<th style="text-align: center;">Domínio</th>
+<th style="text-align: center;">Líng.</th>
+<th style="text-align: left;">Atributos</th>
+<th style="text-align: left;">Abordagem</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="yates2017">(<a href="../../shared/referencias/referencias.html#ref-yates2017" role="doc-biblioref">Yates et al., 2017</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Reddit</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">e</td>
+<td style="text-align: left;">CNN</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="yazdavar2017">(<a href="../../shared/referencias/referencias.html#ref-yazdavar2017" role="doc-biblioref">Yazdavar et al., 2017</a>)</span></td>
+<td style="text-align: center;">s</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Twitter/X</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">t</td>
+<td style="text-align: left;">LDA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="shen2017">(<a href="../../shared/referencias/referencias.html#ref-shen2017" role="doc-biblioref">Shen et al., 2017</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Twitter/X</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">n, u, i, t, d, l, e</td>
+<td style="text-align: left;">LR</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="anx-shen">(<a href="../../shared/referencias/referencias.html#ref-anx-shen" role="doc-biblioref">Shen; Rudzicz, 2017</a>)</span></td>
+<td style="text-align: center;">a</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Reddit</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">e, t, l</td>
+<td style="text-align: left;">MLP</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="anx-micropat">(<a href="../../shared/referencias/referencias.html#ref-anx-micropat" role="doc-biblioref">Loveys et al., 2017</a>)</span></td>
+<td style="text-align: center;">a,*</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Twitter/X</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">s</td>
+<td style="text-align: left;">VADER</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="smhd">(<a href="../../shared/referencias/referencias.html#ref-smhd" role="doc-biblioref">Cohan et al., 2018</a>)</span></td>
+<td style="text-align: center;">d,a,*</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Reddit</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">b, e</td>
+<td style="text-align: left;">FastText</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="song2018">(<a href="../../shared/referencias/referencias.html#ref-song2018" role="doc-biblioref">Song et al., 2018</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">exp</td>
+<td style="text-align: center;">Reddit</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">d, s, t, m, p</td>
+<td style="text-align: left;">MLP+RNN</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="erisk2018-best">(<a href="../../shared/referencias/referencias.html#ref-erisk2018-best" role="doc-biblioref">Trotzek et al., 2018</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">e.d</td>
+<td style="text-align: center;">Reddit</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">e, p, m, t, d</td>
+<td style="text-align: left;">CNN</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="depress-pt-br">(<a href="../../shared/referencias/referencias.html#ref-depress-pt-br" role="doc-biblioref">Nascimento et al., 2018</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Blogs</td>
+<td style="text-align: center;">Pt</td>
+<td style="text-align: left;">s</td>
+<td style="text-align: left;">DT</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="cross-depress">(<a href="../../shared/referencias/referencias.html#ref-cross-depress" role="doc-biblioref">Shen et al., 2018</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Weibo</td>
+<td style="text-align: center;">Ch</td>
+<td style="text-align: left;">s, p, t, m, i, u, n</td>
+<td style="text-align: left;">NN</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="anx-dep">(<a href="../../shared/referencias/referencias.html#ref-anx-dep" role="doc-biblioref">Arora, 2019</a>)</span></td>
+<td style="text-align: center;">d,a</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Twitter/X</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">d, s, t</td>
+<td style="text-align: left;">ensemble</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="aragon2019">(<a href="../../shared/referencias/referencias.html#ref-aragon2019" role="doc-biblioref">Aragón et al., 2019</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">e.d</td>
+<td style="text-align: center;">Reddit</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">s</td>
+<td style="text-align: left;">SVM</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="cacheda2019">(<a href="../../shared/referencias/referencias.html#ref-cacheda2019" role="doc-biblioref">Carneiro, 2019</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">e.d</td>
+<td style="text-align: center;">Reddit</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">t, m, n</td>
+<td style="text-align: left;">RF</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="depress-lrec">(<a href="../../shared/referencias/referencias.html#ref-depress-lrec" role="doc-biblioref">Santos et al., 2020</a>)</span></td>
+<td style="text-align: center;">d,a,*</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Twitter/X</td>
+<td style="text-align: center;">Pt</td>
+<td style="text-align: left;">e, b</td>
+<td style="text-align: left;">LR</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="ss3">(<a href="../../shared/referencias/referencias.html#ref-ss3" role="doc-biblioref">Burdisso et al., 2020</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">e.d</td>
+<td style="text-align: center;">Reddit</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">b</td>
+<td style="text-align: left;">SS3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="sensemood">(<a href="../../shared/referencias/referencias.html#ref-sensemood" role="doc-biblioref">Lin et al., 2020</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Twitter/X</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">e, i</td>
+<td style="text-align: left;">CNN</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="yazdavar2020">(<a href="../../shared/referencias/referencias.html#ref-yazdavar2020" role="doc-biblioref">Hitzler, 2020</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Twitter/X</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">b, s, t, i, n, l, u</td>
+<td style="text-align: left;">RF</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="see-read">(<a href="../../shared/referencias/referencias.html#ref-see-read" role="doc-biblioref">Mann et al., 2020</a>)</span></td>
+<td style="text-align: center;">v</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Instagram</td>
+<td style="text-align: center;">Pt</td>
+<td style="text-align: left;">i, e</td>
+<td style="text-align: left;">NN</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="souza2021deep">(<a href="../../shared/referencias/referencias.html#ref-souza2021deep" role="doc-biblioref">Souza et al., 2021</a>)</span></td>
+<td style="text-align: center;">a,d</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Reddit</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">e</td>
+<td style="text-align: left;">LSTM+CNN</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="ansari2022ens">(<a href="../../shared/referencias/referencias.html#ref-ansari2022ens" role="doc-biblioref">Ansari; Ji, 2022</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Reddit,Twitter/X</td>
+<td style="text-align: center;">En</td>
+<td style="text-align: left;">e,s</td>
+<td style="text-align: left;">LR+LSTM</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="mann2022">(<a href="../../shared/referencias/referencias.html#ref-mann2022" role="doc-biblioref">Mann et al., 2022</a>)</span></td>
+<td style="text-align: center;">v</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Instagram</td>
+<td style="text-align: center;">Pt</td>
+<td style="text-align: left;">e</td>
+<td style="text-align: left;">BERT,LSTM</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="setembrobr">(<a href="../../shared/referencias/referencias.html#ref-setembrobr" role="doc-biblioref">Santos et al., 2024</a>)</span></td>
+<td style="text-align: center;">d,a</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Twitter/X</td>
+<td style="text-align: center;">Pt</td>
+<td style="text-align: left;">e, n</td>
+<td style="text-align: left;">BERT,LSTM</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="set-engineering">(<a href="../../shared/referencias/referencias.html#ref-set-engineering" role="doc-biblioref">Santos et al., 2023</a>)</span></td>
+<td style="text-align: center;">d,a</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Twitter/X</td>
+<td style="text-align: center;">Pt</td>
+<td style="text-align: left;">e</td>
+<td style="text-align: left;">BERT,MoE</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="set-chatgpt">(<a href="../../shared/referencias/referencias.html#ref-set-chatgpt" role="doc-biblioref">Santos; Paraboni, 2023</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Twitter/X</td>
+<td style="text-align: center;">Pt</td>
+<td style="text-align: left;">texto</td>
+<td style="text-align: left;">ChatGPT</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="set-bou">(<a href="../../shared/referencias/referencias.html#ref-set-bou" role="doc-biblioref">Oliveira; Paraboni, 2024</a>)</span></td>
+<td style="text-align: center;">d,a</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Twitter/X</td>
+<td style="text-align: center;">Pt</td>
+<td style="text-align: left;">e, n</td>
+<td style="text-align: left;">BERT,LSTM,LR</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="set-newrev">(<a href="../../shared/referencias/referencias.html#ref-set-newrev" role="doc-biblioref">Oliveira et al., 2024</a>)</span></td>
+<td style="text-align: center;">d,a</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Twitter/X</td>
+<td style="text-align: center;">Pt</td>
+<td style="text-align: left;">e, n</td>
+<td style="text-align: left;">BERT,LSTM,LR</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="set-prompt">(<a href="../../shared/referencias/referencias.html#ref-set-prompt" role="doc-biblioref">Santos; Paraboni, 2024</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Twitter/X</td>
+<td style="text-align: center;">Pt</td>
+<td style="text-align: left;">texto</td>
+<td style="text-align: left;">GPT</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="mendes_caseli_lrec2024">(<a href="../../shared/referencias/referencias.html#ref-mendes_caseli_lrec2024" role="doc-biblioref">Mendes; Caseli, 2024</a>)</span></td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;">det</td>
+<td style="text-align: center;">Facebook</td>
+<td style="text-align: center;">Pt</td>
+<td style="text-align: left;">e, l, p, d, b</td>
+<td style="text-align: left;">SVM,LR,NB,RF,XG,BERT</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+<!-- IMPORTANTE! Se o quadro tiver uma tabela dentro, como o acima, é preciso inserir a linha abaixo depois de :::: -->
+<p></p>
+<p>No que diz respeito ao tipo de transtorno a ser detectado, observa-se que estudos focados na depressão (d) tendem a ser muito mais frequentes do que os focados no transtorno de ansiedade (a). Além disso, observa-se que o estudo de <span class="citation" data-cites="anx-dep">(<a href="../../shared/referencias/referencias.html#ref-anx-dep" role="doc-biblioref">Arora, 2019</a>)</span> trata da questão da ansiedade depressiva, um transtorno misto que combina sintomas de depressão e ansiedade, e que o trabalho de <span class="citation" data-cites="comorbidity">(<a href="../../shared/referencias/referencias.html#ref-comorbidity" role="doc-biblioref">Souza et al., 2020b</a>)</span> investiga a comorbidade destes dois transtornos. Alguns estudos enfocam ainda a detecção de sintomas <span class="citation" data-cites="yazdavar2017 mendes_caseli_lrec2024">(<a href="../../shared/referencias/referencias.html#ref-mendes_caseli_lrec2024" role="doc-biblioref">Mendes; Caseli, 2024</a>; <a href="../../shared/referencias/referencias.html#ref-yazdavar2017" role="doc-biblioref">Yazdavar et al., 2017</a>)</span> ou grau de severidade <span class="citation" data-cites="see-read">(<a href="../../shared/referencias/referencias.html#ref-see-read" role="doc-biblioref">Mann et al., 2020</a>)</span> destes transtornos.</p>
+<p>Considerando-se a tarefa computacional a ser implementada, é possível observar que a maioria dos estudos identificados trata da detecção (det) de depressão/ansiedade ou sua detecção com base no menor volume possível de evidência (e.d), que é uma formulação específica do problema adotada na série de <em>shared tasks</em> eRisk <span class="citation" data-cites="erisk2019">(<a href="../../shared/referencias/referencias.html#ref-erisk2019" role="doc-biblioref">Losada et al., 2019</a>)</span>, e/ou baseada nos <em>corpora</em> derivados destas competições. A preocupação com a necessidade de explicar os passos que levaram ao resultado da classificação é o foco do estudo de <span class="citation" data-cites="song2018">(<a href="../../shared/referencias/referencias.html#ref-song2018" role="doc-biblioref">Song et al., 2018</a>)</span>.</p>
+<p>Assim como no caso dos <em>corpora</em> discutidos na seção anterior, os estudos identificados são, com poucas exceções, baseados em dados nos domínios Twitter/X ou Reddit. Vários destes estudos desenvolvem seus próprios conjuntos de dados (especialmente quando considerando características não textuais da rede social ou outras não disponibilizadas em <em>corpora</em> de uso público), enquanto outros reutilizam um <em>corpus</em> de referência na área, como o RSDD <span class="citation" data-cites="yates2017">(<a href="../../shared/referencias/referencias.html#ref-yates2017" role="doc-biblioref">Yates et al., 2017</a>)</span>, SMHD <span class="citation" data-cites="smhd">(<a href="../../shared/referencias/referencias.html#ref-smhd" role="doc-biblioref">Cohan et al., 2018</a>)</span> ou eRisk <span class="citation" data-cites="erisk2017">(<a href="../../shared/referencias/referencias.html#ref-erisk2017" role="doc-biblioref">Losada et al., 2017</a>)</span> no domínio Reddit, ou ainda o <em>corpus</em> de tweets discutido em <span class="citation" data-cites="shen2017">(<a href="../../shared/referencias/referencias.html#ref-shen2017" role="doc-biblioref">Shen et al., 2017</a>)</span>.</p>
+<p>Também conforme as características dos <em>corpora</em> discutidos na seção anterior, a maioria dos estudos identificados é dedicada ao idioma inglês (En). Há entretanto iniciativas isoladas para diversos outros idiomas, e que não são discutidos aqui porque fogem ao escopo deste livro. Estas iniciativas incluem os idiomas árabe <span class="citation" data-cites="arabic">(<a href="../../shared/referencias/referencias.html#ref-arabic" role="doc-biblioref">Almouzini et al., 2019</a>)</span>, japonês <span class="citation" data-cites="japanese">(<a href="../../shared/referencias/referencias.html#ref-japanese" role="doc-biblioref">Tsugawa et al., 2015</a>)</span>, coreano <span class="citation" data-cites="korean">(<a href="../../shared/referencias/referencias.html#ref-korean" role="doc-biblioref">Park et al., 2013</a>)</span>, romeno <span class="citation" data-cites="anx-romanian">(<a href="../../shared/referencias/referencias.html#ref-anx-romanian" role="doc-biblioref">Briciu; Lupea, 2018</a>)</span>, russo <span class="citation" data-cites="russian">(<a href="../../shared/referencias/referencias.html#ref-russian" role="doc-biblioref">Semenov et al., 2015</a>)</span>, e tailandês <span class="citation" data-cites="thai">(<a href="../../shared/referencias/referencias.html#ref-thai" role="doc-biblioref">Katchapakirin et al., 2018</a>)</span>. No caso da língua portuguesa (Pt), identificamos os estudos de <span class="citation" data-cites="see-read mann2022">(<a href="../../shared/referencias/referencias.html#ref-see-read" role="doc-biblioref">Mann et al., 2020</a>, <a href="../../shared/referencias/referencias.html#ref-mann2022" role="doc-biblioref">2022</a>)</span>, que tratam da questão da detecção de depressão em um <em>corpus</em> multimodal no domínio Instagram com base em questionários.</p>
+<p>No que diz respeito aos modelos e métodos computacionais empregados, observa-se exemplos de estudos que exploram praticamente todo tipo de informação disponibilizada em redes sociais, incluindo dados textuais, temporais, estruturais da rede, e ainda características demográficas e comportamentais dos usuários, geralmente de forma combinada. A variedade de métodos de aprendizado também é significativa, com uma certa preferência por modelos neurais. Assim como em outras áreas do PLN, estudos mais recentemente passaram a utilizar modelos de língua pré-treinados do tipo BERT <span class="citation" data-cites="Devlin19">(<a href="../../shared/referencias/referencias.html#ref-Devlin19" role="doc-biblioref">Devlin et al., 2019</a>)</span>, ELMo <span class="citation" data-cites="elmo">(<a href="../../shared/referencias/referencias.html#ref-elmo" role="doc-biblioref">Peters et al., 2017</a>)</span> e similares <span class="citation" data-cites="mann2022 setembrobr mendes_caseli_lrec2024">(<a href="../../shared/referencias/referencias.html#ref-mann2022" role="doc-biblioref">Mann et al., 2022</a>; <a href="../../shared/referencias/referencias.html#ref-mendes_caseli_lrec2024" role="doc-biblioref">Mendes; Caseli, 2024</a>; <a href="../../shared/referencias/referencias.html#ref-setembrobr" role="doc-biblioref">Santos et al., 2024</a>)</span>, ou baseados em grandes modelos de linguagem e engenharia de <em>prompts</em> <span class="citation" data-cites="set-chatgpt set-prompt">(<a href="../../shared/referencias/referencias.html#ref-set-chatgpt" role="doc-biblioref">Santos; Paraboni, 2023</a>; <a href="../../shared/referencias/referencias.html#ref-set-prompt" role="doc-biblioref">Santos; Paraboni, 2024</a>)</span>.</p>
+<p>As próximas seções focam nos estudos especificamente desenvolvidos para o idioma português brasileiro, uma vez que este é o foco deste livro.</p>
+</section>
+<section id="sec-cap-saude-mental-setbr" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="sec-cap-saude-mental-setbr"><span class="header-section-number">10.4</span> SetembroBR: detecção de depressão/ansiedade em português</h2>
+<p>Como forma de ilustrar o desenvolvimento de modelos de detecção de transtornos de saúde mental a partir de dados provenientes de redes sociais em Português, esta seção discute o caso do projeto SetembroBR, dedicado à detecção de depressão e transtorno de ansiedade no Twitter/X do Brasil.</p>
+<p>A <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html#sec-cap-saude-mental-corpusset" target="_blank" title="Volume 3"><em>Corpus</em> SetembroBR</a></span> descreve o <em>corpus</em> construído, e a <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html#sec-cap-saude-mental-modelosset" target="_blank" title="Volume 3">Modelos desenvolvidos no projeto SetembroBR</a></span> apresenta algumas abordagens computacionais para a tarefa em questão.</p>
+<section id="sec-cap-saude-mental-corpusset" class="level3" data-number="10.4.1">
+<h3 data-number="10.4.1" class="anchored" data-anchor-id="sec-cap-saude-mental-corpusset"><span class="header-section-number">10.4.1</span> <em>Corpus</em> SetembroBR</h3>
+<p>O <em>corpus</em> SetembroBR é uma base de dados mutimodal específica para o português, enfocando a detecção precoce de transtornos de depressão e ansiedade a partir de dados textuais e não-textuais no domínio Twitter/X<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. A construção deste recurso partiu de um estudo-piloto em <span class="citation" data-cites="depress-lrec">(<a href="../../shared/referencias/referencias.html#ref-depress-lrec" role="doc-biblioref">Santos et al., 2020</a>)</span>, cuja definição da tarefa foi posteriormente reformulada e apresentada em sua forma final em <span class="citation" data-cites="setembrobr">(<a href="../../shared/referencias/referencias.html#ref-setembrobr" role="doc-biblioref">Santos et al., 2024</a>)</span>.</p>
+<p>O <em>corpus</em> contempla <em>timelines</em> de usuários e meta-dados associados, como informações de suas relações na rede social e outros. Estes indivíduos foram selecionados com base em seus autorrelatos contendo indicação explícita do momento do diagnóstico (e.g., ‘Na semana passada o meu psicólogo me informou que eu tenho depressão’) feito por um profissional da área médica (e.g., psicólogos etc.).</p>
+<p>Nesta abordagem, assim como em vários outros estudos da área <span class="citation" data-cites="CLPsych2015 yates2017 smhd">(<a href="../../shared/referencias/referencias.html#ref-smhd" role="doc-biblioref">Cohan et al., 2018</a>; <a href="../../shared/referencias/referencias.html#ref-CLPsych2015" role="doc-biblioref">Coppersmith et al., 2015</a>; <a href="../../shared/referencias/referencias.html#ref-yates2017" role="doc-biblioref">Yates et al., 2017</a>)</span>, a seleção de usuários é feita de forma cuidadosa consultando-se a plataforma Twitter/X em busca de autorrelatos que correspondem a uma ampla gama de expressões regulares de interesse, e seguida de inspeção manual. Diferentemente de estudos prévios, entretanto, na presente abordagem a coleta dos dados (tweets) propriamente dita é feita também com inspeção manual, explorando-se a ordenação cronológica da plataforma Twitter/X de modo a restringi-los ao conjunto de dados anteriores ao evento relatado. Um exemplo de como esta porção de dados dita ‘útil’ (para fins de classificação) é delimitada é ilustrada pelo marcador [end] na <a href="#def-cap-saude-mental-quadro-useful" class="quarto-xref">Quadro&nbsp;<span>10.2</span></a> com base em um autorrelato indicado pelo marcador [msg].</p>
+<div id="def-cap-saude-mental-quadro-useful" class="theorem definition">
+<p><span class="theorem-title"><strong>Quadro 10.2</strong></span> Timeline de um usuário com marcador [end] indicando o término da porção de dados a ser considerada na predição de depressão, em que todos os tweets abaixo do ponto [end] são descartados.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Data</th>
+<th style="text-align: center;">Marcador</th>
+<th style="text-align: left;">Texto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Mon March 25</td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">Deixei meu celular em casa e agora a bateria está morta.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tue March 26</td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">Eu assisti esse filme duas vezes no ano passado.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Thu March 28</td>
+<td style="text-align: center;">[end]</td>
+<td style="text-align: left;">tão feliz que finalmente comprei meus óculos novos LOL</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mon April 1</td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">Vou dormir agora. Amanhã é um grande dia.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Wed April 3</td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">@usuário você nunca me contou isso.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mon April 8</td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">Pensando em ligar para ela de novo hoje à noite...</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fri May 3</td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">Oiiii! como você está?</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sun May 5</td>
+<td style="text-align: center;">[msg]</td>
+<td style="text-align: left;">Mês passado o psiquiatra me diagnosticou com depressão :(</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+<p></p>
+<p>Neste exemplo, observa-se que no dia 5 de maio (na parte inferior da <em>timeline</em>), o usuário relata um diagnóstico recebido em uma data não especificada do mês anterior (abril). Assim, todos os tweets anteriores ao mês de abril, até o ponto indicado como [end], são coletados para suporte à tarefa de detecção precoce de depressão. O restante dos dados (a partir de 1o. de abril e incluindo o próprio autorrelato em [msg]) são descartados. Neste mesmo exemplo é possível ainda observar que, como em uma típica <em>timeline</em> de rede social, a grande maioria das postagens tende a apresentar pouca ou nenhuma relação com questões de saúde mental.</p>
+<p>O <em>corpus</em> coletado segundo esta metodologia, detalhada em <span class="citation" data-cites="setembrobr">(<a href="../../shared/referencias/referencias.html#ref-setembrobr" role="doc-biblioref">Santos et al., 2024</a>)</span>, consiste em um conjunto de 46,8 milhões de tweets (totalizando cerca de 555 milhões de <em>tokens</em>) em Português, produzidos por 18.819 usuários únicos. Dentre estes usuários, 3.163 são considerados, em função de seus autorrelatos externos ao <em>corpus</em>, como tendo um futuro diagnóstico de depressão, ansiedade ou ambos. Os demais usuários formam o grupo de controle na proporção de 7 indivíduos aleatórios para cada indivíduo diagnosticado.</p>
+<p>De acordo com as restrições da plataforma Twitter/X, o <em>corpus</em> é disponibilizado para reúso no formato de lista de identificadores numéricos de cada tweet divididos em conjuntos de treino e teste padronizados, a partir dos quais o pesquisador interessado pode recuperá-los utilizando-se a API da rede social. Estão disponíveis<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> informações para <em>download</em> e a rotulação do subconjunto Depressão com uso do modelo GPT 3.5., discutida na seção a seguir.</p>
+</section>
+<section id="sec-cap-saude-mental-modelosset" class="level3" data-number="10.4.2">
+<h3 data-number="10.4.2" class="anchored" data-anchor-id="sec-cap-saude-mental-modelosset"><span class="header-section-number">10.4.2</span> Modelos desenvolvidos no projeto SetembroBR</h3>
+<p>A seguir enumeramos alguns exemplos de uso do <em>corpus</em> SetembroBR aplicados à tarefa de detecção de depressão/ansiedade utilizando métodos computacionais variados. Para detalhes de cada abordagem e seus resultados, sugere-se consultar as publicações referenciadas em cada caso.</p>
+<section id="abordagens-supervisionadas-tradicionais" class="level4" data-number="10.4.2.1">
+<h4 data-number="10.4.2.1" class="anchored" data-anchor-id="abordagens-supervisionadas-tradicionais"><span class="header-section-number">10.4.2.1</span> Abordagens supervisionadas tradicionais</h4>
+<p>A disponibilização do <em>corpus</em> SetembroBR incluiu a descrição de uma série de sistemas <em>baseline</em> construídos com uso de redes do tipo BiLSTM e do modelo de língua BERT <span class="citation" data-cites="Devlin19">(<a href="../../shared/referencias/referencias.html#ref-Devlin19" role="doc-biblioref">Devlin et al., 2019</a>)</span> e outros existentes na literatura da área para predição de depressão e transtorno de ansiedade a partir de dados textuais e não textuais. Dentre as arquiteturas consideradas, destaca-se o uso de LSTM que recebe como entrada uma representação em nível de usuário construída com uso de BERT. Nesta estratégia, a representação de indivíduo consiste de sequências consecutivas de 10 tweets iniciadas em uma posição aleatória da <em>timeline</em> do usuário a cada época. Os tweets de entrada são transformados em uma representação criada com uso do modelo BERTimbau <span class="citation" data-cites="Souza2020">(<a href="../../shared/referencias/referencias.html#ref-Souza2020" role="doc-biblioref">Souza et al., 2020a</a>)</span>, e a última camada é usada como representação final da sequência. Esta arquitetura é seguida de uma camada BiLSTM com função de ativação ReLu que alimenta uma sequência de camadas totalmente conectadas com regularização <em>dropout</em>, e usando <em>softmax</em> como função de ativação na camada de saída. O desbalanceamento de classes é tratado com uso de uma função binária de entropia cruzada com pesos balanceados.</p>
+<p>Esta arquitetura foi posteriormente aprimorada com uso de um modelo BERT treinado especificamente para o domínio do Twitter/X em português, denominado BERTabaporu <span class="citation" data-cites="bertabaporu">(<a href="../../shared/referencias/referencias.html#ref-bertabaporu" role="doc-biblioref">Costa et al., 2023</a>)</span>. Este modelo foi treinado em uma massa de 238 mil tweets, totalizando cerca de 2,9 bilhões de <em>tokens</em>. Os resultados deste modelo foram comparados aos obtidos pelo tradicional BERTimbau <span class="citation" data-cites="Souza2020">(<a href="../../shared/referencias/referencias.html#ref-Souza2020" role="doc-biblioref">Souza et al., 2020a</a>)</span>, treinado em cerca de 2,7 bilhões de <em>tokens</em>, para as tarefas de predição de transtornos de saúde mental e outras em . O modelo BERTabaporu propriamente dito está disponível para reúso no repositório Hugging Face<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
+<p>Finalmente, estes modelos foram combinados em uma arquitetura de comitê de máquina dinâmico de mistura de especialistas apresentada em <span class="citation" data-cites="set-engineering">(<a href="../../shared/referencias/referencias.html#ref-set-engineering" role="doc-biblioref">Santos et al., 2023</a>)</span>, e que é baseada em <span class="citation" data-cites="jacobs1991adaptive">(<a href="../../shared/referencias/referencias.html#ref-jacobs1991adaptive" role="doc-biblioref">Jacobs et al., 1991</a>)</span>. Esta arquitetura é constituída de três modelos especialistas com uma rede <em>gating</em> ponderadora na qual cada modelo especialista, assim como sua própria rede <em>gating</em>, consistem em uma rede do tipo LSTM que recebe como entrada uma representação em nível de usuário construída pelo modelo de representação distribuída BERT <span class="citation" data-cites="Devlin19">(<a href="../../shared/referencias/referencias.html#ref-Devlin19" role="doc-biblioref">Devlin et al., 2019</a>)</span>. A <a href="#fig-cap-saude-mental-moe" class="quarto-xref">Figura&nbsp;<span>10.2</span></a>, extraída de <span class="citation" data-cites="set-engineering">(<a href="../../shared/referencias/referencias.html#ref-set-engineering" role="doc-biblioref">Santos et al., 2023</a>)</span>, ilustra esta arquitetura.</p>
+<div id="fig-cap-saude-mental-moe" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-saude-mental-moe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;10.2: Arquitetura de mistura de especialistas em <span class="citation" data-cites="set-engineering">(<a href="../../shared/referencias/referencias.html#ref-set-engineering" role="doc-biblioref">Santos et al., 2023</a>)</span>
+</figcaption>
+<div aria-describedby="fig-cap-saude-mental-moe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/modelos-MOE-arq.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+</figure>
+</div>
+<p>Os experimentos apresentados em <span class="citation" data-cites="set-engineering">(<a href="../../shared/referencias/referencias.html#ref-set-engineering" role="doc-biblioref">Santos et al., 2023</a>)</span> confirmam a superioridade do modelo baseado em mistura de especialistas (MoE) usando BERT. Para a tarefa de detecção de depressão, MoE apresenta F1 médio de 0,65, enquanto a abordagem de engenharia de características apresenta F1 médio de 0,56. Para a tarefa de detecção de transtorno de ansiedade, são obtidos F1 médio de 0,60 e 0,53, respectivamente.</p>
+</section>
+<section id="abordagem-zero-shot-usando-chatgpt" class="level4" data-number="10.4.2.2">
+<h4 data-number="10.4.2.2" class="anchored" data-anchor-id="abordagem-zero-shot-usando-chatgpt"><span class="header-section-number">10.4.2.2</span> Abordagem <em>zero-shot</em> usando ChatGPT</h4>
+<p>Como alternativa às abordagens supervisionadas tradicionais, o estudo em <span class="citation" data-cites="set-chatgpt">(<a href="../../shared/referencias/referencias.html#ref-set-chatgpt" role="doc-biblioref">Santos; Paraboni, 2023</a>)</span> investigou a tarefa de predição de depressão com base nos dados do <em>corpus</em> SetembroBR em modalidade <em>zero-shot</em> com uso da ferramenta ChatGPT<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>. Para este fim, o modelo foi instruído a avaliar sequências aleatórias de 80 tweets anonimizados cada. A avaliação consistia em atribuir um escore em uma escala de 0 a 10 de acordo com a presença de indicadores linguísticos de depressão no texto, em que 0 significa nenhum indício e 10 significa indícios muito fortes. Com base nos textos assim rotulados, foi calculado então um <em>threshold</em> mínimo para diferenciar as classes positiva e negativa com base em dados de treinamento (de resto não empregados na presente abordagem <em>zero-shot</em>), obtendo-se assim o rótulo da <em>timeline</em> (ou seja, do autor dos textos) como um todo.</p>
+<p>A abordagem <em>zero-shot</em> baseada em ChatGPT foi comparada com a arquitetura BERT tradicional discutida na seção anterior, obtendo resultado médio equivalente (F1 médio de 0,65 para a abordagem ChatGPT e 0,66 para BERT supervisionado), embora com grande diferença nas classes individuais. A abordagem baseada em ChatGPT apresentou ampla superioridade para a classe positiva (Diagnosticados) com F1 de 0,70 contra apenas 0,48 da abordagem BERT, enquanto que a abordagem supervisionada baseada em BERT foi superior para a classe Controle com F1 de 0,84 contra 0,60 da abordagem ChatGPT. O estudo em <span class="citation" data-cites="set-chatgpt">(<a href="../../shared/referencias/referencias.html#ref-set-chatgpt" role="doc-biblioref">Santos; Paraboni, 2023</a>)</span> argumenta que essa diferença é explicável pelo fato de que o modelo de linguagem subjacente ao ChatGPT não possuir uma definição clara do que seria a população média representada pela classe Controle do <em>corpus</em>, enquanto que a abordagem supervisionada possui um grande volume de exemplos da classe, e teria assim melhores condições de distingui-la da classe positiva.</p>
+<p>Como resultado, observa-se que a abordagem <em>zero-shot</em> pode ser considerada superior tanto pela acurácia obtida para a classe de interesse (que é a positiva, não a aleatória), mas igualmente pelo fato de não fazer uso de <em>corpus</em> rotulado. Cabe destacar, entretanto, que os resultados em <span class="citation" data-cites="set-chatgpt">(<a href="../../shared/referencias/referencias.html#ref-set-chatgpt" role="doc-biblioref">Santos; Paraboni, 2023</a>)</span> são preliminares e não podem ser comparados diretamente com os estudos anteriores dado que a abordagem foi testada apenas em um subconjunto dos dados de teste do <em>corpus</em> em virtude do custo associado ao uso da ferramenta ChatGPT.</p>
+</section>
+<section id="engenharia-de-prompts-com-supervisão" class="level4" data-number="10.4.2.3">
+<h4 data-number="10.4.2.3" class="anchored" data-anchor-id="engenharia-de-prompts-com-supervisão"><span class="header-section-number">10.4.2.3</span> Engenharia de <em>prompts</em> com supervisão</h4>
+<p>Inspirado nos resultados iniciais obtidos com uso da ferramenta ChatGPT, o estudo em <span class="citation" data-cites="set-prompt">(<a href="../../shared/referencias/referencias.html#ref-set-prompt" role="doc-biblioref">Santos; Paraboni, 2024</a>)</span> explorou a questão da natureza do conhecimento útil para detectar depressão a partir de dados textuais, e a necessidade de filtrar o ruído proveniente da rede social, ou seja, as postagens ditas irrelevantes para a tarefa.</p>
+<p>Conforme discutido na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html#sec-cap-saude-mental-modelos" target="_blank" title="Volume 3">Modelos computacionais de detecção de depressão/ansiedade</a></span>, observa-se que parte da solução para o problema parece ser, por um lado, encontrada no uso de características de teor mais linguístico, como sequências de <em>tokens</em>, o uso de certas formas pronominais e afins. Por outro lado, abordagens puramente linguísticas são menos úteis na captura de indicadores de mais alto nível, ou mais próximos da aplicação, como no caso de sintomas de depressão. Casos deste tipo, que exigem um processamento mais profundo (ou um maior ‘entendimento’ do texto) são tratados de forma eficiente com uso de <em>prompts</em> submetidos a um grande modelo de linguagem. O estudo realizado tratou assim de combinar estas duas visões do problema, ou seja, a abordagem supervisionada e a engenharia de <em>prompts</em>.</p>
+<p>O estudo em <span class="citation" data-cites="set-prompt">(<a href="../../shared/referencias/referencias.html#ref-set-prompt" role="doc-biblioref">Santos; Paraboni, 2024</a>)</span> utilizou o modelo de língua GPT 3.5. <span class="citation" data-cites="gpt3">(<a href="../../shared/referencias/referencias.html#ref-gpt3" role="doc-biblioref">Brown et al., 2020</a>)</span> para avaliar uma amostra aleatória de tweets do <em>corpus</em> SetembroBR de acordo com a relevância para a previsão de depressão. Como resultado, estes dados foram categorizados como sendo de alta (1), média (2) ou baixa (3) relevância para a saúde mental. Esta rotulação automática foi então utilizada para treinar um classificador de postagens de alta, média e baixa relevância de acordo com o modelo de língua T5 <span class="citation" data-cites="raffel2020exploring">(<a href="../../shared/referencias/referencias.html#ref-raffel2020exploring" role="doc-biblioref">Raffel et al., 2020</a>)</span>, e este classificador foi então aplicado à rotulação do conjunto completo de 19,42 milhões de postagens do sub<em>corpus</em> de depressão. Este conjunto de rótulos em nível de postagem, provisoriamente chamada de SetembroBRGPT foi parcialmente disponibilizada (no momento apenas para o subconjunto Depressão) para reúso juntamente com o <em>corpus</em> original (rotulado ao nível de usuário).</p>
+<p>Como esperado, a maioria das publicações (65,2% na classe Diagnosticado e 71,3% na classe Controle) são consideradas de baixa relevância para a predição de saúde mental de acordo com o modelo GPT. Por outro lado, publicações de alta relevância são relativamente raras (5,4% na classe Diagnosticados e 3,0% na classe Controle). No entanto, tão ou mais importante do que esta distribuição é a observação de que, ao consultar um LLM sobre a relevância de uma publicação para a saúde mental, estamos nos concentrando em grande parte na semântica, isto é, em sintomas e outros sinais clínicos bem conhecidos de depressão, mas isto não quer dizer que outros fatores possam ou devam ser ignorados. Em outras palavras, o <em>prompt</em> utilizado permite ao modelo identificar uma vasta gama de publicações que podem sugerir, por exemplo, distúrbios alimentares ou uso de linguagem negativa, ambos sabidamente relacionados à depressão <span class="citation" data-cites="dm5">(<a href="../../shared/referencias/referencias.html#ref-dm5" role="doc-biblioref">American Psychiatric Association, 2013</a>)</span>, mas não considera explicitamente indicadores linguísticos de depressão mais refinados, como o uso de pronomes de primeira pessoa <span class="citation" data-cites="dep-indicators">(<a href="../../shared/referencias/referencias.html#ref-dep-indicators" role="doc-biblioref">Trifu et al., 2017</a>)</span>, termos absolutos <span class="citation" data-cites="absolute">(<a href="../../shared/referencias/referencias.html#ref-absolute" role="doc-biblioref">Johnstone, 2018</a>)</span> e outros. Estes indicadores, que podem estar presentes em qualquer publicação de baixa ou alta relevância para a depressão, são também importantes preditores do estado de saúde mental, e sugerem que nenhuma publicação deveria em princípio ser descartada com base apenas nos resultados do LLM.</p>
+<p>Como um meio de manter os dados de treino integralmente disponíveis para o classificador e, ao mesmo tempo, distinguir mensagens mais e menos relevantes (que mostram claramente diferentes distribuições no <em>corpus</em>, conforme discutido em <span class="citation" data-cites="set-prompt">(<a href="../../shared/referencias/referencias.html#ref-set-prompt" role="doc-biblioref">Santos; Paraboni, 2024</a>)</span>), foi proposta uma abordagem que usa os rótulos fornecidos pelo LLM para dividir os dados de treinamento em subconjuntos de alta, média e baixa relevância, a partir dos quais foram criados três vetores individuais de contagens TF-IDF reduzidos com seleção univariada. Além disso, como forma de capturar também a noção de ordem das postagens de diferentes graus de relevância, a esta representação foi anexado ainda um vetor de contagens de bigramas dos rótulos alto/médio/baixo computados. Esta adição foi motivada pela observação de que certas sequências de postagens (por exemplo, uma ocorrência de vários tweets consecutivos e altamente relevantes para a detecção de depressão) podem ser indicativas do estado de saúde mental do indivíduo.</p>
+<p>A arquitetura proposta procura assim capturar (i) a noção de postagens mais ou menos importantes (e.g., postagens expressando sintomas de depressão etc.), (ii) os indicadores linguísticos de baixo nível que podem estar presentes em qualquer postagem, incluindo as que não tenham nenhuma relação com saúde mental, e ainda (iii) a noção de sequências de postagens consecutivas com maior ou menor importância para a tarefa. O conjunto final de 55.000 características empregadas para esse fim (i.e., 15.000 contagens de <em>tokens</em> mais 40.000 contagens de bigramas de rótulos) é ilustrado na <a href="#fig-cap-saude-mental-vectors" class="quarto-xref">Figura&nbsp;<span>10.3</span></a>.</p>
+<div id="fig-cap-saude-mental-vectors" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cap-saude-mental-vectors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;10.3: Modelo de 15.000 tokens e 40.000 bigramas de rótulos alto/médio/baixo.
+</figcaption>
+<div aria-describedby="fig-cap-saude-mental-vectors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/vectors.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+</figure>
+</div>
+<p>Os resultados reportados em <span class="citation" data-cites="set-prompt">(<a href="../../shared/referencias/referencias.html#ref-set-prompt" role="doc-biblioref">Santos; Paraboni, 2024</a>)</span> apontam uma pequena vantagem da abordagem baseada em <em>prompts</em> (F1 médio de 0,66) sobre a arquitetura de mistura de especialistas em <span class="citation" data-cites="set-engineering">(<a href="../../shared/referencias/referencias.html#ref-set-engineering" role="doc-biblioref">Santos et al., 2023</a>)</span> (com F1 médio de 0,65). É possível, entretanto, que esta abordagem possa ser aperfeiçoada com uso de modelos do tipo BERT ao invés dos modelos de bigramas utilizados pelo componente supervisionado da arquitetura.</p>
+</section>
+</section>
+</section>
+<section id="sec-cap-saude-mental-amive" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="sec-cap-saude-mental-amive"><span class="header-section-number">10.5</span> Amive: detecção de sintomas de depressão em português</h2>
+<p>O projeto Amive<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> – um acrônimo para <strong>Ami</strong>go <strong>v</strong>irtual <strong>e</strong>specializado – foi desenvolvido na UFSCar<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> (Universidade Federal de São Carlos), de 2021 a 2023, por uma equipe multidisciplinar de pesquisadores e estudantes da computação e da área de saúde mental (psicologia, terapia ocupacional e psiquiatria). O projeto Amive visava combinar dados fisiológicos coletados por sensores presentes em um relógio inteligente (smartwatch) com as informações textuais das postagens de redes sociais para: (i) a identificação de um Possível Perfil Depressivo (PPD) e (ii) a oferta de intervenções personalizadas projetadas para o público-alvo de estudantes universitários <span class="citation" data-cites="amive">(<a href="../../shared/referencias/referencias.html#ref-amive" role="doc-biblioref">Cássia Alves et al., 2024</a>)</span>.</p>
+<p>Para tanto, um conjunto de sinais associados à depressão e seus fatores de risco e protetivos foram definidos pelos especialistas em saúde mental da equipe, conforme descrito na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html#sec-cap-saude-mental-amive-sinais" target="_blank" title="Volume 3">Sinais associados à depressão</a></span>. Focando no público-alvo de estudantes universitários, o <em>corpus</em> foi construído a partir de postagens em páginas do Facebook utilizadas por esse público, conforme descrito na <span>Subseção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html#sec-cap-saude-mental-amive-corpus" target="_blank" title="Volume 3"><em>Corpus</em> do projeto Amive e anotação manual</a></span>.</p>
+<section id="sec-cap-saude-mental-amive-sinais" class="level3" data-number="10.5.1">
+<h3 data-number="10.5.1" class="anchored" data-anchor-id="sec-cap-saude-mental-amive-sinais"><span class="header-section-number">10.5.1</span> Sinais associados à depressão</h3>
+<p>Focando especificamente no uso das informações textuais para a etapa de identificação de PPD, a equipe de especialistas em saúde mental definiu um conjunto de 18 sintomas de depressão e 3 sinais adicionais (19, 20 e 21) descritos brevemente a seguir:</p>
+<ol type="1">
+<li><p><strong>Agitação ou inquietação</strong> – Característica de não conseguir ficar parado fisicamente ou diante de uma situação. Percepção de que o corpo está agitado, não conseguir controlar o movimento dos membros (balançar a perna, andar de um lado para o outro, incapacidade de ficar sentado, agitar as mãos, puxar ou esfregar a pele, roupas ou outros objetos). Mente agitada e inquieta (muitos pensamentos, incômodo mental). Necessidade de fazer algo, de se mover.</p></li>
+<li><p><strong>Alteração de peso ou apetite</strong> – Relato de ganho ou perda de peso. Comer em excesso ou comer bem menos que o habitual. Muita ou pouca vontade de comer.</p></li>
+<li><p><strong>Alteração de sono</strong> – Caracterizado por não dormir de forma adequada. Dormir muito pouco. Dormir em excesso. Ter insônia. Acordar muitas vezes durante a noite. Sentir sono durante o dia. Acordar e não conseguir voltar a dormir. Cansaço e fadiga por não ter dormido.</p></li>
+<li><p><strong>Alteração na eficiência ou funcionalidade</strong> – Caracterizado pela diminuição na eficiência durante a realização de alguma tarefa. Perda de desempenho. Gastar mais tempo do que o habitual para realizar tarefas. Efetuar maior esforço para realizar tarefas. Falta de iniciativa. Interromper uma atividade. Desistir de realizar tarefas.</p></li>
+<li><p><strong>Cansaço, desânimo, desencorajamento, fadiga, perda de energia ou lentificação</strong> – Nesta categoria de sintomas juntamos diversos sintomas semelhantes, sendo que podem aparecer em conjunto na mesma sentença ou separadamente, devendo ser anotados de qualquer forma (em conjunto ou separados). Caracterizados por cansaço excessivo, falta de energia física ou mental, desgaste físico ou mental, fraqueza, falta de ânimo, falta de vontade, não ter motivação. Falta de coragem para resolver ou fazer algo. Perda de interesse para realizar alguma tarefa. Não ter estímulo. Perda do entusiasmo. Desejo de desistir diante de obstáculos percebidos como insuperáveis. Perda da agilidade. Demorar para realizar tarefas. Discurso, pensamento ou movimentos corporais lentificados. Maiores pausas antes de responder. Fala diminuída em termos de volume, inflexão, quantidade ou variedade de conteúdos. Não querer falar ou fazer. Preguiça. Falta de pressa, de vigor, de dinamismo.</p></li>
+<li><p><strong>Desamparo, prejuízo social ou solidão</strong> – Caracterizado pelo sentimento de não ter apoio e ajuda de outros. Sentimento de abandono. Necessidade de apoio. Prejuízo nas interações sociais. Isolamento. Não dar atenção a outras pessoas. Não querer ir para o trabalho, nem para escola para não ter que encontrar com pessoas, não fazer questão de participar de grupos, não querer encontrar amigos, perda do papel social. Desinteresse em estar com pessoas.</p></li>
+<li><p><strong>Desesperança</strong> – Caracterizado pela falta de esperança. Não enxergar perspectivas positivas seja no presente ou futuro. Não acreditar que algo pode ser bom, que o futuro pode ser melhor, que a própria pessoa pode melhorar. Sentimento de que não há saída ou que não resta mais nada.</p></li>
+<li><p><strong>Desvalia ou baixa autoestima</strong> – Caracterizado pelo sentimento de não ter valor. Inutilidade. Aversão a si mesmo. Sentimento de inferiorização, depreciação ou diminuição do valor pessoal. Sentimento de não ser merecedor de algo. Não reconhecer as próprias qualidades. Avaliações negativas e irrealistas do próprio valor. Sensação de fracasso. Imagem negativa sobre si mesmo. Não reconhecer a própria beleza (interior e exterior).</p></li>
+<li><p><strong>Dificuldade para decidir</strong> – Caracterizado pela dificuldade de tomar decisões. Incerteza. Dúvidas. Dificuldade para fazer escolhas.</p></li>
+<li><p><strong>Deficit de atenção ou memória</strong> – Caracterizado pela alteração da capacidade de concentração e memória. Não conseguir manter a atenção em algo. Distração excessiva. Não conseguir prestar atenção adequadamente. Perda de memória. Ter dificuldade para lembrar do que precisa fazer, do que fez. Esquecimento repentino e frequente. Capacidade diminuída para pensar.</p></li>
+<li><p><strong>Irritação ou agressividade</strong> – Caracterizado por sentir-se irritado, impaciente. Agressão verbal ou física. Provocação, hostilidade. Raiva persistente. Ataques de raiva.</p></li>
+<li><p><strong>Perda ou diminuição do prazer ou da libido</strong> – Caracterizado pela perda ou diminuição de prazer pela vida ou por atividades que antes eram agradáveis. Diminuição ou perda de satisfação pessoal ou com a vida. Diminuição ou perda do sentimento de realização. Não sentir alegria ou felicidade na realização de tarefas que antes geravam estes sentimentos. Caracterizado pela alteração no desejo sexual. Perda de vontade sexual. Diminuição do interesse sexual.</p></li>
+<li><p><strong>Preocupação, medo ou ansiedade</strong> – Neste marcador juntamos preocupação, medo e ansiedade, que são sintomas muito parecidos, podem aparecer em conjunto ou separadamente, mas a marcação se dará independente de estarem separados ou juntos. Podem ser caracterizados por: Preocupações exageradas e contínuas e/ou pensar excessivamente em algo e/ou pensamento fixo em algo e/ou medo em excesso e/ou antecipação de algo que ainda não aconteceu e/ou angústia e/ou sentimento de que algo negativo vai acontecer e/ou avaliação negativa de um acontecimento que ainda não aconteceu e/ou catastrofização e/ou identificar perigo ou ameaça em algo que não apresenta perigo ou ameaça e/ou crises de pânico.</p></li>
+<li><p><strong>Sentimento de culpa</strong> – Sentimento de ser responsável por algum dano ou prejuízo causado a outra pessoa ou a si mesmo. Arrependimento por alguma atitude ou decisão tomada.</p></li>
+<li><p><strong>Sentimento de vazio</strong> – Caracterizado por algo que falta. Não conseguir perceber sentimento algum.</p></li>
+<li><p><strong>Sintoma físico</strong> – Qualquer sintoma físico apresentado. Dor de cabeça. Dor muscular. Batimentos cardíacos alterados para mais ou para menos. Respiração acelerada. Sudorese. Tremedeira. Tontura. Sensação de desmaio. Enjoo. Enxaqueca. Dormência. Falta de ar. Calor excessivo. Entre outros. Boca seca, flatulência, indigestão, diarreia, cólicas, palpitação, cefaleia, hiperventilação, suspiros. Alteração de pressão arterial.</p></li>
+<li><p><strong>Suicídio ou auto-extermínio</strong> – Caracterizado por ideias suicidas. Pensamentos recorrentes de morte. Planejamento da própria morte. Tentativa de suicídio. Desejo passivo de não querer acordar pela manhã. Acreditar que os outros estariam melhor se o indivíduo estivesse morto. As pessoas mais gravemente suicidas podem ter colocado seus negócios em ordem (p.&nbsp;ex., atualizar o testamento, pagar as dívidas), podem ter adquirido materiais necessários (p.&nbsp;ex., corda ou arma de fogo) e podem ter estabelecido um local e momento para consumarem o suicídio. Intenso desejo de pôr fim a um estado emocional extremamente doloroso.</p></li>
+<li><p><strong>Tristeza ou humor depressivo</strong> – Caracterizado pela tristeza, que pode durar mais do que o habitual. Sentir-se para baixo, desanimado, sem vontade. Negatividade, pessimismo. Melancolia. É importante que a gravidade e/ou a duração do sintoma de tristeza / humor depressivo sejam considerados na anotação.</p></li>
+<li><p><strong>Fator de risco</strong> – Fator relacionado ao ambiente ou a uma visão geral do mundo. Bullying. Sofrer muita pressão no trabalho. Racismo. Machismo. Pobreza extrema. Adoecimento ou comorbidade. Desemprego, problemas de moradia.</p></li>
+<li><p><strong>Fator protetivo, cuidado em saúde e bem-estar</strong> – Recursos que auxiliam no enfrentamento de problemas. Resiliência. Apoio de amigos. Apoio de familiares. Estar em acompanhamento ou realizar atividades que promovam o bem estar, que dão prazer ao usuário, sentimento de pertença ou sentido à vida.</p></li>
+<li><p><strong>Morte ou suicídio de outro</strong> – Aqui, com esta etiqueta, gostaríamos de deixar anotado quando uma pessoa está se referindo à morte de outras pessoas, estas postagens podem ser caracterizadas pelo relato de tentativas de suicídio ou o suicídio cometidos por outra pessoa, um familiar, conhecido ou pessoa pública, também devem ser anotados relatos de sentimento de luto e perda de pessoas queridas ou que a pessoa tenha apreço.</p></li>
+</ol>
+<p>A motivação para uma investigação mais granular, e não apenas binária, de sinais de depressão em postagens textuais foi derivada do fato de que embora se caracterize por um sofrimento psicológico clinicamente significativo que traz vários impactos nas funcionalidades e na qualidade de vida dos indivíduos, a depressão se manifesta de forma diferente nos indivíduos. Nesse sentido, a detecção de sintomas de depressão e fatores associados pode auxiliar os profissionais de saúde mental a oferecer a melhor forma de auxílio aos indivíduos identificados como PPD.</p>
+</section>
+<section id="sec-cap-saude-mental-amive-corpus" class="level3" data-number="10.5.2">
+<h3 data-number="10.5.2" class="anchored" data-anchor-id="sec-cap-saude-mental-amive-corpus"><span class="header-section-number">10.5.2</span> <em>Corpus</em> do projeto Amive e anotação manual</h3>
+<p>Um conjunto de postagens de páginas públicas do Facebook foi construído a partir da busca, em páginas de segredos universitários<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>, por expressões e palavras-chave: “suicídio”, “depressão”, “me corto”, “vontade de viver”, “me matar” e “quero morrer”. As postagens foram coletadas por meio da plataforma Crowdtangle, com data de postagem entre Janeiro de 2012 e Dezembro de 2021. 780 postagens foram selecionadas para anotação manual. Dado o conteúdo sensível, antes da anotação, um processo manual de anonimização adicional foi realizado para substituir referências a lugares, instituições, eventos, datas e cursos, por etiquetas genéricas como <span class="math inline">\(&lt;\)</span>CIDADE<span class="math inline">\(&gt;\)</span>.</p>
+<p>As 780 postagens foram anotadas por 4 estudantes de psicologia, psiquiatria ou terapia ocupacional de gênero feminino e masculino. A tarefa de anotação consistia em selecionar trechos de texto característicos de um ou mais dos 21 sinais. Um rótulo especial também foi criado para indicar se a postagem como um todo era indicativa de um PPD: <span class="math inline">\(&lt;\)</span>PPD<span class="math inline">\(&gt;\)</span>. Assim, o <em>corpus</em> anotado resultante possui tanto a granularidade fina de instâncias para os 21 sinais de depressão quanto a anotação binária tradicionalmente usada na literatura.</p>
+<p>A <a href="#tbl-cap-saude-mental-amive-sinais" class="quarto-xref">Tabela&nbsp;<span>10.2</span></a> traz a quantidade de instâncias anotadas para cada um dos 21 sinais de depressão. Vale destacar que um dos sinais mais frequentes foi o de “Suicídio ou auto-extermínio” o que pode ter sido decorrente da escolha pelas expressões e palavras-chave usadas na coleta das postagens. Destaca-se também a grande quantidade de instâncias para os fatores de risco e protetivos, indicando a relevância deles no contexto de transtornos de saúde mental em universitários. Por fim, como esperado, o sintoma mais frequente é o mais característico do quadro depressivo: “Tristeza ou humor depressivo”.</p>
+<div id="tbl-cap-saude-mental-amive-sinais" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cap-saude-mental-amive-sinais-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;10.2: Quantidade de instâncias (#) anotadas para os 21 sinais de depressão definidos no projeto Amive, em ordem crescente
+</figcaption>
+<div aria-describedby="tbl-cap-saude-mental-amive-sinais-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<caption>Quantidade de instâncias (#) anotadas para os 21 sinais de depressão definidos no projeto Amive, em ordem crescente</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Sinal</strong></th>
+<th style="text-align: center;"><strong>#</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Agitação ou inquietação</td>
+<td style="text-align: center;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Deficit de atenção ou memória</td>
+<td style="text-align: center;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Alteração de peso ou apetite</td>
+<td style="text-align: center;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Perda ou diminuição do prazer da libido</td>
+<td style="text-align: center;">17</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sintoma físico</td>
+<td style="text-align: center;">24</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Dificuldade para decidir</td>
+<td style="text-align: center;">26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Alteração de sono</td>
+<td style="text-align: center;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sentimento de vazio</td>
+<td style="text-align: center;">34</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sentimento de culpa</td>
+<td style="text-align: center;">48</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Irritação ou agressividade</td>
+<td style="text-align: center;">88</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cansaço, desânimo, desencorajamento, fadiga, perda de energia ou lentificação</td>
+<td style="text-align: center;">106</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Desesperança</td>
+<td style="text-align: center;">112</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Alteração na eficiência ou funcionalidade</td>
+<td style="text-align: center;">113</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Preocupação, medo ou ansiedade</td>
+<td style="text-align: center;">140</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Desvalia ou baixa autoestima</td>
+<td style="text-align: center;">168</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Suicídio ou auto-extermínio</td>
+<td style="text-align: center;">244</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Desamparo, prejuízo social ou solidão</td>
+<td style="text-align: center;">283</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tristeza ou humor depressivo</td>
+<td style="text-align: center;">341</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Morte ou suicídio de outro</td>
+<td style="text-align: center;">47</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fatores protetivos</td>
+<td style="text-align: center;">167</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fatores de risco</td>
+<td style="text-align: center;">286</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+<section id="sec-cap-saude-mental-amive-automatico" class="level3" data-number="10.5.3">
+<h3 data-number="10.5.3" class="anchored" data-anchor-id="sec-cap-saude-mental-amive-automatico"><span class="header-section-number">10.5.3</span> Identificação automática de sinais de depressão</h3>
+<p><span class="citation" data-cites="mendes_caseli_lrec2024">Mendes; Caseli (<a href="../../shared/referencias/referencias.html#ref-mendes_caseli_lrec2024" role="doc-biblioref">2024</a>)</span> investigaram a identificação automática dos 21 sinais de depressão usando estratégias de aprendizado de máquina baseadas em atributos – SVM, regressão logística, naive Bayes, RandomForest e XGBoost – bem como o ajuste fino de modelos neurais – BERTimbau, mBERT, metalBERT e mentalRoBERTa. Entre os atributos investigados estão o uso de dicionários específicos (LIWC, AnewBR), categorias da PHQ-9, etiquetas de <em>part-of-speech</em> e traços morfológicos, métricas geradas pelo NILCMetrix e <em>embeddings</em> estáticas (Word2Vec, FastText, GloVe e LexVec, TF-IDF) e contextualizadas (BERTimbau).</p>
+<p>De modo geral, as estratégias de melhor desempenho na identificação dos sinais de depressão foram as baseadas no ajuste fino dos modelos neurais, em especial o BERTimbau que foi o modelo de melhor desempenho para 8 dos 20 sinais<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>. Contudo, vale ressaltar que apenas 5 sinais obtiveram uma precisão média de 70% ou mais: Sintoma físico (70,0%), Suicídio ou auto-extermínio (71,2%), Tristeza ou humor depressivo (74,5%), Preocupação, medo ou ansiedade (79,4%) e Alteração de sono (90%).</p>
+<p>Entre as principais conclusões de <span class="citation" data-cites="mendes_caseli_lrec2024">(<a href="../../shared/referencias/referencias.html#ref-mendes_caseli_lrec2024" role="doc-biblioref">Mendes; Caseli, 2024</a>)</span> tem-se o fato de que o desempenho dos modelos computacionais está mais associado à complexidade da identificação de alguns sinais do que à quantidade de instâncias disponíveis para treinamento. Por exemplo, com apenas 17 instâncias de um sinal aparentemente simples de ser expresso como “Alteração de sono” o modelo alcançou 90% de precisão enquanto que sinais que geralmente são expressos em uma linguagem mais complexa, mais abstrata e menos direta, como “Desesperança”, mesmo com 5 vezes mais instâncias, foi identificado pelo melhor modelo com apenas 38% de precisão.</p>
+</section>
+</section>
+<section id="considerações-finais" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="considerações-finais"><span class="header-section-number">10.6</span> Considerações finais</h2>
+<p>A detecção de transtornos de saúde mental ou seus sintomas a partir de texto é uma tarefa computacional complexa e não totalmente resolvida do ponto de vista da pesquisa no PLN. Alguns <strong>desafios</strong>, exemplificados pelos projetos SetembroBR e Amive discutidos ao longo deste capítulo, são resumidos a seguir.</p>
+<p>Em relação ao <strong>quantidade e qualidade da anotação</strong>, tem-se o alto esforço demandado pela anotação humana especializada, o que na prática pode impactar no número de instâncias obtidas, como no caso do projeto Amive. A sensibilidade dos dados também demanda atenção extra no processo de anotação manual, considerando <strong>questões éticas</strong> como a não publicização dos dados e o cuidado para não afetar a saúde mental dos próprios anotadores. Como alternativa, tem-se a anotação a partir de autorrelatos ou usando LLMs. Nesses casos, contudo, a confiabilidade das anotações pode não ser tão alta e, no caso dos LLMs, há que se considerar os <strong>custos</strong> computacional e financeiro envolvidos.</p>
+<p>Há também que se considerar a presença de <strong>vieses</strong> como o inerente nos textos de indivíduos da classe positiva (e.g.&nbsp;depressivos ou ansiosos), que após serem diagnosticados podem passar a falar mais sobre o assunto. Por outro lado, os textos das redes sociais também permitem que uma grande variedade de assuntos sejam tratados nas postagens, o que acarreta em <strong>ruídos</strong> em relação ao problema de pesquisa em foco que para ser tratado deveria ter como base de dados apenas textos representativos de questões de saúde mental. Desse modo, é importante observar que os fenômenos de interesse, e que seriam indicativos de saúde mental, podem não estar totalmente representados na rede social. A frequência e teor das postagens de um indivíduo podem variar drasticamente a depender de múltiplos fatores externos, e que não são relacionados ao seu estado de saúde mental.</p>
+<p>A rede social é, portanto, um <strong>retrato naturalmente incompleto</strong>, que talvez traga fragmentos de informação útil para a tarefa, ou talvez nem isso. Como consequência, não é razoável supor que um modelo computacional que receba como entrada apenas as postagens de um indivíduo possa obter altos níveis de acurácia na detecção de um transtorno de saúde mental ou de seus sintomas. Assim, modelos deste tipo são melhor entendidos como ferramentas de apoio ao usuário da rede social, aos seus pais ou responsáveis, ou mesmo a um profissional da área de saúde.</p>
+<p>Considerando-se a natureza específica da atividade em redes sociais, observa-se também que modelos preditivos de saúde mental precisam lidar com <strong>grandes volumes</strong> de publicações, ou seja, <em>timelines</em> longas. Sequências longas deste tipo são uma limitação natural para métodos baseados em <em>fine-tuning</em> de modelos pré-treinados como BERT, e este problema é agravado pelo fato de que os dados normalmente incluem um grande número de publicações que podem ser pouco relevantes para a tarefa.</p>
+<p>Por fim, vale mencionar um grande desafio para as pesquisas nessa temática que é a <strong>não disponibilização pública</strong> de dados de saúde mental. <em>Corpora</em> textuais rotulados com informações sobre saúde mental geralmente não são recursos computacionais totalmente acessíveis, como seriam <em>corpora</em> voltados a outros tipos de aplicação de PLN.</p>
+<p>Esforços para contornar algumas destas dificuldades incluem, mais recentemente, o uso de métodos baseados em <em>prompt</em> de grandes modelos de linguagem. Entretanto, estudos iniciais deste tipo, apesar de promissores, ainda não obtiveram resultados significativamente superiores ao <em>fine-tuning</em> de modelos BERT.</p>
+</section>
+<section id="agradecimentos" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="agradecimentos">Agradecimentos</h2>
+<p>Esse capítulo contou com apoio FAPESP # 2021/08213-0 e # 2020/05157-9 (Projeto Amive). O primeiro autor também agradece ao Centro de Inteligência Artificial (C4AI-USP) e ao apoio da Fundação de Apoio à Pesquisa do Estado de São Paulo (processo FAPESP # 2019/07665-4) e da IBM Corporation. A segunda autora agradece os especialistas do Comitê de Especialistas do Amive: Jair Borges Barbosa Neto, Larissa Campagna Martini, Augusto Rozendo Mendes, Tais Bleicher, Heloísa Cristina Figueiredo Frizzo, Ana Teresa Delfino, Karina Antonialli e Elaine Nabeth Louzada Torres.</p>
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="1" role="list" style="display: none">
+<div id="ref-arabic" class="csl-entry" role="listitem">
+ALMOUZINI, S.; KHEMAKHEM, M.; ALAGEEL, A. <a href="https://doi.org/10.1016/j.procs.2019.12.107">Detecting Arabic Depressed Users from Twitter Data</a>. <strong>Procedia Computer Science</strong>, v. 163, p. 257–265, 2019.
+</div>
+<div id="ref-dm5" class="csl-entry" role="listitem">
+AMERICAN PSYCHIATRIC ASSOCIATION. <strong><a href="https://doi.org/10.1176/appi.books.9780890425596">Diagnostic and Statistical Manual of Mental Disorders 5th edition</a></strong>. Arlington, VA: American Psychiatric Association, 2013.
+</div>
+<div id="ref-ansari2022ens" class="csl-entry" role="listitem">
+ANSARI, L.; JI, S. Ensemble hybrid learning methods for automated depression detection. <strong>IEEE Transactions on computational Social Systems</strong>, 2022.
+</div>
+<div id="ref-aragon2019" class="csl-entry" role="listitem">
+ARAGÓN, M. E. et al. <strong><a href="https://doi.org/10.18653/v1/N19-1151">Detecting Depression in Social Media using Fine-Grained Emotions</a></strong>. <span>NAACL-2019</span>. <strong>Anais</strong>...Minneapolis, <span>USA</span>: Association for Computational Linguistics, 2019.
+</div>
+<div id="ref-anx-dep" class="csl-entry" role="listitem">
+ARORA, A. K. A. A. S. A. A. <strong>Anxious Depression Prediction in Real-time Social Data</strong>. International Conference on Advances in Engineering Science Management &amp; Technology. <strong>Anais</strong>...Dehradun, India: 2019.
+</div>
+<div id="ref-s4-socialmedia" class="csl-entry" role="listitem">
+ASCHBRENNER, J. A. N. A. A. B. A. J. T. A. K. A. <a href="https://doi.org/10.1007/s41347-020-00134-x">Social Media and Mental Health: Benefits, Risks, and Opportunities for Research and Practice</a>. <strong>Journal of Technology in Behavioral Science</strong>, v. 5, p. 245–257, 2020.
+</div>
+<div id="ref-mobile" class="csl-entry" role="listitem">
+ASCHBRENNER, K. A. et al. A survey of online and mobile technology use at peer support agencies. <strong>Psychiatric Quarterly</strong>, p. 1–10, 2018.
+</div>
+<div id="ref-socialmedia" class="csl-entry" role="listitem">
+BIRNBAUM, M. L. et al. Role of social media and the Internet in pathways to care for adolescents and young adults with psychotic disorders and nonpsychotic mood disorders. <strong>Early Intervention in Psychiatry</strong>, v. 11, n. 4, p. 290–295, 2017.
+</div>
+<div id="ref-anx-romanian" class="csl-entry" role="listitem">
+BRICIU, A.; LUPEA, M. <strong><a href="https://doi.org/10.1109/ICCP.2018.8516436">Studying the language of mental illness in Romanian social media</a></strong>. <span>IEEE</span> 14th International Conference on Intelligent Computer Communication and Processing (ICCP). <strong>Anais</strong>...2018.
+</div>
+<div id="ref-gpt3" class="csl-entry" role="listitem">
+BROWN, T. B. et al. <strong>Language Models are Few-Shot Learners</strong>. (H. Larochelle et al., Eds.)Advances in Neural Information Processing Systems. <strong>Anais</strong>...Curran Associates, Inc., 2020. Disponível em: &lt;<a href="https://proceedings.neurips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html">https://proceedings.neurips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html</a>&gt;
+</div>
+<div id="ref-smartphone" class="csl-entry" role="listitem">
+BRUNETTE, M. et al. Use of smartphones, computers and social media among people with SMI: opportunity for intervention. <strong>Community Mental Health Journal</strong>, p. 1–6, 2019.
+</div>
+<div id="ref-bucci" class="csl-entry" role="listitem">
+BUCCI, S.; SCHWANNAUER, M.; BERRY, N. The digital revolution and its impact on mental health care. <strong>Psychology and Psychotherapy: Theory, Research and Practice</strong>, v. 92, n. 2, p. 277–297, 2019.
+</div>
+<div id="ref-ss3" class="csl-entry" role="listitem">
+BURDISSO, S. G.; ERRECALDE, M.; MONTES-Y-GÓMEZ, M. <a href="https://doi.org/10.1016/j.patrec.2020.07.001"><span>t-SS3: a text classifier with dynamic n-grams for early risk detection over text streams</span></a>. <strong>Pattern Recognition Letters</strong>, v. 138, p. 130–137, 2020.
+</div>
+<div id="ref-cacheda2019" class="csl-entry" role="listitem">
+CARNEIRO, F. C. A. D. F. A. F. J. N. A. V. <a href="https://doi.org/10.2196/12554">Early Detection of Depression: Social Network Analysis and Random Forest Techniques</a>. <strong>J Med Internet Res</strong>, v. 21, n. 6, p. e12554, 2019.
+</div>
+<div id="ref-amive" class="csl-entry" role="listitem">
+CÁSSIA ALVES, V. DE et al. <a href="https://doi.org/10.55612/s-5002-059-003">College students-in-the-loop for their mental health: a case of AI and humans working together to support well-being</a>. <strong>Interaction Design and Architecture(s)</strong>, n. 59, p. 79–94, 2024.
+</div>
+<div id="ref-dechoudhury2013" class="csl-entry" role="listitem">
+CHOUDHURY, M. D. et al. <strong>Predicting Depression via Social Media</strong>. <span>International AAAI Conference on Web and Social Media (ICWSM)</span>. <strong>Anais</strong>...AAAI, 2013.
+</div>
+<div id="ref-smhd" class="csl-entry" role="listitem">
+COHAN, A. et al. <strong><span>SMHD</span>: a Large-Scale Resource for Exploring Online Language Usage for Multiple Mental Health Conditions</strong>. <span>COLING-2018</span>. <strong>Anais</strong>...Santa Fe, <span>USA</span>: Association for Computational Linguistics, 2018.
+</div>
+<div id="ref-CLPsych2015" class="csl-entry" role="listitem">
+COPPERSMITH, G. et al. <strong><span>CLPsych 2015 Shared Task: Depression and PTSD on Twitter</span></strong>. Second Workshop on Computational Linguistics and Clinical Psychology: From Linguistic Signal to Clinical Reality. <strong>Anais</strong>...Denver, <span>USA</span>: Association for Computational Linguistics, 2015.
+</div>
+<div id="ref-bertabaporu" class="csl-entry" role="listitem">
+COSTA, P. B. DA et al. <strong><a href="https://doi.org/10.26615/978-954-452-092-2\_024"><span>BERTabaporu: assessing a genre-specific language model for Portuguese NLP</span></a></strong>. Recents Advances in Natural Language Processing (<span>RANLP-2023</span>). <strong>Anais</strong>...Varna, Bulgaria: 2023.
+</div>
+<div id="ref-Devlin19" class="csl-entry" role="listitem">
+DEVLIN, J. et al. <strong><span>BERT:</span> Pre-training of Deep Bidirectional Transformers for Language Understanding</strong>. (J. Burstein, C. Doran, T. Solorio, Eds.)Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, <span>NAACL-HLT</span> 2019. <strong>Anais</strong>...Minneapolis, MN, USA: Association for Computational Linguistics, 2019. Disponível em: &lt;<a href="https://doi.org/10.18653/v1/n19-1423">https://doi.org/10.18653/v1/n19-1423</a>&gt;
+</div>
+<div id="ref-yazdavar2020" class="csl-entry" role="listitem">
+HITZLER, A. H. Y. A. M. S. M. A. G. B. A. W. R. A. A. S. A. A. H. M. A. K. T. A. J. M. M. A. A. M. A. J. P. A. P. <a href="https://doi.org/10.1371/journal.pone.0226248">Multimodal mental health analysis in social media</a>. <strong>PLOS ONE</strong>, v. 15, n. 4, p. 1–27, 2020.
+</div>
+<div id="ref-jacobs1991adaptive" class="csl-entry" role="listitem">
+JACOBS, R. A. et al. Adaptive mixtures of local experts. <strong>Neural computation</strong>, v. 3, n. 1, p. 79–87, 1991.
+</div>
+<div id="ref-absolute" class="csl-entry" role="listitem">
+JOHNSTONE, M. A.-M. A. T. <a href="https://doi.org/10.1177/2167702617747074">In an Absolute State: Elevated Use of Absolutist Words Is a Marker Specific to Anxiety, Depression, and Suicidal Ideation</a>. <strong>Clinical Psychological Science</strong>, v. 6, n. 4, p. 529–542, 2018.
+</div>
+<div id="ref-thai" class="csl-entry" role="listitem">
+KATCHAPAKIRIN, K. et al. <strong><a href="https://doi.org/10.1109/JCSSE.2018.8457362">Facebook Social Media for Depression Detection in the Thai Community</a></strong>. 15th International Joint Conference on Computer Science and Software Engineering <span>(JCSSE)</span>. <strong>Anais</strong>...2018.
+</div>
+<div id="ref-sensemood" class="csl-entry" role="listitem">
+LIN, C. et al. <span>SenseMood: Depression Detection on Social Media</span>. Em: <strong>2020 International Conference on Multimedia Retrieval</strong>. New York, <span>USA</span>: Association for Computing Machinery, 2020. p. 407–411.
+</div>
+<div id="ref-lopes-etal-2022-depression" class="csl-entry" role="listitem">
+LOPES, C. DE S. et al. <a href="https://doi.org/10.1590/0102-311X00123421">Trend in the prevalence of depressive symptoms in Brazil: results from the Brazilian National Health Survey 2013 and 2019</a>. <strong>Cad Saude Publica</strong>, 6 maio 2022.
+</div>
+<div id="ref-erisk-corpus" class="csl-entry" role="listitem">
+LOSADA, D. E.; CRESTANI, F. <strong>A Test Collection for Research on Depression and Language Use</strong>. Experimental IR Meets Multilinguality, Multimodality, and Interaction. <strong>Anais</strong>...Cham: Springer, 2016.
+</div>
+<div id="ref-erisk2017" class="csl-entry" role="listitem">
+LOSADA, D. E.; CRESTANI, F.; PARAPAR, J. <strong><span>eRISK 2017: CLEF lab on early risk prediction on the internet: experimental foundations</span></strong>. Lecture Notes in Computer Science vol 10456. <strong>Anais</strong>...Cham: Springer, 2017.
+</div>
+<div id="ref-erisk2018" class="csl-entry" role="listitem">
+LOSADA, D. E.; CRESTANI, F.; PARAPAR, J. <strong><span>Overview of eRisk: Early Risk Prediction on the Internet</span></strong>. Lecture Notes in Computer Science vol 11018. <strong>Anais</strong>...Cham: Springer, 2018.
+</div>
+<div id="ref-erisk2019" class="csl-entry" role="listitem">
+LOSADA, D. E.; CRESTANI, F.; PARAPAR, J. <strong><span>Overview of eRisk 2019 Early Risk Prediction on the Internet</span></strong>. Lecture Notes in Computer Science vol 11696. <strong>Anais</strong>...2019.
+</div>
+<div id="ref-anx-micropat" class="csl-entry" role="listitem">
+LOVEYS, K. et al. <strong><a href="https://doi.org/10.18653/v1/W17-3110">Small but Mighty: Affective Micropatterns for Quantifying Mental Health from Social Media Language</a></strong>. Fourth Workshop on Computational Linguistics and Clinical Psychology: From Linguistic Signal to Clinical Reality. <strong>Anais</strong>...Vancouver, Canada: Association for Computational Linguistics, 2017.
+</div>
+<div id="ref-mann2022" class="csl-entry" role="listitem">
+MANN, P.; MATSUSHIMA, E. H.; PAES, A. <strong><a href="https://doi.org/10.1109/ACII55700.2022.9953811">Detecting Depression from Social Media Data as a Multiple-Instance Learning Task</a></strong>. 10th International Conference on Affective Computing and Intelligent Interaction (ACII). <strong>Anais</strong>...2022.
+</div>
+<div id="ref-see-read" class="csl-entry" role="listitem">
+MANN, P.; PAES, A.; MATSUSHIMA, E. H. <strong>See and Read: Detecting Depression Symptoms in Higher Education Students Using Multimodal Social Media Data</strong>. Proceedings of the International AAAI Conference on Web and Social Media. <strong>Anais</strong>...2020.
+</div>
+<div id="ref-mendes_caseli_lrec2024" class="csl-entry" role="listitem">
+MENDES, A. R.; CASELI, H. M. <strong>Identifying Fine-grained Depression Signs in Social Media Posts</strong>. Proceedings of the 2024 joint international conference on computational linguistics, language resources and evaluation (LREC 2024). <strong>Anais</strong>...2024.
+</div>
+<div id="ref-depress-pt-br" class="csl-entry" role="listitem">
+NASCIMENTO, R. DA S. et al. <strong><a href="https://doi.org/10.5753/brasnam.2018.3597">Identificando Sinais de Comportamento Depressivo em Redes Sociais</a></strong>. Anais do VII Brazilian Workshop on Social Network Analysis and Mining. <strong>Anais</strong>...Porto Alegre, Brazil: SBC, 2018.
+</div>
+<div id="ref-set-newrev" class="csl-entry" role="listitem">
+OLIVEIRA, R. L. DE; MARTINS, J. T.; PARABONI, I. <a href="https://doi.org/10.1080/13614568.2024.2346227">Mental health prediction from social media connections</a>. <strong>New Review of Hypermedia and Multimedia</strong>, 2024.
+</div>
+<div id="ref-set-bou" class="csl-entry" role="listitem">
+OLIVEIRA, R. L. DE; PARABONI, I. <strong><span>A Bag-of-Users approach to mental health prediction from social media data</span></strong>. <span>16th International Conference on Computational Processing of Portuguese (PROPOR 2024)</span>. <strong>Anais</strong>...Santiago de Compostela, Spain: 2024.
+</div>
+<div id="ref-korean" class="csl-entry" role="listitem">
+PARK, S. et al. Activities on Facebook Reveal the Depressive State of Users. <strong>J Med Internet Res</strong>, v. 15, n. 10, p. e217, 2013.
+</div>
+<div id="ref-elmo" class="csl-entry" role="listitem">
+PETERS, M. E. et al. <strong>Semi-supervised sequence tagging with bidirectional language models</strong>. Proc. of <span>ACL</span>-2017. <strong>Anais</strong>...Vancouver, Canada: Association for Computational Linguistics, 2017.
+</div>
+<div id="ref-raffel2020exploring" class="csl-entry" role="listitem">
+RAFFEL, C. et al. <a href="http://jmlr.org/papers/v21/20-074.html">Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer</a>. <strong>Journal of Machine Learning Research</strong>, v. 21, n. 140, p. 1–67, 2020.
+</div>
+<div id="ref-negativity" class="csl-entry" role="listitem">
+RICKARD, E. M. S. A. M. L. K. A. B. D. F. A. N. S. <a href="https://doi.org/10.2196/jmir.9267">Predicting Depression From Language-Based Emotion Dynamics: Longitudinal Analysis of Facebook and Twitter Status Updates</a>. <strong>Journal of Medical Internet Research</strong>, v. 20, n. 5, p. e168, 2018.
+</div>
+<div id="ref-depress-lrec" class="csl-entry" role="listitem">
+SANTOS, W. R. DOS; FUNABASHI, A. M. M.; PARABONI, I. <strong><span>Searching Brazilian Twitter for signs of mental health issues</span></strong>. 12th International Conference on Language Resources and Evaluation (<span>LREC</span>-2020). <strong>Anais</strong>...Marseille, France: <span>ELRA</span>, 2020.
+</div>
+<div id="ref-setembrobr" class="csl-entry" role="listitem">
+SANTOS, W. R. DOS; OLIVEIRA, R. L. DE; PARABONI, I. <a href="https://doi.org/10.1007/s10579-022-09633-0"><span>SetembroBR: a social media corpus for depression and anxiety disorder prediction</span></a>. <strong>Language Resources and Evaluation</strong>, v. 58, n. 1, p. 273–300, 2024.
+</div>
+<div id="ref-set-chatgpt" class="csl-entry" role="listitem">
+SANTOS, W. R. DOS; PARABONI, I. <strong><span>Predição de transtorno depressivo em redes sociais: BERT supervisionado ou ChatGPT zero-shot?</span></strong> <span>XIV Simpósio Brasileiro de Tecnologia da Informação e da Linguagem Humana (STIL-2023)</span>. <strong>Anais</strong>...Porto Alegre, Brasil: <span>SBC</span>, 2023. Disponível em: &lt;<a href="https://sol.sbc.org.br/index.php/stil/article/view/25433">https://sol.sbc.org.br/index.php/stil/article/view/25433</a>&gt;
+</div>
+<div id="ref-set-prompt" class="csl-entry" role="listitem">
+SANTOS, W. R. DOS; PARABONI, I. <strong><span>Prompt-based mental health screening from social media text</span></strong>. <span>Brazilian Workshop on Social Network Analysis and Mining (BraSNAM-2024)</span>. <strong>Anais</strong>...Brasilia, <span>DF</span>: 2024.
+</div>
+<div id="ref-set-engineering" class="csl-entry" role="listitem">
+SANTOS, W. R. DOS; YOON, S.; PARABONI, I. <a href="https://doi.org/10.1109/TLA.2023.10172137">Mental Health Prediction from Social Media Text Using Mixture of Experts</a>. <strong><span>IEEE Latin America Transactions</span></strong>, v. 21, n. 6, p. 723–729, 2023.
+</div>
+<div id="ref-russian" class="csl-entry" role="listitem">
+SEMENOV, A. et al. <strong>Discerning Depression Propensity Among Participants of Suicide and Depression-Related Groups of Vk.com</strong>. Analysis of Images, Social Networks and Texts. <strong>Anais</strong>...Cham: Springer International Publishing, 2015.
+</div>
+<div id="ref-shen2017" class="csl-entry" role="listitem">
+SHEN, G. et al. <strong><a href="https://doi.org/10.24963/ijcai.2017/536">Depression Detection via Harvesting Social Media: A Multimodal Dictionary Learning Solution</a></strong>. 26th International Joint Conference on Artificial Intelligence, <span>IJCAI-17</span>. <strong>Anais</strong>...2017.
+</div>
+<div id="ref-anx-shen" class="csl-entry" role="listitem">
+SHEN, J. H.; RUDZICZ, F. <strong><a href="https://doi.org/10.18653/v1/W17-3107">Detecting Anxiety on <span>R</span>eddit</a></strong>. Fourth Workshop on Computational Linguistics and Clinical Psychology: From Linguistic Signal to Clinical Reality. <strong>Anais</strong>...Vancouver, Canada: Association for Computational Linguistics, 2017.
+</div>
+<div id="ref-cross-depress" class="csl-entry" role="listitem">
+SHEN, T. et al. <strong><a href="https://doi.org/10.24963/ijcai.2018/223">Cross-Domain Depression Detection via Harvesting Social Media</a></strong>. Twenty-Seventh International Joint Conference on Artificial Intelligence, <span>IJCAI-18</span>. <strong>Anais</strong>...International Joint Conferences on Artificial Intelligence Organization, 2018.
+</div>
+<div id="ref-shrestha" class="csl-entry" role="listitem">
+SHRESTHA, A.; SPEZZANO, F. <strong><a href="https://doi.org/10.1145/3341161.3343511">Detecting Depressed Users in Online Forums</a></strong>. <span>2019 IEEE/ACM International Conference on Advances in Social Networks Analysis and Mining (ASONAM)</span>. <strong>Anais</strong>...2019.
+</div>
+<div id="ref-song2018" class="csl-entry" role="listitem">
+SONG, H. et al. <strong>Feature Attention Network: Interpretable Depression Detection from Social Media</strong>. 32nd Pacific Asia Conference on Language, Information and Computation. <strong>Anais</strong>...Hong Kong: Association for Computational Linguistics, 2018.
+</div>
+<div id="ref-Souza2020" class="csl-entry" role="listitem">
+SOUZA, F.; NOGUEIRA, R.; LOTUFO, R. <strong>BERTimbau: pretrained BERT models for Brazilian Portuguese</strong>. (R. Cerri, R. C. Prati, Eds.)Proceedings of the 2020 Brazilian Conference on Intelligent Systems. <strong>Anais</strong>...Springer International Publishing, a2020.
+</div>
+<div id="ref-comorbidity" class="csl-entry" role="listitem">
+SOUZA, V.; NOBRE, J.; BECKER, K. <strong>Characterization of Anxiety, Depression, and their Comorbidity from Texts of Social Networks</strong>. Anais do XXXV Simpósio Brasileiro de Bancos de Dados. <strong>Anais</strong>...Porto Alegre, Brazil: SBC, b2020.
+</div>
+<div id="ref-souza2021deep" class="csl-entry" role="listitem">
+SOUZA, V.; NOBRE, J.; BECKER, K. A Deep Learning Ensemble to Classify Anxiety, Depression, and their Comorbidity from Texts of Social Networks. <strong>Journal of Information and Data Management</strong>, v. 12, n. 3, p. 306–325, 2021.
+</div>
+<div id="ref-dep-indicators" class="csl-entry" role="listitem">
+TRIFU, R. et al. <a href="https://doi.org/10.24193/jebp.2017.1.7"><span>Linguistic indicators of language in major depressive disorder (MDD). An evidence based research</span></a>. <strong>Journal of Evidence-Based Psychotherapies</strong>, v. 17, p. 105–128, mar. 2017.
+</div>
+<div id="ref-erisk2018-best" class="csl-entry" role="listitem">
+TROTZEK, M.; KOITKA, S.; FRIEDRICH, C. M. Utilizing neural networks and linguistic metadata for early detection of depression indications in text sequences. <strong>IEEE Transactions on Knowledge and Data Engineering</strong>, 2018.
+</div>
+<div id="ref-japanese" class="csl-entry" role="listitem">
+TSUGAWA, S. et al. <strong>Recognizing Depression from Twitter Activity</strong>. 33rd Annual ACM Conference on Human Factors in Computing Systems. <strong>Anais</strong>...New York, <span>USA</span>: Association for Computing Machinery, 2015.
+</div>
+<div id="ref-world2021comprehensive" class="csl-entry" role="listitem">
+WHO. <strong>Comprehensive mental health action plan 2013–2030</strong>. [s.l.] World Health Organization; World Health Organization, 2021.
+</div>
+<div id="ref-yadav-symptoms" class="csl-entry" role="listitem">
+YADAV, S. et al. <strong><a href="https://doi.org/10.18653/v1/2020.coling-main.61">Identifying Depressive Symptoms from Tweets: Figurative Language Enabled Multitask Learning Framework</a></strong>. 28th International Conference on Computational Linguistics. <strong>Anais</strong>...Barcelona, Spain (Online): International Committee on Computational Linguistics, 2020.
+</div>
+<div id="ref-yates2017" class="csl-entry" role="listitem">
+YATES, A.; COHAN, A.; GOHARIAN, N. <strong><a href="https://doi.org/10.18653/v1/D17-1322">Depression and Self-Harm Risk Assessment in Online Forums</a></strong>. Conference on Empirical Methods in Natural Language Processing. <strong>Anais</strong>...Copenhagen, Denmark: Association for Computational Linguistics, 2017.
+</div>
+<div id="ref-yazdavar2017" class="csl-entry" role="listitem">
+YAZDAVAR, A. H. et al. <strong><a href="https://doi.org/10.1145/3110025.3123028">Semi-Supervised Approach to Monitoring Clinical Depressive Symptoms in Social Media</a></strong>. <span>IEEE/ACM International Conference on Advances in Social Network Analysis and Mining</span>. <strong>Anais</strong>...2017.
+</div>
+<div id="ref-zhang-etal-2021-depression" class="csl-entry" role="listitem">
+ZHANG, S. X. et al. <a href="https://doi.org/10.3390/ijerph18137026"><span>Predictors of Depression and Anxiety Symptoms in Brazil during COVID-19</span></a>. <strong>Int J Environ Res Public Health</strong>, v. 18, n. 13, 30 jun. 2021.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p><a href="https://ghdx.healthdata.org/gbd-2019" class="uri">https://ghdx.healthdata.org/gbd-2019</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://www.amive.ufscar.br/" class="uri">https://www.amive.ufscar.br/</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Como descrito na <span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-saude-mental/cap-saude-mental.html#sec-cap-saude-mental-amive" target="_blank" title="Volume 3">Amive: detecção de sintomas de depressão em português</a></span>, ansiedade é um dos sintomas contemplados no projeto Amive (Preocupação, medo ou ansiedade). Contudo, no escopo do projeto Amive, ele foi considerado um sinal relacionado à depressão e não foi usado especificamente para classificação do transtorno de ansiedade.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>A escolha do domínio Twitter/X é motivada pela sua maior popularidade no Brasil.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a href="https://drive.google.com/drive/folders/1MXFRs0u8iF1RNUWABTA0Oz8_Ix1skqZT?usp=sharing" class="uri">https://drive.google.com/drive/folders/1MXFRs0u8iF1RNUWABTA0Oz8_Ix1skqZT?usp=sharing</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p><a href="https://huggingface.co/pablocosta/bertabaporu-large-uncased" class="uri">https://huggingface.co/pablocosta/bertabaporu-large-uncased</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p><a href="https://chat.openai.com/chat" class="uri">https://chat.openai.com/chat</a><a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p><a href="https://www.amive.ufscar.br/" class="uri">https://www.amive.ufscar.br/</a>. Projeto apoiado pela FAPESP (# 20/05157-9).<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p><a href="https://www.ufscar.br/" class="uri">https://www.ufscar.br/</a><a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>As páginas de segredos universitários publicam postagens anônimas de estudantes enviadas por meio de um formulário, também anônimo. Após o envio, as postagens ainda passam por uma moderação antes de serem publicadas.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>O sinal de “Agitação ou inquietação” não foi avaliado nos experimentos reportados em <span class="citation" data-cites="mendes_caseli_lrec2024">(<a href="../../shared/referencias/referencias.html#ref-mendes_caseli_lrec2024" role="doc-biblioref">Mendes; Caseli, 2024</a>)</span> por conter apenas 5 instâncias.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../aplicacoes-e-dominios/cap-saude/cap-saude.html" class="pagination-link" aria-label="PLN na Saúde">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">PLN na Saúde</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../aplicacoes-e-dominios/cap-fala-respiratorios/cap-fala-respiratorios.html" class="pagination-link" aria-label="Classificação de Áudio aplicada à Saúde">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Classificação de Áudio aplicada à Saúde</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://brasileiraspln.com/">
+<p>Brasileiras em PLN, 2026. Todos os direitos reservados</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
