@@ -4,9 +4,19 @@
     "href": "index.html",
     "title": "Processamento de Linguagem Natural",
     "section": "",
+    "text": "Volume 3: Aplicações e Domínios",
+    "crumbs": [
+      "Volume 3: Aplicações e Domínios"
+    ]
+  },
+  {
+    "objectID": "index.html#sobre-o-volume-3",
+    "href": "index.html#sobre-o-volume-3",
+    "title": "Processamento de Linguagem Natural",
+    "section": "Sobre o Volume 3",
     "text": "Sobre o Volume 3\nDos dezoito capítulos deste volume, oito ilustram o PLN em várias aplicações: classificação de textos (Capítulo Classificação de texto), recuperação (Capítulo Recuperação de Informação) e extração (Capítulo Extração de Informação) de informações, tradução (Capítulo Tradução Automática) ou sumarização (Capítulo Sumarização Automática) automáticas, avaliação de complexidade textual (Capítulo Complexidade Textual e suas Tarefas Relacionadas) e correção automática de redações (Capítulo Correção Automática de Redação) e detecção de notícias falsas (fake news) (Capítulo Detecção Automática de Notícias Falsas).\nTrês capítulos ilustram o PLN aplicado ao domínio da saúde: o Capítulo PLN na Saúde discorre sobre as tarefas de PLN comuns a esse domínio; o Capítulo Detecção de Transtornos de Saúde Mental a partir de Texto traz uma aplicação na área de saúde mental; e o Capítulo Classificação de Áudio aplicada à Saúde mostra uma aplicação do processamento de fala para detecção de problemas respiratórios. Já no domínio jurídico ou do direito, o Capítulo PLN no Direito traz os principais conceitos e desafios para o PLN, sendo que o tratamento das entidades nomeados neste domínio é abordado no Capítulo Reconhecimento de Entidades Nomeadas no Domínio Legal, e a geração automática de ementas jurídicas é apresentada no Capítulo Geração Automática de Ementas Jurídicas.\nO Capítulo PLN e Humanidades Digitais discorre sobre a potencialidade do uso de PLN na ampla área de humanidades digitais, caracterizada por trabalhos derivados das ciências humanas que abordam a linguagem. O Capítulo PLN em Redes Sociais introduz o gênero especial da linguagem usada nas redes sociais, enquanto que o Capítulo PLN e Responsabilidade Social ilustra uma aplicação do formalismo Framenet no enfrentamento à violência de gênero e na promoção da acessibilidade cultural. Finalmente, o Capítulo Redes complexas no processamento de língua natural do português explora o potencial do formalismo de redes complexas para modelar textos para aplicações de PLN, ilustrando com o mapeamento das pesquisas em PLN para português.\nA leitura dos capítulos que integram esse volume deve expandir o horizonte dos leitores para as variadas áreas de aplicação do PLN, e mostrar-lhes a potencialidade do emprego de PLN quando ajustado a um domínio de conhecimento, um gênero específico ou uma aplicação em particular.",
     "crumbs": [
-      "Sobre o Volume 3"
+      "Volume 3: Aplicações e Domínios"
     ]
   },
   {
@@ -16,7 +26,7 @@
     "section": "Como citar",
     "text": "Como citar\nCaseli, H.M.; Nunes, M.G.V. (org.) Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português. 4 ed. BPLN, 2026. v. 3. ISBN 978-65-02-00167-7. Disponível em: https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3.\n\n\n\n\n\n\nNota 1: Bibref\n\n\n\n\n\n@Book{BPLN_livro_4ed_vol3:2026,\n   title     = {Processamento de Linguagem Natural: Conceitos,\n                Técnicas e Aplicações em Português},\n   editor    = {Caseli, H. M. and Nunes, M. G. V.},\n   year      = {2026},\n   publisher = {BPLN},   \n   edition   = {4},\n   volume    = {3},\n   isbn      = {978-65-02-00167-7},\n   url       = {https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3}\n}",
     "crumbs": [
-      "Sobre o Volume 3"
+      "Volume 3: Aplicações e Domínios"
     ]
   },
   {
