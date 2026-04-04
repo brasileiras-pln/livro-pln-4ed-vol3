@@ -483,7 +483,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" aria-expanded="false" aria-controls="callout-cite" aria-label="Toggle callout" data-bs-toggle="collapse" data-bs-target=".callout-cite-contents">
+<div class="callout-header d-flex align-content-center" aria-expanded="false" aria-label="Toggle callout" data-bs-toggle="collapse" data-bs-target=".callout-cite-contents" aria-controls="callout-cite">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -580,7 +580,7 @@ Figura&nbsp;13.2: Distribuição temporal dos artigos mapeados de REN para a lí
 <section id="CorporaREN-Legal" class="level3" data-number="13.4.1">
 <h3 data-number="13.4.1" class="anchored" data-anchor-id="CorporaREN-Legal"><span class="header-section-number">13.4.1</span> <em>Corpora</em> para REN-Legal</h3>
 <p>Esforços para a criação e compartilhamento de recursos, como <em>corpora/datasets</em> e modelos, vêm sendo feitos pela comunidade de PLN e EI <span class="citation" data-cites="Oksanen2019Multilingue Solihin2021RS">(<a href="../../shared/referencias/referencias.html#ref-Solihin2021RS" role="doc-biblioref">Firdaus Solihin; Makarim, 2021</a>; <a href="../../shared/referencias/referencias.html#ref-Oksanen2019Multilingue" role="doc-biblioref">Oksanen et al., 2019b</a>)</span>. Estes recursos tornam-se cruciais para impulsionar novas pesquisas e o aprimoramento de pesquisas em curso <span class="citation" data-cites="Bonifacio2020DrugSeizuresCorpus bordino2021garnlp">(<a href="../../shared/referencias/referencias.html#ref-Bonifacio2020DrugSeizuresCorpus" role="doc-biblioref">Bonifacio et al., 2020</a>; <a href="../../shared/referencias/referencias.html#ref-bordino2021garnlp" role="doc-biblioref">Bordino et al., 2021</a>)</span>. O <a href="#def-cap-direito-ren-quadro-corporadetails" class="quarto-xref">Quadro&nbsp;<span>13.1</span></a> apresenta informações sobre alguns <em>corpora</em> para REN-Legal em língua portuguesa encontrados na literatura, destacadas a seguir.</p>
-<!--`\newpage`{=latex}-->
+<p></p>
 <div id="def-cap-direito-ren-quadro-corporadetails" class="theorem definition">
 <p><span class="theorem-title"><strong>Quadro 13.1</strong></span> <em>Corpora</em> REN-Legais em língua portuguesa com acesso público (PB) ou privado (PV)</p>
 <div class="callout callout-style-simple callout-note no-icon">
@@ -888,6 +888,7 @@ Figura&nbsp;13.3: <em>Pipeline</em> do UlyssesNERQ, adaptado de <span class="cit
 </figure>
 </div>
 <p>O UlyssesNERQ <span class="citation" data-cites="AlbuquerquePROPOR2024UlyssesNERQ">(<a href="../../shared/referencias/referencias.html#ref-AlbuquerquePROPOR2024UlyssesNERQ" role="doc-biblioref">Albuquerque et al., 2024</a>)</span> atualiza o <em>pipeline</em> do sistema de RI-Legal original, utilizando NER-Legal e a técnica de expansão de consulta. Através desta técnica, o sistema de RI modifica a <em>string</em> de consulta original, inserindo informações que possam maximizar seus resultados (<span>Seção <a href="https://brasileiraspln.ufscar.br/livro-pln-4ed-vol3/aplicacoes-e-dominios/cap-ir/cap-ir.html#sec-cap-ir-QERF" target="_blank" title="Volume 3">Modificação Automática de Consultas</a></span>). A <a href="#fig-direito-ren-ulyssesnerq_pipeline" class="quarto-xref">Figura&nbsp;<span>13.3</span></a> detalha o processo utilizado. O sistema recebe como entrada a <em>query</em> com solicitação de consulta legislativa e o <em>corpus</em> UlyssesNER-Br. Após a aplicação de tarefas de pré-processamento de texto na consulta, é feita a identificação de duas entidades legislativas, FUNDprojetodelei e FUNDsolicitacaotrabalho. Em caso de identificação destas entidades, a consulta é expandida com os conteúdos dos documentos correlacionados: (i) para a entidade FUNDprojetodelei, a consulta é expandida com a ementa dos projetos de lei encontrados; (ii) para FUNDsolicitacaodetrabalho, a expansão é feita com todo o conteúdo da solicitação legislativa encontrada. Em caso de não ter sido encontrada nenhuma entidade, a consulta não é modificada. O <a href="#def-cap-direito-ren-quadro-exemplos_expansao" class="quarto-xref">Quadro&nbsp;<span>13.2</span></a> apresenta exemplos fictícios de consultas legislativas, com e sem expansão utilizando entidades. Ao final, são retornados os <em>top K</em> documentos mais relevantes encontrados.</p>
+<p></p>
 <div id="def-cap-direito-ren-quadro-exemplos_expansao" class="theorem definition">
 <p><span class="theorem-title"><strong>Quadro 13.2</strong></span> Exemplos de expansão de consultas legislativas utilizando REN, adaptado de <span class="citation" data-cites="AlbuquerquePROPOR2024UlyssesNERQ">(<a href="../../shared/referencias/referencias.html#ref-AlbuquerquePROPOR2024UlyssesNERQ" role="doc-biblioref">Albuquerque et al., 2024</a>)</span>. Expansões de consulta em negrito.</p>
 <div class="callout callout-style-simple callout-note no-icon">
